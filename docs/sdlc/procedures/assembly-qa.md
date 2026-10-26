@@ -29,7 +29,7 @@ file, `docs/sdlc/guides/desktop-ui-quality.md` (checklist), `docs/templates/qa-r
    values equal engine state, no mock data in production code paths, search for fake/sample/demo
    data sources), and documented known limitations.
 4. **Defects.** Log new findings as `DEF-###` with severity.
-5. **Verdict.** `Fail` if any Must acceptance criterion fails or any Critical defect is open.
+5. **Verdict.** `Fail` if any acceptance criterion of a P0 requirement fails or any Critical defect is open.
    `Pass with conditions` lists each condition. `Pass` only with full evidence.
 6. Write `docs/08-qa/qa-report-YYYY-MM-DD-<n>.md`. Update traceability QA status and `PROJECT_STATE.md`.
 

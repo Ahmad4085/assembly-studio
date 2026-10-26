@@ -5,7 +5,7 @@
 > (slash command or a direct request naming it). Never start it on your own initiative.
 
 ## 1. Purpose
-Produce and maintain `docs/01-requirements/requirements.md`: a testable, traceable definition of
+Produce and maintain the `docs/01-requirements/` requirements set (entry: `PRODUCT_REQUIREMENTS.md`): a testable, traceable definition of
 what Assembly Studio must do. Requirements say *what* and *how well*, never *how*. No technology
 choices except true constraints.
 
@@ -26,8 +26,10 @@ choices except true constraints.
    services; debugging depth (step, step-over, reverse/history?); tutorials/samples scope;
    product license and distribution model; accessibility expectations; performance expectations.
    Carry OQ-001…OQ-007 from the overview. Resolve or keep each one.
-4. **Draft** users, use cases (UC), functional requirements (FR) with Given/When/Then acceptance
-   criteria and MoSCoW priority, NFRs with measurable thresholds and verification method
+4. **Draft** product goals (PG), personas (PER), user stories (US), functional requirements (FR) with
+   priority P0–P3 and status (PROPOSED / NEEDS_RESEARCH / BLOCKED, never APPROVED before the gate),
+   Given/When/Then acceptance criteria (AC, split engine-independent vs engine-dependent), NFRs with
+   measurable or explicitly PROPOSED thresholds and a verification method
    (performance, reliability, usability, accessibility, offline, security, compatibility,
    maintainability, licensing, installability), constraints, supported-scope statement including an
    explicit **not supported** list, assumptions, open questions.
@@ -37,14 +39,19 @@ choices except true constraints.
 6. **Self-review** against §6, then set `Awaiting approval` and ask the gate question.
 
 ## 5. Outputs
-`docs/01-requirements/requirements.md`. `PROJECT_STATE.md` updated. Overview OQ table annotated with
-where each question moved.
+`docs/01-requirements/`: `PRODUCT_REQUIREMENTS.md` (goals, personas, scope, constraints, definitions,
+summary, gate), `FUNCTIONAL_REQUIREMENTS.md`, `NON_FUNCTIONAL_REQUIREMENTS.md`, `USER_STORIES.md`,
+`ACCEPTANCE_CRITERIA.md`, `REQUIREMENTS_TRACEABILITY.md`, `OPEN_QUESTIONS.md` (questions and
+assumptions). The set shares one version and status. Overview OQ table annotated with where each
+question moved. Shared memory updated (agent protocol §6).
 
 ## 6. Validation
-- Every FR has ≥1 acceptance criterion and a priority. Every NFR has a measurable threshold and a
-  verification method.
-- IDs unique and sequential, no reuse. Every UC references FRs, and every Must FR belongs to a UC
-  or has a rationale.
+- Every FR has a priority and status. Every NFR has a threshold (FIRM or PROPOSED, with a validation
+  plan) and a verification method.
+- IDs unique and sequential, no reuse. Every P0–P2 FR belongs to ≥1 user story. Every P0/P1 FR and
+  NFR has ≥1 acceptance criterion. Every AC and US reference resolves.
+- No vague wording ("fast", "easy", "fully compatible") without a measurable definition.
+- The traceability matrix covers every FR and NFR, and test cases are `NOT CREATED` / `NOT RUN` until they exist.
 - No implementation decisions disguised as requirements (e.g. "use AvalonEdit") unless recorded
   as a constraint with source.
 - High-impact unknowns are OQ rows, not guesses.

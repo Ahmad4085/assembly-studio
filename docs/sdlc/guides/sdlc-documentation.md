@@ -24,7 +24,9 @@ Every document ends with a `## Changelog` section: `- YYYY-MM-DD v<version>: <wh
 | Prefix | Meaning | Format |
 |---|---|---|
 | FR / NFR | Functional / non-functional requirement | `FR-001` |
-| UC | Use case | `UC-001` |
+| PG / PER | Product goal / persona | `PG-1`, `PER-1` |
+| US | User story | `US-001` |
+| AC | Acceptance criterion (Given/When/Then) | `AC-001` |
 | ASM / OQ / CON | Assumption / open question / constraint | `ASM-001` |
 | RES | Research option evaluated | `RES-001` |
 | ADR | Architecture decision record | `ADR-0001` |
@@ -58,11 +60,12 @@ Never recreate a document from its template when it already exists.
 - Testable statements: "shall" for requirements; measurable thresholds for NFRs.
 - One idea per row or bullet. Tables for registries (requirements, tasks, tests).
 - Separate *facts*, *decisions*, *assumptions* and *open questions*. Never blend them in prose.
-- Link with relative paths and IDs, e.g. `FR-004` → `../01-requirements/requirements.md`.
+- Link with relative paths and IDs, e.g. `FR-004` → `../01-requirements/FUNCTIONAL_REQUIREMENTS.md`.
 - No placeholder text in approved documents ("TBD" only inside an OQ row).
 
 ## 6. Traceability
-`docs/05-planning/traceability.md` maps `FR/NFR` → `ADR` → `UI` → `TASK` → `TC` → latest result.
+`docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` is the single matrix: `PG` → `US` → `FR/NFR` → `AC` →
+`ADR` → `UI` → `TASK` → `TC` → latest result → QA status. Columns are added by the phase that creates them.
 Each command that creates or changes IDs updates the rows it touches (create the file from the
 template if it is missing and phase ≥ 5). Commands earlier than planning record their links inside
 their own documents (e.g. ADR "Requirements addressed").

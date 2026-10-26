@@ -5,32 +5,36 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 16:41 +0500 by Claude Code (`/assembly-init` validation run) |
-| Current phase | 0 Initialization: **complete** (SDLC foundation + multi-agent support) |
+| Last updated | 2026-10-26 17:12 +0500 by Claude Code (SDLC-003 approval recorded) |
+| Current phase | 1 Requirements: **approved** (v1.0). Phase 2 Research is next |
 | Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `SDLC-003` Requirements phase (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | User runs `/assembly-requirements` (Claude Code or Antigravity) |
+| Active task | None in progress. Next: `SDLC-004` Research phase (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | User runs `/assembly-research` (Claude Code or Antigravity) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
   entry points for Claude Code (`.claude/skills/`) and Antigravity (`.agent/`) exist and pass
   structural validation (SDLC-002, re-validated by `/assembly-init` on 2026-10-26 16:41 +0500).
-- **No application code exists.** No requirements, research, architecture, design or plan documents exist yet.
+- Requirements set **v1.0 Approved** in `docs/01-requirements/` (7 documents): 96 FR, 33 NFR (117 APPROVED, 12 NEEDS_RESEARCH),
+  26 user stories, 63 acceptance criteria, 19 open questions. Numeric targets with basis PROPOSED are still unvalidated.
+- **No application code exists.** No research, architecture, design or plan documents exist yet.
 
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| SDLC-003 Requirements phase (phase 1) | 2026-10-26 17:11 +0500 | Approved set v1.0 in `docs/01-requirements/`, approval log below |
 
 ## Approved decisions
-Architecture decisions (ADRs): **none yet**. Process decisions: see `DECISIONS.md`. D-001 to D-005
-are all approved.
+Architecture decisions (ADRs): **none yet**. See `DECISIONS.md`: D-001 to D-009 approved (D-006 to D-009 are product
+scope answers from SDLC-003). D-010 (requirements document layout) approved. **All of D-001 to D-010 are approved.**
 
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
-| 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate. No phase-gate approvals yet |
+| 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate |
+| 2026-10-26 17:11 +0500 | **Requirements gate (phase 1)**: requirements set `docs/01-requirements/` + D-010 | 1.0 | User | "approve requirements v0.1 and D-010". PROPOSED → APPROVED. 12 NEEDS_RESEARCH items approved as goals. PROPOSED-basis targets remain unvalidated |
 
 ## Waivers
 None.
@@ -51,9 +55,9 @@ None.
 | BLK-001 | No .NET SDK installed (only .NET 8.0.8 runtime) | Phase 6+ (build/test) | User installs the SDK chosen by the .NET version ADR (expected .NET 10). Not needed for phases 1–5 |
 
 ## Open high-impact questions
-OQ-001 (execution engine), OQ-002 (assembler and NASM bundling), OQ-003 (DOS/BIOS services in v1),
-OQ-007 (product license and distribution). See `docs/00-project-overview/project-overview.md`.
-These move into `docs/01-requirements/requirements.md` during SDLC-003.
+Authoritative list: `docs/01-requirements/OPEN_QUESTIONS.md`. High impact: OQ-001 (execution engine), OQ-002 (NASM
+redistribution, CPU restriction, listing output), OQ-007 (specific permissive license. Model decided, D-007), OQ-008
+(engine state access, breakpoints, snapshots, determinism).
 
 ## Environment (observed 2026-10-26)
 | Item | Observation |

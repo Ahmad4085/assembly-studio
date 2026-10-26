@@ -80,7 +80,7 @@ engine/assembler/runtime projects. Match the surrounding code.
 All core features (edit, assemble, run, debug, tutorials, samples, help) must work with no network.
 
 ## Traceability
-Stable IDs: `SDLC-###`, `FR-###`, `NFR-###`, `UC-###`, `ADR-####`, `UI-###`, `TASK-###`, `POC-###`,
+Stable IDs: `SDLC-###`, `PG-#`, `PER-#`, `US-###`, `FR-###`, `NFR-###`, `AC-###`, `ADR-####`, `UI-###`, `TASK-###`, `POC-###`,
 `TC-###`, `DEF-###`, `RISK-###`, `OQ-###`, `ASM-###`, `WVR-###`, `BLK-###`. Never renumber or reuse
 an ID. Every task cites its requirements, and every test cites what it verifies.
 

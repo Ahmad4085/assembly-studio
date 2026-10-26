@@ -29,7 +29,7 @@ What is tested in this iteration (milestone, components) and what is explicitly 
 OS, .NET SDK version, assembler version, hardware notes. Record the actual versions at execution time.
 
 ## 5. Entry and exit criteria
-Entry: build succeeds. Exit: all Must-priority tests executed, no unexplained failures.
+Entry: build succeeds. Exit: all tests for P0 requirements executed, no unexplained failures.
 
 ## 6. Known limitations
 Areas not testable yet and why.

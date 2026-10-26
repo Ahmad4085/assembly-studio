@@ -22,7 +22,7 @@
 | UC-001 | | | | | FR-… |
 
 ## 4. Functional requirements
-| ID | Requirement ("The system shall…") | Priority (Must/Should/Could/Won't v1) | Acceptance criteria | Source / rationale |
+| ID | Requirement ("The system shall…") | Priority (P0/P1/P2/P3) | Status (PROPOSED/APPROVED/BLOCKED/NEEDS_RESEARCH) | User stories | Acceptance criteria (AC-###) | Notes |
 |---|---|---|---|---|
 | FR-001 | | | AC1: Given…, when…, then… | |
 

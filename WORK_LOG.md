@@ -110,3 +110,50 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** BLK-001. Antigravity IDE workflow loading unverified
 - **Next step:** user runs `/assembly-requirements` (SDLC-003)
+
+### 2026-10-26 16:50–17:07 +0500 · Claude Code (Opus 5.5) · SDLC-003
+- **Summary:** Ran the requirements phase. Asked 4 elicitation questions not covered by the user's brief. Answers became
+  D-006 (NASM syntax), D-007 (permissive open source), D-008 (text I/O + keyboard), D-009 (English, localizable).
+  Drafted requirements set v0.1 in `docs/01-requirements/`: 96 FR (P0 59, P1 26, P2 10, P3 1), 33 NFR (P0 18, P1 14, P2 1),
+  26 user stories, 63 acceptance criteria (35 engine-independent, 28 engine-dependent), 19 open questions, 6 assumptions,
+  7 constraints. Statuses: 117 PROPOSED, 12 NEEDS_RESEARCH, 0 BLOCKED, 0 APPROVED. Status `Awaiting approval`.
+  Used the existing `docs/01-requirements/` folder instead of the brief's `docs/requirements/` (no duplicate tree).
+  Made `REQUIREMENTS_TRACEABILITY.md` the single traceability matrix and switched to P0–P3 priorities (D-010, proposed).
+  Aligned procedures, guides and templates accordingly.
+- **Files changed:** created `docs/01-requirements/{PRODUCT_REQUIREMENTS,FUNCTIONAL_REQUIREMENTS,NON_FUNCTIONAL_REQUIREMENTS,
+  USER_STORIES,ACCEPTANCE_CRITERIA,REQUIREMENTS_TRACEABILITY,OPEN_QUESTIONS}.md`. Modified `AGENTS.md` (ID prefixes),
+  `docs/00-project-overview/{sdlc-process (v1.2),project-overview}.md`, `docs/sdlc/procedures/{assembly-requirements,
+  assembly-research,assembly-architecture,assembly-plan,assembly-qa,assembly-test}.md`, `docs/sdlc/guides/sdlc-documentation.md`,
+  `docs/templates/{README,requirements,research-evaluation,qa-report,test-plan,traceability}.md`, `DECISIONS.md`, `ROADMAP.md`,
+  `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** no product tests (no code). Requirements generator validation passed: IDs, cross-references, coverage
+  rules, priority/status values, no APPROVED, vague-word scan. Repository structural validator passed, with new checks
+  for the old requirements path, a second matrix and MoSCoW wording.
+  The set was produced by a one-off generator (session scratchpad, not in the repository). The Markdown files are now the source.
+- **Git state after:** HEAD `7ff6f03`. All SDLC-003 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider, not ours)
+- **Unresolved issues:** user approval pending. D-010 proposed. No cross-agent review of the set yet. BLK-001 remains
+- **Next step:** user reviews and approves or requests changes. After approval: `/assembly-research` (SDLC-004)
+
+### 2026-10-26 17:12 +0500 · Claude Code (Opus 5.5) · SDLC-003
+- **Summary:** Recorded the user's approval of the requirements set and D-010 ("approve requirements v0.1 and D-010",
+  2026-10-26 17:11 +0500). The set is now v1.0 `Approved`: 117 requirements PROPOSED → APPROVED, 12 NEEDS_RESEARCH unchanged,
+  PROPOSED target bases unchanged. SDLC-003 Done. SDLC-004 (Research) created as `Ready`.
+- **Files changed:** `docs/01-requirements/*.md` (7, regenerated in approval mode), `DECISIONS.md` (D-010 approved),
+  `PROJECT_STATE.md` (approval log, phase), `ROADMAP.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** regenerating v0.1 was byte-identical to the files on disk (no manual edits were overwritten).
+  v1.0 generator validation passed. A masked diff of v1.0 vs v0.1 showed only status cells, headers, changelog, the counts
+  table, §7 label and the §12 approval record. Repository structural validator: see below
+- **Git state after:** HEAD `7ff6f03`. All SDLC-003 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider, not ours)
+- **Unresolved issues:** BLK-001 (no .NET SDK). No cross-agent review of the requirements set
+- **Next step:** user runs `/assembly-research` (SDLC-004)
+
+### 2026-10-26 17:22 +0500 · Claude Code (Opus 5.5) · SDLC-003
+- **Summary:** At the user's request ("commit the pending changes"), committed all SDLC-003 work: the requirements set v1.0,
+  core alignment edits, and shared-memory updates. Recorded result for the previous entry: repository structural validator
+  passed (ALL OK) after the approval edits.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator before commit
+- **Git state after:** commit `SDLC-003: Requirements set v1.0 (approved)` on top of `7ff6f03` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** BLK-001. No cross-agent review of the requirements set
+- **Next step:** user runs `/assembly-research` (SDLC-004)

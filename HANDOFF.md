@@ -5,44 +5,35 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 16:41 +0500 by Claude Code (Opus 5.5), after an `/assembly-init` validation run. Git state updated for the documentation commit |
-| Current task | **SDLC-003 Requirements phase: `Ready`, not started, no owner** |
-| Last completed | SDLC-002 Multi-agent support (Done) |
-| Git state | At writing: HEAD `c5ffe7d`. **Planned:** all pending documentation changes (approval records, `/assembly-init` environment refresh, this handoff) go into the commit `SDLC-002: Record approval of D-002, D-003, D-005; refresh environment`. Verify with `git log --oneline -1` (expect that message on top of `c5ffe7d`). **Untracked, not ours:** `.idea/vcs.xml` (Rider, so the user's to commit or ignore). Any other change is someone else's. `.mcp.json` is git-ignored |
+| Written | 2026-10-26 17:22 +0500 by Claude Code (Opus 5.5), after recording the requirements approval. Git state updated for the SDLC-003 commit |
+| Current task | **SDLC-004 Research phase: `Ready`, not started, no owner** |
+| Last completed | SDLC-003 Requirements phase (Done. Set v1.0 approved 2026-10-26 17:11 +0500) |
+| Git state | At writing: HEAD `7ff6f03`. **Planned:** all pending SDLC-003 changes (requirements set, alignment edits, shared memory, this handoff) go into the commit `SDLC-003: Requirements set v1.0 (approved)`. Verify with `git log --oneline -1` (expect that message on top of `7ff6f03`) and `git status --short` (expect only `?? .idea/vcs.xml`). **Untracked, not ours:** `.idea/vcs.xml`. Any other change is someone else's |
 
 ## Last verified working state
-- SDLC foundation and multi-agent setup in place and structurally validated (details in
-  `CURRENT_TASK.md` → "Last completed").
-- No application code, no requirements yet. No builds or tests exist, so none have run.
+- Requirements set **v1.0 Approved** (`docs/01-requirements/`). All decisions D-001 to D-010 approved. No ADRs yet.
+- No application code. No builds or tests exist.
 
 ## Changes since the previous handoff
-First handoff. SDLC-002 changes:
-- Procedures and guides moved to the tool-independent core `docs/sdlc/`.
-- `AGENTS.md` holds the shared rules, and `CLAUDE.md` imports it.
-- Antigravity entry points added under `.agent/`.
-- Root shared memory files created. `PROJECT_STATE.md` replaced `docs/status/project-status.md` (deleted).
-- Git initialized.
-Full list: `WORK_LOG.md`.
+- Requirements approved. 117 requirements APPROVED, 12 NEEDS_RESEARCH (approved as goals, details after research).
+- D-010 approved: `docs/01-requirements/` 7-file set, single traceability matrix, P0–P3 priorities.
+- SDLC-004 (Research) defined in `CURRENT_TASK.md` with its priority questions.
 
 ## Failed tests and known issues
-- No failed tests (none exist).
-- **BLK-001:** no .NET SDK installed. Blocks phase 6+ only.
-- Antigravity IDE 1.11.17 loading of `.agent/workflows/` is not verified. In the IDE, check that typing `/`
-  shows `assembly-*` workflows. If not, open the procedure file manually (see below).
-- Antigravity can't technically block the model from starting a phase skill on its own. The gate is
-  enforced by `AGENTS.md` and `.agent/rules/assembly-studio.md`.
+- No failed tests (none exist). BLK-001: no .NET SDK (blocks phase 6+, not research).
+- NFR targets with basis PROPOSED are not yet validated, so don't treat them as measured.
+- Research needs web access to primary sources. Anything not checked must be labeled `[Unverified]`.
 
 ## Decisions and constraints to respect
-- Approved: D-001 to D-005 (process and tooling, see `DECISIONS.md`). No architecture decisions exist yet. Technology choices are **preferences only**.
-- Never self-approve a gate. Run phase procedures only when the user asks.
+- D-006 NASM syntax only. D-007 permissive open source: GPL candidates fail the license gate unless the user changes D-007.
+  D-008 text I/O + keyboard DOS subset. D-009 English, localizable. D-010 requirements layout.
+- Research recommends. Only ADRs (architecture phase) decide. POC code needs explicit user approval and lives in `poc/`.
 
 ## Exact next action
-User runs the requirements phase in either tool (optionally committing the approval records first):
-- Claude Code: `/assembly-requirements`
-- Antigravity CLI: `/assembly-requirements` (workspace skill)
-- Antigravity IDE: `/assembly-requirements` (workflow). Fallback: "Read
-  `docs/sdlc/procedures/assembly-requirements.md` and follow it."
-The agent starts with the elicitation questions. It must not draft requirements from assumptions.
+User runs the research phase in either tool:
+- Claude Code: `/assembly-research` (or `/assembly-research engine` for one topic)
+- Antigravity CLI: `/assembly-research` (workspace skill)
+- Antigravity IDE: `/assembly-research` (workflow). Fallback: "Read `docs/sdlc/procedures/assembly-research.md` and follow it."
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

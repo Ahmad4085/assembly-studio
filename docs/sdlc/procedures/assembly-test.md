@@ -19,7 +19,7 @@ templates `test-plan.md` and `test-report.md`.
 ## 4. Workflow
 1. **Gate in:** ≥1 task `Done`. Required SDK installed (else blocker, stop).
 2. **Plan.** Create or update `docs/07-testing/test-plan.md`: inventory TC IDs by level, mapped to
-   FR/NFR/TASK. Identify untested `Done` tasks and Must requirements.
+   FR/NFR/TASK. Identify untested `Done` tasks and P0 requirements.
 3. **Fill gaps.** Add missing deterministic tests for implemented behavior only, following
    `cpu-instruction-testing`. New tests for unimplemented features are marked `Skip` with a reason
    and never counted as passed. Adding tests here is in scope. Changing production code is not

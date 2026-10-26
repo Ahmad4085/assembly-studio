@@ -4,7 +4,7 @@
 |---|---|
 | Document | SDLC process contract |
 | Status | Approved (process baseline, established at initialization) |
-| Version | 1.1 |
+| Version | 1.2 |
 | Last updated | 2026-10-26 |
 | Owner | Project lead (user) |
 
@@ -19,11 +19,11 @@ live in `docs/sdlc/agent-protocol.md`. The contract applies equally to every age
 | # | Phase | Command | Primary outputs | Gate in (prerequisite) | Gate out |
 |---|---|---|---|---|---|
 | 0 | Initialization | `/assembly-init` | `AGENTS.md`, tool entry points, this file, overview, shared memory files, templates | — | Workspace validates |
-| 1 | Requirements | `/assembly-requirements` | `docs/01-requirements/requirements.md` | Phase 0 complete | **User approval** |
+| 1 | Requirements | `/assembly-requirements` | `docs/01-requirements/` requirements set (entry: `PRODUCT_REQUIREMENTS.md`) | Phase 0 complete | **User approval** |
 | 2 | Research | `/assembly-research` | `docs/02-research/*.md` | Requirements approved | **User approval** of findings and recommendations |
 | 3 | Architecture | `/assembly-architecture` | `docs/03-architecture/architecture.md`, `docs/decisions/ADR-*.md` | Research approved | **User approval** (document and each ADR) |
 | 4 | UI/UX design | `/assembly-design` | `docs/04-design/ui-spec.md`, `docs/04-design/design-tokens.md` | Architecture approved | **User approval** |
-| 5 | Implementation plan | `/assembly-plan` | `docs/05-planning/backlog.md`, `milestones.md`, `traceability.md` | Design approved | **User approval** of backlog (per milestone allowed) |
+| 5 | Implementation plan | `/assembly-plan` | `docs/05-planning/backlog.md`, `milestones.md`. Extends `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` | Design approved | **User approval** of backlog (per milestone allowed) |
 | 6 | Implementation | `/assembly-implement` | Code, tests, `WORK_LOG.md` entries | Task status `Approved` | Task `Done` (Definition of Done met, tests executed) |
 | 7 | Testing | `/assembly-test` | `docs/07-testing/test-plan.md`, `test-report-*.md` | At least one task `Done` | Report recorded (no approval needed) |
 | 8 | QA | `/assembly-qa` | `docs/08-qa/qa-report-*.md` | Test report for the build under QA | **Verdict**: Pass / Pass with conditions / Fail |
@@ -93,12 +93,12 @@ Test result: `Pass` | `Fail` | `Blocked` | `Not run`. Never `Pass` without an ex
 | Repository root | `AGENTS.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`, `ROADMAP.md`, `DECISIONS.md` | Every procedure (agent protocol §6) |
 | `docs/sdlc/` | Tool-independent procedures, guides, agent protocol | `/assembly-init` (changes need approval) |
 | `docs/00-project-overview/` | Overview, this contract | `/assembly-init` |
-| `docs/01-requirements/` | Requirements (FR/NFR/UC), assumptions, open questions | `/assembly-requirements` |
+| `docs/01-requirements/` | Requirements set: product requirements, FR, NFR, user stories, acceptance criteria, traceability matrix (single, extended by later phases), open questions and assumptions | `/assembly-requirements` (matrix: later phases too) |
 | `docs/02-research/` | Option evaluations, research summary, POC results | `/assembly-research` |
 | `docs/03-architecture/` | Architecture document | `/assembly-architecture` |
 | `docs/decisions/` | ADRs (`ADR-####-slug.md`) | `/assembly-architecture` (others may propose) |
 | `docs/04-design/` | UI spec, design tokens | `/assembly-design` |
-| `docs/05-planning/` | Milestones, backlog, traceability matrix, risk register | `/assembly-plan` |
+| `docs/05-planning/` | Milestones, backlog, risk register | `/assembly-plan` |
 | `docs/06-implementation/` | Implementation notes (only when a task needs them) | `/assembly-implement` |
 | `docs/07-testing/` | Test plan, test reports, defect log | `/assembly-test` |
 | `docs/08-qa/` | QA reports | `/assembly-qa` |
@@ -112,3 +112,5 @@ Folders are created when their first real document is written. No empty placehol
 - 2026-10-26 v1.1: Minor. Paths updated for the tool-independent core (`docs/sdlc/`) and root shared
   memory files (`PROJECT_STATE.md` replaces `docs/status/project-status.md`, `WORK_LOG.md` replaces the
   per-task log). Gates and rules unchanged.
+- 2026-10-26 v1.2: Minor. Requirements phase output is the `docs/01-requirements/` document set, and
+  `REQUIREMENTS_TRACEABILITY.md` is the single traceability matrix (D-010, proposed with the requirements gate).

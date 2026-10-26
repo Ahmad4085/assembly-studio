@@ -6,7 +6,7 @@
 | Status | Draft |
 | Version | 0.1 |
 | Last updated | YYYY-MM-DD |
-| Depends on | docs/01-requirements/requirements.md v<x> |
+| Depends on | docs/01-requirements/PRODUCT_REQUIREMENTS.md (set) v<x> |
 
 ## 1. Question
 <Decision this research informs; linked OQ-### and FR/NFR IDs.>

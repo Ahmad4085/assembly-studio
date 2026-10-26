@@ -42,7 +42,8 @@ Approved requirements and research, `docs/03-architecture/*`, `docs/decisions/*`
 `docs/03-architecture/architecture.md`, `docs/decisions/ADR-*.md`, `PROJECT_STATE.md` updated.
 
 ## 6. Validation
-- Every component lists requirements it serves. Every Must FR/NFR is covered by ≥1 component.
+- Every component lists requirements it serves. Every P0/P1 FR/NFR is covered by ≥1 component.
+- ADR IDs added to the ADR column of `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`.
 - Every ADR cites requirements and research. Licensing impact stated for each dependency.
 - No circular dependencies. Engine, runtime and assembler projects have no WPF references.
 - Every decision that rests on an `[Unverified]` claim names the POC or check that validates it.

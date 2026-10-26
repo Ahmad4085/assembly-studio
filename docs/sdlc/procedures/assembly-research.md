@@ -13,7 +13,7 @@ Decisions are made as ADRs in `/assembly-architecture`.
 execution engine → DOS/BIOS services → assembler → editor component → testing → packaging.
 
 ## 3. Reads
-Approved `docs/01-requirements/requirements.md`, `PROJECT_STATE.md`, existing `docs/02-research/*`,
+Approved `docs/01-requirements/` set (especially `OPEN_QUESTIONS.md`), `PROJECT_STATE.md`, existing `docs/02-research/*`,
 `docs/sdlc/guides/assembly-emulator-research.md` (domain guidance and candidate list),
 `docs/sdlc/guides/sdlc-documentation.md`, `docs/templates/research-evaluation.md`.
 

@@ -10,7 +10,7 @@
 ## 1. Requirement verification
 | Requirement | Priority | Acceptance criteria | Evidence (test, manual check) | Result |
 |---|---|---|---|---|
-| FR-001 | Must | AC1… | TC-…, manual step … | Verified / Failed / Not verified |
+| FR-001 | P0 | AC-… | TC-…, manual step … | Verified / Failed / Not verified |
 
 ## 2. Quality checks
 | Area | Checks performed | Result | Notes |
@@ -29,7 +29,7 @@
 |---|---|---|---|
 
 ## 4. Verdict rationale
-Release recommendation is **blocked** if any Must acceptance criterion fails or any Critical
+Release recommendation is **blocked** if any acceptance criterion of a P0 requirement fails or any Critical
 defect is open. List the conditions for "Pass with conditions".
 
 ## 5. Not verified

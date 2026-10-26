@@ -4,51 +4,47 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## SDLC-003: Requirements phase
+## SDLC-004: Research phase
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (not started) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
 | Started | — |
-| Procedure | `docs/sdlc/procedures/assembly-requirements.md` (invoke with `/assembly-requirements`) |
-| Depends on | Phase 0 complete ✔ (SDLC-001, SDLC-002) |
+| Procedure | `docs/sdlc/procedures/assembly-research.md` (invoke with `/assembly-research [topic]`) |
+| Depends on | Requirements set v1.0 approved ✔ (2026-10-26 17:11 +0500) |
 
-**Objective:** Produce `docs/01-requirements/requirements.md` (users, use cases, FR/NFR with
-acceptance criteria and priorities, constraints, supported-scope statement, assumptions, open
-questions) and obtain explicit user approval.
+**Objective:** Gather verified evidence (primary sources, licenses, versions, capabilities) for the decisions the
+architecture must make, compare options against the approved requirements, and recommend. Research recommends;
+decisions are made as ADRs in `/assembly-architecture`.
 
-**Requirements and inputs:** `docs/00-project-overview/project-overview.md` (vision, OQ-001…OQ-007),
-the user's answers to the elicitation questions, `docs/templates/requirements.md`.
+**Requirements and inputs:** `docs/01-requirements/` (approved v1.0), especially `OPEN_QUESTIONS.md`. Guidance:
+`docs/sdlc/guides/assembly-emulator-research.md`. Template: `docs/templates/research-evaluation.md`.
+Priority questions: OQ-001 and OQ-008 (execution engine and its state access, breakpoints, snapshots, determinism),
+OQ-002 (NASM redistribution, minimum version, `CPU 8086` behavior), OQ-009 (source-line mapping), OQ-003 (DOS service
+semantics), OQ-004 (.COM vs MZ), OQ-005, OQ-010 and OQ-013 (.NET/WPF platform and deployment), OQ-015 and OQ-016
+(flag and CPU semantics, reference test suites), OQ-014 (reference machine). All candidates must be license-compatible
+with permissive open source (D-007).
 
-**Files in scope:** `docs/01-requirements/requirements.md` (new). `docs/00-project-overview/project-overview.md`
-(OQ annotations only). Shared memory files. **No code.**
+**Files in scope:** `docs/02-research/*.md` (new), optional `poc/` **only with explicit user approval per POC**.
+Updates to `docs/01-requirements/OPEN_QUESTIONS.md` status columns (minor), and shared memory files. **No product code.**
 
 **Acceptance criteria (procedure exit conditions):**
-- Every FR has ≥1 Given/When/Then acceptance criterion and a priority. Every NFR has a measurable threshold
-  and a verification method.
-- High-impact unknowns recorded as `OQ-###`, not guessed. The supported and unsupported scope is explicit.
-- The document is `Approved` by an explicit user statement logged in `PROJECT_STATE.md`, or is
-  `Awaiting approval` with the gate question asked.
+- Every license, version, platform and capability claim carries an evidence label (`[Verified: source, date]`,
+  `[Measured]`, `[Unverified]`, `[Hypothesis]`). No benchmark numbers without `[Measured]`.
+- Each recommendation cites the requirement IDs it satisfies and the gaps it leaves.
+- `docs/02-research/research-summary.md` links the topic files and lists the unverified items with a resolution plan.
+- The summary is `Approved` by an explicit user statement logged in `PROJECT_STATE.md`, or is `Awaiting approval`
+  with the gate question asked.
 
 **Validation performed:** none yet.
-**Remaining work:** all of it. Starts with elicitation questions to the user.
+**Remaining work:** all of it. Needs web access to primary sources. Without it, findings must be labeled `[Unverified]`.
 
 ---
 
-## Last completed: SDLC-002, Multi-agent support (Done 2026-10-26, Claude Code)
-**Validation performed (all executed 2026-10-26):**
-1. Structural validator (`validate2.py`, kept in the session scratchpad rather than the repository) checked:
-   - 11 procedures with all 10 sections and the session-protocol header, plus 5 guides;
-   - 32 skill wrappers (16 Claude Code + 16 Antigravity), all pointing to existing core files, with matching names and descriptions;
-   - Claude phase wrappers have `disable-model-invocation: true`;
-   - 11 IDE workflows, and the rule `trigger: always_on`;
-   - `AGENTS.md` has no frontmatter and is 5.9 KB, under the 24 KB limit;
-   - no stale paths, no broken references, no parallel customization roots.
-2. Antigravity CLI 1.4.4 (`agy -p`, plan mode, no tools): reported all 16 workspace skills plus `AGENTS.md` and
-   `.agent/rules/assembly-studio.md` loaded. With `.agent/workflows/` present, the CLI loaded **no** workflows,
-   so there are no duplicate commands.
-3. Claude Code: `claude -p "/assembly-status"` (with `MSYS_NO_PATHCONV=1`) expanded the skill and produced a correct
-   status report. Simulated arrival in both tools reported the same task, blockers and next action.
-   Details are in `WORK_LOG.md` (SDLC-002).
-**Not verified:** Antigravity desktop IDE 1.11.17 loading `.agent/workflows/` and `.agent/rules/` (needs the GUI).
+## Last completed: SDLC-003, Requirements phase (Done 2026-10-26, Claude Code)
+- Requirements set v1.0 **Approved** 2026-10-26 17:11 +0500 ("approve requirements v0.1 and D-010"). D-006 to D-010 approved.
+- 96 FR + 33 NFR: 117 APPROVED, 12 NEEDS_RESEARCH. 26 US, 63 AC, 19 OQ.
+- Validation: generator checks (IDs, references, coverage, priorities, vague wording) passed for v0.1 and v1.0. A v0.1
+  regeneration was byte-identical to the files before approval, and v1.0 differs only in statuses and approval text.
+  Repository structural validator passed after the approval edits (ALL OK). Details: `WORK_LOG.md`.

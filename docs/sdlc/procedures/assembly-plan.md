@@ -14,7 +14,7 @@ Never writes code.
 ## 3. Reads
 Approved requirements, research summary, architecture, ADRs, UI spec and tokens; `PROJECT_STATE.md`;
 existing `docs/05-planning/*`; `docs/sdlc/guides/sdlc-documentation.md`; templates
-`backlog.md`, `implementation-task.md`, `traceability.md`.
+`backlog.md`, `implementation-task.md`. The traceability matrix `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`.
 
 ## 4. Workflow
 1. **Gate in:** UI spec `Approved` (or waiver). Check every *Depends on* version and report outdated inputs.
@@ -29,7 +29,8 @@ existing `docs/05-planning/*`; `docs/sdlc/guides/sdlc-documentation.md`; templat
    Size: completable and verifiable in one session (roughly ≤ 1 day of work). Split larger ones.
 5. **Environment tasks.** Include prerequisites explicitly (e.g. "install .NET SDK per ADR"). The
    user performs them, so mark them as user actions.
-6. **Traceability.** Create or update `docs/05-planning/traceability.md` and list coverage gaps.
+6. **Traceability.** Add UI and task columns to `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`
+   (layout: `docs/templates/traceability.md`) and list coverage gaps. Never create a second matrix.
 7. **Risk register** in the backlog.
 8. All new tasks `Proposed`. Set backlog `Awaiting approval`. Ask the gate question (whole backlog or
    per milestone).
@@ -37,10 +38,10 @@ existing `docs/05-planning/*`; `docs/sdlc/guides/sdlc-documentation.md`; templat
 ## 5. Outputs
 `docs/05-planning/backlog.md` (milestones, tasks, risks), `docs/05-planning/milestones.md` (only if
 the backlog becomes too long, otherwise keep milestones inside the backlog),
-`docs/05-planning/traceability.md`, `PROJECT_STATE.md` updated.
+`docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` extended, `PROJECT_STATE.md` updated.
 
 ## 6. Validation
-- Every Must FR/NFR maps to ≥1 task, or is listed as a gap with a reason.
+- Every P0 FR/NFR maps to ≥1 task. P1 items map to a task or have an approved deferral. Gaps are listed with reasons.
 - Every task has ≥1 requirement, test requirements and a Definition of Done.
 - Dependency graph is acyclic. No task depends on a later milestone.
 - Tasks relying on `[Unverified]` claims depend on the POC that verifies them.

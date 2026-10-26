@@ -64,7 +64,7 @@ These preferences become decisions only through approved ADRs (`docs/decisions/`
 | OQ-006 | ~~Initialize a Git repository?~~ Resolved 2026-10-26: initialized with an initial commit (D-004). Remote/hosting still open | Low | User decision |
 | OQ-007 | Product licensing and distribution model (open source? which license?). Affects which dependencies are allowed. | High | Requirements |
 
-These are carried into `docs/01-requirements/requirements.md` when it is created.
+Carried into `docs/01-requirements/OPEN_QUESTIONS.md` on 2026-10-26 (SDLC-003), which is now the authoritative list.
 
 ## Changelog
 - 2026-10-26 v0.1: Created at initialization.

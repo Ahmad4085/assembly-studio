@@ -157,3 +157,48 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** BLK-001. No cross-agent review of the requirements set
 - **Next step:** user runs `/assembly-research` (SDLC-004)
+
+### 2026-10-26 17:28–17:58 +0500 · Claude Code (Opus 5.5) · SDLC-004
+- **Summary:** Ran the research phase (all topics). Claimed SDLC-004 at 17:28. Launched 5 research agents (platform/packaging,
+  execution engine, assembler, DOS services, editor/MVVM/testing) and measured NASM 3.02 locally. **Interruption:** the Claude
+  Code process exited while the agents were running, so `HANDOFF.md` still showed SDLC-004 `Ready`. On resume (~17:47) the
+  state was reconstructed per agent protocol §9: Git and files unchanged apart from my own lock, and the agents were resumed from
+  their saved transcripts. Wrote 5 topic documents and the summary, re-fetched 11 high-impact claims myself, and updated
+  `OPEN_QUESTIONS.md` to v1.1 (13 status updates, OQ-020 to OQ-022 added; minor). Gate question asked.
+- **Key findings:** .NET 10 LTS to 2028-11-14 but **no Windows 10 22H2 Home/Pro support** (conflicts with CON-001/NFR-025 → D1).
+  Unicorn and DOSBox family fail the license gate. Custom C# core + SingleStepTests (MIT) recommended. NASM BSD-2 bundle; a later
+  `cpu 386` in user source overrides `--before "cpu 8086"` (FR-027 gap). AvalonEdit 6.3.1 (net8 build, basic UIA). DOS 3.3/4.0
+  semantics from the MS-DOS MIT source.
+- **Files changed:** created `docs/02-research/{research-summary,platform-and-packaging,execution-engine,dos-services,assembler,
+  editor-mvvm-testing}.md`. Modified `docs/01-requirements/OPEN_QUESTIONS.md` (v1.1), `CURRENT_TASK.md`, `PROJECT_STATE.md`,
+  `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** no product tests (no code). NASM measurements (commands listed in `assembler.md`). Evidence-label scan.
+  Structural validator ALL OK
+- **Git state after:** HEAD `86784bb`. All SDLC-004 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider, not ours)
+- **Unresolved issues:** decisions D1–D3. BLK-001 now also blocks POCs. 13 unverified items with resolution plans (summary §5)
+- **Next step:** user reviews and approves the research summary and answers D1–D3. Then `/assembly-architecture`
+
+### 2026-10-26 18:05 +0500 · Claude Code (Opus 5.5) · SDLC-004
+- **Summary:** Recorded the user's research approval and decisions ("approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK", 2026-10-26 17:59 +0500). Research set → v1.0 `Approved`.
+  D-011 (Windows: Win11 24H2+ and Win10 LTSC supported; Win10 22H2 not), D-012 (add INT 21h AH=00h) and D-013 (POC-001/002 approved,
+  SDK install authorized) added to `DECISIONS.md`. **Installed the .NET SDK 10.0.403 via WinGet** (package `Microsoft.DotNet.SDK.10`,
+  hash verified by WinGet, exit 0). BLK-001 resolved. Defined POC-001/002 in `docs/02-research/poc-00{1,2}.md`. SDLC-004 Done.
+  Created SDLC-005 (requirements change) as `Ready`. CON-001, NFR-025 and FR-039 marked Outdated until SDLC-005.
+- **Files changed:** `docs/02-research/*.md` (6 → v1.0), new `docs/02-research/poc-001.md` and `poc-002.md`,
+  `docs/sdlc/procedures/assembly-implement.md` (minor: where POC definitions live), `DECISIONS.md`, `PROJECT_STATE.md`, `ROADMAP.md`,
+  `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`. **System change:** .NET SDK 10.0.403 + runtimes 10.0.14 installed machine-wide
+- **Tests executed:** `dotnet --list-sdks` → `10.0.403`. `dotnet new wpf --framework net10.0` + `dotnet build -c Release` in the scratchpad →
+  0 warnings, 0 errors (throwaway, not in the repo). Structural validator: see the next `HANDOFF.md`
+- **Git state after:** HEAD `86784bb`. SDLC-004 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** SDLC-005 pending. POC-001/002 not started
+- **Next step:** `/assembly-requirements` (SDLC-005), then `/assembly-implement POC-001` / `POC-002`, then `/assembly-architecture`
+
+### 2026-10-26 18:07 +0500 · Claude Code (Opus 5.5) · SDLC-004
+- **Summary:** At the user's request ("commit the pending changes"), committed all SDLC-004 work. Recorded result for the previous
+  entry: the structural validator passed (ALL OK) after the approval edits.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator before commit
+- **Git state after:** commit `SDLC-004: Research v1.0 (approved), D-011..D-013` on top of `86784bb` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** SDLC-005 pending. POC-001/002 not started
+- **Next step:** `/assembly-requirements apply D-011 and D-012` (SDLC-005)

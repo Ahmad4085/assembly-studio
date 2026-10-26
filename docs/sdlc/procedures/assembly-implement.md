@@ -12,7 +12,8 @@ Implement a single approved, scoped task with tests, verified by an actual build
 dependencies `Done`) and ask which one. Don't pick one yourself.
 
 ## 3. Reads
-- `HANDOFF.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `docs/05-planning/backlog.md` (the task block).
+- `HANDOFF.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `docs/05-planning/backlog.md` (the task block). For an approved
+  proof of concept: `docs/02-research/poc-<id>.md` (code goes in `poc/`, never `src/`).
 - Every requirement, ADR and UI item the task links to, plus the relevant sections of
   `docs/03-architecture/architecture.md` and `docs/04-design/*`.
 - Existing code in the areas to be touched (conventions to match).

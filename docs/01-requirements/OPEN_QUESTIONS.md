@@ -4,7 +4,7 @@
 |---|---|
 | Document | Open questions and assumptions |
 | Status | Approved |
-| Version | 2.3 |
+| Version | 2.5 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -36,8 +36,11 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-018 | Is a NASM-syntax hint enough for students whose courses use MASM/TASM syntax, or is a MASM-compatible mode needed later? | Low | Post-MVP review | Open | FR-021, D-006 |
 | OQ-019 | Development tooling: .NET SDK not installed (BLK-001). Which IDE (Rider is present) and CI setup? | Low | Before phase 6 | Open: .NET SDK still not installed. Now also blocks POCs (`research-summary.md` D3) | — |
 | OQ-020 | Code signing for the installer and executables (Windows SmartScreen warnings for an unsigned open-source app); free options? | Medium | Architecture / release | Open (raised by research 2026-10-26) | FR-083, NFR-027 |
-| OQ-021 | Keyboard conflict: Ctrl+C is 'copy' in the IDE but Ctrl-C/Ctrl-Break in a DOS program. How are they routed (console focus only)? | Low | Design | Open (raised by research 2026-10-26) | FR-064, FR-091 |
+| OQ-021 | Keyboard conflict: Ctrl+C is 'copy' in the IDE but Ctrl-C/Ctrl-Break in a DOS program. How are they routed (console focus only)? | Low | Design | Resolved 2026-10-26 by `docs/04-design/ui-spec.md` §6 (D-015) | FR-064, FR-091 |
 | OQ-022 | Add DOS functions beyond D-008: AH=00h (DOS-1 terminate), 06h (direct console I/O), 0Bh (input status), 30h (version)? | Medium | Architecture (needs a requirements change) | Partially resolved: AH=00h added (D-012). 06h, 0Bh, 30h not in MVP per ADR-0004 (2026-10-26). Open for post-MVP | FR-039, D-008 |
+| OQ-023 | `MachineSnapshot` lacks current-instruction decode, memory and stack windows, and history entries needed by UI-007/008/009/013 | Medium | Design (ADR-0007 amendment) | Resolved 2026-10-26 by ADR-0007 v1.1 amendment | FR-053, FR-054, FR-055, FR-058 |
+| OQ-024 | Floating and re-dockable panels (needs a docking library and an ADR) | Low | Post-MVP | Open | UI-001 |
+| OQ-025 | Are Cascadia Mono and Segoe Fluent Icons present on Windows 10 Enterprise LTSC 21H2? | Low | First shell task | Open (fallbacks: Consolas, Segoe MDL2 Assets) | NFR-025 |
 
 ## Assumptions to validate
 | ID | Assumption | Risk if false | Validation |
@@ -58,3 +61,5 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-10-26 v2.1: Minor (POC-001 results). Status updated for OQ-001, OQ-008, OQ-014. No requirement changed. Stays Approved.
 - 2026-10-26 v2.2: Minor (POC-002 results). OQ-009 answered. No requirement changed. Stays Approved.
 - 2026-10-26 v2.3: Minor. OQ-001, 005, 011, 013, 014, 015, 016 resolved by approved ADRs / D-014. OQ-022 updated. No requirement changed.
+- 2026-10-26 v2.4: Minor (SDLC-007). OQ-021 resolution proposed. OQ-023 to OQ-025 added. No requirement changed.
+- 2026-10-26 v2.5: Minor. OQ-021 and OQ-023 resolved (design approval). No requirement changed.

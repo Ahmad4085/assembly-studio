@@ -332,3 +332,41 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** none
 - **Next step:** `/assembly-design` (SDLC-007)
+
+### 2026-10-26 18:57–19:02 +0500 · Claude Code (Opus 5.5) · SDLC-007
+- **Summary:** Ran the UI/UX design phase. Wrote `docs/04-design/ui-spec.md` v0.1 (6 principles, layout + wireframe, 22 UI items with data sources,
+  12-state × 11-panel matrix, changed-value rules, editor behavior, 33 commands with shortcuts, accessibility, component conventions) and
+  `docs/04-design/design-tokens.md` v0.1 (semantic dark/light tokens, measured contrast, high-contrast mapping, typography, spacing, motion).
+  Found an architecture gap: snapshots lack instruction decode, memory/stack windows and history. Proposed an ADR-0007 v1.1 amendment (OQ-023)
+  instead of inventing an API. Proposed the OQ-021 Ctrl+C resolution. Added OQ-024/025.
+- **Files changed:** created `docs/04-design/ui-spec.md` and `docs/04-design/design-tokens.md`. Modified `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.2,
+  UI column), `docs/01-requirements/OPEN_QUESTIONS.md` (v2.4), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** contrast script: first run 5/166 failing (dark selection #264F78 and comment colors), palette fixed, then 166/166 pass.
+  Design check ALL OK (86/86 app-facing FRs, matrix complete, 33 commands); negative test caught injected defects. Requirements validator and
+  structural validator ALL OK. No product code or tests
+- **Git state after:** HEAD `d13f958`. SDLC-007 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** approval pending (spec, tokens, ADR-0007 v1.1, OQ-021)
+- **Next step:** user approves. Then `/assembly-plan`
+
+### 2026-10-26 19:04 +0500 · Claude Code (Opus 5.5) · SDLC-007
+- **Summary:** Recorded the user's approval ("approve", 2026-10-26 19:03 +0500), given as the reply to the gate question that named four items: ui-spec v0.1, design tokens v0.1,
+  the ADR-0007 v1.1 amendment and the Ctrl+C proposal. All four applied: ui-spec and tokens → v1.0 `Approved`; ADR-0007 → v1.1 (snapshot content,
+  FR-053/054/055/058 added); architecture → v1.1 (minor alignment); D-015 Ctrl+C routing; OPEN_QUESTIONS v2.5 (OQ-021, OQ-023 resolved). SDLC-007 Done,
+  SDLC-008 Ready.
+- **Files changed:** `docs/04-design/ui-spec.md`, `docs/04-design/design-tokens.md`, `docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md`,
+  `docs/03-architecture/architecture.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `DECISIONS.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `CURRENT_TASK.md`,
+  `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** requirements, structural and design validators (see `HANDOFF.md`)
+- **Git state after:** HEAD `d13f958`. SDLC-007 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** none for SDLC-007
+- **Next step:** `/assembly-plan` (SDLC-008)
+
+### 2026-10-26 19:05 +0500 · Claude Code (Opus 5.5) · SDLC-007
+- **Summary:** At the user's request ("commit the pending changes"), committed all SDLC-007 work. Recorded result for the previous entry: structural,
+  requirements and design validators passed (ALL OK) after the approval edits.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural, requirements and design validators before commit
+- **Git state after:** commit `SDLC-007: UI/UX design v1.0 (approved), ADR-0007 v1.1` on top of `d13f958` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** none
+- **Next step:** `/assembly-plan` (SDLC-008)

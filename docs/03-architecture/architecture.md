@@ -4,7 +4,7 @@
 |---|---|
 | Document | System architecture |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 1.1 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/01-requirements/` set v2.0, `docs/02-research/research-summary.md` v1.0, `poc-001.md`, `poc-002.md` |
 
@@ -110,7 +110,8 @@ The complete requirement → component → ADR allocation is in **Appendix A** (
 - **Limits:** instruction budget (default 10,000,000, configurable), console buffer 1 MB, history 1,000 entries, memory exactly
   1 MiB (NFR-015).
 - **Determinism:** no wall clock, no randomness, input recorded with instruction counts. Same image + same input = same trace (NFR-016).
-- **Snapshots:** `CpuState` (record struct) plus memory change ranges from the write journal. The full 1 MiB isn't copied per step
+- **Snapshots:** `CpuState` (record struct) plus memory change ranges from the write journal, and (ADR-0007 v1.1) the decoded current
+  instruction, subscribed memory windows, the stack window and the history delta. The full 1 MiB isn't copied per step
   (161 µs, measured). Reverse stepping (P2) will replay the journal.
 
 ## 5. Data and file formats
@@ -191,7 +192,7 @@ User-facing messages carry a stable code, what happened, where, and the next ste
 | ADR-0004 | Runtime environment and DOS services: in-process, own implementation | Approved |
 | ADR-0005 | Assembler integration: bundled NASM 3.02, listing + map source mapping | Approved |
 | ADR-0006 | Code editor: AvalonEdit | Approved |
-| ADR-0007 | UI architecture: MVVM, threading, snapshots, settings | Approved |
+| ADR-0007 | UI architecture: MVVM, threading, snapshots, settings (v1.1 amendment) | Approved |
 | ADR-0008 | Test framework, tools and oracle data | Approved |
 | ADR-0009 | Packaging: self-contained publish + Inno Setup per-user installer | Approved (code signing Deferred) |
 
@@ -349,3 +350,4 @@ Generated from the component allocation and the ADRs' "Requirements addressed" r
 ## Changelog
 - 2026-10-26 v0.1: Initial architecture (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
+- 2026-10-26 v1.1: Minor. Snapshot description aligned with the approved ADR-0007 v1.1 amendment (OQ-023).

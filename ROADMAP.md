@@ -10,8 +10,8 @@
 | 1 | Requirements | Phase 0 | User approval | **Approved** (v1.0 2026-10-26 17:11 +0500; v2.0 2026-10-26 18:18 +0500) | SDLC-003, SDLC-005 |
 | 2 | Research | Requirements approved | User approval | **Approved** (2026-10-26 17:59 +0500, set v1.0) | SDLC-004 |
 | 3 | Architecture (+ ADRs) | Research approved | User approval | **Approved** (2026-10-26 18:54 +0500, v1.0 + 9 ADRs) | SDLC-006 |
-| 4 | UI/UX design | Architecture approved | User approval | Ready to start | SDLC-007 |
-| 5 | Implementation plan | Design approved | User approval (per milestone allowed) | Not started | — |
+| 4 | UI/UX design | Architecture approved | User approval | **Approved** (2026-10-26 19:03 +0500, spec + tokens v1.0) | SDLC-007 |
+| 5 | Implementation plan | Design approved | User approval (per milestone allowed) | Ready to start | SDLC-008 |
 | 6 | Implementation | Task `Approved` | Task `Done` with evidence | Not started (BLK-001 resolved) | — |
 | 7 | Testing | ≥1 task `Done` | Report recorded | Not started | — |
 | 8 | QA | Test report for build | Verdict | Not started | — |
@@ -30,7 +30,8 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 | POC-001 | Custom C# 8086 core feasibility (`/assembly-implement POC-001`) | Done | Claude Code 2026-10-26 18:33 +0500. **Feasible** (178,000/178,000 cases, ~48 M instr/s) |
 | POC-002 | NASM listing + map source mapping (`/assembly-implement POC-002`) | Done | Claude Code 2026-10-26 18:42 +0500. **Sufficient with limitations** (24/24 tests, 3 independent verifiers) |
 | SDLC-006 | Architecture phase (`/assembly-architecture`) | Done | Claude Code. Architecture v1.0 + ADR-0001..0009 approved 2026-10-26 18:54 +0500. D-014 |
-| SDLC-007 | UI/UX design phase (`/assembly-design`) | Ready | UI spec + design tokens. Settles OQ-021 (Ctrl+C) |
+| SDLC-007 | UI/UX design phase (`/assembly-design`) | Done | Claude Code. Spec + tokens v1.0, ADR-0007 v1.1, D-015 approved 2026-10-26 19:03 +0500 |
+| SDLC-008 | Implementation plan (`/assembly-plan`) | Ready | Milestones, backlog, risk register. Extends the traceability matrix with tasks |
 
 ## Product milestones
 Not defined yet. `/assembly-plan` defines them (expected shape in

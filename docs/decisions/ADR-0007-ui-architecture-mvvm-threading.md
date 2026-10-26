@@ -3,9 +3,9 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.0 |
+| Version | 1.1 |
 | Date | 2026-10-26 |
-| Requirements addressed | FR-035, FR-049, FR-050, FR-051, FR-056, FR-057, FR-064, FR-067, FR-077, FR-078, FR-080, FR-081, FR-082, NFR-002, NFR-004, NFR-009, NFR-018, NFR-019, NFR-032 |
+| Requirements addressed | FR-035, FR-049, FR-050, FR-051, FR-056, FR-057, FR-064, FR-067, FR-077, FR-078, FR-080, FR-081, FR-082, FR-053, FR-054, FR-055, FR-058, NFR-002, NFR-004, NFR-009, NFR-018, NFR-019, NFR-032 |
 | Research | `docs/02-research/editor-mvvm-testing.md` (R-MVVM), `poc-001.md` (latency and throughput) |
 
 ## Context
@@ -36,6 +36,11 @@ bottleneck, not emulation.
    - **Publishing:** an immutable `MachineSnapshot` (CPU state, undefined-flag mask, changed memory ranges since the last publish,
      console delta, session state, current source location). Snapshots are published **immediately** after a step or pause, and
      **at most 30 per second** while running (with a "running — not current" state, FR-057).
+   - **Amendment v1.1 (2026-10-26, OQ-023, from `docs/04-design/ui-spec.md` §10):** each snapshot also carries `CurrentInstruction`
+     (address, bytes, disassembly via `IDisassembler`, source location, `FromMacroExpansion`), `MemoryWindows` (immutable copies of up to
+     4 UI-subscribed regions of ≤ 4 KiB, via `IDebugSession.WatchMemory(seg, off, length)`), `StackWindow` (N words from SS:SP, default 16)
+     and `HistoryDelta` (instructions executed since the last snapshot, bounded by the 1,000-entry history). The worker produces all of
+     them at publish time.
 3. **View models** consume only snapshots, through the Dispatcher. Changed-value highlighting comes from snapshot diffs (FR-056),
    using a non-color cue (desktop-ui-quality guide).
 4. **Settings:** JSON at `%APPDATA%\AssemblyStudio\settings.json` (System.Text.Json, part of .NET). On an invalid file: use
@@ -54,3 +59,4 @@ bottleneck, not emulation.
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
+- 2026-10-26 v1.1: **Amendment approved** by the user (2026-10-26 19:03 +0500: "approve" (reply to the gate question naming ui-spec v0.1, design tokens v0.1, the ADR-0007 v1.1 amendment and the Ctrl+C proposal)). Snapshot content extended (OQ-023). No other change.

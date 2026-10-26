@@ -1,0 +1,27 @@
+# .NET build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.trx
+
+# Packaging output
+publish/
+artifacts/
+*.exe.tmp
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Secrets (never commit)
+*.pfx
+*.snk.private
+.env
+
+# Rider keeps its own per-user ignore list in .idea/.gitignore
+
+# Machine-specific: JetBrains Rider local MCP endpoint (port changes per session)
+.mcp.json

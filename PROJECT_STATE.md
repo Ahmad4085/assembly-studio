@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 19:04 +0500 by Claude Code (SDLC-007 approval recorded) |
-| Current phase | 4 UI/UX design: **approved** (ui-spec v1.0, design tokens v1.0, ADR-0007 v1.1). Next: **5 Implementation plan** |
-| Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `SDLC-008` Implementation plan (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-plan` |
+| Last updated | 2026-10-26 19:17 +0500 by Claude Code (SDLC-008 approval recorded) |
+| Current phase | 5 Implementation plan: **approved** (backlog v1.0). Next: **6 Implementation**, milestone M0 |
+| Current milestone | M0 Foundation (not started) |
+| Active task | None in progress. Next: `TASK-001` Solution skeleton (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-implement TASK-001`. User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -28,6 +28,7 @@
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| SDLC-008 Implementation plan (phase 5) | 2026-10-26 19:17 +0500 | Backlog v1.0 approved: 8 milestones, 62 tasks |
 | SDLC-007 UI/UX design phase (phase 4) | 2026-10-26 19:03 +0500 | ui-spec v1.0 + design tokens v1.0 approved. ADR-0007 v1.1. D-015 |
 | SDLC-006 Architecture phase (phase 3) | 2026-10-26 18:54 +0500 | Architecture v1.0 + ADR-0001..0009 approved, D-014 |
 | POC-002 NASM listing + map source mapping | 2026-10-26 18:42 +0500 | **Sufficient with limitations**: `docs/02-research/poc-002.md`, `poc/POC-002-source-mapping/` |
@@ -48,6 +49,7 @@ See `DECISIONS.md`.
 | 2026-10-26 17:59 +0500 | **Research gate (phase 2)**: `docs/02-research/` set + decisions D-011, D-012, D-013 | 1.0 | User | "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Recommendations are input to ADRs, not decisions |
 | 2026-10-26 18:54 +0500 | **Architecture gate (phase 3)**: `docs/03-architecture/architecture.md` + ADR-0001..0009 + reference machine (D-014) | 1.0 | User | "approve architecture v0.1 and ADR-0001..0009; reference machine OK". ADR-0009 code signing remains Deferred (OQ-020) |
 | 2026-10-26 19:03 +0500 | **Design gate (phase 4)**: `docs/04-design/ui-spec.md` + `design-tokens.md`, ADR-0007 v1.1 amendment, Ctrl+C routing (D-015) | 1.0 | User | "approve", given to the gate question that named these four items |
+| 2026-10-26 19:17 +0500 | **Plan gate (phase 5)**: `docs/05-planning/backlog.md` (all milestones M0–M7, TASK-001..105) | 1.0 | User | "approve backlog v0.1". All 62 tasks Approved |
 | 2026-10-26 18:18 +0500 | **Requirements set v2.0** (D-011, D-012 applied; new AC-064) | 2.0 | User | "approve requirements v2.0". FR-039, FR-041, NFR-025 → APPROVED |
 
 ## Waivers

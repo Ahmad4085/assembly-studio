@@ -4,32 +4,27 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## SDLC-008: Implementation plan
+## TASK-001: Solution skeleton and build settings
 
 | Field | Value |
 |---|---|
-| Status | **Ready** (not started) |
+| Status | **Ready** (approved, not started) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
 | Started | — |
-| Procedure | `docs/sdlc/procedures/assembly-plan.md` (invoke with `/assembly-plan`) |
-| Depends on | Requirements v2.0, research v1.0, architecture v1.1, ADR-0001..0009 (0007 v1.1), ui-spec v1.0, design tokens v1.0, all approved ✔ |
+| Definition | `docs/05-planning/backlog.md` § TASK-001 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-001`) |
+| Depends on | — (first task). ADR-0001, ADR-0002, ADR-0008 approved ✔. .NET SDK 10.0.403 ✔ |
 
-**Objective:** produce `docs/05-planning/backlog.md` (milestones, ordered `TASK-###` with scope, dependencies, test requirements and Definition of Done,
-risk register) and extend `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` with a Tasks column, then obtain approval (per milestone allowed).
-**No code.**
+**Objective:** create `AssemblyStudio.slnx` with all projects from ADR-0002 (empty), one test project per production project, shared build settings,
+central package versions, root `global.json` (SDK pin + Microsoft.Testing.Platform runner) and `.editorconfig`, with trivial tests passing.
 
-**Key inputs:** ADR-0002 (projects and dependency rules), ADR-0008 (MTP, oracle data fetch), the validation items the ADRs assign to "first … task"
-(AvalonEdit on net10 + Narrator, Iced on net10, fonts and icons OQ-025, text scaling, theme contrast test, coverlet MTP, NASM fixtures for `<10>`/nested includes/`%rep`),
-POC-001/002 code as references (not to be promoted directly).
-
-**Acceptance criteria:** the procedure's validation (`docs/sdlc/procedures/assembly-plan.md` §6).
+**Acceptance criteria:** `dotnet build -c Release` → 0 warnings. `dotnet test --solution AssemblyStudio.slnx` → all trivial tests pass. Standard DoD (backlog §4).
 
 **Validation performed:** none yet.
-**Remaining work:** all of it.
+**Remaining work:** all of it. **Parallel user action:** TASK-006 (clean Windows 11 24H2 and Windows 10 Enterprise LTSC 21H2 VMs) can start any time.
 
 ---
 
-## Last completed: SDLC-007, UI/UX design (Done 2026-10-26, Claude Code)
-- ui-spec v1.0 + design tokens v1.0 **Approved** 2026-10-26 19:03 +0500 ("approve", given to the gate question naming spec, tokens, ADR-0007 v1.1 and Ctrl+C).
-- ADR-0007 → v1.1 (snapshot content, OQ-023). D-015 Ctrl+C routing (OQ-021). Architecture → v1.1 (minor, aligned).
-- Validation: 166/166 contrast pairs, design check ALL OK, requirements and structural validators ALL OK.
+## Last completed: SDLC-008, Implementation plan (Done 2026-10-26, Claude Code)
+- Backlog v1.0 **Approved** 2026-10-26 19:17 +0500 ("approve backlog v0.1"): 8 milestones, 62 tasks (3 user actions), all `Approved`.
+- Validation: plan checks OK (77/77 P0, 40/40 P1 covered, acyclic, milestone order, unverified gating). Traceability v2.3 (Tasks column). Validators ALL OK.

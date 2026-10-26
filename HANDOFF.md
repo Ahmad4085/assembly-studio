@@ -5,27 +5,30 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 19:05 +0500 by Claude Code (Opus 5.5), after recording the design approval. Git state updated for the SDLC-007 commit |
-| Current task | **SDLC-008 Implementation plan: `Ready`, not started, no owner** |
-| Last completed | SDLC-007 UI/UX design (Done. Spec + tokens v1.0 approved 2026-10-26 19:03 +0500) |
-| Git state | At writing: HEAD `d13f958`. **Planned:** all pending SDLC-007 changes (`docs/04-design/`, ADR-0007 v1.1, architecture v1.1, traceability v2.2, OPEN_QUESTIONS v2.5, shared memory, this handoff) go into the commit `SDLC-007: UI/UX design v1.0 (approved), ADR-0007 v1.1`. Verify with `git log --oneline -1` (expect that message on top of `d13f958`) and `git status --short` (expect only `?? .idea/vcs.xml`). **Untracked, not ours:** `.idea/vcs.xml` |
+| Written | 2026-10-26 19:18 +0500 by Claude Code (Opus 5.5), after recording the backlog approval. Git state updated for the SDLC-008 commit |
+| Current task | **TASK-001 Solution skeleton: `Ready`, approved, not started, no owner** |
+| Last completed | SDLC-008 Implementation plan (Done. Backlog v1.0 approved 2026-10-26 19:17 +0500) |
+| Git state | At writing: HEAD `41d05b1`. **Planned:** all pending SDLC-008 changes (`docs/05-planning/backlog.md`, traceability v2.3, shared memory, this handoff) go into the commit `SDLC-008: Implementation backlog v1.0 (approved)`. Verify with `git log --oneline -1` (expect that message on top of `41d05b1`) and `git status --short` (expect only `?? .idea/vcs.xml`). **Untracked, not ours:** `.idea/vcs.xml` |
 
 ## Last verified working state
-- Requirements v2.0, research v1.0, architecture v1.1, ADR-0001..0009 (0007 v1.1), ui-spec v1.0, tokens v1.0: all approved and consistent (validators ALL OK).
-- No product code exists. POC-001/002 green at their last runs.
+- All SDLC documents approved through the plan: requirements v2.0, research v1.0, architecture v1.1, ADR-0001..0009 (0007 v1.1), ui-spec v1.0, tokens v1.0, backlog v1.0.
+- No product code exists yet (`src/` absent). POC-001/002 green at their last runs.
 
 ## Changes since the previous handoff
-- Design approved. ADR-0007 v1.1 (snapshot content). D-015 Ctrl+C routing. OQ-021/023 resolved.
+- Backlog approved: 62 tasks `Approved`. Implementation phase opens with M0.
 
 ## Failed tests and known issues
-- No failed tests. Open: OQ-007 (license, before release), OQ-020 (signing, release), OQ-022 (post-MVP DOS functions), OQ-024 (docking, post-MVP),
-  OQ-025 (fonts/icons on Win10 LTSC, first shell task).
+- No failed tests. Open: OQ-007 (license → TASK-100), OQ-020 (signing, release), OQ-025 (fonts/icons → TASK-070), OQ-022/024 (post-MVP).
 
 ## Decisions and constraints to respect
-- D-001 to D-015, ADR-0001..0009 (0007 v1.1), ui-spec and tokens approved. The plan must turn every ADR's "first … task" validation item into a task.
+- D-001 to D-015, ADR-0001..0009 (0007 v1.1), ui-spec, tokens and backlog approved.
+- Implement one approved task at a time with `/assembly-implement <TASK-ID>`. Product code goes in `src/` and `tests/`. POC code is reference only.
+- Never use destructive Git commands without explicit user instruction.
 
 ## Exact next action
-User runs `/assembly-plan` (SDLC-008).
+1. User runs `/assembly-implement TASK-001` (backlog § TASK-001).
+2. In parallel (user action): TASK-006, provision clean Windows 11 24H2 x64 and Windows 10 Enterprise LTSC 21H2 x64 VMs and record them in
+   `docs/06-implementation/environments.md`.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

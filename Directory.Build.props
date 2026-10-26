@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <!-- Test project defaults per ADR-0002 and ADR-0008 -->
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <!-- Test names use underscores (Given_when_then style); CA1707 applies to production APIs only. -->

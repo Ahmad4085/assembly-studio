@@ -434,3 +434,17 @@
 - **Git state after:** untracked new files, modified `CURRENT_TASK.md`, `docs/05-planning/backlog.md`, `.idea/vcs.xml` untracked. Last commit `12a2431`.
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement TASK-002` (Architecture rule test). TASK-006 user action in parallel.
+
+### 2026-10-26 20:01 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-002
+- **Summary:** Implemented TASK-002 (Architecture rule test). Created `tests/AssemblyStudio.ArchitectureTests/` with `ArchitectureRuleTests.cs` using `System.Reflection.Metadata` to enforce ADR-0002 compile-time modularity, dependency boundaries, and forbidden UI references.
+- **Files changed:**
+  - Created: `tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj`
+  - Created: `tests/AssemblyStudio.ArchitectureTests/ArchitectureRuleTests.cs`
+  - Modified: `AssemblyStudio.slnx` (added `AssemblyStudio.ArchitectureTests`), `Directory.Build.props` (matched `*Tests`), `docs/05-planning/backlog.md` (TASK-002 -> Done), `CURRENT_TASK.md`
+- **Tests executed:**
+  - Deliberate negative test: added forbidden reference from `Debugging` to `Engine.I8086`. Run `dotnet test tests/AssemblyStudio.ArchitectureTests` -> **FAILED with 2 errors** (ADR-0002 graph violation and forbidden reference caught).
+  - Clean state verification: removed forbidden reference. Run `dotnet build AssemblyStudio.slnx -c Release` -> **0 warnings, 0 errors**.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` -> **31/31 passed** (9 test assemblies, duration 7.16s, 0 failed, 0 skipped).
+- **Git state after:** untracked new test project files, modified files.
+- **Unresolved issues:** none
+- **Next step:** `/assembly-implement TASK-003` (SingleStepTests oracle data fetch). TASK-006 user action in parallel.

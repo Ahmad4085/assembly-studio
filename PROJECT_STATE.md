@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 19:42 +0500 by Antigravity (TASK-001 completed) |
+| Last updated | 2026-10-26 20:01 +0500 by Antigravity (TASK-002 completed) |
 | Current phase | **6 Implementation**, milestone M0 Foundation (in progress) |
 | Current milestone | M0 Foundation (in progress) |
-| Active task | None in progress. Next: `TASK-002` Architecture rule test (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-implement TASK-002`. User action TASK-006 (clean test VMs) can start any time |
+| Active task | None in progress. Next: `TASK-003` SingleStepTests oracle data fetch (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-implement TASK-003`. User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -21,11 +21,12 @@
   Inno Setup per-user, custom C# 8086 core validated by SingleStepTests, NASM 3.02 bundled, AvalonEdit, DOS 3.3/4.0 semantics.
 - Requirements **v2.0 approved** 2026-10-26 18:18 +0500: D-011 (Windows 11 24H2+ / Windows 10 Enterprise LTSC 21H2) and D-012 (INT 21h AH=00h) applied.
   Status: 118 APPROVED, 11 NEEDS_RESEARCH. 64 acceptance criteria.
-- **Product skeleton in place:** `AssemblyStudio.slnx` with all 8 src projects and 8 test projects per ADR-0002. Release build and tests verified green.
+- **Product skeleton and architecture tests in place:** `AssemblyStudio.slnx` with all 8 src projects and 9 test projects per ADR-0002. Release build and 31/31 tests verified green.
 
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-002 Architecture rule test | 2026-10-26 20:01 +0500 | `tests/AssemblyStudio.ArchitectureTests/`, 23 architecture tests (ADR-0002 graph & UI isolation), negative test verified, 31/31 solution tests passed |
 | TASK-001 Solution skeleton and build settings | 2026-10-26 19:42 +0500 | `AssemblyStudio.slnx`, 16 projects, Release build (0w/0e), 8/8 tests passed |
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
@@ -62,8 +63,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-26 19:39 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-26 19:41 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **8/8 passed** (8 test projects, xunit.v3 MTP runner) |
+| Product build (2026-10-26 20:00 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-26 20:00 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **31/31 passed** (9 test projects, xunit.v3 MTP runner) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |

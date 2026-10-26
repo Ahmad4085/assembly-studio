@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <!-- Product dependencies to ensure assemblies are built and available for inspection -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Engine.I8086\AssemblyStudio.Engine.I8086.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Runtime\AssemblyStudio.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Os.Dos\AssemblyStudio.Os.Dos.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Debugging\AssemblyStudio.Debugging.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.App\AssemblyStudio.App.csproj" />
+  </ItemGroup>
+</Project>

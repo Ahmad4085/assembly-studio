@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Runtime environment: memory, .COM loader, PSP, interrupt routing, console device (ADR-0002, ADR-0004) -->
+  <ItemGroup>
+    <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Learning content: samples, tutorials, instruction reference (ADR-0002) -->
+  <ItemGroup>
+    <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

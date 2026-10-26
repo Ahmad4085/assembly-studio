@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Debug session: worker, execution control, breakpoints, history, snapshots (ADR-0002, ADR-0007) -->
+  <ItemGroup>
+    <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

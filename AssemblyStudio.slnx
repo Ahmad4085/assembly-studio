@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AssemblyStudio.Core/AssemblyStudio.Core.csproj" />
+    <Project Path="src/AssemblyStudio.Engine.I8086/AssemblyStudio.Engine.I8086.csproj" />
+    <Project Path="src/AssemblyStudio.Runtime/AssemblyStudio.Runtime.csproj" />
+    <Project Path="src/AssemblyStudio.Os.Dos/AssemblyStudio.Os.Dos.csproj" />
+    <Project Path="src/AssemblyStudio.Toolchain.Nasm/AssemblyStudio.Toolchain.Nasm.csproj" />
+    <Project Path="src/AssemblyStudio.Debugging/AssemblyStudio.Debugging.csproj" />
+    <Project Path="src/AssemblyStudio.Content/AssemblyStudio.Content.csproj" />
+    <Project Path="src/AssemblyStudio.App/AssemblyStudio.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AssemblyStudio.Core.Tests/AssemblyStudio.Core.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Runtime.Tests/AssemblyStudio.Runtime.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Os.Dos.Tests/AssemblyStudio.Os.Dos.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Toolchain.Nasm.Tests/AssemblyStudio.Toolchain.Nasm.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Debugging.Tests/AssemblyStudio.Debugging.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.Content.Tests/AssemblyStudio.Content.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.App.Tests/AssemblyStudio.App.Tests.csproj" />
+  </Folder>
+</Solution>

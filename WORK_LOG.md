@@ -405,3 +405,32 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement TASK-001`. User action TASK-006 in parallel
+
+### 2026-10-26 19:42 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-001
+- **Summary:** Implemented TASK-001 (Solution skeleton and build settings). Created `AssemblyStudio.slnx` with all 8 src projects and 8 test projects per ADR-0002, shared build settings, central package management, SDK pin, and MTP runner with trivial passing tests.
+- **Files changed:**
+  - Created: `global.json`, `Directory.Build.props`, `Directory.Packages.props`, `.editorconfig`, `AssemblyStudio.slnx`
+  - Created: `src/AssemblyStudio.Core/AssemblyStudio.Core.csproj`
+  - Created: `src/AssemblyStudio.Engine.I8086/AssemblyStudio.Engine.I8086.csproj`
+  - Created: `src/AssemblyStudio.Runtime/AssemblyStudio.Runtime.csproj`
+  - Created: `src/AssemblyStudio.Os.Dos/AssemblyStudio.Os.Dos.csproj`
+  - Created: `src/AssemblyStudio.Toolchain.Nasm/AssemblyStudio.Toolchain.Nasm.csproj`
+  - Created: `src/AssemblyStudio.Debugging/AssemblyStudio.Debugging.csproj`
+  - Created: `src/AssemblyStudio.Content/AssemblyStudio.Content.csproj`
+  - Created: `src/AssemblyStudio.App/AssemblyStudio.App.csproj`, `src/AssemblyStudio.App/App.xaml`, `src/AssemblyStudio.App/App.xaml.cs`
+  - Created: `tests/AssemblyStudio.Core.Tests/AssemblyStudio.Core.Tests.csproj`, `tests/AssemblyStudio.Core.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj`, `tests/AssemblyStudio.Engine.I8086.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Runtime.Tests/AssemblyStudio.Runtime.Tests.csproj`, `tests/AssemblyStudio.Runtime.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Os.Dos.Tests/AssemblyStudio.Os.Dos.Tests.csproj`, `tests/AssemblyStudio.Os.Dos.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Toolchain.Nasm.Tests/AssemblyStudio.Toolchain.Nasm.Tests.csproj`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Debugging.Tests/AssemblyStudio.Debugging.Tests.csproj`, `tests/AssemblyStudio.Debugging.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.Content.Tests/AssemblyStudio.Content.Tests.csproj`, `tests/AssemblyStudio.Content.Tests/SkeletonTests.cs`
+  - Created: `tests/AssemblyStudio.App.Tests/AssemblyStudio.App.Tests.csproj`, `tests/AssemblyStudio.App.Tests/SkeletonTests.cs`
+  - Modified: `docs/05-planning/backlog.md` (TASK-001 -> Done), `CURRENT_TASK.md`
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` -> Build succeeded. 0 Warning(s), 0 Error(s). Time Elapsed 00:00:22.97
+  - `dotnet test --solution AssemblyStudio.slnx` -> Test run summary: Passed! Total: 8, Failed: 0, Succeeded: 8, Skipped: 0. Duration: 11s 190ms
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` -> Test run summary: Passed! Total: 8, Failed: 0, Succeeded: 8, Skipped: 0. Duration: 10s 513ms
+- **Git state after:** untracked new files, modified `CURRENT_TASK.md`, `docs/05-planning/backlog.md`, `.idea/vcs.xml` untracked. Last commit `12a2431`.
+- **Unresolved issues:** none
+- **Next step:** `/assembly-implement TASK-002` (Architecture rule test). TASK-006 user action in parallel.

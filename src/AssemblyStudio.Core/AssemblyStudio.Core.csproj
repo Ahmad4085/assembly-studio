@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Core abstractions and immutable models (ADR-0002) -->
+</Project>

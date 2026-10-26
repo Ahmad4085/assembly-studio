@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <!-- WPF shell and composition root (ADR-0001, ADR-0002, ADR-0007) -->
+  <ItemGroup>
+    <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Engine.I8086\AssemblyStudio.Engine.I8086.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Runtime\AssemblyStudio.Runtime.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Os.Dos\AssemblyStudio.Os.Dos.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Debugging\AssemblyStudio.Debugging.csproj" />
+    <ProjectReference Include="..\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- NASM toolchain integration, diagnostics, listing/map parsing, source mapping (ADR-0002, ADR-0005) -->
+  <ItemGroup>
+    <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

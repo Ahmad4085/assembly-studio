@@ -12,7 +12,7 @@
 | 3 | Architecture (+ ADRs) | Research approved | User approval | **Approved** (2026-10-26 18:54 +0500, v1.0 + 9 ADRs) | SDLC-006 |
 | 4 | UI/UX design | Architecture approved | User approval | **Approved** (2026-10-26 19:03 +0500, spec + tokens v1.0) | SDLC-007 |
 | 5 | Implementation plan | Design approved | User approval (per milestone allowed) | **Approved** (2026-10-26 19:17 +0500, backlog v1.0, all milestones) | SDLC-008 |
-| 6 | Implementation | Task `Approved` | Task `Done` with evidence | **Ready**: M0 first (TASK-001) | TASK-001…105 |
+| 6 | Implementation | Task `Approved` | Task `Done` with evidence | **In progress** (M0: TASK-001 Done) | TASK-001…105 |
 | 7 | Testing | ≥1 task `Done` | Report recorded | Not started | — |
 | 8 | QA | Test report for build | Verdict | Not started | — |
 | 9 | Release | QA not `Fail`, no open Critical | User approval | Not started | — |
@@ -38,7 +38,7 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 
 | ID | Milestone | Tasks | Status |
 |---|---|---|---|
-| M0 | Foundation | TASK-001–006 | Ready |
+| M0 | Foundation | TASK-001–006 | **In progress** (TASK-001 Done) |
 | M1 | 8086 engine (headless) | TASK-010–020 | Not started |
 | M2 | Runtime, DOS and toolchain | TASK-030–044 | Not started |
 | M3 | Debug session (headless) | TASK-050–054 | Not started |

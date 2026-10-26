@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Document | Agent protocol (tool-independent) |
-| Status | Proposed (implemented 2026-10-26, awaiting user review; see DECISIONS.md D-002, D-003) |
+| Status | Approved (2026-10-26 16:39 +0500, with DECISIONS.md D-002 and D-003) |
 | Version | 1.0 |
 | Last updated | 2026-10-26 |
 | Applies to | Every agent (Claude Code, Google Antigravity, others) and the user |

@@ -4,7 +4,7 @@
 |---|---|
 | Document | Project overview |
 | Status | Draft (context document; refined by `/assembly-requirements`) |
-| Version | 0.2 |
+| Version | 0.3 |
 | Last updated | 2026-10-26 |
 
 ## Vision
@@ -46,12 +46,12 @@ These preferences become decisions only through approved ADRs (`docs/decisions/`
 ## Environment observed at initialization (2026-10-26)
 | Item | Observation |
 |---|---|
-| OS | Windows 11 Pro 10.0.26200 |
+| OS | Windows 11 Pro 10.0.26200.9711 |
 | .NET | Runtime 8.0.8 (NETCore + WindowsDesktop) only. **No .NET SDK installed** (`dotnet --list-sdks` → none) |
-| Git | Installed. Repository initialized 2026-10-26 (D-004) |
+| Git | 2.55.0.windows.2. Repository initialized 2026-10-26 (D-004) |
 | NASM | 3.02 on PATH (`nasm -v`). Not evaluated or approved yet (OQ-002) |
 | IDE | JetBrains Rider project files present (`.idea/`, `.mcp.json` Rider MCP) |
-| AI agents | Claude Code 2.1.308. Google Antigravity CLI 1.4.4 and desktop IDE 1.11.17 (see `AGENTS.md`) |
+| AI agents | Claude Code 2.1.308. Google Antigravity CLI 1.4.7 (auto-updated from 1.4.4; workspace skills re-verified) and desktop IDE 1.11.17 (see `AGENTS.md`) |
 
 ## Open decisions at initialization
 | ID | Question | Impact | Resolved in |
@@ -69,3 +69,4 @@ These are carried into `docs/01-requirements/requirements.md` when it is created
 ## Changelog
 - 2026-10-26 v0.1: Created at initialization.
 - 2026-10-26 v0.2: Environment updated (NASM, Antigravity, Git). OQ-006 resolved.
+- 2026-10-26 v0.3: Minor. Environment refreshed by `/assembly-init` (Antigravity CLI 1.4.7, Windows build, Git version).

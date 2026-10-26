@@ -74,3 +74,39 @@
 - **Git state after:** as SDLC-002
 - **Unresolved issues:** none
 - **Next step:** headless tests from Git Bash must set `MSYS_NO_PATHCONV=1`
+
+### 2026-10-26 16:39 +0500 · Claude Code (Opus 5.5) · SDLC-002 (follow-up)
+- **Summary:** Recorded the user's explicit approval of D-002 (tool-independent core), D-003 (root shared memory
+  files) and D-005 (`.agent/` Antigravity layout). Agent protocol status set to Approved. Next action is now SDLC-003.
+- **Files changed:** modified `DECISIONS.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`, `docs/sdlc/agent-protocol.md`
+- **Tests executed:** none (documentation status change only)
+- **Git state after:** HEAD `c5ffe7d`. The 5 files above are uncommitted (no commit requested)
+- **Unresolved issues:** Antigravity IDE workflow loading still unverified. BLK-001 remains
+- **Next step:** user runs `/assembly-requirements` (SDLC-003)
+
+### 2026-10-26 16:41 +0500 · Claude Code (Opus 5.5) · /assembly-init (validation run, no work item)
+- **Summary:** Ran `/assembly-init` on the initialized workspace. Inventory: all expected items present (9 root files,
+  core docs, 11 procedures, 5 guides, 14 templates, 16 Claude wrappers, 16 Antigravity skills, 11 workflows, 1 rule). None missing.
+  Wrapper integrity OK. `ROADMAP.md` phases match the process contract. No command-name conflicts (project, user-level, agy global).
+  One deviation found and fixed: the environment record was stale (Antigravity CLI auto-updated 1.4.4 → 1.4.7).
+  SDLC-003 lock untouched (still `Ready`, unowned).
+- **Files changed:** modified `docs/00-project-overview/project-overview.md` (v0.3, environment), `PROJECT_STATE.md`,
+  `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** structural validator → ALL OK. Template presence 14/14. ROADMAP/process phase comparison → MATCH.
+  `agy -p "/skills"` (agy 1.4.7, `MSYS_NO_PATHCONV=1`) → 16 workspace skills listed. Environment: `ver`, `dotnet --list-sdks`
+  (none), `dotnet --list-runtimes`, `nasm -v`, `git --version`, `claude --version`, `agy --version`
+- **Git state after:** HEAD `c5ffe7d`. Uncommitted: the approval follow-up plus this run's edits (6 files, all by Claude Code).
+  Untracked `.idea/vcs.xml` (Rider, not ours)
+- **Unresolved issues:** BLK-001 (no .NET SDK). Antigravity IDE workflow loading unverified
+- **Next step:** user runs `/assembly-requirements` (SDLC-003). Optionally commit the pending documentation changes first
+
+### 2026-10-26 16:42 +0500 · Claude Code (Opus 5.5) · SDLC-002 (follow-up)
+- **Summary:** At the user's request ("commit the pending doc changes"), committed the pending documentation changes:
+  the D-002/D-003/D-005 approval records and the `/assembly-init` environment refresh.
+- **Files changed:** `DECISIONS.md`, `HANDOFF.md`, `PROJECT_STATE.md`, `WORK_LOG.md`, `docs/sdlc/agent-protocol.md`,
+  `docs/00-project-overview/project-overview.md` (committed, no content changes besides this entry and the handoff Git state)
+- **Tests executed:** structural validator before commit (see Git/validation output in the session)
+- **Git state after:** commit `SDLC-002: Record approval of D-002, D-003, D-005; refresh environment` on top of `c5ffe7d` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** BLK-001. Antigravity IDE workflow loading unverified
+- **Next step:** user runs `/assembly-requirements` (SDLC-003)

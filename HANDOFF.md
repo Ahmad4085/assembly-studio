@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 by Claude Code (Opus 5.5), end of SDLC-002 |
+| Written | 2026-10-26 16:41 +0500 by Claude Code (Opus 5.5), after an `/assembly-init` validation run. Git state updated for the documentation commit |
 | Current task | **SDLC-003 Requirements phase: `Ready`, not started, no owner** |
 | Last completed | SDLC-002 Multi-agent support (Done) |
-| Git state | At writing: repository initialized, no commits yet. **Planned:** this file and all others go into the single initial commit `SDLC-002: Multi-agent SDLC foundation`. Verify with `git log --oneline -1` (expect that message) and `git status --short` (expect empty). Anything else is someone else's change. `.mcp.json` is git-ignored |
+| Git state | At writing: HEAD `c5ffe7d`. **Planned:** all pending documentation changes (approval records, `/assembly-init` environment refresh, this handoff) go into the commit `SDLC-002: Record approval of D-002, D-003, D-005; refresh environment`. Verify with `git log --oneline -1` (expect that message on top of `c5ffe7d`). **Untracked, not ours:** `.idea/vcs.xml` (Rider, so the user's to commit or ignore). Any other change is someone else's. `.mcp.json` is git-ignored |
 
 ## Last verified working state
 - SDLC foundation and multi-agent setup in place and structurally validated (details in
@@ -33,12 +33,11 @@ Full list: `WORK_LOG.md`.
   enforced by `AGENTS.md` and `.agent/rules/assembly-studio.md`.
 
 ## Decisions and constraints to respect
-- Approved: D-001 (Claude skills format), D-004 (Git). Proposed, awaiting user review: D-002, D-003, D-005.
-  See `DECISIONS.md`. No architecture decisions exist yet. Technology choices are **preferences only**.
+- Approved: D-001 to D-005 (process and tooling, see `DECISIONS.md`). No architecture decisions exist yet. Technology choices are **preferences only**.
 - Never self-approve a gate. Run phase procedures only when the user asks.
 
 ## Exact next action
-User decides whether to accept D-002/D-003/D-005, then runs the requirements phase in either tool:
+User runs the requirements phase in either tool (optionally committing the approval records first):
 - Claude Code: `/assembly-requirements`
 - Antigravity CLI: `/assembly-requirements` (workspace skill)
 - Antigravity IDE: `/assembly-requirements` (workflow). Fallback: "Read

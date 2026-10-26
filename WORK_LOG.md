@@ -297,3 +297,38 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** none
 - **Next step:** `/assembly-architecture` (SDLC-006)
+
+### 2026-10-26 18:47–18:52 +0500 · Claude Code (Opus 5.5) · SDLC-006
+- **Summary:** Ran the architecture phase. Wrote `docs/03-architecture/architecture.md` v0.1 (12 components C01–C12, flows, execution model, error
+  handling, security, budgets with POC measurements, extensibility, test strategy, 6 risks) and ADR-0001 to ADR-0009 (platform, solution structure,
+  engine, runtime + DOS (in-process), NASM integration, AvalonEdit, MVVM/threading/snapshots, testing, packaging; code signing deferred). Generated the
+  requirement allocation (Appendix A) and added an ADRs column to the traceability matrix (v2.1, minor). Proposed a reference machine (OQ-014). Gate question asked.
+- **Files changed:** created `docs/03-architecture/architecture.md` and `docs/decisions/ADR-0001..0009-*.md`. Modified
+  `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.1), `DECISIONS.md` (ADR register, proposed), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`,
+  `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** no product tests (no product code). Allocation script → 129/129 allocated. Requirements consistency validator → ALL OK.
+  ADR structure check → OK (2 hits reviewed, see `CURRENT_TASK.md`). Structural validator → ALL OK
+- **Git state after:** HEAD `40c3185`. SDLC-006 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** approval pending. OQ-007 (specific license) before release. OQ-014 reference machine proposal needs approval
+- **Next step:** user approves the architecture and ADRs (all or individually). Then `/assembly-design`
+
+### 2026-10-26 18:54 +0500 · Claude Code (Opus 5.5) · SDLC-006
+- **Summary:** Recorded the user's approval ("approve architecture v0.1 and ADR-0001..0009; reference machine OK", 2026-10-26 18:54 +0500). Architecture and ADR-0001..0009 → v1.0 `Approved` (ADR-0009 signing still Deferred).
+  `DECISIONS.md`: 9 ADRs approved + D-014 (reference machine: i5-8265U, 16 GB, Windows 11). OPEN_QUESTIONS v2.3: OQ-001, 005, 011, 013, 014, 015, 016
+  resolved, OQ-022 updated. SDLC-006 Done. SDLC-007 (UI/UX design) Ready.
+- **Files changed:** `docs/03-architecture/architecture.md`, `docs/decisions/ADR-0001..0009`, `DECISIONS.md`, `docs/01-requirements/OPEN_QUESTIONS.md`,
+  `PROJECT_STATE.md`, `ROADMAP.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** requirements consistency validator and structural validator (see `HANDOFF.md`)
+- **Git state after:** HEAD `40c3185`. SDLC-006 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** none for SDLC-006. OQ-007 (license, before release), OQ-020 (signing, release), OQ-021 (design)
+- **Next step:** `/assembly-design` (SDLC-007)
+
+### 2026-10-26 18:55 +0500 · Claude Code (Opus 5.5) · SDLC-006
+- **Summary:** At the user's request ("commit the pending changes"), committed all SDLC-006 work. Recorded result for the previous entry: structural
+  validator and requirements consistency validator passed (ALL OK) after the approval edits, and the stale decisions summary in PROJECT_STATE was fixed.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator and requirements consistency validator before commit
+- **Git state after:** commit `SDLC-006: Architecture v1.0 + ADR-0001..0009 (approved)` on top of `40c3185` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** none
+- **Next step:** `/assembly-design` (SDLC-007)

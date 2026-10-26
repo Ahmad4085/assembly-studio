@@ -23,9 +23,20 @@
 | D-011 | Supported Windows (research decision D1 = A): **Windows 11 24H2+** and **Windows 10 Enterprise LTSC 21H2** are supported and tested. **Windows 10 22H2 Home/Pro is not supported** (may work, untested), because .NET 10 doesn't support it upstream. Changes CON-001 and NFR-025 | **Approved** | User 2026-10-26 17:59 +0500: "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Requirement text updated by SDLC-005 (`/assembly-requirements`) |
 | D-012 | Add **INT 21h AH=00h** (DOS-1 terminate, same semantics as INT 20h) to the MVP DOS subset. Changes FR-039 | **Approved** | User 2026-10-26 17:59 +0500: "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Requirement text updated by SDLC-005 |
 | D-013 | **POC-001** (custom C# core feasibility) and **POC-002** (listing + map source mapping) approved. **.NET 10 SDK installation authorized** (installed 18:04 +0500: SDK 10.0.403) | **Approved** | User 2026-10-26 17:59 +0500: "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK" |
+| D-014 | **Reference machine** for performance acceptance (OQ-014): Intel Core i5-8265U (4C/8T), 16 GB RAM, Windows 11 (the dev machine) as the minimum reference | **Approved** | User 2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK" |
 
 ## Architecture decisions (ADRs)
-None yet. They are created by `/assembly-architecture` after requirements and research are approved.
+| ADR | Decision | Status | Source |
+|---|---|---|---|
+| [ADR-0001](docs/decisions/ADR-0001-platform-dotnet10-wpf.md) | Platform: .NET 10 LTS + WPF on Windows x64 | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0002](docs/decisions/ADR-0002-solution-structure.md) | Solution structure and dependency rules | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0003](docs/decisions/ADR-0003-execution-engine.md) | Execution engine: custom managed 8086 core | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0004](docs/decisions/ADR-0004-runtime-and-dos-services.md) | Runtime environment and DOS services: in-process, own implementation | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0005](docs/decisions/ADR-0005-assembler-integration-nasm.md) | Assembler integration: bundled NASM 3.02, listing + map source mapping | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0006](docs/decisions/ADR-0006-editor-avalonedit.md) | Code editor: AvalonEdit | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0007](docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md) | UI architecture: MVVM, threading, snapshots, settings | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0008](docs/decisions/ADR-0008-testing-strategy-and-tools.md) | Test framework, tools and oracle data | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0009](docs/decisions/ADR-0009-packaging-and-distribution.md) | Packaging: self-contained + Inno Setup per-user (code signing Deferred) | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
 
 ## Pending technology preferences (not decisions)
 C# · WPF/XAML · MVVM · .NET 10 LTS · AvalonEdit (to evaluate) · xUnit (to evaluate) · NASM (to

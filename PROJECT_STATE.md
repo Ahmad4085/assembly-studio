@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 18:42 +0500 by Claude Code (POC-002) |
-| Current phase | 2 Research: **approved** (POC-001 and POC-002 done). Next: **3 Architecture** |
+| Last updated | 2026-10-26 18:54 +0500 by Claude Code (SDLC-006 approval recorded) |
+| Current phase | 3 Architecture: **approved** (v1.0 + ADR-0001..0009). Next: **4 UI/UX design** |
 | Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `SDLC-006` Architecture (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-architecture` |
+| Active task | None in progress. Next: `SDLC-007` UI/UX design (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-design` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -28,6 +28,7 @@
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| SDLC-006 Architecture phase (phase 3) | 2026-10-26 18:54 +0500 | Architecture v1.0 + ADR-0001..0009 approved, D-014 |
 | POC-002 NASM listing + map source mapping | 2026-10-26 18:42 +0500 | **Sufficient with limitations**: `docs/02-research/poc-002.md`, `poc/POC-002-source-mapping/` |
 | POC-001 Custom C# 8086 core feasibility | 2026-10-26 18:33 +0500 | **Feasible**: `docs/02-research/poc-001.md`, `poc/POC-001-cpu-core/` |
 | SDLC-005 Requirements change v2.0 (D-011, D-012) | 2026-10-26 18:18 +0500 | Approved set v2.0, approval log below |
@@ -35,8 +36,8 @@
 | SDLC-003 Requirements phase (phase 1) | 2026-10-26 17:11 +0500 | Approved set v1.0 in `docs/01-requirements/`, approval log below |
 
 ## Approved decisions
-Architecture decisions (ADRs): **none yet**. See `DECISIONS.md`: D-001 to D-009 approved (D-006 to D-009 are product
-scope answers from SDLC-003). D-010 (requirements document layout) approved. **All of D-001 to D-010 are approved.**
+Architecture decisions: **ADR-0001 to ADR-0009 approved** (ADR-0009 code signing Deferred). Decisions **D-001 to D-014 approved**.
+See `DECISIONS.md`.
 
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
@@ -44,6 +45,7 @@ scope answers from SDLC-003). D-010 (requirements document layout) approved. **A
 | 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate |
 | 2026-10-26 17:11 +0500 | **Requirements gate (phase 1)**: requirements set `docs/01-requirements/` + D-010 | 1.0 | User | "approve requirements v0.1 and D-010". PROPOSED → APPROVED. 12 NEEDS_RESEARCH items approved as goals. PROPOSED-basis targets remain unvalidated |
 | 2026-10-26 17:59 +0500 | **Research gate (phase 2)**: `docs/02-research/` set + decisions D-011, D-012, D-013 | 1.0 | User | "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Recommendations are input to ADRs, not decisions |
+| 2026-10-26 18:54 +0500 | **Architecture gate (phase 3)**: `docs/03-architecture/architecture.md` + ADR-0001..0009 + reference machine (D-014) | 1.0 | User | "approve architecture v0.1 and ADR-0001..0009; reference machine OK". ADR-0009 code signing remains Deferred (OQ-020) |
 | 2026-10-26 18:18 +0500 | **Requirements set v2.0** (D-011, D-012 applied; new AC-064) | 2.0 | User | "approve requirements v2.0". FR-039, FR-041, NFR-025 → APPROVED |
 
 ## Waivers

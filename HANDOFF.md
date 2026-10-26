@@ -5,37 +5,35 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 20:03 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-002 |
-| Current task | **TASK-003 SingleStepTests oracle data fetch: `Ready`, approved, not started, no owner** |
-| Last completed | TASK-002 Architecture rule test (Done 2026-10-26 20:01 +0500) |
-| Git state | At writing: HEAD `625a012` (committed `TASK-002: Architecture rule test`, pushed to `origin/master`). Working tree clean. **Untracked, not ours:** `.idea/vcs.xml` |
+| Written | 2026-10-26 22:35 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-003 |
+| Current task | **TASK-004 Coverage tooling (coverlet with MTP): `Ready`, approved, not started, no owner** |
+| Last completed | TASK-003 SingleStepTests oracle data fetch (Done 2026-10-26 20:18 +0500) |
+| Git state | At writing: HEAD `763ffc7`. Modified: `.gitignore`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `WORK_LOG.md`, `docs/05-planning/backlog.md`, `HANDOFF.md`. Untracked: `build/`, `tests/AssemblyStudio.Engine.I8086.Tests/Oracle/`. **Untracked, not ours:** `.idea/vcs.xml` |
 
 ## Last verified working state
 - Product solution `AssemblyStudio.slnx` builds cleanly: `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
-- All 9 test projects run under Microsoft.Testing.Platform and pass: `dotnet test --solution AssemblyStudio.slnx -c Release` → **31/31 passed** (0 failed, 0 skipped).
-- Architecture tests: 23 tests in `AssemblyStudio.ArchitectureTests` enforcing ADR-0002 boundary rules pass.
-- Negative test verified: deliberate forbidden dependency from `Debugging` to `Engine.I8086` failed with 2 errors, and removal restored green.
+- All 9 test projects run under Microsoft.Testing.Platform and pass: `dotnet test --solution AssemblyStudio.slnx -c Release` → **37/37 passed** (0 failed, 0 skipped).
+- SingleStepTests 8086 hardware oracle dataset: 324 files verified and checksummed via `SHA256SUMS.txt` in `testdata/singlesteptests/8086/` (git-ignored per ADR-0008). Idempotence verified.
+- `SingleStepOracleHelper` passes all tests, including failing with clear instructions when test data is absent.
 
 ## Changes since the previous handoff
-- Implemented **TASK-002**:
-  - Created `tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj` and `ArchitectureRuleTests.cs`.
-  - Added `AssemblyStudio.ArchitectureTests` to `AssemblyStudio.slnx`.
-  - Updated `Directory.Build.props` to match `*Tests`.
-  - Verified non-App assemblies do not reference UI frameworks (`PresentationFramework`, `WindowsBase`, `AvalonEdit`, etc.).
-  - Verified ADR-0002 dependency graph and verified that Debugging never references Engine or Runtime.
-  - Negative test proven: deliberate forbidden reference failed, clean state passes.
-- Backlog updated: TASK-002 marked `Done`.
-- `CURRENT_TASK.md` updated: TASK-002 completed, TASK-003 set to `Ready`.
+- Implemented **TASK-003**:
+  - Created `build/fetch-singlesteptests.ps1` with SHA-256 generation, `SOURCE.txt` (MIT license, commit `e71c68d215a6bb8c356bd4cb3842de3bef345ca9`), and `-Include8088` switch.
+  - Added `build/singlesteptests-8086-v1-files.txt` with exact 324 file list.
+  - Added `testdata/` and `tools/nasm/` to `.gitignore`.
+  - Created `SingleStepOracleHelper.cs` and unit tests in `tests/AssemblyStudio.Engine.I8086.Tests/Oracle/`.
+- Backlog updated: TASK-003 marked `Done`.
+- `CURRENT_TASK.md` updated: TASK-003 completed, TASK-004 set to `Ready`.
 
 ## Failed tests and known issues
 - None. 0 failed tests, 0 warnings, 0 errors.
 
 ## Decisions and constraints to respect
 - ADR-0001 through ADR-0009, D-001 through D-015.
-- Architecture rules enforced by `AssemblyStudio.ArchitectureTests`. Non-App projects must never reference UI or AvalonEdit.
+- Hardware oracle data stays out of Git (`testdata/` is git-ignored).
 
 ## Exact next action
-1. User runs `/assembly-implement TASK-003` (backlog § TASK-003: SingleStepTests oracle data fetch).
+1. User runs `/assembly-implement TASK-004` (backlog § TASK-004: Coverage tooling with coverlet and MTP).
 2. In parallel (user action): TASK-006, provision clean Windows 11 24H2 x64 and Windows 10 Enterprise LTSC 21H2 x64 VMs and record them in `docs/06-implementation/environments.md`.
 
 ## Do not overwrite or revert

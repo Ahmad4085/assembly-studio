@@ -448,3 +448,20 @@
 - **Git state after:** untracked new test project files, modified files.
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement TASK-003` (SingleStepTests oracle data fetch). TASK-006 user action in parallel.
+
+### 2026-10-26 20:18 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-003
+- **Summary:** Implemented TASK-003 (SingleStepTests oracle data fetch). Created `build/fetch-singlesteptests.ps1` with SHA-256 manifests, SOURCE.txt, and 8088 secondary oracle support. Added git-ignore rules and implemented `SingleStepOracleHelper` in `Engine.I8086.Tests`.
+- **Files changed:**
+  - Created: `build/fetch-singlesteptests.ps1`, `build/singlesteptests-8086-v1-files.txt`
+  - Created: `tests/AssemblyStudio.Engine.I8086.Tests/Oracle/SingleStepOracleHelper.cs`
+  - Created: `tests/AssemblyStudio.Engine.I8086.Tests/Oracle/SingleStepOracleHelperTests.cs`
+  - Modified: `.gitignore` (added `testdata/`, `tools/nasm/`), `docs/05-planning/backlog.md` (TASK-003 -> Done), `CURRENT_TASK.md`
+- **Tests executed:**
+  - `powershell -ExecutionPolicy Bypass -File build/fetch-singlesteptests.ps1` -> 324 files verified/downloaded.
+  - Idempotence verification: second execution verified hashes match (`900D6BB74B74224B6F7DF7F141215EEC9ECE4153E2D7A5153E7ECD589EB524A9`).
+  - Missing data negative test: `SingleStepOracleHelperTests.LocateDataDirectory_fails_with_clear_instructions_when_data_is_absent` and missing opcode test pass.
+  - `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` -> **37/37 passed** (9 test assemblies, duration 6.56s, 0 failed, 0 skipped).
+- **Git state after:** untracked new files, modified files.
+- **Unresolved issues:** none
+- **Next step:** `/assembly-implement TASK-004` (Coverage tooling). TASK-006 user action in parallel.

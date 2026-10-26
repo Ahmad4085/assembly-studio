@@ -16,6 +16,10 @@ artifacts/
 Thumbs.db
 Desktop.ini
 
+# Test oracle and external tooling data (fetched by scripts, never committed per ADR-0005/0008)
+testdata/
+tools/nasm/
+
 # Secrets (never commit)
 *.pfx
 *.snk.private

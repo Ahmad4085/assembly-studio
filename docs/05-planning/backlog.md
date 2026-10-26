@@ -34,7 +34,7 @@
 |---|---|---|---|---|---|---|
 | TASK-001 | Solution skeleton and build settings | M0 | — | L | NFR-019, NFR-020, NFR-021 | Done |
 | TASK-002 | Architecture rule test | M0 | TASK-001 | L | NFR-019 | Done |
-| TASK-003 | SingleStepTests oracle data fetch | M0 | TASK-001 | L | NFR-017 | Approved |
+| TASK-003 | SingleStepTests oracle data fetch | M0 | TASK-001 | L | NFR-017 | Done |
 | TASK-004 | Coverage tooling (coverlet with MTP) | M0 | TASK-001 | M | NFR-021 | Approved |
 | TASK-005 | Bundled NASM tooling layout | M0 | TASK-001 | L | FR-023, NFR-030, NFR-031 | Approved |
 | TASK-006 | Provide clean test VMs (user action) **(User action)** | M0 | — | M | NFR-025 | Approved |
@@ -159,7 +159,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M0 |
 | Requirements | NFR-017 |
 | Decisions / design | ADR-0008, ADR-0003 |

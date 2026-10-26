@@ -270,3 +270,30 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement POC-002`
+
+### 2026-10-26 18:35–18:42 +0500 · Claude Code (Opus 5.5) · POC-002
+- **Summary:** Implemented POC-002 (`poc/POC-002-source-mapping/`): safe NASM runner, GNU diagnostics parser, listing/map parsers, `SourceMap`
+  (include/macro attribution, sections), independent verifiers, 7 fixtures. Measured the undocumented listing layout first. **Verdict: sufficient with limitations.**
+- **Files changed:** created `poc/POC-002-source-mapping/` (`.gitignore`, `global.json`, `Directory.Build.props`, `Poc.Mapping.slnx`, `README.md`,
+  `fixtures/` (7 + `inc/helpers.inc`), `Poc.Mapping/{Poc.Mapping.csproj,Nasm.cs,Diagnostic.cs,Listing.cs,SourceMap.cs,Verification.cs}`,
+  `Poc.Mapping.Tests/{Poc.Mapping.Tests.csproj,MappingTests.cs}`). Modified `docs/02-research/poc-002.md` (results),
+  `docs/01-requirements/OPEN_QUESTIONS.md` (v2.2, minor), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:**
+  - `dotnet build Poc.Mapping.slnx -c Release` → 0 warnings, 0 errors (first try).
+  - `dotnet test --solution Poc.Mapping.slnx -c Release` → first run **failed** (most tests). Two causes: my map parser read the blank line after
+    "Program origin" as a hex value; and a wrong assumption that no map file exists after a failed build (measured: it is created empty). Fixed both,
+    then **24/24 passed**.
+  - Mutation check (section base dropped) → 20/24 failed as expected. Reverted (no marker left) → 24/24 passed.
+  - Timing: build 66–83 ms, `nasm -E` 62–67 ms (6 runs each).
+- **Git state after:** HEAD `bfd0324`. POC-002 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** limitations listed in `poc-002.md` (undocumented listing format, deep nesting, nested includes, `%rep`) for the architecture
+- **Next step:** `/assembly-architecture` (SDLC-006)
+
+### 2026-10-26 18:45 +0500 · Claude Code (Opus 5.5) · POC-002
+- **Summary:** At the user's request ("commit the pending changes"), committed the POC-002 sources, fixtures and docs. Build output is git-ignored.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator and requirements consistency validator before commit
+- **Git state after:** commit `POC-002: NASM source mapping (sufficient with limitations)` on top of `bfd0324` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** none
+- **Next step:** `/assembly-architecture` (SDLC-006)

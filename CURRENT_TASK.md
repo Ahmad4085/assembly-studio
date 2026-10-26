@@ -4,28 +4,32 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## POC-002: NASM listing + map source mapping
+## SDLC-006: Architecture phase
 
 | Field | Value |
 |---|---|
-| Status | **Ready** (approved, not started) |
+| Status | **Ready** (not started) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
 | Started | — |
-| Definition | `docs/02-research/poc-002.md` (goal, scope, exit criteria) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement POC-002`) |
-| Depends on | D-013 approval ✔. .NET SDK 10.0.403 ✔. NASM 3.02 installed locally ✔ |
+| Procedure | `docs/sdlc/procedures/assembly-architecture.md` (invoke with `/assembly-architecture`) |
+| Depends on | Research v1.0 approved ✔. Requirements v2.0 approved ✔. POC-001 ✔ (feasible). POC-002 ✔ (sufficient with limitations) |
 
-**Objective:** prove that NASM's listing + map give an exact source line ↔ address table for single- and multi-section programs, `times`/`align`,
-macros and `%include`; parse diagnostics; propose `cpu`-directive bypass detection. Throwaway code in `poc/POC-002-source-mapping/`.
+**Objective:** produce `docs/03-architecture/architecture.md` and the ADRs in `docs/decisions/` (at least: .NET/UI stack, solution structure,
+execution engine, DOS services approach, assembler integration and source mapping, editor component, test framework (incl. MTP mode),
+packaging), then obtain user approval.
 
-**Acceptance criteria:** the exit criteria in `docs/02-research/poc-002.md`, recorded there as `[Measured]`.
+**Key inputs:** `docs/02-research/research-summary.md` (R-*), `poc-001.md` §4 and `poc-002.md` (results and limitations), D-001 to D-013,
+open questions marked "ADR pending" (OQ-001, OQ-005, OQ-011, OQ-013, OQ-015, OQ-020, OQ-022).
+
+**Acceptance criteria:** the procedure's validation (`docs/sdlc/procedures/assembly-architecture.md` §6) and exit conditions
+(architecture + blocking ADRs `Approved` or explicitly deferred).
 
 **Validation performed:** none yet.
-**Remaining work:** all of it. Reuse POC-001's setup lessons: `global.json` MTP mode for `dotnet test`, and analyzers with warnings as errors.
+**Remaining work:** all of it.
 
 ---
 
-## Last completed: POC-001, Custom C# 8086 core feasibility (Done 2026-10-26 18:33 +0500, Claude Code). Verdict: feasible
-- `dotnet build Poc.Cpu.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution Poc.Cpu.slnx -c Release` → 94/94 passed.
-- SingleStepTests 8086: 178,000/178,000 cases passed (89 files). The mutation check (PF inverted) fails 31/94 as expected, and the code was restored.
-- Step + snapshot mean 0.091 µs. Throughput 47.7–49.4 M instr/s (NFR-003 target ≥ 1 M/s). Full results: `docs/02-research/poc-001.md`.
+## Last completed: POC-002, NASM listing + map source mapping (Done 2026-10-26 18:42 +0500, Claude Code). Verdict: sufficient with limitations
+- `dotnet build Poc.Mapping.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution Poc.Mapping.slnx -c Release` → 24/24 passed.
+- Three independent verifiers (image bytes, map symbols, ndisasm boundaries) pass on 5 fixtures. The mutation check fails 20/24 as expected (restored).
+- Macros map to the invoking line, includes to their file, `times`/`align` full length. `cpu` bypass detected via `nasm -E`. Details: `docs/02-research/poc-002.md`.

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Poc.Mapping.Tests/Poc.Mapping.Tests.csproj" />
+  <Project Path="Poc.Mapping/Poc.Mapping.csproj" />
+</Solution>

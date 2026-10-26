@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 18:33 +0500 by Claude Code (POC-001) |
-| Current phase | 2 Research: **approved**. Requirements **v2.0 approved**. Next: POC-001/002, then 3 Architecture |
+| Last updated | 2026-10-26 18:42 +0500 by Claude Code (POC-002) |
+| Current phase | 2 Research: **approved** (POC-001 and POC-002 done). Next: **3 Architecture** |
 | Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `POC-002` (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-implement POC-002`, then `/assembly-architecture` |
+| Active task | None in progress. Next: `SDLC-006` Architecture (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-architecture` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -28,6 +28,7 @@
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| POC-002 NASM listing + map source mapping | 2026-10-26 18:42 +0500 | **Sufficient with limitations**: `docs/02-research/poc-002.md`, `poc/POC-002-source-mapping/` |
 | POC-001 Custom C# 8086 core feasibility | 2026-10-26 18:33 +0500 | **Feasible**: `docs/02-research/poc-001.md`, `poc/POC-001-cpu-core/` |
 | SDLC-005 Requirements change v2.0 (D-011, D-012) | 2026-10-26 18:18 +0500 | Approved set v2.0, approval log below |
 | SDLC-004 Research phase (phase 2) | 2026-10-26 17:59 +0500 | Approved research set v1.0 in `docs/02-research/` |
@@ -58,6 +59,8 @@ None. Research documents revalidated against requirements v2.0.
 | Product tests | **None exist** |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
+| POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
+| POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
 | Failed tests / open defects | None |
 
 ## Blockers

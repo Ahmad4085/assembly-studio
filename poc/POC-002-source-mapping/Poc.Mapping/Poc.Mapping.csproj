@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- POC-002: throwaway NASM integration and source mapping. No UI references. -->
+</Project>

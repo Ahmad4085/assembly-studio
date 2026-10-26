@@ -4,7 +4,7 @@
 |---|---|
 | Document | Open questions and assumptions |
 | Status | Approved |
-| Version | 2.1 |
+| Version | 2.2 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -24,7 +24,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-006 | Initialize a Git repository? | Low | User | Resolved 2026-10-26 (D-004) | — |
 | OQ-007 | Product distribution model and license. | High | User | Partially resolved: permissive open source (D-007). Specific license (e.g. MIT or Apache-2.0) open, needed before first release | NFR-030 |
 | OQ-008 | Can the selected engine expose all registers, flags, memory and per-instruction state, support breakpoints and execution control, and snapshot/restore state? Is it deterministic? | High | Research / POC | Partially answered 2026-10-26 (POC-001): full register/flag/memory access, single-step, INT interception hook and deterministic traces shown. Breakpoints/snapshots designed in the architecture | FR-046 to FR-062, NFR-016 |
-| OQ-009 | How are addresses mapped to source lines (NASM listing or map files), including macros and `times`? How reliable is it? | Medium | Research / POC | Partially answered 2026-10-26 (research): listing + map mapping measured. Macros/`times`/`%include` → POC-002 | FR-028, FR-052, FR-053 |
+| OQ-009 | How are addresses mapped to source lines (NASM listing or map files), including macros and `times`? How reliable is it? | Medium | Research / POC | Answered 2026-10-26 by POC-002: listing + map is sufficient with limitations (macros → invoking line, includes, times/align verified). Limitations listed in `docs/02-research/poc-002.md` | FR-028, FR-052, FR-053 |
 | OQ-010 | Minimum supported Windows 10/11 builds for the chosen .NET/WPF. x64 only, or also ARM64? | Medium | Research | Resolved 2026-10-26 by D-011: Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2 (x64) supported. Arm64 optional build, not required | NFR-025 |
 | OQ-011 | Safest way to execute untrusted programs: is in-process emulation enough, or is a separate process needed for fault isolation? | Medium | Architecture | Open | NFR-010, NFR-013, FR-096 |
 | OQ-012 | Which P0/P1 requirements fit the first release? Which P1 items may be deferred? | Medium | Plan (with user) | Open | All P1 |
@@ -56,3 +56,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
 - 2026-10-26 v2.1: Minor (POC-001 results). Status updated for OQ-001, OQ-008, OQ-014. No requirement changed. Stays Approved.
+- 2026-10-26 v2.2: Minor (POC-002 results). OQ-009 answered. No requirement changed. Stays Approved.

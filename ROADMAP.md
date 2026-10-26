@@ -27,8 +27,8 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 | SDLC-003 | Requirements phase (`/assembly-requirements`) | Done | Claude Code. Set v1.0 approved 2026-10-26 17:11 +0500 (D-006 to D-010) |
 | SDLC-004 | Research phase (`/assembly-research`) | Done | Claude Code. Set v1.0 approved 2026-10-26 17:59 +0500. D-011 to D-013 |
 | SDLC-005 | Requirements change: apply D-011 (Windows support) and D-012 (AH=00h) to CON-001, NFR-025, FR-039 (`/assembly-requirements`) | Done | Claude Code. Set v2.0 approved 2026-10-26 18:18 +0500 |
-| POC-001 | Custom C# 8086 core feasibility (`/assembly-implement POC-001`) | Approved: next | `docs/02-research/poc-001.md` |
-| POC-002 | NASM listing + map source mapping (`/assembly-implement POC-002`) | Approved | `docs/02-research/poc-002.md` |
+| POC-001 | Custom C# 8086 core feasibility (`/assembly-implement POC-001`) | Done | Claude Code 2026-10-26 18:33 +0500. **Feasible** (178,000/178,000 cases, ~48 M instr/s) |
+| POC-002 | NASM listing + map source mapping (`/assembly-implement POC-002`) | Approved: next | `docs/02-research/poc-002.md` |
 | SDLC-006 | Architecture phase (`/assembly-architecture`) | Not started | After POC-001/002. Uses their results |
 
 ## Product milestones

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <!-- Test names use underscores (Given_when_then style); CA1707 applies to production APIs only. -->
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Dev/test-only dependency (never shipped). xunit.v3: Apache-2.0 per docs/02-research/editor-mvvm-testing.md.
+         Runs on Microsoft.Testing.Platform; global.json selects the MTP mode of `dotnet test` (.NET 10 SDK). -->
+    <PackageReference Include="xunit.v3" Version="4.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Poc.Cpu\Poc.Cpu.csproj" />
+  </ItemGroup>
+</Project>

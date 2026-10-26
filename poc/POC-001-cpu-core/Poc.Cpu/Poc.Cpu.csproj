@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- POC-001: throwaway managed 8086 core. No UI references (engine projects must stay WPF-free). -->
+</Project>

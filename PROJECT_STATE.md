@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 18:19 +0500 by Claude Code (SDLC-005 approval recorded) |
+| Last updated | 2026-10-26 18:33 +0500 by Claude Code (POC-001) |
 | Current phase | 2 Research: **approved**. Requirements **v2.0 approved**. Next: POC-001/002, then 3 Architecture |
 | Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `POC-001` (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-implement POC-001`, then `/assembly-implement POC-002`, then `/assembly-architecture` |
+| Active task | None in progress. Next: `POC-002` (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-implement POC-002`, then `/assembly-architecture` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -28,6 +28,7 @@
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| POC-001 Custom C# 8086 core feasibility | 2026-10-26 18:33 +0500 | **Feasible**: `docs/02-research/poc-001.md`, `poc/POC-001-cpu-core/` |
 | SDLC-005 Requirements change v2.0 (D-011, D-012) | 2026-10-26 18:18 +0500 | Approved set v2.0, approval log below |
 | SDLC-004 Research phase (phase 2) | 2026-10-26 17:59 +0500 | Approved research set v1.0 in `docs/02-research/` |
 | SDLC-003 Requirements phase (phase 1) | 2026-10-26 17:11 +0500 | Approved set v1.0 in `docs/01-requirements/`, approval log below |
@@ -53,8 +54,10 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Build | **Not applicable**: no code. Not runnable anyway: no .NET SDK installed (BLK-001) |
-| Tests | **None exist.** No test has been executed |
+| Product build | **Not applicable**: no product code yet (`src/` doesn't exist) |
+| Product tests | **None exist** |
+| POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
+| POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | Failed tests / open defects | None |
 
 ## Blockers

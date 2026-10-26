@@ -4,29 +4,28 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## POC-001: Custom C# 8086 core feasibility
+## POC-002: NASM listing + map source mapping
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (approved, not started) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
 | Started | — |
-| Definition | `docs/02-research/poc-001.md` (goal, scope, exit criteria, constraints) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement POC-001`) |
-| Depends on | D-013 approval ✔. .NET SDK 10.0.403 ✔ |
+| Definition | `docs/02-research/poc-002.md` (goal, scope, exit criteria) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement POC-002`) |
+| Depends on | D-013 approval ✔. .NET SDK 10.0.403 ✔. NASM 3.02 installed locally ✔ |
 
-**Objective:** prove (or disprove) that a managed C# 8086 core executes a representative opcode subset exactly as SingleStepTests
-8086 records, and **measure** step latency and throughput against NFR-002 and NFR-003. Throwaway code in `poc/POC-001-cpu-core/`.
+**Objective:** prove that NASM's listing + map give an exact source line ↔ address table for single- and multi-section programs, `times`/`align`,
+macros and `%include`; parse diagnostics; propose `cpu`-directive bypass detection. Throwaway code in `poc/POC-002-source-mapping/`.
 
-**Acceptance criteria:** the exit criteria in `docs/02-research/poc-001.md`: pass rate per opcode, measured latency and throughput,
-and a feasibility verdict, recorded there as `[Measured]`.
+**Acceptance criteria:** the exit criteria in `docs/02-research/poc-002.md`, recorded there as `[Measured]`.
 
 **Validation performed:** none yet.
-**Remaining work:** all of it. POC-002 (`docs/02-research/poc-002.md`) is approved too and runs after this, one task at a time.
+**Remaining work:** all of it. Reuse POC-001's setup lessons: `global.json` MTP mode for `dotnet test`, and analyzers with warnings as errors.
 
 ---
 
-## Last completed: SDLC-005, Requirements change (Done 2026-10-26, Claude Code)
-- Requirements set **v2.0 Approved** 2026-10-26 18:18 +0500 ("approve requirements v2.0"): D-011 and D-012 applied. FR-039, FR-041, NFR-025 → APPROVED. New AC-064.
-- Validation: markdown consistency validator ALL OK (96 FR, 33 NFR, 64 AC, 26 US, 129 rows; 118 APPROVED, 11 NEEDS_RESEARCH).
-  Research documents revalidated (*Depends on* → v2.0, minor). Repository structural validator ALL OK.
+## Last completed: POC-001, Custom C# 8086 core feasibility (Done 2026-10-26 18:33 +0500, Claude Code). Verdict: feasible
+- `dotnet build Poc.Cpu.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution Poc.Cpu.slnx -c Release` → 94/94 passed.
+- SingleStepTests 8086: 178,000/178,000 cases passed (89 files). The mutation check (PF inverted) fails 31/94 as expected, and the code was restored.
+- Step + snapshot mean 0.091 µs. Throughput 47.7–49.4 M instr/s (NFR-003 target ≥ 1 M/s). Full results: `docs/02-research/poc-001.md`.

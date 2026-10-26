@@ -241,3 +241,32 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement POC-001`
+
+### 2026-10-26 18:23–18:33 +0500 · Claude Code (Opus 5.5) · POC-001
+- **Summary:** Implemented the POC-001 throwaway managed 8086 core (`poc/POC-001-cpu-core/`): core + SingleStepTests runner (`Poc.Cpu`), xUnit v3 tests,
+  benchmark. Downloaded SingleStepTests 8086 v1 (MIT) at commit e71c68d (89 opcode files + metadata, 38.6 MB, git-ignored). **Verdict: feasible.**
+- **Files changed:** created `poc/POC-001-cpu-core/` (`.gitignore`, `global.json`, `Directory.Build.props`, `Poc.Cpu.slnx`, `README.md`,
+  `fetch-testdata.ps1`, `Poc.Cpu/{Poc.Cpu.csproj,Cpu8086.cs,SingleStepTests.cs}`, `Poc.Cpu.Tests/{Poc.Cpu.Tests.csproj,OracleTests.cs,HandWrittenTests.cs}`,
+  `Poc.Cpu.Bench/{Poc.Cpu.Bench.csproj,Program.cs}`). Modified `docs/02-research/poc-001.md` (results), `docs/01-requirements/OPEN_QUESTIONS.md` (v2.1, minor),
+  `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:**
+  - `dotnet build Poc.Cpu.slnx -c Release` → first runs failed on analyzer errors (CA1051 public fields, CA1711 enum name, CA1707 test names). Fixed by
+    renaming the enum, a scoped CA1051 suppression with justification, and CA1707 disabled for the test project only. Then **0 warnings, 0 errors**.
+  - `dotnet test` (VSTest mode) → refused on the .NET 10 SDK ("Testing with VSTest target is no longer supported by Microsoft.Testing.Platform").
+    Fixed with `global.json` MTP mode, removing the VSTest adapter packages.
+  - `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed**. `--sst-report` → **178,000/178,000** SingleStepTests cases passed.
+  - Mutation check (PF inverted) → 31/94 failed as expected. Reverted (no marker left) → 94/94 passed.
+  - Benchmark (Release, i5-8265U, mains power): step+snapshot mean 0.091 µs (p99 0.2 µs); 1 MiB snapshot 161 µs; throughput 47.71–49.37 M instr/s.
+- **Git state after:** HEAD `6252368`. POC-001 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** none for POC-001. Architecture inputs listed in `poc-001.md` §4
+- **Next step:** `/assembly-implement POC-002`
+
+### 2026-10-26 18:34 +0500 · Claude Code (Opus 5.5) · POC-001
+- **Summary:** At the user's request ("commit the pending changes"), committed the POC-001 sources and docs. Build output and the
+  SingleStepTests data are git-ignored (re-fetch with `poc/POC-001-cpu-core/fetch-testdata.ps1`, pinned commit e71c68d).
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator and requirements consistency validator before commit
+- **Git state after:** commit `POC-001: Custom C# 8086 core feasibility (feasible)` on top of `6252368` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** none
+- **Next step:** `/assembly-implement POC-002`

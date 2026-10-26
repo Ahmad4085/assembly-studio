@@ -6,7 +6,7 @@
 | Status | Approved |
 | Version | 1.0 |
 | Last updated | 2026-10-26 |
-| Depends on | `docs/01-requirements/PRODUCT_REQUIREMENTS.md` (set) v1.0 |
+| Depends on | `docs/01-requirements/PRODUCT_REQUIREMENTS.md` (set) v2.0 |
 
 Research **recommends**. Architecture decides, through ADRs. Approving this summary accepts the recommendations
 as **input** to `/assembly-architecture`. It doesn't approve any ADR or change any requirement.
@@ -98,3 +98,4 @@ Approved by the user on 2026-10-26 17:59 +0500 ("approve research v0.1; D1=A; D2
 ## Changelog
 - 2026-10-26 v0.1: Initial research summary (SDLC-004).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:59 +0500). Content unchanged from v0.1.
+- 2026-10-26: Minor. *Depends on* updated to requirements v2.0 after revalidation: v2.0 applies D-011/D-012, which came from this research. No content change.

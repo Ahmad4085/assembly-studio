@@ -4,7 +4,7 @@
 |---|---|
 | Document | Product requirements (entry document of the requirements set) |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -68,11 +68,13 @@ reviewed and approved as one unit. This document carries the gate.
 | D-007 | Distribution model is **permissive open source**. The specific license is open (OQ-007) |
 | D-008 | MVP program I/O is **text output plus keyboard input** through a documented DOS service subset. BIOS video and keyboard services are Post-MVP |
 | D-009 | MVP UI and content are **English only, with all strings localizable** |
+| D-011 | Supported Windows: **Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2**. Windows 10 22H2 Home/Pro is not supported (.NET 10 upstream support, research) |
+| D-012 | The MVP DOS subset **adds INT 21h AH=00h** (DOS-1 terminate) |
 
 ## 6. Constraints
 | ID | Constraint | Source |
 |---|---|---|
-| CON-001 | Runs on Windows 10 and Windows 11 desktops. | Product vision |
+| CON-001 | Runs on Windows 11 24H2 or later and Windows 10 Enterprise LTSC 21H2 (x64). Windows 10 22H2 Home/Pro is not supported. | Product vision, D-011 |
 | CON-002 | Core functionality works offline with no account or cloud service. | Product vision, AGENTS.md |
 | CON-003 | No paid dependencies and no mandatory online services. | AGENTS.md |
 | CON-004 | Released as permissive open source; every distributed dependency must be license-compatible. | D-007 |
@@ -90,13 +92,14 @@ ADR, after verifying compatibility, licensing and tooling (no .NET SDK is instal
 | **Verified (environment, observed 2026-10-26)** | Windows 11 Pro 10.0.26200 [Measured: `ver`]. NASM 3.02 installed locally [Measured: `nasm -v`]. No .NET SDK installed, runtime 8.0.8 only [Measured: `dotnet --list-sdks`]. No third-party capability, license or performance claim has been verified yet |
 | **Decided by the user** | D-006 syntax, D-007 distribution model, D-008 MVP I/O class, D-009 language |
 | **Approved (this set, v1.0)** | All FR/NFR, every numeric threshold marked PROPOSED, .COM-only MVP format, the DOS function list in FR-039, initial register values in FR-034 |
-| **Unresolved** | `OPEN_QUESTIONS.md`: engine (OQ-001, OQ-008), assembler bundling and CPU restriction (OQ-002), source mapping (OQ-009), Windows minimums (OQ-010), isolation (OQ-011), deployment (OQ-013) and others |
+| **Unresolved** | `OPEN_QUESTIONS.md`: engine (OQ-001, OQ-008), assembler bundling and CPU restriction (OQ-002), source mapping (OQ-009), isolation (OQ-011), deployment (OQ-013) and others |
 
 ## 8. Supported-scope statement (MVP, proposed)
 - **CPU:** 8086 real mode, documented instruction set without 8087 (final list FR-036 after research). 1 MiB address space. No 80186+, protected mode, 32-bit or 64-bit.
 - **Assembler and syntax:** NASM syntax, 16-bit flat binary output (`-f bin`, `org 100h`), single source file.
 - **Executable format:** .COM only (≤ 65,280 bytes). MZ .EXE is Post-MVP (FR-043).
-- **Operating-system services:** text output, keyboard input and termination (INT 21h 01h/02h/07h/08h/09h/0Ah/4Ch, INT 20h, proposed). Anything else halts with an explicit message (FR-040).
+- **Platform:** Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2, x64 (D-011). Windows 10 22H2 Home/Pro is not supported.
+- **Operating-system services:** text output, keyboard input and termination (INT 21h 00h/01h/02h/07h/08h/09h/0Ah/4Ch, INT 20h; D-008, D-012), DOS 3.3/4.0 semantics with documented deviations. Anything else halts with an explicit message (FR-040).
 - **Execution:** always emulated, never native. Deterministic, budgeted and pausable.
 - **Not supported in the MVP:** DOS file, device and memory services, TSRs, BIOS video/keyboard (INT 10h/16h), graphics, sound, mouse, MASM/TASM syntax, arbitrary existing DOS programs.
 
@@ -153,9 +156,9 @@ FR-089
 | Set | PROPOSED | NEEDS_RESEARCH | BLOCKED | APPROVED |
 |---|---|---|---|---|
 | Functional | 0 | 10 | 0 | 86 |
-| Non-functional | 0 | 2 | 0 | 31 |
+| Non-functional | 0 | 1 | 0 | 32 |
 
-User stories: 26. Acceptance criteria: 63 (35 engine-independent, 28 engine-dependent). Open questions: 19 (18 open or partially open). Assumptions: 6.
+User stories: 26. Acceptance criteria: 64 (35 engine-independent, 29 engine-dependent). Open questions: 22 (16 open, partially answered or researched pending an ADR). Assumptions: 6.
 
 ## 12. Approval record
 Approved by the user on 2026-10-26 17:11 +0500 ("approve requirements v0.1 and D-010"), logged in `PROJECT_STATE.md`.
@@ -166,6 +169,10 @@ Approved by the user on 2026-10-26 17:11 +0500 ("approve requirements v0.1 and D
 - Further changes follow the process contract §4: minor edits update the changelog, and substantive changes need a
   new version and re-approval.
 
+**v2.0 (SDLC-005): approved 2026-10-26 18:18 +0500** ("approve requirements v2.0"). Applies D-011 and D-012. FR-039, FR-041 and NFR-025 are APPROVED.
+
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

@@ -4,7 +4,7 @@
 |---|---|
 | Document | Requirements traceability matrix |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -55,9 +55,9 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-4 | US-010 | FR-036 | P0 | NEEDS_RESEARCH | AC-028 | NOT CREATED | NOT RUN |
 | PG-4 | US-010 | FR-037 | P0 | APPROVED | AC-028 | NOT CREATED | NOT RUN |
 | PG-4 | US-010 | FR-038 | P0 | APPROVED | AC-031 | NOT CREATED | NOT RUN |
-| PG-3 | US-008 | FR-039 | P0 | APPROVED | AC-022, AC-023 | NOT CREATED | NOT RUN |
+| PG-3 | US-008 | FR-039 | P0 | APPROVED | AC-022, AC-023, AC-064 | NOT CREATED | NOT RUN |
 | PG-4 | US-010 | FR-040 | P0 | APPROVED | AC-029 | NOT CREATED | NOT RUN |
-| PG-3 | US-008 | FR-041 | P0 | APPROVED | AC-022 | NOT CREATED | NOT RUN |
+| PG-3 | US-008 | FR-041 | P0 | APPROVED | AC-022, AC-064 | NOT CREATED | NOT RUN |
 | PG-4 | US-016 | FR-042 | P0 | APPROVED | AC-030 | NOT CREATED | NOT RUN |
 | PG-6 | US-026 | FR-043 | P2 | NEEDS_RESEARCH | — | NOT CREATED | NOT RUN |
 | PG-6 | US-026 | FR-044 | P2 | NEEDS_RESEARCH | — | NOT CREATED | NOT RUN |
@@ -137,7 +137,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-4 | — | NFR-022 | P0 | APPROVED | AC-043, AC-044 | NOT CREATED | NOT RUN |
 | PG-1, PG-6 | — | NFR-023 | P1 | APPROVED | AC-062 | NOT CREATED | NOT RUN |
 | PG-2 | — | NFR-024 | P1 | APPROVED | AC-013, AC-055 | NOT CREATED | NOT RUN |
-| PG-5 | — | NFR-025 | P0 | NEEDS_RESEARCH | AC-040 | NOT CREATED | NOT RUN |
+| PG-5 | — | NFR-025 | P0 | APPROVED | AC-040 | NOT CREATED | NOT RUN |
 | PG-4 | — | NFR-026 | P1 | APPROVED | AC-059 | NOT CREATED | NOT RUN |
 | PG-5 | — | NFR-027 | P0 | APPROVED | AC-040, AC-041 | NOT CREATED | NOT RUN |
 | PG-5 | — | NFR-028 | P2 | APPROVED | — | NOT CREATED | NOT RUN |
@@ -148,7 +148,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-6 | — | NFR-033 | P1 | APPROVED | AC-051 | NOT CREATED | NOT RUN |
 
 ## Coverage
-- Requirements: 96 FR + 33 NFR. User stories: 26. Acceptance criteria: 63.
+- Requirements: 96 FR + 33 NFR. User stories: 26. Acceptance criteria: 64.
 - P0/P1 requirements without an acceptance criterion: **0**.
 - Requirements without an acceptance criterion (P2/P3 only, written when promoted): FR-009, FR-010, FR-043, FR-044, FR-059, FR-060, FR-061, FR-062, FR-073, FR-074, FR-089, NFR-028.
 - FR without a user story: FR-089 (P3, out of scope).
@@ -157,3 +157,5 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

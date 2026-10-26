@@ -6,7 +6,7 @@
 | Status | Approved |
 | Version | 1.0 |
 | Last updated | 2026-10-26 |
-| Depends on | `docs/01-requirements/PRODUCT_REQUIREMENTS.md` (set) v1.0 |
+| Depends on | `docs/01-requirements/PRODUCT_REQUIREMENTS.md` (set) v2.0 |
 
 **Method.** Sources were read on 2026-10-26 by a research agent. The claims marked ✔ were independently
 re-fetched by the lead agent on the same day. Guidance: `docs/sdlc/guides/assembly-emulator-research.md`.
@@ -117,3 +117,4 @@ embedding (POC-005) with a dependency and license review.
 ## Changelog
 - 2026-10-26 v0.1: Initial research (SDLC-004).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:59 +0500). Content unchanged from v0.1.
+- 2026-10-26: Minor. *Depends on* updated to requirements v2.0 after revalidation: v2.0 applies D-011/D-012, which came from this research. No content change.

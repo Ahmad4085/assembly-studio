@@ -202,3 +202,42 @@
   `.idea/vcs.xml` left untracked (user's Rider file)
 - **Unresolved issues:** SDLC-005 pending. POC-001/002 not started
 - **Next step:** `/assembly-requirements apply D-011 and D-012` (SDLC-005)
+
+### 2026-10-26 18:09–18:13 +0500 · Claude Code (Opus 5.5) · SDLC-005
+- **Summary:** Applied D-011 (supported Windows) and D-012 (INT 21h AH=00h) to the requirements set in place. The set is now v2.0
+  `Awaiting approval` (substantive change → major version per the documentation guide; the earlier plan said "v1.1", corrected). Changed:
+  CON-001, NFR-025, AC-040, ASM-001, OQ-010 (D-011); FR-039, FR-041, new AC-064, US-008, OQ-022 (D-012); PRODUCT_REQUIREMENTS §5/§7/§8/§11/§12.
+  FR-039, FR-041 and NFR-025 are PROPOSED until re-approval. Minor: fixed the "Answered Researched" wording in OPEN_QUESTIONS.
+- **Incident:** while claiming the task, a script called `date` through Python's `os.popen`, which ran the Windows `date` command and
+  wrote its prompt text into `CURRENT_TASK.md` "Started". It was fixed within a minute using the shell clock (18:11 +0500), with the
+  correction noted in the field. Timestamps are now always passed in from bash `date`.
+- **Files changed:** `docs/01-requirements/*.md` (7, v2.0), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** no product tests. Requirements markdown consistency validator → ALL OK (96 FR, 33 NFR, 64 AC, 26 US, 129 rows).
+  Repository structural validator → ALL OK
+- **Git state after:** HEAD `7deda79`. SDLC-005 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** re-approval pending. Research documents' *Depends on* is still v1.0 (update after approval)
+- **Next step:** user approves requirements v2.0. Then `/assembly-implement POC-001` / `POC-002`, then `/assembly-architecture`
+
+### 2026-10-26 18:19 +0500 · Claude Code (Opus 5.5) · SDLC-005
+- **Summary:** Recorded the user's approval ("approve requirements v2.0", 2026-10-26 18:18 +0500). FR-039, FR-041 and NFR-025 → APPROVED, the 7 requirement headers →
+  `Approved` v2.0, count table updated (FR 86/10, NFR 32/1). Research documents revalidated (*Depends on* → v2.0, minor). SDLC-005
+  Done. POC-001 set as the current task (`Ready`).
+- **Incident (minor):** the approval script failed halfway (the traceability row regex expected the ID in the first column). The FR and NFR
+  files had already been written correctly. The remaining steps were re-run without repeating them. Verified: exactly one approval
+  changelog line per file.
+- **Files changed:** `docs/01-requirements/*.md` (7), `docs/02-research/*.md` (6, *Depends on*), `PROJECT_STATE.md`, `ROADMAP.md`,
+  `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** requirements markdown consistency validator → ALL OK. Structural validator: see `HANDOFF.md`
+- **Git state after:** HEAD `7deda79`. SDLC-005 changes uncommitted (no commit requested). `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** none for SDLC-005
+- **Next step:** `/assembly-implement POC-001`
+
+### 2026-10-26 18:21 +0500 · Claude Code (Opus 5.5) · SDLC-005
+- **Summary:** At the user's request ("commit the pending changes"), committed all SDLC-005 work. Recorded result for the previous
+  entry: the structural validator passed (ALL OK) after the approval edits.
+- **Files changed:** no content changes besides this entry and the `HANDOFF.md` Git state
+- **Tests executed:** structural validator and requirements consistency validator before commit
+- **Git state after:** commit `SDLC-005: Requirements v2.0 (approved)` on top of `7deda79` (this entry is part of it, so verify with `git log -1`).
+  `.idea/vcs.xml` left untracked (user's Rider file)
+- **Unresolved issues:** none
+- **Next step:** `/assembly-implement POC-001`

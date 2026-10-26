@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-26 18:05 +0500 by Claude Code (SDLC-004 approval recorded) |
-| Current phase | 2 Research: **approved** (v1.0). Next: requirements change (SDLC-005), POCs, then 3 Architecture |
+| Last updated | 2026-10-26 18:19 +0500 by Claude Code (SDLC-005 approval recorded) |
+| Current phase | 2 Research: **approved**. Requirements **v2.0 approved**. Next: POC-001/002, then 3 Architecture |
 | Current milestone | None yet (milestones are defined by `/assembly-plan`) |
-| Active task | None in progress. Next: `SDLC-005` requirements change for D-011/D-012 (`Ready`, see `CURRENT_TASK.md`) |
-| Next recommended action | `/assembly-requirements` (apply D-011/D-012, re-approve). Then `/assembly-implement POC-001` and `POC-002`. Then `/assembly-architecture` |
+| Active task | None in progress. Next: `POC-001` (`Ready`, see `CURRENT_TASK.md`) |
+| Next recommended action | `/assembly-implement POC-001`, then `/assembly-implement POC-002`, then `/assembly-architecture` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -19,8 +19,8 @@
   26 user stories, 63 acceptance criteria, 19 open questions. Numeric targets with basis PROPOSED are still unvalidated.
 - Research set **v1.0 Approved** in `docs/02-research/` (6 documents + POC-001/002 definitions). Key recommendations: .NET 10 + WPF self-contained,
   Inno Setup per-user, custom C# 8086 core validated by SingleStepTests, NASM 3.02 bundled, AvalonEdit, DOS 3.3/4.0 semantics.
-- **Requirements change pending:** D-011 (Windows support) and D-012 (add INT 21h AH=00h) change CON-001, NFR-025 and FR-039.
-  Until SDLC-005 updates them, those three requirements are **Outdated**.
+- Requirements **v2.0 approved** 2026-10-26 18:18 +0500: D-011 (Windows 11 24H2+ / Windows 10 Enterprise LTSC 21H2) and D-012 (INT 21h AH=00h) applied.
+  Status: 118 APPROVED, 11 NEEDS_RESEARCH. 64 acceptance criteria.
 - **No application code exists.** No architecture, design or plan documents exist yet.
 
 ## Completed
@@ -28,6 +28,7 @@
 |---|---|---|
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| SDLC-005 Requirements change v2.0 (D-011, D-012) | 2026-10-26 18:18 +0500 | Approved set v2.0, approval log below |
 | SDLC-004 Research phase (phase 2) | 2026-10-26 17:59 +0500 | Approved research set v1.0 in `docs/02-research/` |
 | SDLC-003 Requirements phase (phase 1) | 2026-10-26 17:11 +0500 | Approved set v1.0 in `docs/01-requirements/`, approval log below |
 
@@ -41,12 +42,13 @@ scope answers from SDLC-003). D-010 (requirements document layout) approved. **A
 | 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate |
 | 2026-10-26 17:11 +0500 | **Requirements gate (phase 1)**: requirements set `docs/01-requirements/` + D-010 | 1.0 | User | "approve requirements v0.1 and D-010". PROPOSED → APPROVED. 12 NEEDS_RESEARCH items approved as goals. PROPOSED-basis targets remain unvalidated |
 | 2026-10-26 17:59 +0500 | **Research gate (phase 2)**: `docs/02-research/` set + decisions D-011, D-012, D-013 | 1.0 | User | "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Recommendations are input to ADRs, not decisions |
+| 2026-10-26 18:18 +0500 | **Requirements set v2.0** (D-011, D-012 applied; new AC-064) | 2.0 | User | "approve requirements v2.0". FR-039, FR-041, NFR-025 → APPROVED |
 
 ## Waivers
 None.
 
 ## Outdated documents
-- `docs/01-requirements/` requirements CON-001, NFR-025, FR-039: superseded by D-011/D-012 until SDLC-005 updates them.
+None. Research documents revalidated against requirements v2.0.
 
 ## Latest build and test status
 | Item | Status |

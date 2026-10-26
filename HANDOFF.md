@@ -5,30 +5,28 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 18:07 +0500 by Claude Code (Opus 5.5), after recording the research approval. Git state updated for the SDLC-004 commit |
-| Current task | **SDLC-005 requirements change (D-011, D-012): `Ready`, not started, no owner** |
-| Last completed | SDLC-004 Research phase (Done. Set v1.0 approved 2026-10-26 17:59 +0500) |
-| Git state | At writing: HEAD `86784bb`. **Planned:** all pending SDLC-004 changes (research set, POC definitions, OPEN_QUESTIONS v1.1, implement procedure note, shared memory, this handoff) go into the commit `SDLC-004: Research v1.0 (approved), D-011..D-013`. Verify with `git log --oneline -1` (expect that message on top of `86784bb`) and `git status --short` (expect only `?? .idea/vcs.xml`). **Untracked, not ours:** `.idea/vcs.xml`. Any other change is someone else's |
+| Written | 2026-10-26 18:21 +0500 by Claude Code (Opus 5.5), after recording the requirements v2.0 approval. Git state updated for the SDLC-005 commit |
+| Current task | **POC-001 (custom C# 8086 core feasibility): `Ready`, approved, not started, no owner** |
+| Last completed | SDLC-005 Requirements change (Done. Set v2.0 approved 2026-10-26 18:18 +0500) |
+| Git state | At writing: HEAD `7deda79`. **Planned:** all pending SDLC-005 changes (requirements v2.0, research *Depends on*, shared memory, this handoff) go into the commit `SDLC-005: Requirements v2.0 (approved)`. Verify with `git log --oneline -1` (expect that message on top of `7deda79`) and `git status --short` (expect only `?? .idea/vcs.xml`). **Untracked, not ours:** `.idea/vcs.xml`. Any other change is someone else's |
 
 ## Last verified working state
-- Requirements v1.0 approved (CON-001, NFR-025, FR-039 Outdated until SDLC-005). Research v1.0 approved.
-- **.NET SDK 10.0.403 installed and working** (a WPF template build passed). No product code. No product tests.
+- Requirements v2.0 approved, research v1.0 approved, both consistent (validators ALL OK). .NET SDK 10.0.403 installed.
+- No product code. No product tests. No POC run yet.
 
 ## Changes since the previous handoff
-- Research approved. Decisions D-011 (Windows support A), D-012 (AH=00h), D-013 (POCs + SDK).
-- SDK installed, BLK-001 resolved. POC-001/002 defined (`docs/02-research/poc-00x.md`), approved, not started.
+- Requirements v2.0 approved (D-011 Windows support, D-012 INT 21h AH=00h, AC-064). Research *Depends on* → v2.0.
 
 ## Failed tests and known issues
-- No failed tests (none exist).
-- Requirements CON-001, NFR-025 and FR-039 contradict D-011/D-012 until SDLC-005. Follow the decisions, not the old text.
+- No failed tests (none exist). No open blockers.
 
 ## Decisions and constraints to respect
-- D-001 to D-013 approved. Research recommendations are inputs. ADRs decide.
-- POC code goes in `poc/` only and is never promoted to `src/` without a backlog task.
+- D-001 to D-013 approved. Requirements v2.0 and research v1.0 approved. POC code only in `poc/`, never promoted to `src/` without a task.
+- POC-001 constraints (`docs/02-research/poc-001.md`): no GPL code or data; SingleStepTests 8086 (MIT) as the oracle; the test data is downloaded once and its source recorded.
 
 ## Exact next action
-1. User runs `/assembly-requirements apply D-011 and D-012` (SDLC-005). The agent edits in place (set v1.1) and asks for re-approval.
-2. User runs `/assembly-implement POC-001` and `/assembly-implement POC-002` (in either order; one task at a time).
+1. User runs `/assembly-implement POC-001`. The agent follows `docs/02-research/poc-001.md` and records `[Measured]` results there.
+2. Then `/assembly-implement POC-002`.
 3. Then `/assembly-architecture`.
 
 ## Do not overwrite or revert

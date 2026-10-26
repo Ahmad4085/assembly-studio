@@ -4,7 +4,7 @@
 |---|---|
 | Document | User stories |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -27,7 +27,7 @@ Personas: `PRODUCT_REQUIREMENTS.md` §4. Format: *As a [user], I want [capabilit
 |---|---|---|---|---|
 | US-006 | As a Student, I want to create, save and reopen my exercise files reliably, so that I never lose my work. | PG-2 | FR-002, FR-003, FR-004, FR-005, FR-008, FR-009, FR-019, FR-020 | AC-002, AC-003, AC-004, AC-005, AC-007, AC-008, AC-012 |
 | US-007 | As a Student, I want to assemble my program with one command and see whether it succeeded and how large it is, so that I know the program is valid before running it. | PG-2 | FR-025, FR-026, FR-028, FR-031 | AC-017, AC-019, AC-020 |
-| US-008 | As a Student, I want my program to read keyboard input and print results in an integrated console, so that I can complete typical input/output exercises. | PG-3 | FR-039, FR-041, FR-063, FR-064 | AC-022, AC-023, AC-045 |
+| US-008 | As a Student, I want my program to read keyboard input and print results in an integrated console, so that I can complete typical input/output exercises. | PG-3 | FR-039, FR-041, FR-063, FR-064 | AC-022, AC-023, AC-045, AC-064 |
 | US-009 | As a Student, I want to inspect memory and the stack while my program is paused, so that I can check my data and procedure calls. | PG-1 | FR-054, FR-055, FR-056 | AC-025, AC-026 |
 | US-010 | As a Student, I want to be told clearly when I use an instruction, service or feature that is not supported, so that I don't mistake a tool limit for my own bug. | PG-4 | FR-027, FR-032, FR-036, FR-037, FR-038, FR-040, FR-045 | AC-018, AC-028, AC-029, AC-031, AC-051 |
 | US-022 | As a Student, I want my preferences to persist, and a broken settings file not to stop the application, so that my setup stays stable. | PG-5 | FR-077, FR-078, FR-080, FR-081, FR-082 | AC-039, AC-053, AC-054 |
@@ -56,3 +56,5 @@ Personas: `PRODUCT_REQUIREMENTS.md` §4. Format: *As a [user], I want [capabilit
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

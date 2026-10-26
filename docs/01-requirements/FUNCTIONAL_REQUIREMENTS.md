@@ -4,7 +4,7 @@
 |---|---|
 | Document | Functional requirements |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -64,9 +64,9 @@ Definitions of priority and status: `PRODUCT_REQUIREMENTS.md` §2. Every require
 | FR-036 | The supported instruction set shall be documented. MVP target: the documented 8086 instruction set, excluding 8087 coprocessor (ESC) instructions, with defined behavior for HLT, WAIT and LOCK. The final list depends on research. | P0 | NEEDS_RESEARCH | US-010 | AC-028 | OQ-001, OQ-016 |
 | FR-037 | When execution reaches an unsupported or invalid opcode, execution shall halt before it with the state preserved, showing the address (CS:IP), instruction bytes and reason. | P0 | APPROVED | US-010 | AC-028 | — |
 | FR-038 | CPU-generated interrupts (divide error, INTO overflow, single-step, INT 3) with no handler installed by the program shall halt execution with a runtime error naming the condition and address. | P0 | APPROVED | US-010 | AC-031 | — |
-| FR-039 | The runtime shall emulate the MVP DOS service subset for text I/O and termination (D-008). PROPOSED list: INT 21h functions 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch and INT 20h. The final list and semantics are confirmed by research. | P0 | APPROVED | US-008 | AC-022, AC-023 | D-008, OQ-003 |
+| FR-039 | The runtime shall emulate the MVP DOS service subset for text I/O and termination (D-008, D-012): INT 21h functions 00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch and INT 20h, with DOS 3.3/4.0 semantics and the documented deviations in `docs/02-research/dos-services.md`. | P0 | APPROVED | US-008 | AC-022, AC-023, AC-064 | D-008, D-012, OQ-003 (answered) |
 | FR-040 | Any interrupt or service function outside the supported set shall halt execution with a message naming the interrupt and function (e.g. INT 21h AH=3Dh). | P0 | APPROVED | US-010 | AC-029 | — |
-| FR-041 | Normal termination (INT 20h, INT 21h AH=4Ch, or RET to PSP:0000) shall end the session and report the exit code where one exists. | P0 | APPROVED | US-008 | AC-022 | — |
+| FR-041 | Normal termination (INT 20h, INT 21h AH=00h, INT 21h AH=4Ch, or RET to PSP:0000) shall end the session and report the termination path and the exit code where one exists. | P0 | APPROVED | US-008 | AC-022, AC-064 | D-012 |
 | FR-042 | Each run shall have an instruction budget (PROPOSED default: 10,000,000, configurable). When it is exceeded, execution pauses with an explanatory message and the user may continue or stop. | P0 | APPROVED | US-016 | AC-030 | NFR-015 |
 | FR-043 | MZ .EXE programs shall be loaded and executed. | P2 | NEEDS_RESEARCH | US-026 | — | OQ-004 |
 | FR-044 | A documented subset of BIOS video and keyboard services (INT 10h, INT 16h) shall be emulated. | P2 | NEEDS_RESEARCH | US-026 | — | D-008 (Post-MVP) |
@@ -150,3 +150,5 @@ Definitions of priority and status: `PRODUCT_REQUIREMENTS.md` §2. Every require
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

@@ -4,7 +4,7 @@
 |---|---|
 | Document | Non-functional requirements |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -37,7 +37,7 @@ Targets marked `PROPOSED` are starting values, not measured results. Each one na
 | NFR-022 | Accessibility | Accessibility baseline | Contrast >= 4.5:1 for text and >= 3:1 for UI components in all themes (WCAG 2.2 AA levels). Full keyboard operability of essential workflows | FIRM | Contrast measurement, keyboard-only walkthrough | P0 | APPROVED | PG-4 | AC-043, AC-044 |
 | NFR-023 | Usability | Beginner first success | >= 80% of first-time participants (at least 5) open a sample, build, run and step within 5 minutes without outside help | PROPOSED | Moderated usability session | P1 | APPROVED | PG-1, PG-6 | AC-062 |
 | NFR-024 | Usability | Error message quality | 100% of user-facing errors state what happened, where and a next step | FIRM | Review checklist over the message catalog | P1 | APPROVED | PG-2 | AC-013, AC-055 |
-| NFR-025 | Compatibility | Supported Windows versions | Windows 10 and Windows 11, x64. Minimum builds set after research | PROPOSED | Install-and-run test on each supported OS version | P0 | NEEDS_RESEARCH | PG-5 | AC-040 |
+| NFR-025 | Compatibility | Supported Windows versions | Supported and tested: Windows 11 24H2 or later (x64) and Windows 10 Enterprise LTSC 21H2 (x64). Not supported: Windows 10 22H2 Home/Pro (may work, untested) (D-011) | FIRM | Install-and-run test on Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2 | P0 | APPROVED | PG-5 | AC-040 |
 | NFR-026 | Compatibility | Display scaling | Correct layout at 100%, 125%, 150% and 200% scaling and per-monitor DPI. Minimum window 1024x768 | PROPOSED | Manual check at each scale factor | P1 | APPROVED | PG-4 | AC-059 |
 | NFR-027 | Installability | Install and uninstall | Offline install on a clean machine completes <= 2 min. Uninstall removes all program files and leaves user files untouched | PROPOSED | Clean-VM install/uninstall test | P0 | APPROVED | PG-5 | AC-040, AC-041 |
 | NFR-028 | Installability | Install footprint | Installed size <= 300 MB | PROPOSED | Measurement of installed folder | P2 | APPROVED | PG-5 | — |
@@ -50,3 +50,5 @@ Targets marked `PROPOSED` are starting values, not measured results. Each one na
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

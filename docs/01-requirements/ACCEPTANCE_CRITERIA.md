@@ -4,7 +4,7 @@
 |---|---|
 | Document | Acceptance criteria |
 | Status | Approved |
-| Version | 1.0 |
+| Version | 2.0 |
 | Last updated | 2026-10-26 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -328,7 +328,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - Verifies: FR-072, NFR-018 · Priority: P0 · Test status: NOT RUN
 
 ### AC-040 Clean install and first run
-- **Given** a clean supported Windows x64 machine without .NET or an assembler installed and without internet
+- **Given** a clean machine for each supported OS (Windows 11 24H2+ x64; Windows 10 Enterprise LTSC 21H2 x64) without .NET or an assembler installed and without internet
 - **When** the installer runs
 - **Then** installation completes without downloads within the NFR-027 target, a Start menu shortcut exists, and the application launches and builds and runs the hello-world sample
 - Verifies: FR-083, FR-084, FR-086, NFR-025, NFR-027 · Priority: P0 · Test status: NOT RUN
@@ -399,6 +399,14 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Then** at least 80% complete within 5 minutes without outside help
 - Verifies: NFR-023 · Priority: P1 · Test status: NOT RUN
 
+### AC-064 Termination paths
+- **Given** four built programs that end with (a) INT 20h, (b) INT 21h AH=00h, (c) INT 21h AH=4Ch with AL=05h, (d) a near RET using the initial stack word
+- **When** each is run
+- **Then** each session ends normally and reports its termination path. (c) reports exit code 05h, and (a), (b) and (d) report exit code 00h
+- Verifies: FR-039, FR-041 · Priority: P0 · Test status: NOT RUN
+
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
+- 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
+- 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.

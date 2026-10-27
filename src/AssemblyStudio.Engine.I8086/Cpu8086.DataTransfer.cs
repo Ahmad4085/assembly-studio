@@ -445,27 +445,7 @@ public sealed partial class Cpu8086
         return Executed(cursor);
     }
 
-    // ---- PUSH r/m16 via FF /6 (the other FF forms arrive with later tasks) ----------------------------
-
-    private StepResult ExecPushRm16(PrefixInfo op)
-    {
-        ushort cursor = (ushort)(op.OpcodeIp + 1);
-        ModRmInfo m = ReadModRm(ref cursor, op.SegmentOverride);
-        if (m.Reg != 6)
-        {
-            return HaltUnsupported();
-        }
-        var s = _state;
-        // The 8086 PUSH SP quirk applies to the register form of FF /6 as well.
-        ushort value = ReadRm16(s, m);
-        if (!m.IsMemory && m.Rm == 4)
-        {
-            value = (ushort)(s.SP - 2);
-        }
-        Push(ref s, value);
-        _state = s;
-        return Executed(cursor);
-    }
+    // ---- PUSH/POP r/m16 via the FF group (/6 PUSH; /0 /1 INC/DEC live in Cpu8086.Arithmetic.cs) -------
 
     private StepResult ExecPushf(PrefixInfo op)
     {

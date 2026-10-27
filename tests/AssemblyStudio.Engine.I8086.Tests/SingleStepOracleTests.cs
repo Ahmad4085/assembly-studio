@@ -16,9 +16,11 @@ namespace AssemblyStudio.Engine.I8086.Tests;
 public class SingleStepOracleTests
 {
     /// <summary>The opcode files in TASK-012 scope: MOV, XCHG, LEA/LDS/LES, XLAT, LAHF/SAHF,
-    /// PUSH/POP (reg, seg, rm), PUSH/POP rm via FF/6, PUSHF/POPF.</summary>
+    /// PUSH/POP (reg, seg, rm), PUSH/POP rm via FF/6, PUSHF/POPF; and TASK-013 scope: ADD/ADC/
+    /// SUB/SBB/CMP (rm/r, acc-imm, groups 80-83 all /reg), INC/DEC (r16 and rm), NEG F6/F7 /3.</summary>
     public static TheoryData<string> OracleFiles { get; } = new(
     [
+        // TASK-012: data transfer
         "06.json.gz", "07.json.gz", "0E.json.gz", "16.json.gz", "17.json.gz", "1E.json.gz", "1F.json.gz",
         "50.json.gz", "51.json.gz", "52.json.gz", "53.json.gz", "54.json.gz", "55.json.gz", "56.json.gz",
         "57.json.gz", "58.json.gz", "59.json.gz", "5A.json.gz", "5B.json.gz", "5C.json.gz", "5D.json.gz",
@@ -33,6 +35,19 @@ public class SingleStepOracleTests
         "BE.json.gz", "BF.json.gz",
         "C4.json.gz", "C5.json.gz", "C6.json.gz", "C7.json.gz", "D7.json.gz",
         "FF.6.json.gz",
+        // TASK-013: arithmetic (ADD/ADC/SUB/SBB/CMP families, INC/DEC, NEG)
+        "00.json.gz", "01.json.gz", "02.json.gz", "03.json.gz", "04.json.gz", "05.json.gz",
+        "10.json.gz", "11.json.gz", "12.json.gz", "13.json.gz", "14.json.gz", "15.json.gz",
+        "18.json.gz", "19.json.gz", "1A.json.gz", "1B.json.gz", "1C.json.gz", "1D.json.gz",
+        "28.json.gz", "29.json.gz", "2A.json.gz", "2B.json.gz", "2C.json.gz", "2D.json.gz",
+        "38.json.gz", "39.json.gz", "3A.json.gz", "3B.json.gz", "3C.json.gz", "3D.json.gz",
+        "40.json.gz", "41.json.gz", "42.json.gz", "43.json.gz", "44.json.gz", "45.json.gz", "46.json.gz", "47.json.gz",
+        "48.json.gz", "49.json.gz", "4A.json.gz", "4B.json.gz", "4C.json.gz", "4D.json.gz", "4E.json.gz", "4F.json.gz",
+        "80.0.json.gz", "80.1.json.gz", "80.2.json.gz", "80.3.json.gz", "80.4.json.gz", "80.5.json.gz", "80.6.json.gz", "80.7.json.gz",
+        "81.0.json.gz", "81.1.json.gz", "81.2.json.gz", "81.3.json.gz", "81.4.json.gz", "81.5.json.gz", "81.6.json.gz", "81.7.json.gz",
+        "82.0.json.gz", "82.1.json.gz", "82.2.json.gz", "82.3.json.gz", "82.4.json.gz", "82.5.json.gz", "82.6.json.gz", "82.7.json.gz",
+        "83.0.json.gz", "83.1.json.gz", "83.2.json.gz", "83.3.json.gz", "83.4.json.gz", "83.5.json.gz", "83.6.json.gz", "83.7.json.gz",
+        "F6.3.json.gz", "F7.3.json.gz", "FE.0.json.gz", "FE.1.json.gz", "FF.0.json.gz", "FF.1.json.gz",
     ]);
 
     private static readonly string[] RegNames = ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di", "cs", "ds", "es", "ss", "ip", "flags"];

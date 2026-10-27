@@ -31,10 +31,25 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
 
         // Handlers return null for unsupported or undefined forms: the state is then restored and
         // the step halts with the instruction inspectable (FR-037). Data transfer: TASK-012
-        // (Cpu8086.DataTransfer.cs); the other families arrive with TASK-013..018 (ADR-0003 §4).
+        // (Cpu8086.DataTransfer.cs); arithmetic: TASK-013 (Cpu8086.Arithmetic.cs); the other
+        // families arrive with TASK-014..018 (ADR-0003 §4).
         StepResult? result = opcode.Opcode switch
         {
             0xCD => ExecuteIntImm8(opcode),
+            0x00 or 0x01 or 0x02 or 0x03 => ExecArithRmR(opcode),
+            0x04 or 0x05 => ExecArithAccImm(opcode),
+            >= 0x10 and <= 0x13 => ExecArithRmR(opcode),
+            0x14 or 0x15 => ExecArithAccImm(opcode),
+            >= 0x18 and <= 0x1B => ExecArithRmR(opcode),
+            0x1C or 0x1D => ExecArithAccImm(opcode),
+            >= 0x28 and <= 0x2B => ExecArithRmR(opcode),
+            0x2C or 0x2D => ExecArithAccImm(opcode),
+            >= 0x38 and <= 0x3B => ExecArithRmR(opcode),
+            0x3C or 0x3D => ExecArithAccImm(opcode),
+            >= 0x40 and <= 0x4F => ExecIncDecReg16(opcode),
+            0x80 or 0x81 or 0x82 or 0x83 => ExecArithGroupImm(opcode),
+            0xF6 => ExecNeg(opcode, wide: false),
+            0xF7 => ExecNeg(opcode, wide: true),
             0x88 => ExecMovRm8FromR8(opcode),
             0x89 => ExecMovRm16FromR16(opcode),
             0x8A => ExecMovR8FromRm8(opcode),
@@ -65,7 +80,8 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             0x1E => ExecPushSeg(opcode, SegReg.DS),
             0x1F => ExecPopSeg(opcode, SegReg.DS),
             0x8F => ExecPopRm16(opcode),
-            0xFF => ExecPushRm16(opcode),
+            0xFE => ExecFeGroup(opcode),
+            0xFF => ExecFfGroup(opcode),
             0x9C => ExecPushf(opcode),
             0x9D => ExecPopf(opcode),
             _ => null,

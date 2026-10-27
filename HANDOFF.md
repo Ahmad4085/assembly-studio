@@ -8,7 +8,7 @@
 | Written | 2026-10-27 13:56 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-012 |
 | Current task | **TASK-013 Arithmetic instructions: `Ready`, approved, not started, no owner** |
 | Last completed | TASK-012 Data transfer instructions (Done 2026-10-27 13:55 +0500) |
-| Git state | HEAD `fa9dcc5` "docs: update HANDOFF.md after pushing TASK-010/011", **pushed to origin/master**. Uncommitted, ours: TASK-012 source/tests (`src/AssemblyStudio.Engine.I8086/Cpu8086.DataTransfer.cs`, `Cpu8086.cs`, `tests/.../SingleStepOracleTests.cs`, `DataTransferTests.cs`) + shared memory + backlog. Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Git state | HEAD `fcfba74` "docs: shared memory for TASK-012", **pushed to origin/master** (2026-10-27, range fa9dcc5..fcfba74). Working tree clean except untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors (2026-10-27 13:55 +0500).

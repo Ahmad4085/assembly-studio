@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.0 |
+| Version | 1.1 |
 | Date | 2026-10-26 |
 | Requirements addressed | NFR-017, NFR-020, NFR-021, NFR-016, NFR-022, FR-068 (sample verification), AC-043, AC-044, AC-056, AC-058 |
 | Research | `docs/02-research/editor-mvvm-testing.md` (R-TEST), `poc-001.md`, `poc-002.md` |
@@ -43,8 +43,13 @@ mode [Measured].
 
 ## Validation
 - The first M0 task creates the solution skeleton with `global.json` and runs `dotnet test` green (empty test).
+  **Result [Verified] (TASK-001, 2026-10-26):** `dotnet test --solution AssemblyStudio.slnx -c Release` green under Microsoft.Testing.Platform.
+- **Oracle data pin [Verified] (TASK-003 rework, 2026-10-26, between 22:48 and 22:58 +0500):** 8086 `v1` at commit `e71c68d215a6bb8c356bd4cb3842de3bef345ca9`:
+  all 324 files matched GitHub's git blob SHA-1 for that commit. Their SHA-256 values are committed in `build/singlesteptests-8086-v1.sha256`.
+  The fetch script verifies every file against it and exits with code 1 on any missing, failed or mismatching file.
 - **Unverified:** the coverlet MTP package name and how it works with xunit.v3 4.0.2 on .NET 10. Checked when coverage is introduced.
 
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
+- 2026-10-26 v1.1: Minor. Validation results recorded (skeleton, oracle data pin and SHA-256 manifests). Decision unchanged.

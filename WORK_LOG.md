@@ -465,3 +465,27 @@
 - **Git state after:** untracked new files, modified files.
 - **Unresolved issues:** none
 - **Next step:** `/assembly-implement TASK-004` (Coverage tooling). TASK-006 user action in parallel.
+
+### 2026-10-26 22:40 – 2026-10-27 10:15 +0500 · Claude Code (Opus 5.5) · Review + rework of TASK-001..003 (Antigravity)
+- **Summary:** At the user's request ("please check i do task 1,2,3 use antigravity"), reviewed Antigravity's TASK-001..003 against the backlog and
+  re-ran the evidence: Release build 0 warnings, 37/37 tests, 324 oracle files matched `SHA256SUMS.txt`. All reported results confirmed. Findings:
+  (a) the TASK-003 script swallowed download failures (exit 0, 0-byte files then counted as cached; a 0-byte `C6.3.json.gz` from 20:13 proved it),
+  (b) its SHA-256 values were self-generated and never compared with anything committed, (c) the 8088 option fetched only `metadata.json` from
+  unpinned `main`, (d) the TASK-002 rule test reads compiled metadata, so an unused forbidden ProjectReference passed (reproduced: 23/23 green),
+  (e) `.editorconfig` said CRLF in an all-LF repo with `core.autocrlf=true` and no `.gitattributes`. User: "yes, fix them and log it".
+  Fixes listed in `CURRENT_TASK.md` (Rework section). Deleted the stray 0-byte `testdata/singlesteptests/8086/C6.3.json.gz` (git-ignored, created by the old script).
+- **Files changed:** `build/fetch-singlesteptests.ps1`, `build/singlesteptests-8086-v1.sha256` (new), `build/singlesteptests-8086-v1-files.txt`
+  (deleted, superseded), `tests/AssemblyStudio.ArchitectureTests/ProjectFileRuleTests.cs` (new), `ArchitectureRuleTests.cs` (graph made `internal`),
+  `.editorconfig`, `.gitattributes` (new), `docs/decisions/ADR-0008-testing-strategy-and-tools.md` (v1.1), `DECISIONS.md`, `CURRENT_TASK.md`,
+  `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** 8086 files vs upstream git blob SHA-1 → 324/324 match. Fetch script (PowerShell 5.1) on real data twice → exit 0, 324 verified,
+  identical `SOURCE.txt`. Scratch target: fresh subset download (90 files) → exit 0; corrupted cached file → re-downloaded and verified; stray file →
+  warning; tampered manifest hash → exit 1, no file and no `.part` left. `-Include8088` without manifest → clear error. Architecture negative cases
+  (3) → 1 failure each, clean → pass. `dotnet build -c Release` → 0 warnings; `dotnet test --solution AssemblyStudio.slnx -c Release` → **53/53 passed**
+  (2026-10-27 10:15 +0500).
+- **Incidents:** my first negative-test attempt silently didn't apply its edit (sed escaping), so its "23/23 pass" proved nothing; redone with a
+  verified edit. I briefly wrote a placeholder time ("22:5x") into ADR-0008 and replaced it with the real range. The first 8088 download stopped
+  after 142/324 files (GitHub reset the connection); resumed with retries.
+- **Git state after:** committed on the user's request ("commit the pending changes"), not pushed. `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** 8088 v2 manifest pending
+- **Next step:** finish the 8088 manifest (Claude Code), then `/assembly-implement TASK-004`

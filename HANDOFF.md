@@ -5,36 +5,31 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-26 22:35 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-003 |
-| Current task | **TASK-004 Coverage tooling (coverlet with MTP): `Ready`, approved, not started, no owner** |
-| Last completed | TASK-003 SingleStepTests oracle data fetch (Done 2026-10-26 20:18 +0500) |
-| Git state | At writing: HEAD `df5291c` (committed `TASK-003: SingleStepTests oracle data fetch`, pushed to `origin/master`). Working tree clean. **Untracked, not ours:** `.idea/vcs.xml` |
+| Written | 2026-10-27 10:15 +0500 by Claude Code (Opus 5.5), after the review and rework of TASK-001..003 |
+| Current task | **Rework of TASK-001..003: code done and committed. Open: 8088 v2 manifest (Claude Code, download in progress)**. Then TASK-004 `Ready` |
+| Last completed | TASK-003 (Antigravity), reworked by Claude Code (see `WORK_LOG.md`) |
+| Git state | At writing: HEAD `6aa04c3`; the rework is committed right after this file as `TASK-002/003 rework: verified oracle fetch, project-file rules, LF` (not pushed). **Untracked, not ours:** `.idea/vcs.xml` |
 
 ## Last verified working state
-- Product solution `AssemblyStudio.slnx` builds cleanly: `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
-- All 9 test projects run under Microsoft.Testing.Platform and pass: `dotnet test --solution AssemblyStudio.slnx -c Release` → **37/37 passed** (0 failed, 0 skipped).
-- SingleStepTests 8086 hardware oracle dataset: 324 files verified and checksummed via `SHA256SUMS.txt` in `testdata/singlesteptests/8086/` (git-ignored per ADR-0008). Idempotence verified.
-- `SingleStepOracleHelper` passes all tests, including failing with clear instructions when test data is absent.
+- `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution AssemblyStudio.slnx -c Release` → **53/53 passed** (2026-10-27 10:15 +0500).
+- `build/fetch-singlesteptests.ps1` (default, 8086) → exit 0, 324/324 files verified against `build/singlesteptests-8086-v1.sha256`.
 
 ## Changes since the previous handoff
-- Implemented **TASK-003**:
-  - Created `build/fetch-singlesteptests.ps1` with SHA-256 generation, `SOURCE.txt` (MIT license, commit `e71c68d215a6bb8c356bd4cb3842de3bef345ca9`), and `-Include8088` switch.
-  - Added `build/singlesteptests-8086-v1-files.txt` with exact 324 file list.
-  - Added `testdata/` and `tools/nasm/` to `.gitignore`.
-  - Created `SingleStepOracleHelper.cs` and unit tests in `tests/AssemblyStudio.Engine.I8086.Tests/Oracle/`.
-- Backlog updated: TASK-003 marked `Done`.
-- `CURRENT_TASK.md` updated: TASK-003 completed, TASK-004 set to `Ready`.
+- Review of Antigravity's TASK-001..003: all reported results reproduced. Fixes: the fetch script fails loudly and verifies against committed
+  SHA-256 manifests; 8088 v2 pinned (`aea84484…`); `.csproj` architecture rules (unused forbidden references, UseWPF, unlisted projects);
+  LF line endings enforced (`.editorconfig`, `.gitattributes`). ADR-0008 v1.1 (validation results).
 
 ## Failed tests and known issues
-- None. 0 failed tests, 0 warnings, 0 errors.
+- No failed tests. `-Include8088` stops with a clear error until `build/singlesteptests-8088-v2.sha256` exists.
 
 ## Decisions and constraints to respect
-- ADR-0001 through ADR-0009, D-001 through D-015.
-- Hardware oracle data stays out of Git (`testdata/` is git-ignored).
+- ADR-0001..0009 (0007 v1.1, 0008 v1.1), D-001..D-015.
+- Oracle files are verified only against the committed manifests. Never regenerate a manifest from unverified downloads.
+- Architecture rules exist twice (compiled references + `.csproj`). A new src project must be added to `AllowedProductDependencies`.
 
 ## Exact next action
-1. User runs `/assembly-implement TASK-004` (backlog § TASK-004: Coverage tooling with coverlet and MTP).
-2. In parallel (user action): TASK-006, provision clean Windows 11 24H2 x64 and Windows 10 Enterprise LTSC 21H2 x64 VMs and record them in `docs/06-implementation/environments.md`.
+1. Claude Code: when the 8088 download finishes, commit `build/singlesteptests-8088-v2.sha256` (all 324 files must match upstream git blobs) and run `-Include8088` twice.
+2. User runs `/assembly-implement TASK-004`. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -27,7 +27,7 @@ public class ArchitectureRuleTests
         "System.Windows.Forms"
     ];
 
-    private static readonly Dictionary<string, string[]> AllowedProductDependencies = new()
+    internal static readonly Dictionary<string, string[]> AllowedProductDependencies = new()
     {
         ["AssemblyStudio.Core"] = [],
         ["AssemblyStudio.Engine.I8086"] = ["AssemblyStudio.Core"],

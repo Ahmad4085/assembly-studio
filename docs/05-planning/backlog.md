@@ -40,7 +40,7 @@
 | TASK-006 | Provide clean test VMs (user action) **(User action)** | M0 | — | M | NFR-025 | Approved |
 | TASK-010 | Core abstractions v1 | M1 | TASK-001 | L | NFR-019, FR-033, NFR-018 | Done |
 | TASK-011 | Engine skeleton: decode, ModR/M, memory access | M1 | TASK-010, TASK-003 | M | FR-033, FR-036, FR-037 | Done |
-| TASK-012 | Data transfer instructions | M1 | TASK-011 | M | FR-036, NFR-017 | Approved |
+| TASK-012 | Data transfer instructions | M1 | TASK-011 | M | FR-036, NFR-017 | Done |
 | TASK-013 | Arithmetic instructions | M1 | TASK-011 | M | FR-036, FR-048, NFR-017 | Approved |
 | TASK-014 | Logic, shift and rotate instructions | M1 | TASK-011 | M | FR-036, FR-048, NFR-017 | Approved |
 | TASK-015 | Multiply, divide, BCD and conversions | M1 | TASK-011 | M | FR-036, FR-038, FR-048, NFR-017 | Approved |

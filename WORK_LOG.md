@@ -594,3 +594,48 @@
   TASK-012 (oracle helper wiring planned for TASK-020 gate).
 - **Git state after:** uncommitted TASK-010 + TASK-011 changes (user commits on request per protocol).
 - **Next step:** `/assembly-implement TASK-012` (data transfer instructions).
+
+### 2026-10-27 13:14-13:55 +0500 - OpenCode (GLM-5.3-Flash Free) - TASK-012
+- **Summary:** Ran `/assembly-implement TASK-012` (data transfer instructions). Implemented all
+  TASK-012 opcodes in a new partial-class file `Cpu8086.DataTransfer.cs`: MOV (rm/reg 88-8B;
+  segment registers 8C/8E with the 8086 reg&3 Sreg-field aliasing; moffs A0-A3; reg-imm B0-BF;
+  rm-imm C6/C7 where every reg field behaves as /0), XCHG (86/87 and AX-form 90-97, 90 = NOP),
+  LEA 8D, LES C4, LDS C5 (memory forms only; mod=11 undefined -> halts UnsupportedInstruction with
+  state unchanged), XLAT D7 (DS default, segment override honoured), LAHF 9F (flags low byte
+  verbatim) and SAHF 9E ((AH & 0xD5) | 0x02), PUSH/POP reg 50-5F and seg 06/07/0E/16/17/1E/1F,
+  POP rm 8F (every reg field behaves as /0), PUSH rm via FF/6 (other FF forms remain unsupported),
+  PUSHF 9C (FLAGS verbatim) and POPF 9D ((popped | 0xF002) & ~0x0028). Oracle-confirmed 8086 quirks:
+  PUSH SP pushes the NEW decremented SP (also for the register form of FF/6); POP SP (5C and 8F
+  rm4) loads SP with the popped value; PUSHF pushes FLAGS verbatim; POPF forces the canonical
+  reserved bits. All semantics derived empirically from the SingleStepTests data before coding
+  (LAHF "anomaly" from the pre-implementation investigation was my own hex-arithmetic error:
+  64647 = 0xFC87, and 0x9E is SAHF, not LAHF - both instructions resolved textbook-clean 2000/2000).
+  Cpu8086.cs became `sealed partial` with a switch-expression dispatch (null = unsupported/undefined
+  -> state restored, halt; FR-037 intact). Two engine bugs found and fixed during verify: handlers
+  did not advance IP (fixed via the Executed(endIp) helper) and executed results reported the end
+  IP instead of the instruction start (fixed by normalizing from the pre-step state in
+  StepInstruction). Built the SingleStepTests oracle harness in the engine test project (71 opcode
+  files, per-case flags-mask resolution from metadata.json, unexpected-write detection, fresh
+  FakeMemory per case).
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/` - Cpu8086.DataTransfer.cs (new),
+  Cpu8086.cs (partial + dispatch); `tests/AssemblyStudio.Engine.I8086.Tests/` -
+  SingleStepOracleTests.cs (new, 71 oracle files), DataTransferTests.cs (new, 30 hand tests),
+  ScratchDebugTests.cs (temporary debug test, deleted again - not committed);
+  `docs/05-planning/backlog.md`, `ROADMAP.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`,
+  `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` - 0 warnings, 0 errors.
+  `dotnet test --solution AssemblyStudio.slnx -c Release` - first run 141/146 passed, 5 failed
+  (root causes fixed below); re-run - **204/204 passed**; the engine test project alone is
+  146/146 (71 oracle + 44 skeleton + 30 data-transfer + 1 scratch while it existed).
+- **Incidents:** intermediate failures and root causes, all mine: (1) real engine bug - handlers
+  never advanced IP; (2) real engine bug - executed results carried the end IP as the instruction
+  address; (3) real quirk found by oracle - FF/6 register form of PUSH SP must push the decremented
+  SP (fixed); (4) my hand-test encoding/assertion mistakes: MOV BH math (BX 0x1000 + BH=0x99 =
+  0x9900), [BP+...] defaults to the SS segment (three tests), XLAT address (BX+AL = 0x1034, not
+  0x10EB), XCHG reg field 0 = AX not SP, NOP advances IP, A3 length 3 bytes. One harness bug found
+  by debugging: final registers were overlaid into the dict used to SetState, so cases started from
+  their own final values (fixed by separating initial state from expected finals). A stale-build
+  mix once masked/muddled results; a clean rebuild made the failure set reproducible.
+- **Unresolved issues:** none. App.Tests project present in the solution passed untouched.
+- **Git state after:** uncommitted TASK-012 changes (user commits on request per protocol).
+- **Next step:** `/assembly-implement TASK-013` (arithmetic instructions).

@@ -13,7 +13,7 @@ namespace AssemblyStudio.Engine.I8086;
 /// <param name="memory">The emulated memory the CPU fetches from and addresses.</param>
 /// <param name="interruptRouter">Interrupt interception callback, or <see langword="null"/> to
 /// vector every interrupt through the IVT.</param>
-public sealed class Cpu8086(IMemory memory, IInterruptRouter? interruptRouter = null) : ICpu
+public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptRouter = null) : ICpu
 {
     private CpuState _state;
 
@@ -29,18 +29,62 @@ public sealed class Cpu8086(IMemory memory, IInterruptRouter? interruptRouter = 
         CpuState before = _state;
         PrefixInfo opcode = Decoder.ParsePrefixes(_state, memory);
 
-        switch (opcode.Opcode)
+        // Handlers return null for unsupported or undefined forms: the state is then restored and
+        // the step halts with the instruction inspectable (FR-037). Data transfer: TASK-012
+        // (Cpu8086.DataTransfer.cs); the other families arrive with TASK-013..018 (ADR-0003 §4).
+        StepResult? result = opcode.Opcode switch
         {
-            case 0xCD:
-                return ExecuteIntImm8(opcode);
-            default:
-                // Every other opcode family arrives with TASK-012..018 (ADR-0003 §4). Halt with the
-                // state inspectable at the instruction: CS:IP restored, nothing modified (FR-037).
-                _state = before;
-                return new StepResult(
-                    StepOutcome.Halted, before.CS, before.IP,
-                    HaltReason.UnsupportedInstruction, FlagBit.None);
+            0xCD => ExecuteIntImm8(opcode),
+            0x88 => ExecMovRm8FromR8(opcode),
+            0x89 => ExecMovRm16FromR16(opcode),
+            0x8A => ExecMovR8FromRm8(opcode),
+            0x8B => ExecMovR16FromRm16(opcode),
+            0x8C => ExecMovRm16FromSreg(opcode),
+            0x8E => ExecMovSregFromRm16(opcode),
+            >= 0xA0 and <= 0xA3 => ExecMovMoffs(opcode),
+            >= 0xB0 and <= 0xB7 => ExecMovReg8FromImm8(opcode),
+            >= 0xB8 and <= 0xBF => ExecMovReg16FromImm16(opcode),
+            0xC6 => ExecMovRm8FromImm8(opcode),
+            0xC7 => ExecMovRm16FromImm16(opcode),
+            0x86 => ExecXchgRm8R8(opcode),
+            0x87 => ExecXchgRm16R16(opcode),
+            >= 0x90 and <= 0x97 => ExecXchgAxReg(opcode),
+            0x8D => ExecLea(opcode),
+            0xC4 => ExecLesOrLds(opcode, isLes: true),
+            0xC5 => ExecLesOrLds(opcode, isLes: false),
+            0xD7 => ExecXlat(opcode),
+            0x9E => ExecSahf(opcode),
+            0x9F => ExecLahf(opcode),
+            >= 0x50 and <= 0x57 => ExecPushReg(opcode),
+            >= 0x58 and <= 0x5F => ExecPopReg(opcode),
+            0x06 => ExecPushSeg(opcode, SegReg.ES),
+            0x07 => ExecPopSeg(opcode, SegReg.ES),
+            0x0E => ExecPushSeg(opcode, SegReg.CS),
+            0x16 => ExecPushSeg(opcode, SegReg.SS),
+            0x17 => ExecPopSeg(opcode, SegReg.SS),
+            0x1E => ExecPushSeg(opcode, SegReg.DS),
+            0x1F => ExecPopSeg(opcode, SegReg.DS),
+            0x8F => ExecPopRm16(opcode),
+            0xFF => ExecPushRm16(opcode),
+            0x9C => ExecPushf(opcode),
+            0x9D => ExecPopf(opcode),
+            _ => null,
+        };
+
+        if (result is not null)
+        {
+            // For executed instructions the report carries the instruction's own address: the
+            // state as it stood at entry (CS:IP on the first byte, prefixes included).
+            return result.Value.Outcome == StepOutcome.Executed
+                ? result.Value with { InstructionCs = before.CS, InstructionIp = before.IP }
+                : result.Value;
         }
+
+        // Halt with the state inspectable at the instruction: CS:IP restored, nothing modified (FR-037).
+        _state = before;
+        return new StepResult(
+            StepOutcome.Halted, before.CS, before.IP,
+            HaltReason.UnsupportedInstruction, FlagBit.None);
     }
 
     /// <summary>

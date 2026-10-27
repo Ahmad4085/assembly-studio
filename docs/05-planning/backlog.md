@@ -36,7 +36,7 @@
 | TASK-002 | Architecture rule test | M0 | TASK-001 | L | NFR-019 | Done |
 | TASK-003 | SingleStepTests oracle data fetch | M0 | TASK-001 | L | NFR-017 | Done |
 | TASK-004 | Coverage tooling (coverlet with MTP) | M0 | TASK-001 | M | NFR-021 | Done |
-| TASK-005 | Bundled NASM tooling layout | M0 | TASK-001 | L | FR-023, NFR-030, NFR-031 | Approved |
+| TASK-005 | Bundled NASM tooling layout | M0 | TASK-001 | L | FR-023, NFR-030, NFR-031 | Done |
 | TASK-006 | Provide clean test VMs (user action) **(User action)** | M0 | — | M | NFR-025 | Approved |
 | TASK-010 | Core abstractions v1 | M1 | TASK-001 | L | NFR-019, FR-033, NFR-018 | Approved |
 | TASK-011 | Engine skeleton: decode, ModR/M, memory access | M1 | TASK-010, TASK-003 | M | FR-033, FR-036, FR-037 | Approved |
@@ -217,7 +217,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M0 |
 | Requirements | FR-023, NFR-030, NFR-031 |
 | Decisions / design | ADR-0005 |

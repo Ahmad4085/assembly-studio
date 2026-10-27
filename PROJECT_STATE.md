@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-27 10:48 +0500 by Claude Code (TASK-004 done) |
+| Last updated | 2026-10-27 12:00 +0500 by Antigravity (TASK-005 done) |
 | Current phase | **6 Implementation**, milestone M0 Foundation (in progress) |
 | Current milestone | M0 Foundation (in progress) |
-| Active task | None in progress. Next: `TASK-005` Bundled NASM tooling layout (`Ready`). Uncommitted: TASK-004 and the 8088 v2 manifest |
-| Next recommended action | `/assembly-implement TASK-005`. User action TASK-006 (clean test VMs) can start any time |
+| Active task | None in progress. Next: M1 `TASK-010` Core abstractions v1 (`Ready`). Parallel user action: `TASK-006` (clean test VMs) |
+| Next recommended action | `/assembly-implement TASK-010` (begins M1). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-005 Bundled NASM tooling layout | 2026-10-27 12:00 +0500 | `build/fetch-nasm.ps1`, pinned NASM 3.02 win64 verified (SHA-256 `161d0bfa...`), `tools/nasm/` git-ignored with `SOURCE.txt` and `SHA256SUMS.txt`; `NasmLocator` test helper; 58/58 solution tests passed |
 | TASK-004 Coverage tooling (coverlet with MTP) | 2026-10-27 10:48 +0500 | `coverlet.MTP` 10.1.0 (MIT), `build/coverage.ps1` → `artifacts/coverage/summary.md`; skeleton report generated; probe 4/5 merged as predicted; 53/53 tests |
 | Review fixes TASK-001..003 (Claude Code, user request) | 2026-10-27 10:15 +0500 | Fetch script hardened + committed 8086 SHA-256 manifest (324/324 matched upstream git blobs); 16 `.csproj` rule tests (3 negative cases fail as expected); LF line endings (`.gitattributes`); 53/53 tests. 8088 v2 manifest pending |
 | TASK-003 SingleStepTests oracle data fetch | 2026-10-26 20:18 +0500 | `build/fetch-singlesteptests.ps1`, 324 files verified/checksummed, SingleStepOracleHelper tests passed, 37/37 solution tests passed |
@@ -66,9 +67,9 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-27 10:48 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-27 10:48 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **53/53 passed** (9 test projects, xunit.v3 MTP runner) |
-| Coverage (2026-10-27 10:48 +0500) | `build/coverage.ps1` → exit 0; all product assemblies "n/a (no coverable lines)" (skeleton). Target ≥ 85% engine/runtime (NFR-021) not yet measurable |
+| Product build (2026-10-27 12:00 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-27 12:00 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **58/58 passed** (9 test projects, xunit.v3 MTP runner) |
+| Coverage (2026-10-27 12:00 +0500) | `build/coverage.ps1` → exit 0; all product assemblies "n/a (no coverable lines)" (skeleton). Target ≥ 85% engine/runtime (NFR-021) not yet measurable |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |

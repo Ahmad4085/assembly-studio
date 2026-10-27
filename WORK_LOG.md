@@ -508,3 +508,19 @@
 - **Git state after:** committed on the user's request ("commit the pending changes") on top of `e299d3c`, not pushed. `.idea/vcs.xml` untracked (Rider)
 - **Unresolved issues:** none for TASK-004. Coverage thresholds are out of scope (later task)
 - **Next step:** `/assembly-implement TASK-005`
+
+### 2026-10-27 11:08–12:00 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-005
+- **Summary:** Ran `/assembly-implement TASK-005` (Bundled NASM tooling layout). Created `build/fetch-nasm.ps1` to download and verify the pinned NASM 3.02 win64 binary from nasm.us against its SHA-256 hash (`161d0bfaff53c2f9e9f3e69fd0672323ebabafd1268976a5cec11be92a19aee7`), extract `nasm.exe`, `ndisasm.exe`, and `LICENSE` (BSD-2-Clause) into `tools/nasm/`, and write deterministic `SOURCE.txt` and `SHA256SUMS.txt` (UTF-8 without BOM, LF, no timestamps). Updated `.gitignore` to ignore `tools/`. Implemented `NasmLocator` helper and comprehensive tests in `tests/AssemblyStudio.Toolchain.Nasm.Tests/` covering locating binaries, version verification (3.02), ndisasm locator, BSD-2-Clause license & source metadata, SHA-256 manifest integrity, and actionable failure instructions on missing tool.
+- **Files changed:** `build/fetch-nasm.ps1` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmLocator.cs` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmLocatorTests.cs` (new), `.gitignore`, `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `powershell -ExecutionPolicy Bypass -File build/fetch-nasm.ps1 -Force` → archive verified, extracted and verified nasm 3.02.
+  - `powershell -ExecutionPolicy Bypass -File build/fetch-nasm.ps1` → idempotent: verified already installed and hashes match.
+  - `dotnet test tests\AssemblyStudio.Toolchain.Nasm.Tests\AssemblyStudio.Toolchain.Nasm.Tests.csproj -c Release` → 6/6 passed.
+  - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **58/58 passed** across all 9 test projects (duration ~8.7s).
+  - `build/coverage.ps1` → exit 0, summary generated.
+- **Incidents:** Initial test build caught CA1850 (`SHA256.HashData` preferred over `ComputeHash`); updated test code to use `SHA256.HashData`.
+- **Git state after:** uncommitted changes for TASK-005. Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc`.
+- **Unresolved issues:** none for TASK-005. User action TASK-006 (clean test VMs) in parallel.
+- **Next step:** `/assembly-implement TASK-010` (begins M1).
+

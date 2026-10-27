@@ -18,7 +18,7 @@ Desktop.ini
 
 # Test oracle and external tooling data (fetched by scripts, never committed per ADR-0005/0008)
 testdata/
-tools/nasm/
+tools/
 
 # Secrets (never commit)
 *.pfx

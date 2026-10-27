@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-27 12:05 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-005 |
+| Written | 2026-10-27 12:05 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-005; Git-state line updated 2026-10-27 by OpenCode (GLM-5.3-Flash Free) after committing TASK-005 |
 | Current task | **TASK-010 Core abstractions v1: `Ready`, approved, not started, no owner** |
 | Last completed | TASK-005 Bundled NASM tooling layout (Done 2026-10-27 12:00 +0500) |
-| Git state | HEAD `23e0fca` (not pushed). Uncommitted working tree changes for TASK-005 (`build/fetch-nasm.ps1`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmLocator*.cs`, `.gitignore`, shared memory). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Git state | HEAD `a006825` "TASK-005: Bundled NASM tooling layout" (not pushed; user asked for the commit). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution AssemblyStudio.slnx -c Release` → **58/58 passed** (2026-10-27 12:00 +0500).
@@ -28,7 +28,7 @@
 - Deterministic metadata in fetch scripts (no runtime timestamps).
 
 ## Exact next action
-1. Optional: commit TASK-005 pending changes (`git add ...; git commit -m "TASK-005: Bundled NASM tooling layout"`).
+1. ~~Optional: commit TASK-005 pending changes~~ Done: committed as `a006825` on the user's request (2026-10-27, time not recorded).
 2. Begin Milestone M1: user runs `/assembly-implement TASK-010`.
 3. In parallel (user action): TASK-006 test VMs.
 

@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
-| Version | 1.1 |
+| Version | 1.2 |
 | Date | 2026-10-26 |
 | Requirements addressed | NFR-017, NFR-020, NFR-021, NFR-016, NFR-022, FR-068 (sample verification), AC-043, AC-044, AC-056, AC-058 |
 | Research | `docs/02-research/editor-mvvm-testing.md` (R-TEST), `poc-001.md`, `poc-002.md` |
@@ -47,9 +47,19 @@ mode [Measured].
 - **Oracle data pin [Verified] (TASK-003 rework, 2026-10-26, between 22:48 and 22:58 +0500):** 8086 `v1` at commit `e71c68d215a6bb8c356bd4cb3842de3bef345ca9`:
   all 324 files matched GitHub's git blob SHA-1 for that commit. Their SHA-256 values are committed in `build/singlesteptests-8086-v1.sha256`.
   The fetch script verifies every file against it and exits with code 1 on any missing, failed or mismatching file.
-- **Unverified:** the coverlet MTP package name and how it works with xunit.v3 4.0.2 on .NET 10. Checked when coverage is introduced.
+- **Coverage [Verified] (TASK-004, 2026-10-27 10:48 +0500):** the package is `coverlet.MTP` **10.1.0**, license **MIT** (nuspec license
+  expression), from the coverlet repository (`https://github.com/coverlet-coverage/coverlet`). It targets net10.0 and depends on
+  Microsoft.Testing.Platform ≥ 2.4.1 and Microsoft.Extensions.Configuration/.Json/DependencyInjection 10.0.12 (MIT). xunit.v3 4.0.2 resolves
+  Microsoft.Testing.Platform 2.5.1, and it works with SDK 10.0.403: `dotnet test --project <p> --coverlet --coverlet-output-format cobertura`.
+  No `TestingPlatformDotnetTestSupport` setting is needed on SDK 10. Referenced by every test project (`Directory.Build.props`) and inactive
+  without `--coverlet`. `build/coverage.ps1` merges the line hits per product assembly into `artifacts/coverage/summary.md`. A scratch probe
+  (3-branch method, two partial tests in different test projects) gave the expected 2/5, 3/5 and merged 4/5 lines.
+  Note: coverlet reports `line-rate="1"` for an assembly with 0 coverable lines. The summary shows such assemblies as "n/a", not 100%.
+- **8088 v2 manifest [Verified against upstream] (2026-10-27):** all 324 `v2` files at commit `aea84484abc79d09639d855b7b0ab32bc9e4dbeb` matched
+  GitHub's git blob SHA-1. SHA-256 values in `build/singlesteptests-8088-v2.sha256`. The fetch script's `-Include8088` run on it is not yet recorded.
 
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
 - 2026-10-26 v1.1: Minor. Validation results recorded (skeleton, oracle data pin and SHA-256 manifests). Decision unchanged.
+- 2026-10-27 v1.2: Minor. Coverage validation result (TASK-004, coverlet.MTP 10.1.0) and the 8088 v2 manifest recorded. Decision unchanged.

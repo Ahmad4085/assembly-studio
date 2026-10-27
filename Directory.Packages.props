@@ -7,5 +7,7 @@
   <ItemGroup>
     <!-- Test framework (ADR-0008: xUnit v3 4.0.2, Apache-2.0) -->
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <!-- Coverage under Microsoft.Testing.Platform (ADR-0008: coverlet, MIT). Collects only when the coverlet option is passed -->
+    <PackageVersion Include="coverlet.MTP" Version="10.1.0" />
   </ItemGroup>
 </Project>

@@ -15,4 +15,9 @@
     <!-- Test names use underscores (Given_when_then style); CA1707 applies to production APIs only. -->
     <NoWarn>$(NoWarn);CA1707</NoWarn>
   </PropertyGroup>
+
+  <!-- Every test project can collect coverage (ADR-0008). Collects only when the coverlet option is passed (build/coverage.ps1) -->
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+    <PackageReference Include="coverlet.MTP" />
+  </ItemGroup>
 </Project>

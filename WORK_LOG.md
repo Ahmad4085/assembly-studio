@@ -489,3 +489,22 @@
 - **Git state after:** committed on the user's request ("commit the pending changes"), not pushed. `.idea/vcs.xml` untracked (Rider)
 - **Unresolved issues:** 8088 v2 manifest pending
 - **Next step:** finish the 8088 manifest (Claude Code), then `/assembly-implement TASK-004`
+
+### 2026-10-27 10:18–10:48 +0500 · Claude Code (Opus 5.5) · TASK-004
+- **Summary:** Ran `/assembly-implement TASK-004`. Verified the ADR-0008 unverified item on NuGet: `coverlet.MTP` 10.1.0, MIT, net10.0, needs
+  Microsoft.Testing.Platform ≥ 2.4.1 (xunit.v3 4.0.2 resolves 2.5.1). Pinned it centrally and referenced it from every test project. Wrote
+  `build/coverage.ps1` (per-project Cobertura, merged line hits per product assembly, `artifacts/coverage/summary.md`, "n/a" for assemblies with
+  no coverable lines because coverlet reports those as rate 1). ADR-0008 v1.2 records the result. TASK-004 Done.
+  Also finished the rework leftover: 8088 v2 download completed, 324/324 matched upstream git blobs, `build/singlesteptests-8088-v2.sha256` written.
+- **Files changed:** `Directory.Packages.props`, `Directory.Build.props`, `build/coverage.ps1` (new), `build/singlesteptests-8088-v2.sha256` (new),
+  `docs/decisions/ADR-0008-testing-strategy-and-tools.md` (v1.2), `DECISIONS.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`,
+  `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution AssemblyStudio.slnx -c Release`
+  → **53/53 passed**. `build/coverage.ps1` on the repo → exit 0, 9 Cobertura files from 9 projects, all assemblies "n/a (no coverable lines)".
+  Scratch copy (no `.git`): probe method + two partial tests → Core.Tests 2/5, Runtime.Tests 3/5, merged 4/5 = 80.0% (only `return 0` uncovered),
+  commit shown as `unknown`; with one test made to fail → exit 1, summary marked "Incomplete".
+- **Incidents:** my first edit put `--coverlet` inside XML comments in both props files (invalid XML, `--` not allowed), which broke the build
+  (9 restore errors); reworded, rebuilt clean. The user declined the `-Include8088` double run of the fetch script; it has not been run.
+- **Git state after:** committed on the user's request ("commit the pending changes") on top of `e299d3c`, not pushed. `.idea/vcs.xml` untracked (Rider)
+- **Unresolved issues:** none for TASK-004. Coverage thresholds are out of scope (later task)
+- **Next step:** `/assembly-implement TASK-005`

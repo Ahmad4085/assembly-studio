@@ -36,7 +36,7 @@
 | [ADR-0005](docs/decisions/ADR-0005-assembler-integration-nasm.md) | Assembler integration: bundled NASM 3.02, listing + map source mapping | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
 | [ADR-0006](docs/decisions/ADR-0006-editor-avalonedit.md) | Code editor: AvalonEdit | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
 | [ADR-0007](docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md) | UI architecture: MVVM, threading, snapshots, settings (v1.1: snapshot content amendment approved 2026-10-26) | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
-| [ADR-0008](docs/decisions/ADR-0008-testing-strategy-and-tools.md) | Test framework, tools and oracle data (v1.1: validation results recorded, decision unchanged) | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
+| [ADR-0008](docs/decisions/ADR-0008-testing-strategy-and-tools.md) | Test framework, tools and oracle data (v1.2: validation results recorded incl. coverlet.MTP 10.1.0, decision unchanged) | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
 | [ADR-0009](docs/decisions/ADR-0009-packaging-and-distribution.md) | Packaging: self-contained + Inno Setup per-user (code signing Deferred) | **Approved** 2026-10-26 18:54 +0500 | SDLC-006, 2026-10-26 |
 
 ## Pending technology preferences (not decisions)

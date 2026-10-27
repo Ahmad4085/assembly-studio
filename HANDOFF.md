@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-27 16:12 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-014 |
+| Written | 2026-10-27 16:12 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-014; Git-state line updated after the push (16:30 +0500) |
 | Current task | **TASK-015 Multiply, divide, BCD and conversions: `Approved`, not started, no owner** |
 | Last completed | TASK-014 Logic, shift and rotate instructions (Done 2026-10-27 16:12 +0500) |
-| Git state | HEAD `33a234f` "docs: shared memory for TASK-014", directly below the code commit `84077c5` "TASK-014: Logic, shift and rotate instructions with oracle-verified 8086 flag semantics". **TASK-013 + TASK-014 commits not yet pushed** (push only on user request). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Git state | HEAD `dca31a0` "docs: update HANDOFF.md with final TASK-014 commit state", **pushed to origin/master** (2026-10-27 16:30 +0500; includes TASK-013 `ccd2595`/`9082aca`/`ef7bc8c`, TASK-014 `84077c5`/`33a234f`). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-27 16:12 +0500).

@@ -524,3 +524,73 @@
 - **Unresolved issues:** none for TASK-005. User action TASK-006 (clean test VMs) in parallel.
 - **Next step:** `/assembly-implement TASK-010` (begins M1).
 
+
+### 2026-10-27 12:16"12:21 +0500 " OpenCode (GLM-5.3-Flash Free) " TASK-010
+- **Summary:** Ran `/assembly-implement TASK-010` (Core abstractions v1, M1 start). Defined the Core
+  interfaces and immutable models every component depends on: `FlagBit`, `CpuState` (record struct),
+  `StepOutcome`/`HaltReason`/`StepResult`, `IMemory` (write journal via `TakeJournal()` +
+  `MemoryChange(PhysicalAddress, OldValue)`), `IInterruptRouter` (`StepResult? Intercept`; null =
+  vector through the IVT per ADR-0004 "3), `ICpu` (`State`/`SetState`/`StepInstruction`),
+  `IDisassembler`, `IConsoleDevice` (output write/drain delta, input try-read), `IMachine`
+  (`Cpu`/`Memory`/`Console`/`InterruptRouter`), `IOsServices`
+  (`StepResult? HandleService(vector, state, IMachine)`), and the `MachineSnapshot` shape with the
+  ADR-0007 v1.1 fields as types (`SessionState`, `CurrentInstruction`, `MemoryWindow`,
+  `StackWindow`, termination path/exit code, `HistoryDelta`). XML docs on every public abstraction,
+  citing ADRs/FRs. Out of scope (not added): `IAssembler`/`ISourceMap` (TASK-040/043),
+  `IDebugSession` (TASK-050), all implementations.
+- **Files changed:** `src/AssemblyStudio.Core/` " FlagBit.cs, CpuState.cs, StepResult.cs,
+  IMemory.cs, IInterruptRouter.cs, ICpu.cs, IDisassembler.cs, IConsoleDevice.cs, IMachine.cs,
+  IOsServices.cs, MachineSnapshot.cs (all new); `tests/AssemblyStudio.Core.Tests/` "
+  CpuStateTests.cs, MachineSnapshotTests.cs (8 tests, new); `docs/05-planning/backlog.md`,
+  `ROADMAP.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` " 0 warnings, 0 errors
+  (12:20 +0500). `dotnet test --solution AssemblyStudio.slnx -c Release` " **66/66 passed**
+  (9 test projects; 58 previous + 8 new Core model tests). Architecture tests green (Core has no
+  references at all, per ADR-0002).
+- **Incidents:** first build failed twice, both fixed at the root: (1) CA1716 rejected `ICpu.Step()`
+  (reserved keyword) " renamed to `StepInstruction()` instead of suppressing; (2) my test files
+  missed `using Xunit;` which the other test projects include explicitly.
+- **Unresolved issues:** the `MachineSnapshot` producer contract (pass lists created for the
+  snapshot, never mutate afterwards) is documented on the type but not yet compiler-enforced;
+  enforcement/snapshot deep-copy is a candidate for the snapshot task (TASK-051).
+- **Git state after:** uncommitted TASK-010 changes (user commits on request per protocol).
+- **Next step:** `/assembly-implement TASK-011` (engine skeleton).
+
+### 2026-10-27 12:30"12:45 +0500 " OpenCode (GLM-5.3-Flash Free) " TASK-011
+- **Summary:** Ran `/assembly-implement TASK-011` (engine skeleton: decode, ModR/M, memory access).
+  Implemented `Cpu8086 : ICpu` with a pure decode stage and an opcode dispatch that, in this task,
+  carries only the interrupt interception contract: `INT imm8` (0xCD) calls
+  `IInterruptRouter.Intercept(vector, state-at-INT)`; a handled `StepResult` is returned unchanged;
+  `WaitingForInput` passes through with CS:IP left on the INT; `null` (or no router) vectors through
+  the IVT with real 8086 semantics (push FLAGS/CS/return-IP, clear IF/TF, load CS:IP from the IVT,
+  16-bit SP wrap). Every other opcode " including the ADR-0003 "4 aliases (0F, 60"6F, C0/C1, C8/C9,
+  D6) " halts `Halted(UnsupportedInstruction)` with CS:IP restored to the instruction start and the
+  full state byte-identical (FR-037, AC-028 engine part). `Decoder` (internal static, pure) parses
+  prefixes (segment overrides last-wins, F2/F3 REP capture, F0 LOCK ignored) and decodes the full
+  8086 ModR/M table: default segments (rm 2/3 and rm 6 mod"0 " SS, else DS), disp8 sign-extended,
+  disp16, mod00 rm110 direct displacement, 16-bit EA and fetch-IP wrap. `InternalsVisibleTo` the
+  engine test project as the decode seam. Out of scope: instruction families (TASK-012"018),
+  disassembler (TASK-019).
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/` " Cpu8086.cs (new), Decoder.cs (new),
+  AssemblyStudio.Engine.I8086.csproj (InternalsVisibleTo); `tests/AssemblyStudio.Engine.I8086.Tests/`
+  " FakeMemory.cs (new), DecoderTests.cs (new, 21 tests), Cpu8086Tests.cs (new, 16 tests);
+  `docs/05-planning/backlog.md`, `ROADMAP.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`,
+  `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` " 0 warnings, 0 errors.
+  `dotnet test --solution AssemblyStudio.slnx -c Release` " first run **92/103 passed, 11 failed**;
+  root causes fixed (below); re-run " **103/103 passed** (9 test projects; 44/44 in
+  Engine.I8086.Tests).
+- **Incidents:** the first test run failed 11 tests with three root causes, all mine, no engine
+  shortcuts: (1) real bug " the halt `StepResult` reported `OpcodeIp` for BOTH InstructionCs and
+  InstructionIp, and with prefixes the instruction address is the state IP, not the opcode byte IP;
+  fixed to `before.CS`/`before.IP`; (2) wrong ModR/M byte in a test (0xC6 is mod11, not mod00 rm110;
+  fixed to 0x06); (3) wrong physical addresses in two wrap tests (CS 0x0800 x 16 = 0x8000, so
+  CS:FFFF = 0x17FFF, not 0x8FFFF or 0x18FFF). Note: `Unsupported_opcode_at_ip_0xffff` had passed
+  spuriously against a mis-addressed write (an unwritten byte 0x00 is also unsupported); its address
+  is fixed and the test now exercises the written 0x60 opcode; the alias-opcode theory carries the
+  per-opcode assertions. Earlier compile errors: `Assert.Equal(int, byte?)` resolved to the DateTime
+  overload " made the comparison explicit (`Assert.Equal<byte>`).
+- **Unresolved issues:** none for TASK-011. SingleStepTests validation per opcode begins with
+  TASK-012 (oracle helper wiring planned for TASK-020 gate).
+- **Git state after:** uncommitted TASK-010 + TASK-011 changes (user commits on request per protocol).
+- **Next step:** `/assembly-implement TASK-012` (data transfer instructions).

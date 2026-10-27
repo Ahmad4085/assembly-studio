@@ -5,31 +5,34 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-27 12:05 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-005; Git-state line updated 2026-10-27 by OpenCode (GLM-5.3-Flash Free) after committing TASK-005 |
-| Current task | **TASK-010 Core abstractions v1: `Ready`, approved, not started, no owner** |
-| Last completed | TASK-005 Bundled NASM tooling layout (Done 2026-10-27 12:00 +0500) |
-| Git state | HEAD `a006825` "TASK-005: Bundled NASM tooling layout" (not pushed; user asked for the commit). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Written | 2026-10-27 12:46 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-011 |
+| Current task | **TASK-012 Data transfer instructions: `Ready`, approved, not started, no owner** |
+| Last completed | TASK-011 Engine skeleton: decode, ModR/M, memory access (Done 2026-10-27 12:45 +0500) |
+| Git state | HEAD `cc128c0` "docs: update HANDOFF.md with TASK-005 commit" (not pushed). Uncommitted: TASK-010 + TASK-011 source/tests (new files in `src/AssemblyStudio.Core/`, `src/AssemblyStudio.Engine.I8086/`, `tests/AssemblyStudio.Core.Tests/`, `tests/AssemblyStudio.Engine.I8086.Tests/`) + `docs/05-planning/backlog.md`, `ROADMAP.md`, shared memory. Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution AssemblyStudio.slnx -c Release` → **58/58 passed** (2026-10-27 12:00 +0500).
-- `build/coverage.ps1` → exit 0; summary in `artifacts/coverage/summary.md` (skeleton: no coverable lines yet).
-- `build/fetch-nasm.ps1` → exit 0; idempotent and hash-verified (`161d0bfa...`), extracted `nasm.exe`, `ndisasm.exe`, and `LICENSE` in `tools/nasm/`.
-- `build/fetch-singlesteptests.ps1` (default, 8086) → 324/324 verified. 8088 manifest verified against upstream.
+- `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors (2026-10-27 12:45 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **103/103 passed** (9 test projects), including 44 engine hand tests (2026-10-27 12:45 +0500).
+- `build/fetch-nasm.ps1` → verified, idempotent (`tools/nasm/` populated). Oracle data: 8086 324/324 + 8088 v2 manifest verified (committed).
 
 ## Changes since the previous handoff
-- TASK-005: `build/fetch-nasm.ps1` (hash verification, atomic download, deterministic `SOURCE.txt` and `SHA256SUMS.txt`), `.gitignore` updated for `tools/`, `NasmLocator` and `NasmLocatorTests` in `tests/AssemblyStudio.Toolchain.Nasm.Tests` (6 tests).
+- TASK-010: Core abstractions v1 in `src/AssemblyStudio.Core/` (interfaces + immutable models, `MachineSnapshot` shape per ADR-0007 v1.1, XML docs) + 8 model tests.
+- TASK-011: `Cpu8086 : ICpu` with pure decode, prefix handling, full ModR/M/EA table, 16-bit wraps, INT imm8 interception contract (router + real IVT vectoring), unsupported/alias-opcode halt with state unchanged; `Decoder` internal seam; `FakeMemory` double; 37 hand tests.
+- (Earlier in this session, OpenCode: `/assembly-status`; committed TASK-005 as `a006825` + HANDOFF doc commit `cc128c0` on the user's request.)
 
 ## Failed tests and known issues
-- None.
+- None. (Intermediate run: 11 failures — three root causes, all fixed and re-verified; see `WORK_LOG.md` TASK-011.)
+- Snapshot list-mutation producer contract documented on `MachineSnapshot`, not compiler-enforced (candidate for TASK-051).
 
 ## Decisions and constraints to respect
-- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-015.
-- Pinned NASM 3.02 per ADR-0005. Missing toolchain binaries must fail with actionable instructions rather than silently falling back to PATH.
-- Deterministic metadata in fetch scripts (no runtime timestamps).
+- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-015. Core has **no project references**; Engine.I8086 references only Core (Iced arrives with TASK-019).
+- Engine API exposes snapshots, not live state (ADR-0002/0003). Decode is pure: halt restores CS:IP, nothing modified (FR-037).
+- Undefined flags: deterministic value + reported mask (ADR-0003 §3). Pinned NASM 3.02 per ADR-0005.
+- `Cpu8086` is not thread-safe; the debug-session worker thread is the only caller (ADR-0004 §2).
 
 ## Exact next action
-1. ~~Optional: commit TASK-005 pending changes~~ Done: committed as `a006825` on the user's request (2026-10-27, time not recorded).
-2. Begin Milestone M1: user runs `/assembly-implement TASK-010`.
+1. Optional: commit the pending TASK-010 + TASK-011 changes (user asks or approves per protocol §8).
+2. User runs `/assembly-implement TASK-012` (data transfer instructions; oracle wiring starts here).
 3. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert

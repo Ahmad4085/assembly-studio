@@ -8,7 +8,7 @@
 | Written | 2026-10-27 14:59 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-013 |
 | Current task | **TASK-014 Logic, shift and rotate instructions: `Ready`, approved, not started, no owner** |
 | Last completed | TASK-013 Arithmetic instructions (Done 2026-10-27 14:59 +0500) |
-| Git state | HEAD `ccd2595` "TASK-013: Arithmetic instructions (ADD/ADC/SUB/SBB/CMP, INC/DEC, NEG) with exact 8086 flags" + docs commit `fa25969` "docs: shared memory for TASK-013", **not yet pushed** (push only on user request). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Git state | HEAD (this commit) finalizes the shas; TASK-013 state = code commit `ccd2595` "TASK-013: Arithmetic instructions ... with exact 8086 flags" + docs commit "docs: shared memory for TASK-013" (directly below it). **Not yet pushed** (push only on user request). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-27 14:59 +0500).

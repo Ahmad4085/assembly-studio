@@ -8,7 +8,7 @@
 | Written | 2026-10-27 12:46 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-011 |
 | Current task | **TASK-012 Data transfer instructions: `Ready`, approved, not started, no owner** |
 | Last completed | TASK-011 Engine skeleton: decode, ModR/M, memory access (Done 2026-10-27 12:45 +0500) |
-| Git state | HEAD `cc128c0` "docs: update HANDOFF.md with TASK-005 commit" (not pushed). Uncommitted: TASK-010 + TASK-011 source/tests (new files in `src/AssemblyStudio.Core/`, `src/AssemblyStudio.Engine.I8086/`, `tests/AssemblyStudio.Core.Tests/`, `tests/AssemblyStudio.Engine.I8086.Tests/`) + `docs/05-planning/backlog.md`, `ROADMAP.md`, shared memory. Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Git state | HEAD `aa00e41` "docs: shared memory for TASK-010 and TASK-011", **pushed to origin/master** (2026-10-27, time not recorded; range 23e0fca..aa00e41). Working tree clean except untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors (2026-10-27 12:45 +0500).
@@ -31,7 +31,7 @@
 - `Cpu8086` is not thread-safe; the debug-session worker thread is the only caller (ADR-0004 §2).
 
 ## Exact next action
-1. Optional: commit the pending TASK-010 + TASK-011 changes (user asks or approves per protocol §8).
+1. ~~Commit the pending TASK-010 + TASK-011 changes~~ Done: committed (`b2d9e57`, `bafa380`, `aa00e41`) and pushed on the user's request (2026-10-27, time not recorded).
 2. User runs `/assembly-implement TASK-012` (data transfer instructions; oracle wiring starts here).
 3. In parallel (user action): TASK-006 test VMs.
 

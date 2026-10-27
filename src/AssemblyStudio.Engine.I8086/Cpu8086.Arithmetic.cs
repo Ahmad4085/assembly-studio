@@ -261,15 +261,10 @@ public sealed partial class Cpu8086
 
     // ---- NEG (F6/F7 /3): result = 0 - r/m ---------------------------------------------------------------
 
-    private StepResult ExecNeg(PrefixInfo op, bool wide)
+    /// <summary>NEG core: ModR/M already decoded and the arm checked (/3) by the F6/F7 group
+    /// dispatcher in Cpu8086.Logic.cs.</summary>
+    private StepResult ExecNegCore(in ModRmInfo m, ushort cursor, bool wide)
     {
-        ushort cursor = (ushort)(op.OpcodeIp + 1);
-        ModRmInfo m = ReadModRm(ref cursor, op.SegmentOverride);
-        if (m.Reg != 3)
-        {
-            return HaltUnsupported();
-        }
-
         var s = _state;
         ushort value = wide ? ReadRm16(s, m) : ReadRm8(s, m);
         ushort sign = wide ? (ushort)0x8000 : (ushort)0x80;

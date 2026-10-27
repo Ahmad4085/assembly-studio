@@ -639,3 +639,13 @@
 - **Unresolved issues:** none. App.Tests project present in the solution passed untouched.
 - **Git state after:** uncommitted TASK-012 changes (user commits on request per protocol).
 - **Next step:** `/assembly-implement TASK-013` (arithmetic instructions).
+
+## 2026-10-27 14:59 +0500 - TASK-013 Arithmetic instructions (OpenCode (GLM-5.3-Flash Free))
+- `/assembly-implement TASK-013` executed per `docs/sdlc/procedures/assembly-implement.md`.
+- New `src/AssemblyStudio.Engine.I8086/Cpu8086.Arithmetic.cs`: ADD/ADC/SUB/SBB/CMP (rm/r bases 00/10/18/28/38 arms 0-3; acc-imm arms 4/5; immediate groups 80/82/81/83 with reg-field operation select, 83 sign-extends imm8), INC/DEC r16 (40-4F, CF untouched), INC/DEC rm (FE/FF arms 0/1), NEG (F6/F7 arm 3). Exact 8086 flags, width-aware OF (bit 7 for 8-bit), CMP discards the result.
+- `Cpu8086.cs`: arithmetic dispatch cases; FF group restructured into `ExecFfGroup` (arms 0/1 INC/DEC rm16 + arm 6 PUSH from TASK-012, others halt); FE group handler `ExecFeGroup`. `ExecPushRm16` removed (logic moved into `ExecFfGroup`).
+- Oracle harness extended to 84 TASK-013 files (30 family + 16 r16 INC/DEC + 32 group + F6.3/F7.3 + FE.0/FE.1/FF.0/FF.1); all 155 in-scope oracle files pass 100%.
+- 20 hand tests in new `tests/.../ArithmeticTests.cs`, incl. the AC-025 example verbatim (AL=7Fh+01h -> AL=80h, OF=1, SF=1, AF=1, PF=0, CF=0).
+- Two real bugs found by the oracle and fixed before completion (root cause first, tests not weakened): CMP acc-imm wrongly wrote the discarded result into AL/AX (3C/3D files); INC/DEC 8-bit computed flags from an unmasked 16-bit intermediate (0xFF + 1 = 0x100 -> ZF/SF wrong) - result now width-masked.
+- Verified this session: `dotnet build AssemblyStudio.slnx -c Release` 0 warnings 0 errors; `dotnet test --solution AssemblyStudio.slnx -c Release` 308/308 passed (engine project 249/249: 155 oracle files + 94 hand/other tests).
+- No new dependencies. Committed on user request (2026-10-27 15:10 +0500, `ccd2595`); docs commit follows. Next: `/assembly-implement TASK-014`.

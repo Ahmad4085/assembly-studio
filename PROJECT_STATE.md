@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-27 13:55 +0500 by OpenCode (TASK-012 done) |
+| Last updated | 2026-10-27 14:59 +0500 by OpenCode (TASK-013 done) |
 | Current phase | **6 Implementation**, milestone M0 (TASK-006 user action pending) and M1 (in progress) |
 | Current milestone | M1 8086 engine (headless) — in progress; M0 Foundation nearly complete (TASK-006 user action pending) |
-| Active task | None in progress. Next: `TASK-013` Arithmetic instructions (`Ready`: TASK-011 Done). Parallel user action: `TASK-006` (clean test VMs) |
-| Next recommended action | `/assembly-implement TASK-013`. User action TASK-006 (clean test VMs) can start any time |
+| Active task | None in progress. Next: `TASK-014` Logic, shift and rotate instructions (`Ready`: TASK-011 Done). Parallel user action: `TASK-006` (clean test VMs) |
+| Next recommended action | `/assembly-implement TASK-014`. User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-013 Arithmetic instructions | 2026-10-27 14:59 +0500 | ADD/ADC/SUB/SBB/CMP in all forms (rm/r bases 00/10/18/28/38 arms 0-3, acc-imm arms 4/5, immediate groups 80/82/81/83 all /reg with sign-extended imm8 in 83), INC/DEC r16 40-4F and rm FE/FF /0 /1 (CF untouched), NEG F6/F7 /3; exact width-aware 8086 flags; 84 SingleStepTests oracle files at 100% (155 total incl. TASK-012) + 20 hand tests incl. AC-025 verbatim. Release build 0w/0e; 308/308 solution tests |
 | TASK-012 Data transfer instructions | 2026-10-27 13:55 +0500 | MOV (all forms: rm/reg, segment registers with `reg&3` aliasing, moffs A0-A3, reg-imm B0-BF, rm-imm C6/C7 with reg-field aliasing), XCHG (86/87 + 90-97), LEA/LDS/LES (memory forms; mod=11 halts undefined), XLAT, LAHF/SAHF, PUSH/POP reg+seg (50-5F, 06/07/0E/16/17/1E/1F), POP rm (8F), PUSH rm via FF/6, PUSHF/POPF; oracle-confirmed 8086 quirks (PUSH SP pushes decremented SP, POP SP loads popped value, PUSHF verbatim, POPF `(popped|0xF002)&~0x0028`); 71 SingleStepTests oracle files at 100% + 30 hand tests. Release build 0w/0e; 204/204 solution tests |
 | TASK-011 Engine skeleton: decode, ModR/M, memory access | 2026-10-27 12:45 +0500 | `Cpu8086` (`ICpu`) with pure decode, prefix handling (segment overrides, REP capture, LOCK ignored), full 8086 ModR/M/EA table, 16-bit IP and EA wrap, INT imm8 interception contract (router + real IVT vectoring), unsupported/alias-opcode halt with state unchanged; `Decoder` internal seam + `FakeMemory` double; 37 hand tests. Release build 0w/0e; 103/103 solution tests |
 | TASK-010 Core abstractions v1 (M1 start) | 2026-10-27 12:21 +0500 | `ICpu`, `CpuState`, `IMemory` + write journal (`MemoryChange`), `IInterruptRouter`, `StepResult` (`StepOutcome`/`HaltReason`), `IDisassembler`, `IMachine`, `IConsoleDevice`, `IOsServices`, `MachineSnapshot` + `SessionState`/`CurrentInstruction`/`MemoryWindow`/`StackWindow` (ADR-0007 v1.1 fields, types only), XML docs on all public abstractions; 8 model tests (CpuState equality/with-expressions, snapshot immutability). Release build 0w/0e; 66/66 solution tests |
@@ -70,8 +71,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-27 13:55 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-27 13:55 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **204/204 passed** (xunit.v3 MTP runner; includes 71 SingleStepTests oracle files at 100% (TASK-012) and 30 new engine hand tests) |
+| Product build (2026-10-27 14:59 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-27 14:59 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **308/308 passed** (xunit.v3 MTP runner; includes 155 SingleStepTests oracle files at 100% (71 TASK-012 + 84 TASK-013) and 20 new arithmetic hand tests) |
 | Coverage (2026-10-27 12:00 +0500) | `build/coverage.ps1` → exit 0; all product assemblies "n/a (no coverable lines)" (skeleton). Target ≥ 85% engine/runtime (NFR-021) not yet measurable |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

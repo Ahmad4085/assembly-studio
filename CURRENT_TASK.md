@@ -4,13 +4,34 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-013 Arithmetic instructions
+## Next: TASK-014 Logic, shift and rotate instructions
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (approved; TASK-011 Done) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Started | — |
+| Definition | `docs/05-planning/backlog.md` § TASK-014 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-014`) |
+| Depends on | TASK-011 (Done ✔) |
+
+**Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-013 Arithmetic instructions (Done 2026-10-27 14:59 +0500, OpenCode (GLM-5.3-Flash Free))
+- `src/AssemblyStudio.Engine.I8086/Cpu8086.Arithmetic.cs` (new partial class): ADD/ADC/SUB/SBB/CMP in all three shapes — rm/r families (bases 00/10/18/28/38, arms 0-3), acc-imm (arms 4/5: AL,imm8 / AX,imm16), and the immediate groups 80/82 (rm8, imm8; 82 = undocumented alias of 80), 81 (rm16, imm16), 83 (rm16, sign-extended imm8) with the reg field selecting the operation; INC/DEC r16 (40-4F, all INC/DEC flags except CF); INC/DEC rm (FE/FF arms 0/1); NEG (F6/F7 arm 3, halts for other arms).
+- Exact 8086 flags: CF carry/borrow out; OF signed overflow (width-aware, bit 7 for 8-bit); AF carry/borrow out of bit 3; SF top bit; ZF on zero; PF even parity of the low 8 bits. INC/DEC leave CF unchanged; NEG sets CF unless the operand is 0 and overflows only on 0x80/0x8000; CMP computes SUB flags and discards the result. TF/IF/DF and reserved bits pass through; everything touched is defined (`FlagBit.None` report).
+- **AC-025 hand test verbatim**: `add al, bl` with AL=7Fh, BL=01h → AL=80h, OF=1, SF=1, ZF=0, AF=1, PF=0, CF=0 (flags word 0x0A92).
+- `Cpu8086.cs`: arithmetic cases added to dispatch; the FF group now dispatches arms 0/1 (INC/DEC rm16) alongside arm 6 (PUSH, TASK-012) — `ExecPushRm16` became `ExecFfGroup`; FE is its own group handler (`ExecFeGroup`, arms other than 0/1 halt unsupported).
+- **Oracle harness**: 84 TASK-013 files added to `SingleStepOracleTests` (30 family + 16 INC/DEC r16 + 32 group 80-83 all /reg + NEG F6.3/F7.3 + rm INC/DEC FE.0/FE.1/FF.0/FF.1) → **100% pass on all 155 oracle files** (71 TASK-012 + 84 TASK-013).
+- 20 deterministic hand tests (`ArithmeticTests.cs`): AC-025, ADC/SBB carry/borrow chains, INC/DEC CF-untouched, NEG of 0/0x80/word, CMP discards, 83 sign-extension, group imm writes to memory, ES override, 16-bit SF/ZF/OF edges, FE/FF out-of-scope arms halt with byte-identical state (FR-037).
+- No new dependencies. Release build: 0 warnings, 0 errors. Solution tests: 308/308 passed.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | OpenCode (GLM-5.3-Flash Free) |
+| Started / finished | 2026-10-27 14:00 / 14:59 +0500 |
 | Definition | `docs/05-planning/backlog.md` § TASK-013 (goal, scope, tests, DoD) |
 | Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-013`) |
 | Depends on | TASK-011 (Done ✔) |

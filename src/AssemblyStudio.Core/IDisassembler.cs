@@ -1,0 +1,16 @@
+namespace AssemblyStudio.Core;
+
+/// <summary>
+/// Decodes 8086 instruction bytes for the current-instruction view and the history (FR-053, FR-058;
+/// ADR-0003 §6: implemented over Iced with the NASM formatter, 16-bit). The implementation is an
+/// adapter in <c>Engine.I8086</c>; it must not know about the machine or session.
+/// </summary>
+public interface IDisassembler
+{
+    /// <summary>Decodes the first instruction in <paramref name="bytes"/> and returns its
+    /// NASM-like text (including prefixes, e.g. "mov ax, bx"). Returns <see langword="null"/>
+    /// when the bytes are not a valid 8086 encoding.</summary>
+    /// <param name="bytes">Instruction bytes starting at the instruction address (at least the
+    /// instruction length; up to 6 bytes is enough for any 8086 instruction).</param>
+    string? Disassemble(ReadOnlySpan<byte> bytes);
+}

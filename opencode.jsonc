@@ -1,0 +1,49 @@
+{
+  // Assembly Studio project config for OpenCode v2 (D-016). Shared rules come from AGENTS.md (read natively).
+  // No model or provider here: those are per-user settings in ~/.config/opencode/. Never put API keys in this file.
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [".opencode/assembly-studio.md"],
+
+  // Ordered rules: the LAST matching rule wins. So the order is: allow everything, then the broad "ask" rules, then
+  // the "deny" rules, which must stay last so that no broader rule after them can turn a deny back into ask or allow.
+  // "deny" also holds under --auto; "ask" is auto-approved under --auto.
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "allow" },
+
+    // Allowed only after the user agrees (history, publishing, bulk deletes, installs).
+    { "action": "shell", "resource": "git reset *", "effect": "ask" },
+    { "action": "shell", "resource": "git restore *", "effect": "ask" },
+    { "action": "shell", "resource": "git rebase *", "effect": "ask" },
+    { "action": "shell", "resource": "git commit --amend*", "effect": "ask" },
+    { "action": "shell", "resource": "git push *", "effect": "ask" },
+    { "action": "shell", "resource": "git branch -D *", "effect": "ask" },
+    { "action": "shell", "resource": "git stash drop*", "effect": "ask" },
+    { "action": "shell", "resource": "git stash clear*", "effect": "ask" },
+    { "action": "shell", "resource": "rm -rf *", "effect": "ask" },
+    { "action": "shell", "resource": "rm -r *", "effect": "ask" },
+    { "action": "shell", "resource": "Remove-Item * -Recurse*", "effect": "ask" },
+    { "action": "shell", "resource": "winget *", "effect": "ask" },
+    { "action": "shell", "resource": "choco *", "effect": "ask" },
+    { "action": "shell", "resource": "npm install -g *", "effect": "ask" },
+    { "action": "shell", "resource": "dotnet tool install *", "effect": "ask" },
+    { "action": "shell", "resource": "dotnet workload *", "effect": "ask" },
+    { "action": "read", "resource": "*.env", "effect": "ask" },
+    { "action": "read", "resource": "*.env.*", "effect": "ask" },
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+
+    // Destructive Git commands: forbidden by AGENTS.md without an explicit user instruction. Keep these last.
+    { "action": "shell", "resource": "git reset --hard*", "effect": "deny" },
+    { "action": "shell", "resource": "git clean *", "effect": "deny" },
+    { "action": "shell", "resource": "git checkout -- *", "effect": "deny" },
+    { "action": "shell", "resource": "git checkout .", "effect": "deny" },
+    { "action": "shell", "resource": "git push --force*", "effect": "deny" },
+    { "action": "shell", "resource": "git push -f*", "effect": "deny" },
+    { "action": "shell", "resource": "git push * --force*", "effect": "deny" },
+    { "action": "shell", "resource": "git push * -f*", "effect": "deny" },
+    { "action": "shell", "resource": "git filter-branch *", "effect": "deny" },
+
+    // The user's JetBrains Rider files. Keep last.
+    { "action": "edit", "resource": "*.idea/*", "effect": "deny" },
+    { "action": "edit", "resource": "*.mcp.json", "effect": "deny" }
+  ]
+}

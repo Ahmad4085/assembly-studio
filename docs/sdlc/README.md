@@ -1,7 +1,7 @@
 # SDLC Core (tool-independent)
 
 Everything here is plain Markdown that any agent or person can follow. Tool-specific files
-(`CLAUDE.md`, `.claude/skills/`, `.agent/`) are thin entry points that point back here. They
+(`CLAUDE.md`, `.claude/skills/`, `.agent/`, `.opencode/`, `opencode.jsonc`) are thin entry points that point back here. They
 contain no procedure logic of their own.
 
 | Concern | Defined in |

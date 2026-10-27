@@ -1,7 +1,8 @@
 # Assembly Studio — Shared Agent Rules
 
-These rules apply to every AI coding agent (Claude Code, Google Antigravity, others) and to the
-user. Tool-specific instructions live in `CLAUDE.md` (Claude Code) and `.agent/rules/` (Antigravity).
+These rules apply to every AI coding agent (Claude Code, Google Antigravity, OpenCode, others) and to the
+user. Tool-specific instructions live in `CLAUDE.md` (Claude Code), `.agent/rules/` (Antigravity) and
+`.opencode/assembly-studio.md` (OpenCode).
 
 ## Project
 Assembly Studio is an offline-first Windows 10/11 desktop IDE for learning, writing, assembling,

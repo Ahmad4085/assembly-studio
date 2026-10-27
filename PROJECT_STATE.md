@@ -40,6 +40,7 @@
 | TASK-001 Solution skeleton and build settings | 2026-10-26 19:42 +0500 | `AssemblyStudio.slnx`, 16 projects, Release build (0w/0e), 8/8 tests passed |
 | SDLC-001 SDLC foundation (phase 0) | 2026-10-26 | `WORK_LOG.md` entry, files under `docs/`, `.claude/skills/` |
 | SDLC-002 Multi-agent support (Claude Code + Antigravity) | 2026-10-26 | `WORK_LOG.md` entry, validation results |
+| SDLC-009 OpenCode support (D-016) | 2026-10-27 20:24 +0500 | 11 commands, rules file, permission config; verified via OpenCode's local API (see `WORK_LOG.md`) |
 | SDLC-008 Implementation plan (phase 5) | 2026-10-26 19:17 +0500 | Backlog v1.0 approved: 8 milestones, 62 tasks |
 | SDLC-007 UI/UX design phase (phase 4) | 2026-10-26 19:03 +0500 | ui-spec v1.0 + design tokens v1.0 approved. ADR-0007 v1.1. D-015 |
 | SDLC-006 Architecture phase (phase 3) | 2026-10-26 18:54 +0500 | Architecture v1.0 + ADR-0001..0009 approved, D-014 |
@@ -101,6 +102,7 @@ redistribution, CPU restriction, listing output), OQ-007 (specific permissive li
 | Git | Repository initialized 2026-10-26 (D-004) |
 | Claude Code | 2.1.308 |
 | Antigravity | CLI `agy` 1.4.7 (auto-updated from 1.4.4; 16 workspace skills re-verified). Desktop IDE 1.11.17 (`D:\Antigravity`) |
+| OpenCode | v2.0.29 (`opencode`). Project config `opencode.jsonc` + `.opencode/` (D-016). Model and provider are per-user settings |
 | JetBrains Rider | Project files present (`.idea/`, `.mcp.json`) |
 
 ## Changelog

@@ -6,7 +6,7 @@
 | Status | Approved (2026-10-26 16:39 +0500, with DECISIONS.md D-002 and D-003) |
 | Version | 1.0 |
 | Last updated | 2026-10-26 |
-| Applies to | Every agent (Claude Code, Google Antigravity, others) and the user |
+| Applies to | Every agent (Claude Code, Google Antigravity, OpenCode, others) and the user |
 
 Assembly Studio is developed by more than one AI coding tool in the same workspace. This protocol
 lets any agent resume the work from the repository alone, without the user re-explaining anything.
@@ -118,4 +118,6 @@ Tell the user the next action from `HANDOFF.md`.
 - Claude Code: see `CLAUDE.md`. Procedures run as `/assembly-*` skills (`.claude/skills/`).
 - Google Antigravity: see `.agent/rules/assembly-studio.md`. Procedures run as `/assembly-*`
   skills (CLI) or workflows (IDE).
+- OpenCode: see `.opencode/assembly-studio.md` (loaded through `opencode.jsonc`). Procedures run as `/assembly-*`
+  commands (`.opencode/commands/`).
 - Any other agent: read `AGENTS.md`, then open `docs/sdlc/procedures/<command>.md` and follow it.

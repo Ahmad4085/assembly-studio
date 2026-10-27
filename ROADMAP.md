@@ -32,6 +32,7 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 | SDLC-006 | Architecture phase (`/assembly-architecture`) | Done | Claude Code. Architecture v1.0 + ADR-0001..0009 approved 2026-10-26 18:54 +0500. D-014 |
 | SDLC-007 | UI/UX design phase (`/assembly-design`) | Done | Claude Code. Spec + tokens v1.0, ADR-0007 v1.1, D-015 approved 2026-10-26 19:03 +0500 |
 | SDLC-008 | Implementation plan (`/assembly-plan`) | Done | Claude Code. Backlog v1.0 approved 2026-10-26 19:17 +0500 (62 tasks) |
+| SDLC-009 | OpenCode support (D-016) | Done | Claude Code. `.opencode/` + `opencode.jsonc`; D-016 approved 2026-10-27 20:24 +0500 |
 
 ## Product milestones
 **Approved 2026-10-26 19:17 +0500** (`docs/05-planning/backlog.md` §1):

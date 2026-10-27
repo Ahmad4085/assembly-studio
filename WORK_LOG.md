@@ -659,3 +659,25 @@
 - 23 hand tests in new `tests/.../LogicShiftRotateTests.cs`: logic CF/OF clears, TEST discards (3 forms), NOT no-flags, count=1 OF rules for all six ops, rotates CF-only, CL=0 no-op (byte-identical state), CL=2 OF untouched, SHR word, SETMO byte/word/CL=0, FR-037 halts (F6 /1 and /4 byte-identical).
 - Verified this session: `dotnet build AssemblyStudio.slnx -c Release` 0 warnings 0 errors; `dotnet test --solution AssemblyStudio.slnx -c Release` 389/389 passed (engine project 307/307 + 23 new hand tests + 58 new oracle files + others).
 - No new dependencies. Committed on user request (2026-10-27 16:24 +0500, `84077c5`); docs commit follows. Next: `/assembly-implement TASK-015`.
+
+### 2026-10-27 11:00 – 20:25 +0500 · Claude Code (Opus 5.5) · SDLC-009 OpenCode support
+- **Summary:** At the user's request, added OpenCode (v2.0.29) as a third agent, using v2 conventions checked in the official v2 docs and in the tool itself:
+  11 `/assembly-*` commands in `.opencode/commands/`, OpenCode rules and working discipline in `.opencode/assembly-studio.md` (loaded via
+  `instructions`), project `opencode.jsonc` with ordered permission rules. Guides are reused from `.claude/skills/`. D-016 approved by the user at
+  2026-10-27 20:24 +0500 ("approve D-016 and commit"). Docs updated: `AGENTS.md`, `docs/sdlc/agent-protocol.md` §10, `docs/sdlc/README.md`.
+  Not committed: `poc/task015-*.ps1` (created by another agent's TASK-015 analysis, not ours). `HANDOFF.md` not rewritten because OpenCode was
+  active on TASK-015 analysis at the time; its next handoff should drop `.opencode/` and `opencode.jsonc` from "untracked, not ours".
+- **Files changed:** `.opencode/commands/assembly-*.md` (11, new), `.opencode/assembly-studio.md` (new), `opencode.jsonc` (new), `DECISIONS.md` (D-016),
+  `AGENTS.md`, `docs/sdlc/agent-protocol.md`, `docs/sdlc/README.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `WORK_LOG.md`
+- **Tests executed:** OpenCode local API (scratch clone, `x-opencode-directory` header): `command.list` → 11 `assembly-*` commands; `skill.list` → 5 guides
+  visible, 11 phase skills `autoinvoke: false`; `agent.get build` → our rules merged, deny rules after every allow/ask rule. A rule simulator matched
+  24/24 expected outcomes. Live `opencode run "/assembly-status"` at 11:12 failed: both configured API keys were rejected (no project effect).
+  Incident: my first `opencode.jsonc` put the broad `ask` rules after the `deny` rules (last match wins), which would have turned force-push into an
+  auto-approvable prompt; reordered before any use and confirmed in the merged rule list.
+- **Also this session (user's machine, outside the repo):** Antigravity CLI `~/.gemini/antigravity-cli/settings.json` permissions replaced with
+  `command(*)`, `read_url(*)` and a deny list (backup `settings.json.bak-20261027`). Tested with `agy -p` in a throwaway repo: commands run without
+  prompts; `git reset --hard` blocked; **`git status --short; git reset --hard` (chained) was NOT blocked** (deny rules match by prefix). Finding:
+  `agy --mode auto` is "not available for this account" and silently falls back to the default mode.
+- **Git state after:** committed on the user's request ("approve D-016 and commit"), not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`
+- **Unresolved issues:** none for SDLC-009
+- **Next step:** unchanged from `HANDOFF.md` (TASK-015, then TASK-060 for the first visible window)

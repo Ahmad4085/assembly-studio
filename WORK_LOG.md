@@ -765,6 +765,6 @@
   - `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **466/466 passed** (2026-10-28 13:23 +0500; all 276 SingleStepTests oracle files pass 100%, 16 hand tests passed).
   - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 13:23 +0500).
   - `dotnet test --solution AssemblyStudio.slnx -c Release` → **564/565 passed** (1 failure: pre-existing DEF-001 App smoke test in background runner; 2026-10-28 13:27 +0500).
-- **Git state after:** uncommitted changes for TASK-017 (commit only when user requests). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Git state after:** committed as `398ee36` (`TASK-017: String instructions and REP prefixes`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-017. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-018` (Flag ops, misc and full opcode table) or `/assembly-implement TASK-061` (themes).

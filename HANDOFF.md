@@ -8,7 +8,7 @@
 | Written | 2026-10-28 13:28 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-017 |
 | Current task | **TASK-018 Flag ops, misc and the full opcode table: `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
 | Last completed | TASK-017 String instructions and REP prefixes (Done 2026-10-28 13:28 +0500) |
-| Git state | HEAD `303c680` (not pushed). TASK-017 changes uncommitted. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `398ee36` (not pushed). TASK-017 is committed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 13:20 +0500).

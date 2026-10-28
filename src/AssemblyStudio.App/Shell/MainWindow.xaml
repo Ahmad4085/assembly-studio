@@ -1,0 +1,258 @@
+<Window x:Class="AssemblyStudio.App.Shell.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
+        Title="{x:Static shell:Strings.AppTitle}"
+        MinWidth="{x:Static shell:LayoutState.MinWindowWidth}"
+        MinHeight="{x:Static shell:LayoutState.MinWindowHeight}"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Surface.Window}"
+        Foreground="{DynamicResource Text.Primary}"
+        FontFamily="{DynamicResource Font.UI}"
+        FontSize="{DynamicResource FontSize.UI}"
+        UseLayoutRounding="True"
+        FocusManager.FocusedElement="{Binding ElementName=EditorPanel}">
+  <Window.CommandBindings>
+    <CommandBinding Command="{x:Static shell:MainWindow.NextPaneCommand}" Executed="OnNextPane" />
+    <CommandBinding Command="{x:Static shell:MainWindow.PreviousPaneCommand}" Executed="OnPreviousPane" />
+  </Window.CommandBindings>
+  <Window.InputBindings>
+    <KeyBinding Key="F6" Command="{x:Static shell:MainWindow.NextPaneCommand}" />
+    <KeyBinding Key="F6" Modifiers="Shift" Command="{x:Static shell:MainWindow.PreviousPaneCommand}" />
+    <KeyBinding Key="R" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Registers}" />
+    <KeyBinding Key="F" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Flags}" />
+    <KeyBinding Key="M" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Memory}" />
+    <KeyBinding Key="K" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Stack}" />
+    <KeyBinding Key="O" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Console}" />
+    <KeyBinding Key="P" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Problems}" />
+    <KeyBinding Key="U" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Runtime}" />
+    <KeyBinding Key="H" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.History}" />
+    <KeyBinding Key="B" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Breakpoints}" />
+    <KeyBinding Key="L" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Learn}" />
+  </Window.InputBindings>
+
+  <DockPanel Background="{DynamicResource Surface.Window}">
+    <!-- UI-002 menus. Commands owned by later tasks are shown (with their shortcuts) but disabled. -->
+    <Menu DockPanel.Dock="Top" AutomationProperties.Name="{x:Static shell:Strings.RegionMenu}" Padding="4,2">
+      <MenuItem Header="{x:Static shell:Strings.MenuFile}">
+        <MenuItem Header="{x:Static shell:Strings.CmdNew}" InputGestureText="{x:Static shell:Strings.KeyNew}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdOpen}" InputGestureText="{x:Static shell:Strings.KeyOpen}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSave}" InputGestureText="{x:Static shell:Strings.KeySave}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSaveAs}" InputGestureText="{x:Static shell:Strings.KeySaveAs}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCloseTab}" InputGestureText="{x:Static shell:Strings.KeyCloseTab}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdRecent}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdSettings}" InputGestureText="{x:Static shell:Strings.KeySettings}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdExit}" InputGestureText="{x:Static shell:Strings.KeyExit}" Click="OnExit" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuEdit}">
+        <MenuItem Header="{x:Static shell:Strings.CmdUndo}" InputGestureText="{x:Static shell:Strings.KeyUndo}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdRedo}" InputGestureText="{x:Static shell:Strings.KeyRedo}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdCut}" InputGestureText="{x:Static shell:Strings.KeyCut}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCopy}" InputGestureText="{x:Static shell:Strings.KeyCopy}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdPaste}" InputGestureText="{x:Static shell:Strings.KeyPaste}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSelectAll}" InputGestureText="{x:Static shell:Strings.KeySelectAll}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdFind}" InputGestureText="{x:Static shell:Strings.KeyFind}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdFindNext}" InputGestureText="{x:Static shell:Strings.KeyFindNext}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdFindPrevious}" InputGestureText="{x:Static shell:Strings.KeyFindPrevious}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReplace}" InputGestureText="{x:Static shell:Strings.KeyReplace}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdGoToLine}" InputGestureText="{x:Static shell:Strings.KeyGoToLine}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdTabMovesFocus}" InputGestureText="{x:Static shell:Strings.KeyTabMovesFocus}" IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuView}">
+        <MenuItem Header="{x:Static shell:Strings.CmdNextPane}" InputGestureText="{x:Static shell:Strings.KeyNextPane}"
+                  Command="{x:Static shell:MainWindow.NextPaneCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdPreviousPane}" InputGestureText="{x:Static shell:Strings.KeyPreviousPane}"
+                  Command="{x:Static shell:MainWindow.PreviousPaneCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.MenuGoTo}">
+          <MenuItem Header="{x:Static shell:Strings.GoRegisters}" InputGestureText="{x:Static shell:Strings.KeyGoRegisters}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Registers}" />
+          <MenuItem Header="{x:Static shell:Strings.GoFlags}" InputGestureText="{x:Static shell:Strings.KeyGoFlags}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Flags}" />
+          <MenuItem Header="{x:Static shell:Strings.GoMemory}" InputGestureText="{x:Static shell:Strings.KeyGoMemory}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Memory}" />
+          <MenuItem Header="{x:Static shell:Strings.GoStack}" InputGestureText="{x:Static shell:Strings.KeyGoStack}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Stack}" />
+          <Separator />
+          <MenuItem Header="{x:Static shell:Strings.GoConsole}" InputGestureText="{x:Static shell:Strings.KeyGoConsole}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Console}" />
+          <MenuItem Header="{x:Static shell:Strings.GoProblems}" InputGestureText="{x:Static shell:Strings.KeyGoProblems}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Problems}" />
+          <MenuItem Header="{x:Static shell:Strings.GoRuntime}" InputGestureText="{x:Static shell:Strings.KeyGoRuntime}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Runtime}" />
+          <MenuItem Header="{x:Static shell:Strings.GoHistory}" InputGestureText="{x:Static shell:Strings.KeyGoHistory}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.History}" />
+          <MenuItem Header="{x:Static shell:Strings.GoBreakpoints}" InputGestureText="{x:Static shell:Strings.KeyGoBreakpoints}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Breakpoints}" />
+          <MenuItem Header="{x:Static shell:Strings.GoLearn}" InputGestureText="{x:Static shell:Strings.KeyGoLearn}"
+                    Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Learn}" />
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdShowLearn}" IsCheckable="True" IsChecked="{Binding IsLearnVisible}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdShowMachine}" IsCheckable="True" IsChecked="{Binding IsMachineVisible}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdShowBottom}" IsCheckable="True" IsChecked="{Binding IsBottomVisible}" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomIn}" InputGestureText="{x:Static shell:Strings.KeyZoomIn}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomOut}" InputGestureText="{x:Static shell:Strings.KeyZoomOut}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomReset}" InputGestureText="{x:Static shell:Strings.KeyZoomReset}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdResetLayout}" Command="{Binding ResetLayoutCommand}" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuBuild}">
+        <MenuItem Header="{x:Static shell:Strings.CmdBuild}" InputGestureText="{x:Static shell:Strings.KeyBuild}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCancelBuild}" InputGestureText="{x:Static shell:Strings.KeyCancelBuild}" IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuDebug}">
+        <MenuItem Header="{x:Static shell:Strings.CmdRun}" InputGestureText="{x:Static shell:Strings.KeyRun}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdPause}" InputGestureText="{x:Static shell:Strings.KeyPause}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdStop}" InputGestureText="{x:Static shell:Strings.KeyStop}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReset}" InputGestureText="{x:Static shell:Strings.KeyReset}" IsEnabled="False" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdStepInto}" InputGestureText="{x:Static shell:Strings.KeyStepInto}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdStepOver}" InputGestureText="{x:Static shell:Strings.KeyStepOver}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdToggleBreakpoint}" InputGestureText="{x:Static shell:Strings.KeyToggleBreakpoint}" IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuLearn}">
+        <MenuItem Header="{x:Static shell:Strings.CmdSamples}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdTutorials}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReference}" IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="{x:Static shell:Strings.MenuHelp}">
+        <MenuItem Header="{x:Static shell:Strings.CmdHelp}" InputGestureText="{x:Static shell:Strings.KeyHelp}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdAbout}" IsEnabled="False" />
+      </MenuItem>
+    </Menu>
+
+    <!-- UI-002 command bar. Session commands are disabled in the Empty state (ui-spec section 4). -->
+    <Border DockPanel.Dock="Top" MinHeight="{DynamicResource Size.CommandBar}" Padding="8,2"
+            BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,1,0,1">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" AutomationProperties.Name="{x:Static shell:Strings.RegionCommandBar}">
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE90F;" Content="{x:Static shell:Strings.BarBuild}" ToolTip="{x:Static shell:Strings.TipBuild}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE768;" Content="{x:Static shell:Strings.BarRun}" ToolTip="{x:Static shell:Strings.TipRun}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE769;" Content="{x:Static shell:Strings.BarPause}" ToolTip="{x:Static shell:Strings.TipPause}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE71A;" Content="{x:Static shell:Strings.BarStop}" ToolTip="{x:Static shell:Strings.TipStop}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE72C;" Content="{x:Static shell:Strings.BarReset}" ToolTip="{x:Static shell:Strings.TipReset}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE74B;" Content="{x:Static shell:Strings.BarStepInto}" ToolTip="{x:Static shell:Strings.TipStepInto}" IsEnabled="False" />
+        <Button Style="{StaticResource CommandButton}" Tag="&#xE7A6;" Content="{x:Static shell:Strings.BarStepOver}" ToolTip="{x:Static shell:Strings.TipStepOver}" IsEnabled="False" />
+      </StackPanel>
+    </Border>
+
+    <!-- UI-016 status bar. -->
+    <Border DockPanel.Dock="Bottom" Padding="8,3" Background="{DynamicResource Surface.Panel}"
+            BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,1,0,0"
+            AutomationProperties.Name="{x:Static shell:Strings.RegionStatusBar}">
+      <TextBlock x:Name="StatusText" Text="{Binding StatusText}" Foreground="{DynamicResource Text.Secondary}"
+                 FontSize="{DynamicResource FontSize.UI.Small}" />
+    </Border>
+
+    <!-- Regions (ui-spec section 2). Sizes and visibility are applied by the code-behind from the view model. -->
+    <Grid x:Name="RegionGrid">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition x:Name="LearnColumn" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" MinWidth="320" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition x:Name="MachineColumn" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" MinHeight="200" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition x:Name="BottomRow" />
+      </Grid.RowDefinitions>
+
+      <!-- UI-015 Learn sidebar -->
+      <GroupBox x:Name="LearnPanel" Grid.Column="0" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderLearn}"
+                AutomationProperties.Name="{x:Static shell:Strings.RegionLearn}">
+        <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyLearn}" />
+      </GroupBox>
+      <GridSplitter x:Name="LearnSplitter" Grid.Column="1" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
+                    ResizeDirection="Columns" AutomationProperties.Name="{x:Static shell:Strings.SplitterLearn}" />
+
+      <!-- UI-003 editor area (editor arrives with TASK-064; welcome screen UI-020 with TASK-062) -->
+      <GroupBox x:Name="EditorPanel" Grid.Column="2" Style="{StaticResource Panel.Headerless}"
+                AutomationProperties.Name="{x:Static shell:Strings.RegionEditor}">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="420">
+          <TextBlock Style="{StaticResource EmptyState.Title}" Text="{x:Static shell:Strings.EmptyEditorTitle}" />
+          <TextBlock Style="{StaticResource EmptyState.Text}" TextAlignment="Center" Text="{x:Static shell:Strings.EmptyEditorText}" />
+        </StackPanel>
+      </GroupBox>
+
+      <GridSplitter x:Name="MachineSplitter" Grid.Column="3" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
+                    ResizeDirection="Columns" AutomationProperties.Name="{x:Static shell:Strings.SplitterMachine}" />
+
+      <!-- Machine column: UI-005 registers above UI-006 flags -->
+      <Grid x:Name="MachineRegion" Grid.Column="4" AutomationProperties.Name="{x:Static shell:Strings.RegionMachine}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox x:Name="RegistersPanel" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderRegisters}">
+          <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+        </GroupBox>
+        <GroupBox x:Name="FlagsPanel" Grid.Row="1" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderFlags}"
+                  BorderThickness="0,1,0,0" MinHeight="96">
+          <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+        </GroupBox>
+      </Grid>
+
+      <GridSplitter x:Name="BottomSplitter" Grid.Row="1" Grid.ColumnSpan="5" Height="{DynamicResource Size.Splitter}"
+                    HorizontalAlignment="Stretch" ResizeDirection="Rows" AutomationProperties.Name="{x:Static shell:Strings.SplitterBottom}" />
+
+      <!-- Bottom area: UI-010..UI-014 tab group; UI-008 memory and UI-009 stack beside it (tabs when compact) -->
+      <Grid x:Name="BottomRegion" Grid.Row="2" Grid.ColumnSpan="5" AutomationProperties.Name="{x:Static shell:Strings.RegionBottom}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" MinWidth="240" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition x:Name="MemoryStackColumn" />
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="BottomTabs" SelectedIndex="{Binding BottomTab, Converter={x:Static shell:EnumIndexConverter.Instance}}"
+                    AutomationProperties.Name="{x:Static shell:Strings.RegionBottomTabs}">
+          <TabItem Header="{x:Static shell:Strings.TabConsole}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyConsole}" />
+          </TabItem>
+          <TabItem Header="{x:Static shell:Strings.TabProblems}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyProblems}" />
+          </TabItem>
+          <TabItem Header="{x:Static shell:Strings.TabRuntime}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyRuntime}" />
+          </TabItem>
+          <TabItem Header="{x:Static shell:Strings.TabHistory}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyHistory}" />
+          </TabItem>
+          <TabItem Header="{x:Static shell:Strings.TabBreakpoints}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyBreakpoints}" />
+          </TabItem>
+          <TabItem x:Name="MemoryTab" Header="{x:Static shell:Strings.TabMemory}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          </TabItem>
+          <TabItem x:Name="StackTab" Header="{x:Static shell:Strings.TabStack}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          </TabItem>
+        </TabControl>
+        <GridSplitter x:Name="MemoryStackSplitter" Grid.Column="1" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
+                      ResizeDirection="Columns" AutomationProperties.Name="{x:Static shell:Strings.SplitterMemoryStack}" />
+        <Grid x:Name="MemoryStackGroup" Grid.Column="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <GroupBox x:Name="MemoryPanel" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderMemory}">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          </GroupBox>
+          <GroupBox x:Name="StackView" Grid.Column="1" Width="180" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderStack}"
+                    BorderThickness="1,0,0,0">
+            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          </GroupBox>
+        </Grid>
+      </Grid>
+    </Grid>
+  </DockPanel>
+</Window>

@@ -699,3 +699,26 @@
 - **Unresolved issues:** none for TASK-015. Note: earlier instruction families (TASK-012..014) still report `FlagBit.None` for undefined flags (e.g. AF
   after logic ops); TASK-015 reports its masks. Not changed here (out of scope).
 - **Next step:** `/assembly-implement TASK-016`, or `TASK-060` for the first visible window
+
+### 2026-10-28 11:02 – 11:31 +0500 · Claude Code (Opus 5.5) · TASK-060 WPF shell and layout
+- **Summary:** User ran `/assembly-implement TASK-060`. Main window per ui-spec §2 in `src/AssemblyStudio.App/Shell/` (MVVM, CommunityToolkit.Mvvm 8.4.2 per ADR-0007): menus (UI-002 skeleton, every command with access key and shortcut; later-task commands disabled), command bar, status bar (UI-016, app version), Learn / editor / machine column / bottom tab group + memory/stack regions with keyboard-resizable splitters, empty states only (no machine data). F6/Shift+F6 region cycling, View ▸ Go to (Ctrl+Alt+R/F/M/K/O/P/U/H/B/L), region toggles, Reset Layout; compact layout below 1280 px; layout persisted in `settings.json` "layout"; 2 px focus ring; PerMonitorV2 manifest; Windows text scaling applied to font tokens; strings in `Strings.resx`; dark tokens only (TASK-061 owns themes).
+- **Files changed:** `src/AssemblyStudio.App/Shell/` (new: `MainWindow.xaml(.cs)`, `ShellViewModel.cs`, `LayoutState.cs`, `JsonLayoutStore.cs`,
+  `EnumIndexConverter.cs`, `StartupOptions.cs`, `TextScale.cs`, `ShellStyles.xaml`, `Strings.resx` + generated `Strings.cs`), `Themes/Dark.xaml`
+  (new), `app.manifest` (new), `App.xaml(.cs)`, `AssemblyStudio.App.csproj`, `Directory.Packages.props` (CommunityToolkit.Mvvm 8.4.2, MIT, verified in
+  the restored nuspec; approved by ADR-0007), `tests/AssemblyStudio.App.Tests/` (6 new files; placeholder `SkeletonTests.cs` removed),
+  `docs/06-implementation/task-060-verification.md` (new), backlog (TASK-060 Done; TASK-015 summary row corrected to Done, missed on 2026-10-28),
+  `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. `dotnet test --solution AssemblyStudio.slnx -c Release`
+  → 465/465 passed (41 App tests). Startup (process start → first rendered frame): 4,854 ms on the first launch after the build; 1,673 / 2,206 /
+  2,543 / 1,511 / 1,482 ms over 5 more launches; 1,622 and 2,494 ms inside test runs.
+- **Issues found and fixed during the task:** `.resx` strongly-typed generation runs after WPF's markup pass, so a generated `Strings.cs` accessor is
+  committed instead (regenerate with the string table). The default 1440 × 900 window opened partly off-screen on this 150 % display → bounds now
+  fit the work area. A 200 % text render clipped the command bar and panel titles → minimum heights + icon-only command bar below 1280 px.
+  The selected tab's bold weight leaked into tab content → header-only styling.
+- **Incident:** my first attempt at a screenshot used a screen capture from PowerShell; the app window was not in front and the capture showed the
+  user's browser. The image was deleted immediately without further use; all later review images were rendered in-process from the app window
+  only (`RenderTargetBitmap`).
+- **Git state after:** not committed (commit only on the user's request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`
+- **Unresolved issues:** none blocking. Manual checks at 100/125/200 % DPI and multi-monitor (AC-059), reference-machine startup (TASK-086),
+  Windows 10 LTSC fonts (TASK-070) remain with their tasks.
+- **Next step:** `/assembly-implement TASK-016` or `TASK-061`

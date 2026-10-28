@@ -5,36 +5,37 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-28 10:25 +0500 by Claude Code (Opus 5.5), after completing TASK-015 (taken over from OpenCode on the user's request) |
-| Current task | **TASK-016 Control transfer and interrupts: `Approved`, not started, no owner** (TASK-060 WPF shell also eligible) |
-| Last completed | TASK-015 Multiply, divide, BCD and conversions (Done 2026-10-28 10:25 +0500) |
-| Git state | TASK-015 committed as `37e7422` (on the user's request, 2026-10-28), after `ddc5fe5` (SDLC-009); this HANDOFF update is a follow-up docs commit. **Not pushed** (origin/master at `357251e`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
+| Written | 2026-10-28 11:31 +0500 by Claude Code (Opus 5.5), after completing TASK-060 |
+| Current task | **TASK-016 Control transfer and interrupts: `Approved`, not started, no owner** (TASK-061 themes also eligible) |
+| Last completed | TASK-060 WPF shell and layout (Done 2026-10-28 11:31 +0500) |
+| Git state | HEAD `d56a1b4` (TASK-015 `37e7422` + HANDOFF), **not pushed** (origin/master at `357251e`). TASK-060 changes **uncommitted**. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-28, this session).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` -> **425/425 passed** (2026-10-28, this session); **229 SingleStepTests oracle files at 100%** (71 TASK-012 + 84 TASK-013 + 58 TASK-014 + 16 TASK-015).
+- `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-28 11:31 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` -> **465/465 passed** (2026-10-28 11:31 +0500); 229 oracle files at 100%; 41 App tests.
+- The app runs: `src/AssemblyStudio.App/bin/Release/net10.0-windows/AssemblyStudio.App.exe` opens the empty shell (startup 1.5–2.5 s here).
 
 ## Changes since the previous handoff
-- SDLC-009 (OpenCode support, D-016) committed as `ddc5fe5`. `.opencode/` and `opencode.jsonc` are now tracked project files.
-- TASK-015 in new `Cpu8086.MulDiv.cs`: MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD.
-- Division follows the 8086 CORD microcode loop (`Cord`), so the FLAGS pushed by a divide error match the real chip. Divide error (quotient overflow, divisor 0, AAM 0): `IInterruptRouter.Intercept(0, state-at-the-instruction)`; with no handler, real vectoring that pushes the *next* instruction's IP (8086).
-- Oracle-verified 8086 quirks: IDIV rejects -128/-32768; REP prefix negates the IDIV quotient; AAA/AAS adjust AL and AH separately; DAA/DAS high-digit threshold is 9Fh when AF was set on entry; DAS low-digit borrow does not set CF.
-- INT vectoring factored into `VectorInterrupt(vector, flagsToPush, returnIp)`; TASK-016's INT 3/INTO/IRET should reuse it.
-- TASK-015 steps report undefined-flag masks (`StepResult.UndefinedFlags`); TASK-012..014 still report `None`.
+- TASK-060: WPF shell in `src/AssemblyStudio.App/Shell/` (see `CURRENT_TASK.md` and `docs/06-implementation/task-060-verification.md`).
+- New dependency: CommunityToolkit.Mvvm 8.4.2 (MIT, ADR-0007), App project only.
+- Layout is saved to `%APPDATA%\AssemblyStudio\settings.json` under `"layout"`; `--settings <path>` overrides the file, `--smoke-report <path>`
+  measures startup and exits without saving.
+- Strings: edit `Shell/Strings.resx` and regenerate `Shell/Strings.cs` together (plain accessor; `.resx` code generation doesn't run before
+  WPF's markup pass).
 
 ## Failed tests and known issues
-- None failing. F6/F7 /1 (undocumented TEST alias) and FF arms 2/3/4/5/7 halt until their tasks. IMUL with a REP prefix is not negated (no oracle evidence; the oracle has no such cases).
+- None failing. Engine: F6/F7 /1 and FF arms 2/3/4/5/7 halt until their tasks. UI: dark theme only (TASK-061); later-task commands disabled.
+- Cascadia Mono isn't installed on this dev machine (code font falls back to Consolas).
 
 ## Decisions and constraints to respect
-- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016. Core has **no project references**; Engine.I8086 references only Core.
-- Engine API exposes snapshots, not live state (ADR-0002/0003). Decode is pure: halt restores CS:IP, nothing modified (FR-037).
-- Undefined flags: deterministic value + reported mask (ADR-0003 A3); the oracle harness masks via metadata.json.
-- `Cpu8086` is not thread-safe (ADR-0004 A2). Runtime error policy for INT 0 with the default vector belongs to TASK-032.
-- Hand-test helper pattern: `NewCpu` needs two overloads (see existing test files).
+- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016. Core has no project references; Engine.I8086 references only Core.
+- UI: views use token resources only; panels show only snapshot data (NFR-018) — empty states until their tasks.
+- WPF tests run on the shared STA thread in `tests/AssemblyStudio.App.Tests/StaTestThread.cs` (one `Application` per process).
+- `Cpu8086` is not thread-safe (ADR-0004 A2). Runtime error policy for INT 0 belongs to TASK-032.
 
 ## Exact next action
-1. Optional: push `ddc5fe5`, `37e7422` and the HANDOFF commit (push only on user request).
-2. User runs `/assembly-implement TASK-016` (control transfer and interrupts), or `/assembly-implement TASK-060` for the first visible WPF window.
+1. Optional: commit TASK-060 and push (`ddc5fe5`, `37e7422`, `d56a1b4`, plus TASK-060) — only on the user's request.
+2. User runs `/assembly-implement TASK-016` (engine) or `/assembly-implement TASK-061` (themes and contrast test).
 3. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert

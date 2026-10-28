@@ -1,0 +1,238 @@
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace AssemblyStudio.App.Shell;
+
+/// <summary>
+/// Main window view (UI-001). View concerns only: applying the view model's region sizes and
+/// visibility to the grid, reading splitter sizes back, and moving keyboard focus for F6/Shift+F6
+/// and the View ▸ Go to commands. The layout rules live in <see cref="ShellViewModel"/>.
+/// </summary>
+public partial class MainWindow : Window
+{
+    /// <summary>F6: next region (ui-spec section 6).</summary>
+    public static readonly RoutedUICommand NextPaneCommand = new(Strings.CmdNextPane, nameof(NextPaneCommand), typeof(MainWindow));
+
+    /// <summary>Shift+F6: previous region.</summary>
+    public static readonly RoutedUICommand PreviousPaneCommand = new(Strings.CmdPreviousPane, nameof(PreviousPaneCommand), typeof(MainWindow));
+
+    private readonly ShellViewModel _viewModel;
+    private readonly bool _persistLayout;
+
+    /// <summary>Creates the window over its view model.</summary>
+    /// <param name="viewModel">Shell state.</param>
+    /// <param name="persistLayout">Save the layout when the window closes.</param>
+    public MainWindow(ShellViewModel viewModel, bool persistLayout = true)
+    {
+        ArgumentNullException.ThrowIfNull(viewModel);
+        _viewModel = viewModel;
+        _persistLayout = persistLayout;
+        DataContext = viewModel;
+        InitializeComponent();
+
+        ApplyWindowBounds();
+        ApplyLayout();
+        viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        viewModel.PanelActivated += (_, panel) => FocusPanel(panel);
+        viewModel.LayoutReset += (_, _) =>
+        {
+            ApplyWindowBounds();
+            ApplyLayout();
+        };
+        SizeChanged += (_, e) => viewModel.UpdateWindowWidth(e.NewSize.Width);
+        Closing += OnClosing;
+    }
+
+    /// <summary>The region that currently holds keyboard (or, in an inactive window, logical)
+    /// focus; the editor when focus is outside every region (menu, command bar).</summary>
+    internal ShellRegion CurrentRegion
+    {
+        get
+        {
+            var focused = FocusManager.GetFocusedElement(this) as DependencyObject;
+            if (focused is null)
+            {
+                return ShellRegion.Editor;
+            }
+
+            foreach (ShellRegion region in Enum.GetValues<ShellRegion>())
+            {
+                FrameworkElement container = RegionContainer(region);
+                if (container == focused || container.IsAncestorOf(focused))
+                {
+                    return region;
+                }
+            }
+
+            return ShellRegion.Editor;
+        }
+    }
+
+    /// <summary>Moves focus to the next (or previous) shown region: F6 / Shift+F6.</summary>
+    internal void CyclePane(bool backwards) => FocusRegion(_viewModel.NextRegion(CurrentRegion, backwards));
+
+    private void OnNextPane(object sender, ExecutedRoutedEventArgs e) => CyclePane(backwards: false);
+
+    private void OnPreviousPane(object sender, ExecutedRoutedEventArgs e) => CyclePane(backwards: true);
+
+    private void OnExit(object sender, RoutedEventArgs e) => Close();
+
+    private FrameworkElement RegionContainer(ShellRegion region) => region switch
+    {
+        ShellRegion.Machine => MachineRegion,
+        ShellRegion.Bottom => BottomRegion,
+        ShellRegion.Learn => LearnPanel,
+        _ => EditorPanel,
+    };
+
+    private void FocusRegion(ShellRegion region)
+    {
+        UIElement target = region switch
+        {
+            ShellRegion.Machine => RegistersPanel,
+            ShellRegion.Bottom => SelectedBottomTab(),
+            ShellRegion.Learn => LearnPanel,
+            _ => EditorPanel,
+        };
+        MoveFocus(target);
+    }
+
+    private void FocusPanel(ShellPanel panel)
+    {
+        UIElement target = panel switch
+        {
+            ShellPanel.Registers => RegistersPanel,
+            ShellPanel.Flags => FlagsPanel,
+            ShellPanel.Learn => LearnPanel,
+            ShellPanel.Memory when _viewModel.IsMemoryStackDocked => MemoryPanel,
+            ShellPanel.Stack when _viewModel.IsMemoryStackDocked => StackView,
+            _ => SelectedBottomTab(),
+        };
+        MoveFocus(target);
+    }
+
+    /// <summary>Sets the window's logical focus and, when the window is active, keyboard focus.
+    /// Logical focus keeps F6 order correct while another window is in front.</summary>
+    private void MoveFocus(UIElement target)
+    {
+        UpdateLayout();
+        FocusManager.SetFocusedElement(this, target);
+        target.Focus();
+    }
+
+    private UIElement SelectedBottomTab() => BottomTabs.SelectedItem as TabItem ?? (UIElement)BottomTabs;
+
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(ShellViewModel.IsLearnShown):
+            case nameof(ShellViewModel.IsMachineVisible):
+            case nameof(ShellViewModel.IsBottomVisible):
+            case nameof(ShellViewModel.IsMemoryStackDocked):
+                CaptureSizes();
+                ApplyLayout();
+                MoveFocusOutOfHiddenRegion();
+                break;
+        }
+    }
+
+    /// <summary>Applies the view model's sizes and visibility to the region grid.</summary>
+    private void ApplyLayout()
+    {
+        ShellViewModel vm = _viewModel;
+        SetColumn(LearnColumn, LearnPanel, LearnSplitter, vm.IsLearnShown, vm.LearnWidth);
+        SetColumn(MachineColumn, MachineRegion, MachineSplitter, vm.IsMachineVisible, vm.MachineWidth);
+        SetColumn(MemoryStackColumn, MemoryStackGroup, MemoryStackSplitter, vm.IsMemoryStackDocked, vm.MemoryStackWidth);
+
+        BottomRow.MinHeight = vm.IsBottomVisible ? 120 : 0;
+        BottomRow.Height = new GridLength(vm.IsBottomVisible ? vm.BottomHeight : 0);
+        BottomRegion.Visibility = vm.IsBottomVisible ? Visibility.Visible : Visibility.Collapsed;
+        BottomSplitter.Visibility = BottomRegion.Visibility;
+
+        Visibility tabs = vm.IsMemoryStackDocked ? Visibility.Collapsed : Visibility.Visible;
+        MemoryTab.Visibility = tabs;
+        StackTab.Visibility = tabs;
+    }
+
+    private static void SetColumn(ColumnDefinition column, UIElement content, UIElement splitter, bool shown, double width)
+    {
+        column.MinWidth = shown ? 120 : 0;
+        column.Width = new GridLength(shown ? width : 0);
+        content.Visibility = shown ? Visibility.Visible : Visibility.Collapsed;
+        splitter.Visibility = content.Visibility;
+    }
+
+    /// <summary>Reads splitter-adjusted sizes of the regions still on screen back into the view model.</summary>
+    private void CaptureSizes()
+    {
+        if (LearnPanel.IsVisible && LearnColumn.ActualWidth > 0)
+        {
+            _viewModel.LearnWidth = LearnColumn.ActualWidth;
+        }
+
+        if (MachineRegion.IsVisible && MachineColumn.ActualWidth > 0)
+        {
+            _viewModel.MachineWidth = MachineColumn.ActualWidth;
+        }
+
+        if (BottomRegion.IsVisible && BottomRow.ActualHeight > 0)
+        {
+            _viewModel.BottomHeight = BottomRow.ActualHeight;
+        }
+
+        if (MemoryStackGroup.IsVisible && MemoryStackColumn.ActualWidth > 0)
+        {
+            _viewModel.MemoryStackWidth = MemoryStackColumn.ActualWidth;
+        }
+    }
+
+    private void MoveFocusOutOfHiddenRegion()
+    {
+        if (FocusManager.GetFocusedElement(this) is UIElement { IsVisible: false })
+        {
+            FocusRegion(ShellRegion.Editor);
+        }
+    }
+
+    private void ApplyWindowBounds()
+    {
+        // Fit the saved size to the work area (smaller screens, other monitors, high text scale).
+        // On a screen smaller than the 1024 × 768 minimum the minimum gives way to the screen.
+        Rect work = SystemParameters.WorkArea;
+        MinWidth = Math.Min(LayoutState.MinWindowWidth, work.Width);
+        MinHeight = Math.Min(LayoutState.MinWindowHeight, work.Height);
+        Width = Math.Min(_viewModel.WindowWidth, work.Width);
+        Height = Math.Min(_viewModel.WindowHeight, work.Height);
+        if (!IsLoaded)
+        {
+            Left = work.Left + ((work.Width - Width) / 2);
+            Top = work.Top + ((work.Height - Height) / 2);
+            WindowStartupLocation = WindowStartupLocation.Manual;
+        }
+
+        WindowState = _viewModel.IsMaximized ? WindowState.Maximized : WindowState.Normal;
+    }
+
+    private void OnClosing(object? sender, CancelEventArgs e)
+    {
+        if (!_persistLayout)
+        {
+            return;
+        }
+
+        CaptureSizes();
+        Rect bounds = WindowState == WindowState.Normal ? new Rect(Left, Top, ActualWidth, ActualHeight) : RestoreBounds;
+        try
+        {
+            _viewModel.Save(bounds.Width, bounds.Height, WindowState == WindowState.Maximized);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // Losing the layout must never block closing. Logging arrives with TASK-068.
+        }
+    }
+}

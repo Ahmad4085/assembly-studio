@@ -1,0 +1,265 @@
+<!--
+  Shell control styles (UI-001, UI-002, UI-016; ui-spec section 9 component conventions).
+  Token keys only (Themes/Dark.xaml). Every focusable element shows the 2 px Focus.Ring (FR-092).
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Keyboard focus indicator (FR-092): 2 px ring, drawn only for keyboard focus. -->
+  <Style x:Key="FocusVisual.Ring">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Rectangle Margin="-2" Stroke="{DynamicResource Focus.Ring}" StrokeThickness="2" SnapsToDevicePixels="True" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Inset variant for regions that fill their space (an outset ring would be clipped by neighbours). -->
+  <Style x:Key="FocusVisual.Inset">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Rectangle Margin="1" Stroke="{DynamicResource Focus.Ring}" StrokeThickness="2" SnapsToDevicePixels="True" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Panel (PanelHeader + content). A GroupBox exposes a named Group to UI Automation (FR-093). -->
+  <Style x:Key="Panel" TargetType="GroupBox">
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Inset}" />
+    <Setter Property="Background" Value="{DynamicResource Surface.Panel}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border.Subtle}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="AutomationProperties.Name" Value="{Binding Header, RelativeSource={RelativeSource Self}}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="GroupBox">
+          <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+          <DockPanel Background="{TemplateBinding Background}">
+            <Border DockPanel.Dock="Top" MinHeight="{DynamicResource Size.PanelHeader}" Padding="{DynamicResource Space.Pad.Panel}"
+                    BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,0,0,1">
+              <TextBlock Text="{TemplateBinding Header}" Foreground="{DynamicResource Text.Secondary}"
+                         FontSize="{DynamicResource FontSize.UI.Small}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </Border>
+            <ContentPresenter Margin="{DynamicResource Space.Pad.Panel}" />
+          </DockPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Panel without a header (the editor area: its tabs arrive with TASK-064). -->
+  <Style x:Key="Panel.Headerless" TargetType="GroupBox" BasedOn="{StaticResource Panel}">
+    <Setter Property="Background" Value="{DynamicResource Surface.Editor}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="GroupBox">
+          <Border Background="{TemplateBinding Background}">
+            <ContentPresenter />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- EmptyState text (ui-spec section 4, "Empty" column). -->
+  <Style x:Key="EmptyState.Text" TargetType="TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Text.Muted}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.UI}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,4,0,0" />
+  </Style>
+
+  <Style x:Key="EmptyState.Title" TargetType="TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.Title}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+
+  <!-- Splitters: focusable, arrow keys resize (ui-spec section 2). -->
+  <Style TargetType="GridSplitter">
+    <Setter Property="Background" Value="{DynamicResource Border.Subtle}" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="IsTabStop" Value="True" />
+    <Setter Property="KeyboardIncrement" Value="16" />
+    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Inset}" />
+    <Setter Property="ResizeBehavior" Value="PreviousAndNext" />
+  </Style>
+
+  <!-- CommandButton: glyph + visible label, tooltip with shortcut (ui-spec section 9). -->
+  <Style x:Key="CommandButton" TargetType="Button">
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.UI}" />
+    <Setter Property="Padding" Value="{DynamicResource Space.Pad.Button}" />
+    <Setter Property="Margin" Value="0,0,4,0" />
+    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Ring}" />
+    <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="Bd" Background="Transparent" CornerRadius="{DynamicResource Radius.Small}" Padding="{TemplateBinding Padding}">
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{TemplateBinding Tag}" FontFamily="{DynamicResource Font.Icons}" Margin="0,0,6,0" VerticalAlignment="Center" />
+              <ContentPresenter x:Name="Label" RecognizesAccessKey="True" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <!-- Labels show at 1280 px and wider; below that, glyph + tooltip only (ui-spec section 9). -->
+            <DataTrigger Binding="{Binding IsCompact}" Value="True">
+              <Setter TargetName="Label" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Surface.Raised}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Editor.Selection}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Foreground" Value="{DynamicResource Text.Disabled}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Bottom tab group. -->
+  <Style TargetType="TabControl">
+    <Setter Property="Background" Value="{DynamicResource Surface.Panel}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="TabControl">
+          <DockPanel Background="{TemplateBinding Background}" KeyboardNavigation.TabNavigation="Local">
+            <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,0,0,1">
+              <TabPanel IsItemsHost="True" Margin="4,0,0,0" KeyboardNavigation.TabIndex="1" />
+            </Border>
+            <ContentPresenter ContentSource="SelectedContent" Margin="{DynamicResource Space.Pad.Panel}" KeyboardNavigation.TabIndex="2" />
+          </DockPanel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="TabItem">
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.UI}" />
+    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Inset}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="TabItem">
+          <Grid MinHeight="{DynamicResource Size.PanelHeader}">
+            <Border x:Name="Bd" Background="Transparent" Padding="10,4">
+              <!-- Header-only text styling: the tab's content must not inherit it. -->
+              <ContentPresenter x:Name="HeaderPresenter" ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center"
+                                TextElement.Foreground="{DynamicResource Text.Secondary}" />
+            </Border>
+            <!-- Selected tab: accent bar + weight (never color alone, ui-spec section 8). -->
+            <Border x:Name="Indicator" Height="2" VerticalAlignment="Bottom" Background="{DynamicResource Accent.Primary}" Visibility="Hidden" />
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="Indicator" Property="Visibility" Value="Visible" />
+              <Setter TargetName="HeaderPresenter" Property="TextElement.Foreground" Value="{DynamicResource Text.Primary}" />
+              <Setter TargetName="HeaderPresenter" Property="TextElement.FontWeight" Value="SemiBold" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Surface.Raised}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Menus: one template for all four MenuItem roles. -->
+  <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Separator">
+          <Border Height="1" Margin="8,4" Background="{DynamicResource Border.Subtle}" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="Menu">
+    <Setter Property="Background" Value="{DynamicResource Surface.Window}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="FontFamily" Value="{DynamicResource Font.UI}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.UI}" />
+  </Style>
+
+  <Style TargetType="MenuItem">
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="MenuItem">
+          <Border x:Name="Bd" Background="Transparent" Padding="8,4" CornerRadius="{DynamicResource Radius.Small}">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuCheck" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuGesture" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBlock x:Name="Check" Width="20" Text="&#xE73E;" FontFamily="{DynamicResource Font.Icons}" VerticalAlignment="Center" Visibility="Hidden" />
+              <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center" />
+              <TextBlock x:Name="Gesture" Grid.Column="2" Margin="32,0,0,0" Text="{TemplateBinding InputGestureText}"
+                         Foreground="{DynamicResource Text.Muted}" VerticalAlignment="Center" />
+              <TextBlock x:Name="Arrow" Grid.Column="3" Margin="12,0,0,0" Text="&#xE76C;" FontSize="10"
+                         FontFamily="{DynamicResource Font.Icons}" VerticalAlignment="Center" Visibility="Collapsed" />
+              <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True" Focusable="False" PopupAnimation="None"
+                     IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}">
+                <Border Background="{DynamicResource Surface.Raised}" BorderBrush="{DynamicResource Border.Strong}" BorderThickness="1"
+                        Padding="0,4" MinWidth="200">
+                  <ItemsPresenter Grid.IsSharedSizeScope="True" KeyboardNavigation.DirectionalNavigation="Cycle"
+                                  KeyboardNavigation.TabNavigation="Cycle" />
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="Role" Value="TopLevelHeader">
+              <Setter TargetName="Check" Property="Visibility" Value="Collapsed" />
+              <Setter TargetName="Gesture" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="Role" Value="TopLevelItem">
+              <Setter TargetName="Check" Property="Visibility" Value="Collapsed" />
+              <Setter TargetName="Gesture" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuHeader">
+              <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
+              <Setter TargetName="PART_Popup" Property="Placement" Value="Right" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="IsHighlighted" Value="True">
+              <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Editor.Selection}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter Property="Foreground" Value="{DynamicResource Text.Disabled}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="ToolTip">
+    <Setter Property="Background" Value="{DynamicResource Surface.Raised}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border.Strong}" />
+    <Setter Property="FontSize" Value="{DynamicResource FontSize.UI.Small}" />
+  </Style>
+</ResourceDictionary>

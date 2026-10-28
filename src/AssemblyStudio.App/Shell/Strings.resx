@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>Assembly Studio</value><comment>Window title</comment></data>
+  <data name="StatusAppVersion" xml:space="preserve"><value>Assembly Studio {0}</value><comment>Status bar, no document open. {0} = version</comment></data>
+  <data name="MenuFile" xml:space="preserve"><value>_File</value></data>
+  <data name="MenuEdit" xml:space="preserve"><value>_Edit</value></data>
+  <data name="MenuView" xml:space="preserve"><value>_View</value></data>
+  <data name="MenuBuild" xml:space="preserve"><value>_Build</value></data>
+  <data name="MenuDebug" xml:space="preserve"><value>_Debug</value></data>
+  <data name="MenuLearn" xml:space="preserve"><value>_Learn</value></data>
+  <data name="MenuHelp" xml:space="preserve"><value>_Help</value></data>
+  <data name="MenuGoTo" xml:space="preserve"><value>_Go To</value></data>
+  <data name="CmdNew" xml:space="preserve"><value>_New</value></data>
+  <data name="CmdOpen" xml:space="preserve"><value>_Open…</value></data>
+  <data name="CmdSave" xml:space="preserve"><value>_Save</value></data>
+  <data name="CmdSaveAs" xml:space="preserve"><value>Save _As…</value></data>
+  <data name="CmdCloseTab" xml:space="preserve"><value>_Close Tab</value></data>
+  <data name="CmdRecent" xml:space="preserve"><value>_Recent Files</value></data>
+  <data name="CmdSettings" xml:space="preserve"><value>Se_ttings…</value></data>
+  <data name="CmdExit" xml:space="preserve"><value>E_xit</value></data>
+  <data name="CmdUndo" xml:space="preserve"><value>_Undo</value></data>
+  <data name="CmdRedo" xml:space="preserve"><value>_Redo</value></data>
+  <data name="CmdCut" xml:space="preserve"><value>Cu_t</value></data>
+  <data name="CmdCopy" xml:space="preserve"><value>_Copy</value></data>
+  <data name="CmdPaste" xml:space="preserve"><value>_Paste</value></data>
+  <data name="CmdSelectAll" xml:space="preserve"><value>Select _All</value></data>
+  <data name="CmdFind" xml:space="preserve"><value>_Find…</value></data>
+  <data name="CmdFindNext" xml:space="preserve"><value>Find _Next</value></data>
+  <data name="CmdFindPrevious" xml:space="preserve"><value>Find Pre_vious</value></data>
+  <data name="CmdReplace" xml:space="preserve"><value>R_eplace…</value></data>
+  <data name="CmdGoToLine" xml:space="preserve"><value>_Go to Line…</value></data>
+  <data name="CmdTabMovesFocus" xml:space="preserve"><value>Tab _Moves Focus</value></data>
+  <data name="CmdNextPane" xml:space="preserve"><value>Next _Pane</value></data>
+  <data name="CmdPreviousPane" xml:space="preserve"><value>Pre_vious Pane</value></data>
+  <data name="CmdShowLearn" xml:space="preserve"><value>Learn _Sidebar</value></data>
+  <data name="CmdShowMachine" xml:space="preserve"><value>_Machine Column</value></data>
+  <data name="CmdShowBottom" xml:space="preserve"><value>_Bottom Area</value></data>
+  <data name="CmdZoomIn" xml:space="preserve"><value>Zoom _In</value></data>
+  <data name="CmdZoomOut" xml:space="preserve"><value>Zoom _Out</value></data>
+  <data name="CmdZoomReset" xml:space="preserve"><value>Reset _Zoom</value></data>
+  <data name="CmdResetLayout" xml:space="preserve"><value>Reset _Layout</value></data>
+  <data name="CmdBuild" xml:space="preserve"><value>_Build</value></data>
+  <data name="CmdCancelBuild" xml:space="preserve"><value>_Cancel Build</value></data>
+  <data name="CmdRun" xml:space="preserve"><value>_Run / Continue</value></data>
+  <data name="CmdPause" xml:space="preserve"><value>_Pause</value></data>
+  <data name="CmdStop" xml:space="preserve"><value>_Stop</value></data>
+  <data name="CmdReset" xml:space="preserve"><value>R_eset</value></data>
+  <data name="CmdStepInto" xml:space="preserve"><value>Step _Into</value></data>
+  <data name="CmdStepOver" xml:space="preserve"><value>Step _Over</value></data>
+  <data name="CmdToggleBreakpoint" xml:space="preserve"><value>Toggle _Breakpoint</value></data>
+  <data name="CmdSamples" xml:space="preserve"><value>_Samples</value></data>
+  <data name="CmdTutorials" xml:space="preserve"><value>_Tutorials</value></data>
+  <data name="CmdReference" xml:space="preserve"><value>_Reference</value></data>
+  <data name="CmdHelp" xml:space="preserve"><value>_Help</value></data>
+  <data name="CmdAbout" xml:space="preserve"><value>_About Assembly Studio</value></data>
+  <data name="GoRegisters" xml:space="preserve"><value>_Registers</value></data>
+  <data name="GoFlags" xml:space="preserve"><value>_Flags</value></data>
+  <data name="GoMemory" xml:space="preserve"><value>_Memory</value></data>
+  <data name="GoStack" xml:space="preserve"><value>Stac_k</value></data>
+  <data name="GoConsole" xml:space="preserve"><value>C_onsole</value></data>
+  <data name="GoProblems" xml:space="preserve"><value>_Problems</value></data>
+  <data name="GoRuntime" xml:space="preserve"><value>R_untime Messages</value></data>
+  <data name="GoHistory" xml:space="preserve"><value>_History</value></data>
+  <data name="GoBreakpoints" xml:space="preserve"><value>_Breakpoints</value></data>
+  <data name="GoLearn" xml:space="preserve"><value>_Learn Sidebar</value></data>
+  <data name="KeyNew" xml:space="preserve"><value>Ctrl+N</value></data>
+  <data name="KeyOpen" xml:space="preserve"><value>Ctrl+O</value></data>
+  <data name="KeySave" xml:space="preserve"><value>Ctrl+S</value></data>
+  <data name="KeySaveAs" xml:space="preserve"><value>Ctrl+Shift+S</value></data>
+  <data name="KeyCloseTab" xml:space="preserve"><value>Ctrl+W</value></data>
+  <data name="KeySettings" xml:space="preserve"><value>Ctrl+,</value></data>
+  <data name="KeyExit" xml:space="preserve"><value>Alt+F4</value></data>
+  <data name="KeyUndo" xml:space="preserve"><value>Ctrl+Z</value></data>
+  <data name="KeyRedo" xml:space="preserve"><value>Ctrl+Y</value></data>
+  <data name="KeyCut" xml:space="preserve"><value>Ctrl+X</value></data>
+  <data name="KeyCopy" xml:space="preserve"><value>Ctrl+C</value></data>
+  <data name="KeyPaste" xml:space="preserve"><value>Ctrl+V</value></data>
+  <data name="KeySelectAll" xml:space="preserve"><value>Ctrl+A</value></data>
+  <data name="KeyFind" xml:space="preserve"><value>Ctrl+F</value></data>
+  <data name="KeyFindNext" xml:space="preserve"><value>F3</value></data>
+  <data name="KeyFindPrevious" xml:space="preserve"><value>Shift+F3</value></data>
+  <data name="KeyReplace" xml:space="preserve"><value>Ctrl+H</value></data>
+  <data name="KeyGoToLine" xml:space="preserve"><value>Ctrl+G</value></data>
+  <data name="KeyTabMovesFocus" xml:space="preserve"><value>Ctrl+M</value></data>
+  <data name="KeyNextPane" xml:space="preserve"><value>F6</value></data>
+  <data name="KeyPreviousPane" xml:space="preserve"><value>Shift+F6</value></data>
+  <data name="KeyZoomIn" xml:space="preserve"><value>Ctrl+Plus</value></data>
+  <data name="KeyZoomOut" xml:space="preserve"><value>Ctrl+Minus</value></data>
+  <data name="KeyZoomReset" xml:space="preserve"><value>Ctrl+0</value></data>
+  <data name="KeyGoRegisters" xml:space="preserve"><value>Ctrl+Alt+R</value></data>
+  <data name="KeyGoFlags" xml:space="preserve"><value>Ctrl+Alt+F</value></data>
+  <data name="KeyGoMemory" xml:space="preserve"><value>Ctrl+Alt+M</value></data>
+  <data name="KeyGoStack" xml:space="preserve"><value>Ctrl+Alt+K</value></data>
+  <data name="KeyGoConsole" xml:space="preserve"><value>Ctrl+Alt+O</value></data>
+  <data name="KeyGoProblems" xml:space="preserve"><value>Ctrl+Alt+P</value></data>
+  <data name="KeyGoRuntime" xml:space="preserve"><value>Ctrl+Alt+U</value></data>
+  <data name="KeyGoHistory" xml:space="preserve"><value>Ctrl+Alt+H</value></data>
+  <data name="KeyGoBreakpoints" xml:space="preserve"><value>Ctrl+Alt+B</value></data>
+  <data name="KeyGoLearn" xml:space="preserve"><value>Ctrl+Alt+L</value></data>
+  <data name="KeyBuild" xml:space="preserve"><value>Ctrl+Shift+B</value></data>
+  <data name="KeyCancelBuild" xml:space="preserve"><value>Esc</value></data>
+  <data name="KeyRun" xml:space="preserve"><value>F5</value></data>
+  <data name="KeyPause" xml:space="preserve"><value>Ctrl+Alt+Break</value></data>
+  <data name="KeyStop" xml:space="preserve"><value>Shift+F5</value></data>
+  <data name="KeyReset" xml:space="preserve"><value>Ctrl+Shift+F5</value></data>
+  <data name="KeyStepInto" xml:space="preserve"><value>F11</value></data>
+  <data name="KeyStepOver" xml:space="preserve"><value>F10</value></data>
+  <data name="KeyToggleBreakpoint" xml:space="preserve"><value>F9</value></data>
+  <data name="KeyHelp" xml:space="preserve"><value>F1</value></data>
+  <data name="BarBuild" xml:space="preserve"><value>Build</value></data>
+  <data name="BarRun" xml:space="preserve"><value>Run</value></data>
+  <data name="BarPause" xml:space="preserve"><value>Pause</value></data>
+  <data name="BarStop" xml:space="preserve"><value>Stop</value></data>
+  <data name="BarReset" xml:space="preserve"><value>Reset</value></data>
+  <data name="BarStepInto" xml:space="preserve"><value>Step Into</value></data>
+  <data name="BarStepOver" xml:space="preserve"><value>Step Over</value></data>
+  <data name="TipBuild" xml:space="preserve"><value>Build (Ctrl+Shift+B)</value></data>
+  <data name="TipRun" xml:space="preserve"><value>Run / Continue (F5)</value></data>
+  <data name="TipPause" xml:space="preserve"><value>Pause (Ctrl+Alt+Break)</value></data>
+  <data name="TipStop" xml:space="preserve"><value>Stop (Shift+F5)</value></data>
+  <data name="TipReset" xml:space="preserve"><value>Reset: rebuild and reload (Ctrl+Shift+F5)</value></data>
+  <data name="TipStepInto" xml:space="preserve"><value>Step Into (F11)</value></data>
+  <data name="TipStepOver" xml:space="preserve"><value>Step Over (F10)</value></data>
+  <data name="HeaderLearn" xml:space="preserve"><value>Learn</value></data>
+  <data name="HeaderRegisters" xml:space="preserve"><value>Registers</value></data>
+  <data name="HeaderFlags" xml:space="preserve"><value>Flags</value></data>
+  <data name="HeaderMemory" xml:space="preserve"><value>Memory</value></data>
+  <data name="HeaderStack" xml:space="preserve"><value>Stack</value></data>
+  <data name="TabConsole" xml:space="preserve"><value>Console</value></data>
+  <data name="TabProblems" xml:space="preserve"><value>Problems</value></data>
+  <data name="TabRuntime" xml:space="preserve"><value>Runtime</value></data>
+  <data name="TabHistory" xml:space="preserve"><value>History</value></data>
+  <data name="TabBreakpoints" xml:space="preserve"><value>Breakpoints</value></data>
+  <data name="TabMemory" xml:space="preserve"><value>Memory</value></data>
+  <data name="TabStack" xml:space="preserve"><value>Stack</value></data>
+  <data name="EmptyEditorTitle" xml:space="preserve"><value>No document open</value></data>
+  <data name="EmptyEditorText" xml:space="preserve"><value>Create a new file (Ctrl+N) or open one (Ctrl+O) to start.</value></data>
+  <data name="EmptyMachine" xml:space="preserve"><value>Build and run a program to see the CPU</value></data>
+  <data name="EmptyConsole" xml:space="preserve"><value>Program output appears here</value></data>
+  <data name="EmptyProblems" xml:space="preserve"><value>No problems</value></data>
+  <data name="EmptyRuntime" xml:space="preserve"><value>Session messages appear here</value></data>
+  <data name="EmptyHistory" xml:space="preserve"><value>No instructions executed yet</value></data>
+  <data name="EmptyBreakpoints" xml:space="preserve"><value>No breakpoints</value></data>
+  <data name="EmptyLearn" xml:space="preserve"><value>Samples, tutorials and the instruction reference appear here</value></data>
+  <data name="RegionEditor" xml:space="preserve"><value>Editor</value></data>
+  <data name="RegionMachine" xml:space="preserve"><value>Machine column</value></data>
+  <data name="RegionBottom" xml:space="preserve"><value>Bottom area</value></data>
+  <data name="RegionLearn" xml:space="preserve"><value>Learn sidebar</value></data>
+  <data name="RegionCommandBar" xml:space="preserve"><value>Command bar</value></data>
+  <data name="RegionStatusBar" xml:space="preserve"><value>Status bar</value></data>
+  <data name="RegionMenu" xml:space="preserve"><value>Main menu</value></data>
+  <data name="RegionBottomTabs" xml:space="preserve"><value>Output panels</value></data>
+  <data name="SplitterLearn" xml:space="preserve"><value>Resize Learn sidebar</value></data>
+  <data name="SplitterMachine" xml:space="preserve"><value>Resize machine column</value></data>
+  <data name="SplitterBottom" xml:space="preserve"><value>Resize bottom area</value></data>
+  <data name="SplitterMemoryStack" xml:space="preserve"><value>Resize memory and stack</value></data>
+</root>

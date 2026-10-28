@@ -9,5 +9,7 @@
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
     <!-- Coverage under Microsoft.Testing.Platform (ADR-0008: coverlet, MIT). Collects only when the coverlet option is passed -->
     <PackageVersion Include="coverlet.MTP" Version="10.1.0" />
+    <!-- MVVM source generators for the WPF app (ADR-0007: CommunityToolkit.Mvvm 8.4.2, MIT) -->
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
   </ItemGroup>
 </Project>

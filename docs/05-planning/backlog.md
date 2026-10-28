@@ -43,7 +43,7 @@
 | TASK-012 | Data transfer instructions | M1 | TASK-011 | M | FR-036, NFR-017 | Done |
 | TASK-013 | Arithmetic instructions | M1 | TASK-011 | M | FR-036, FR-048, NFR-017 | Done |
 | TASK-014 | Logic, shift and rotate instructions | M1 | TASK-011 | M | FR-036, FR-048, NFR-017 | Done |
-| TASK-015 | Multiply, divide, BCD and conversions | M1 | TASK-011 | M | FR-036, FR-038, FR-048, NFR-017 | Approved |
+| TASK-015 | Multiply, divide, BCD and conversions | M1 | TASK-011 | M | FR-036, FR-038, FR-048, NFR-017 | Done |
 | TASK-016 | Control transfer and interrupts | M1 | TASK-011 | M | FR-036, FR-038, NFR-017 | Approved |
 | TASK-017 | String instructions and REP prefixes | M1 | TASK-011 | M | FR-036, NFR-017 | Approved |
 | TASK-018 | Flag ops, misc and the full opcode table | M1 | TASK-012, TASK-013, TASK-014, TASK-015, TASK-016, TASK-017 | L | FR-036, FR-037, FR-045, NFR-017 | Approved |
@@ -66,7 +66,7 @@
 | TASK-052 | Breakpoints and Step Over | M3 | TASK-051 | M | FR-050, FR-052 | Approved |
 | TASK-053 | Input routing, Ctrl-C delivery and replay | M3 | TASK-050, TASK-036 | L | FR-064, NFR-016 | Approved |
 | TASK-054 | Fault containment, fuzz and soak | M3 | TASK-050 | M | NFR-010, FR-096, NFR-013, NFR-015 | Approved |
-| TASK-060 | WPF shell and layout | M4 | TASK-001 | M | FR-091, FR-092, NFR-026, NFR-005 | Approved |
+| TASK-060 | WPF shell and layout | M4 | TASK-001 | M | FR-091, FR-092, NFR-026, NFR-005 | Done |
 | TASK-061 | Themes, tokens and contrast test | M4 | TASK-060 | M | NFR-022, FR-094, NFR-026 | Approved |
 | TASK-062 | Document service and file workflow | M4 | TASK-060 | M | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-019, FR-020, NFR-029 | Approved |
 | TASK-063 | Crash recovery | M4 | TASK-062 | L | NFR-011 | Approved |
@@ -1079,7 +1079,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done (2026-10-28 11:31 +0500, Claude Code (Opus 5.5)) |
 | Milestone | M4 |
 | Requirements | FR-091, FR-092, NFR-026, NFR-005 |
 | Decisions / design | ADR-0007, UI-001, UI-002, UI-016 |

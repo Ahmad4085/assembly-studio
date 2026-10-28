@@ -8,13 +8,29 @@
 
 | Field | Value |
 |---|---|
-| Status | **Ready** (approved; TASK-015 Done) |
+| Status | **Ready** (approved) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
 | Definition | `docs/05-planning/backlog.md` § TASK-016 (goal, scope, tests, DoD) |
 | Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-016`) |
 
-**Also eligible:** TASK-060 (WPF shell and layout, depends only on TASK-001), the first visible window.
+**Also eligible (depend on TASK-060, now Done):** TASK-061 Themes, tokens and contrast test; TASK-067 Settings service (also needs TASK-040).
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-060 WPF shell and layout (Done 2026-10-28 11:31 +0500, Claude Code (Opus 5.5))
+- Main window per ui-spec §2 in `src/AssemblyStudio.App/Shell/` (MVVM, CommunityToolkit.Mvvm 8.4.2 per ADR-0007): menus (UI-002 skeleton, every command with access key and shortcut; later-task commands disabled), command bar, status bar (UI-016, app version), Learn / editor / machine column / bottom tab group + memory/stack regions with keyboard-resizable splitters, empty states only (no machine data). F6/Shift+F6 region cycling, View ▸ Go to (Ctrl+Alt+R/F/M/K/O/P/U/H/B/L), region toggles, Reset Layout; compact layout below 1280 px; layout persisted in `settings.json` "layout"; 2 px focus ring; PerMonitorV2 manifest; Windows text scaling applied to font tokens; strings in `Strings.resx`; dark tokens only (TASK-061 owns themes).
+- Tests (App.Tests, 41): view-model layout rules, settings-file store, options/text-scale, UI smoke on the real XAML (window opens, F6 cycles,
+  Go to focuses, hidden region returns focus, View menu opens), in-process renders for review (`artifacts/ui/`, not committed), and a real-exe
+  startup measurement (NFR-005). Verification notes: `docs/06-implementation/task-060-verification.md`.
+- Release build 0 warnings, 0 errors. Solution tests 465/465 passed.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met; partial items documented in the verification notes) |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-28 11:02 / 2026-10-28 11:31 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-060 |
 
 ---
 

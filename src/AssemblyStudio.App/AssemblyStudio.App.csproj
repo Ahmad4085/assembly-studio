@@ -3,6 +3,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <!-- Per-monitor DPI awareness (NFR-026) -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <!-- WPF shell and composition root (ADR-0001, ADR-0002, ADR-0007) -->
@@ -14,5 +16,13 @@
     <ProjectReference Include="..\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
     <ProjectReference Include="..\AssemblyStudio.Debugging\AssemblyStudio.Debugging.csproj" />
     <ProjectReference Include="..\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="AssemblyStudio.App.Tests" />
   </ItemGroup>
 </Project>

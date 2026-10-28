@@ -8,7 +8,7 @@
 | Written | 2026-10-28 14:06 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-018 |
 | Current task | **TASK-019 Disassembler adapter (Iced): `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
 | Last completed | TASK-018 Flag ops, misc and the full opcode table (Done 2026-10-28 14:06 +0500) |
-| Git state | HEAD `3854cfd` (not pushed). TASK-018 changes uncommitted. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `7e5ac5d` (not pushed). TASK-018 is committed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 13:52 +0500).

@@ -785,6 +785,6 @@
   - `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **513/513 passed** (2026-10-28 14:01 +0500; all 283 SingleStepTests oracle files pass 100%, all 40 hand tests passed).
   - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 14:02 +0500).
   - `dotnet test --solution AssemblyStudio.slnx -c Release` → **611/612 passed** (1 failure: pre-existing DEF-001 App smoke test in background runner; 2026-10-28 14:06 +0500).
-- **Git state after:** uncommitted changes for TASK-018 (commit only when user requests). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Git state after:** committed as `7e5ac5d` (`TASK-018: Flag ops, misc and the full opcode table`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-018. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-019` (Disassembler adapter (Iced)) or `/assembly-implement TASK-061` (themes).

@@ -339,17 +339,4 @@ public class LogicShiftRotateTests
         Assert.Equal(HaltReason.UnsupportedInstruction, result.HaltReason);
         Assert.Equal(before, cpu.State);
     }
-
-    [Fact]
-    public void F6_arm_4_mul_halts_untouched()
-    {
-        var (cpu, _) = NewCpu(0xF6, 0xE0); // F6 /4 (MUL arrives with a later task)
-        var before = cpu.State;
-
-        var result = cpu.StepInstruction();
-
-        Assert.Equal(StepOutcome.Halted, result.Outcome);
-        Assert.Equal(HaltReason.UnsupportedInstruction, result.HaltReason);
-        Assert.Equal(before, cpu.State);
-    }
 }

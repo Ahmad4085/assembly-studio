@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-27 16:12 +0500 by OpenCode (TASK-014 done) |
+| Last updated | 2026-10-28 10:25 +0500 by Claude Code (Opus 5.5) (TASK-015 done) |
 | Current phase | **6 Implementation**, milestone M0 (TASK-006 user action pending) and M1 (in progress) |
 | Current milestone | M1 8086 engine (headless) — in progress; M0 Foundation nearly complete (TASK-006 user action pending) |
-| Active task | None in progress. Next: `TASK-015` Multiply, divide, BCD and conversions (`Approved`). Parallel user action: `TASK-006` (clean test VMs) |
+| Active task | None in progress. Next: `TASK-016` Control transfer and interrupts (`Approved`); `TASK-060` (WPF shell) also eligible. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-015`. User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-016` (or `TASK-060` for the first visible window). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-015 Multiply, divide, BCD and conversions | 2026-10-28 10:25 +0500 | MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD in new `Cpu8086.MulDiv.cs`. Division follows the 8086 CORD microcode loop, so divide-error FLAGS pushed on the stack match the real chip; divide error (overflow, divisor 0, AAM 0) goes through the router as vector 0, else real vectoring with the 8086 return address (next instruction). 8086 quirks oracle-verified: IDIV rejects -128/-32768, REP negates the IDIV quotient, AAA/AAS adjust AL and AH separately, DAA/DAS high-digit threshold 9Fh when AF was set, DAS low-digit borrow does not set CF. Undefined-flag masks reported per step. 16 oracle files at 100% (229 total) + 21 hand tests incl. AC-031 engine part. Release build 0w/0e; 425/425 solution tests |
 | TASK-014 Logic, shift and rotate instructions | 2026-10-27 16:12 +0500 | AND/OR/XOR (rm/r bases 08/20/30 + acc-imm 0C/24/34, reusing the shared `Arith` core), TEST (84/85, A8/A9, F6/F7 /0 — result discarded, AF untouched), NOT (F6/F7 /2, no flags), shifts/rotates D0-D3 all /reg with 8086 count semantics (count not masked, count 0 = full no-op, OF only for count 1 with oracle-verified rules, count>1 leaves OF untouched, rotates touch only CF/OF); undocumented /6 = SETMO (operand all ones, oracle raw-flag values); 58 SingleStepTests oracle files at 100% first run (213 total) + 23 hand tests. Release build 0w/0e; 389/389 solution tests |
 | TASK-013 Arithmetic instructions | 2026-10-27 14:59 +0500 | ADD/ADC/SUB/SBB/CMP in all forms (rm/r bases 00/10/18/28/38 arms 0-3, acc-imm arms 4/5, immediate groups 80/82/81/83 all /reg with sign-extended imm8 in 83), INC/DEC r16 40-4F and rm FE/FF /0 /1 (CF untouched), NEG F6/F7 /3; exact width-aware 8086 flags; 84 SingleStepTests oracle files at 100% (155 total incl. TASK-012) + 20 hand tests incl. AC-025 verbatim. Release build 0w/0e; 308/308 solution tests |
 | TASK-012 Data transfer instructions | 2026-10-27 13:55 +0500 | MOV (all forms: rm/reg, segment registers with `reg&3` aliasing, moffs A0-A3, reg-imm B0-BF, rm-imm C6/C7 with reg-field aliasing), XCHG (86/87 + 90-97), LEA/LDS/LES (memory forms; mod=11 halts undefined), XLAT, LAHF/SAHF, PUSH/POP reg+seg (50-5F, 06/07/0E/16/17/1E/1F), POP rm (8F), PUSH rm via FF/6, PUSHF/POPF; oracle-confirmed 8086 quirks (PUSH SP pushes decremented SP, POP SP loads popped value, PUSHF verbatim, POPF `(popped|0xF002)&~0x0028`); 71 SingleStepTests oracle files at 100% + 30 hand tests. Release build 0w/0e; 204/204 solution tests |
@@ -74,8 +75,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-27 14:59 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-27 16:12 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **389/389 passed** (xunit.v3 MTP runner; includes 213 SingleStepTests oracle files at 100% (71 TASK-012 + 84 TASK-013 + 58 TASK-014) and 23 new logic/shift/rotate hand tests) |
+| Product build (2026-10-28 10:25 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-28 10:25 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **425/425 passed** (xunit.v3 MTP runner; includes 229 SingleStepTests oracle files at 100% (71 TASK-012 + 84 TASK-013 + 58 TASK-014 + 16 TASK-015) and 21 new multiply/divide/BCD hand tests) |
 | Coverage (2026-10-27 12:00 +0500) | `build/coverage.ps1` → exit 0; all product assemblies "n/a (no coverable lines)" (skeleton). Target ≥ 85% engine/runtime (NFR-021) not yet measurable |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

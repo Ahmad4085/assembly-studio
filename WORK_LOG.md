@@ -681,3 +681,21 @@
 - **Git state after:** committed on the user's request ("approve D-016 and commit"), not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`
 - **Unresolved issues:** none for SDLC-009
 - **Next step:** unchanged from `HANDOFF.md` (TASK-015, then TASK-060 for the first visible window)
+
+### 2026-10-28 09:53 – 10:25 +0500 · Claude Code (Opus 5.5) · TASK-015 Multiply, divide, BCD and conversions
+- **Summary:** The user asked Claude Code to continue TASK-015 after OpenCode (GLM-5.3-Flash Free) hit its usage limit ("please continue opencode
+  task its limit reach"). OpenCode had set the task `In progress` and left 12 analysis scripts (`poc/task015-*.ps1`, untracked, kept as is) but no
+  engine code. Two `opencode.exe` processes were still running at takeover; no files changed underneath this session.
+  Derived the 8086 division flags from the oracle (Python, scratch only): DIV divide-error flags = SUB(high, divisor) (1,950/1,950); a simulation of
+  the CORD shift-and-subtract loop reproduces SF/ZF/AF/PF/OF of every successful DIV and every late IDIV overflow, with CF = NOT(quotient top bit);
+  AAM 0 is the same routine with high = 0. Implemented MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD in new `Cpu8086.MulDiv.cs`. Division follows the 8086 CORD microcode loop, so divide-error FLAGS pushed on the stack match the real chip; divide error (overflow, divisor 0, AAM 0) goes through the router as vector 0, else real vectoring with the 8086 return address (next instruction). 8086 quirks oracle-verified: IDIV rejects -128/-32768, REP negates the IDIV quotient, AAA/AAS adjust AL and AH separately, DAA/DAS high-digit threshold 9Fh when AF was set, DAS low-digit borrow does not set CF. Undefined-flag masks reported per step. 16 oracle files at 100% (229 total) + 21 hand tests incl. AC-031 engine part.
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/Cpu8086.MulDiv.cs` (new), `Cpu8086.cs`, `Cpu8086.Logic.cs`,
+  `tests/AssemblyStudio.Engine.I8086.Tests/MulDivBcdTests.cs` (new), `SingleStepOracleTests.cs` (+16 files), `LogicShiftRotateTests.cs` (removed
+  the MUL-halts test), `docs/05-planning/backlog.md` (TASK-015 Done), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`
+- **Tests executed:** `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors. First oracle run: 27.json.gz 17 and 2F.json.gz 37 failing
+  cases (DAA/DAS 8086 quirks), plus the obsolete TASK-014 MUL-halt test; fixed. `dotnet test --solution AssemblyStudio.slnx -c Release` → 425/425 passed
+  (229 oracle files at 100%).
+- **Git state after:** not committed (commit only on the user's request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis)
+- **Unresolved issues:** none for TASK-015. Note: earlier instruction families (TASK-012..014) still report `FlagBit.None` for undefined flags (e.g. AF
+  after logic ops); TASK-015 reports its masks. Not changed here (out of scope).
+- **Next step:** `/assembly-implement TASK-016`, or `TASK-060` for the first visible window

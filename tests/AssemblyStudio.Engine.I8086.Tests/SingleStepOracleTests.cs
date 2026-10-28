@@ -19,7 +19,8 @@ public class SingleStepOracleTests
     /// PUSH/POP (reg, seg, rm), PUSH/POP rm via FF/6, PUSHF/POPF; TASK-013 scope: ADD/ADC/
     /// SUB/SBB/CMP (rm/r, acc-imm, groups 80-83 all /reg), INC/DEC (r16 and rm), NEG F6/F7 /3;
     /// TASK-014 scope: OR/AND/XOR families (rm/r + acc-imm), TEST (84/85, A8/A9, F6/F7 /0),
-    /// NOT (F6/F7 /2), shifts/rotates D0-D3 all /reg incl. the undocumented /6 SETMO.</summary>
+    /// NOT (F6/F7 /2), shifts/rotates D0-D3 all /reg incl. the undocumented /6 SETMO; TASK-015 scope:
+    /// MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD.</summary>
     public static TheoryData<string> OracleFiles { get; } = new(
     [
         // TASK-012: data transfer
@@ -60,6 +61,9 @@ public class SingleStepOracleTests
         "D1.0.json.gz", "D1.1.json.gz", "D1.2.json.gz", "D1.3.json.gz", "D1.4.json.gz", "D1.5.json.gz", "D1.6.json.gz", "D1.7.json.gz",
         "D2.0.json.gz", "D2.1.json.gz", "D2.2.json.gz", "D2.3.json.gz", "D2.4.json.gz", "D2.5.json.gz", "D2.6.json.gz", "D2.7.json.gz",
         "D3.0.json.gz", "D3.1.json.gz", "D3.2.json.gz", "D3.3.json.gz", "D3.4.json.gz", "D3.5.json.gz", "D3.6.json.gz", "D3.7.json.gz",
+        // TASK-015: MUL/IMUL/DIV/IDIV (F6/F7 /4-/7, incl. divide errors vectoring through INT 0), BCD adjust, CBW/CWD
+        "F6.4.json.gz", "F6.5.json.gz", "F6.6.json.gz", "F6.7.json.gz", "F7.4.json.gz", "F7.5.json.gz", "F7.6.json.gz", "F7.7.json.gz",
+        "27.json.gz", "2F.json.gz", "37.json.gz", "3F.json.gz", "D4.json.gz", "D5.json.gz", "98.json.gz", "99.json.gz",
     ]);
 
     private static readonly string[] RegNames = ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di", "cs", "ds", "es", "ss", "ip", "flags"];

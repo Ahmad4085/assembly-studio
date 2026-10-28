@@ -79,7 +79,8 @@ public sealed partial class Cpu8086
     }
 
     /// <summary>F6/F7 group dispatcher: 0 = TEST rm,imm; 2 = NOT; 3 = NEG (Cpu8086.Arithmetic.cs);
-    /// the MUL/DIV arms (4-7) and the undocumented /1 TEST alias halt until their tasks.</summary>
+    /// 4-7 = MUL/IMUL/DIV/IDIV (Cpu8086.MulDiv.cs; a REP prefix negates the IDIV quotient). The
+    /// undocumented /1 TEST alias is not in the approved scope and halts.</summary>
     private StepResult ExecF6F7Group(PrefixInfo op, bool wide)
     {
         ushort cursor = (ushort)(op.OpcodeIp + 1);
@@ -89,6 +90,10 @@ public sealed partial class Cpu8086
             0 => ExecTestRmImmCore(m, cursor, wide),
             2 => ExecNotCore(m, cursor, wide),
             3 => ExecNegCore(m, cursor, wide),
+            4 => ExecMulCore(m, cursor, wide, signed: false),
+            5 => ExecMulCore(m, cursor, wide, signed: true),
+            6 => ExecDivCore(m, cursor, wide, signed: false, negateQuotient: false),
+            7 => ExecDivCore(m, cursor, wide, signed: true, negateQuotient: op.Rep != RepKind.None),
             _ => HaltUnsupported(),
         };
     }

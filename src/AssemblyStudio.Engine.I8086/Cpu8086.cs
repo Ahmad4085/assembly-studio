@@ -31,8 +31,9 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
 
         // Handlers return null for unsupported or undefined forms: the state is then restored and
         // the step halts with the instruction inspectable (FR-037). Data transfer: TASK-012
-        // (Cpu8086.DataTransfer.cs); arithmetic: TASK-013 (Cpu8086.Arithmetic.cs); the other
-        // families arrive with TASK-014..018 (ADR-0003 §4).
+        // (Cpu8086.DataTransfer.cs); arithmetic: TASK-013 (Cpu8086.Arithmetic.cs); logic: TASK-014
+        // (Cpu8086.Logic.cs); multiply/divide/BCD: TASK-015 (Cpu8086.MulDiv.cs); the other
+        // families arrive with TASK-016..018 (ADR-0003 §4).
         StepResult? result = opcode.Opcode switch
         {
             0xCD => ExecuteIntImm8(opcode),
@@ -95,6 +96,14 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             0xFE => ExecFeGroup(opcode),
             0xFF => ExecFfGroup(opcode),
             0x9C => ExecPushf(opcode),
+            0x27 => ExecDecimalAdjust(opcode, add: true),
+            0x2F => ExecDecimalAdjust(opcode, add: false),
+            0x37 => ExecAsciiAdjust(opcode, add: true),
+            0x3F => ExecAsciiAdjust(opcode, add: false),
+            0x98 => ExecCbw(opcode),
+            0x99 => ExecCwd(opcode),
+            0xD4 => ExecAam(opcode),
+            0xD5 => ExecAad(opcode),
             0x9D => ExecPopf(opcode),
             _ => null,
         };
@@ -136,24 +145,25 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             return handled.Value;
         }
 
-        // Vector normally: push FLAGS, CS, return address (after the full instruction), then load
-        // CS:IP from the IVT and clear IF/TF (ADR-0003 §2). SP wraps at 16 bits.
-        ushort returnIp = (ushort)(immIp + 1);
-        Push(atInt.Flags);
-        Push(atInt.CS);
+        // Vector normally, returning after the full instruction.
+        VectorInterrupt(vector, atInt.Flags, (ushort)(immIp + 1));
+        return new StepResult(StepOutcome.Executed, opcode.OpcodeIp, opcode.OpcodeIp, HaltReason.None, FlagBit.None);
+    }
+
+    /// <summary>Real 8086 vectoring (ADR-0003 §2): push FLAGS, CS and the return address, load
+    /// CS:IP from the IVT and clear IF/TF. SP wraps at 16 bits.</summary>
+    private void VectorInterrupt(byte vector, ushort flagsToPush, ushort returnIp)
+    {
+        Push(flagsToPush);
+        Push(_state.CS);
         Push(returnIp);
 
         _state = _state with
         {
             IP = memory.Read16(0, (ushort)(vector * 2)),
             CS = memory.Read16(0, (ushort)((vector * 2) + 2)),
+            Flags = (ushort)(flagsToPush & ~(ushort)(FlagBit.IF | FlagBit.TF)),
         };
-        _state = _state with
-        {
-            Flags = (ushort)(_state.Flags & ~(ushort)(FlagBit.IF | FlagBit.TF)),
-        };
-
-        return new StepResult(StepOutcome.Executed, opcode.OpcodeIp, opcode.OpcodeIp, HaltReason.None, FlagBit.None);
     }
 
     private void Push(ushort value)

@@ -4,17 +4,35 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-015 Multiply, divide, BCD and conversions
+## Next: TASK-016 Control transfer and interrupts
 
 | Field | Value |
 |---|---|
-| Status | **Ready** (approved; TASK-011 Done) |
+| Status | **Ready** (approved; TASK-015 Done) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Definition | `docs/05-planning/backlog.md` § TASK-015 (goal, scope, tests, DoD) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-015`) |
-| Depends on | TASK-011 (Done ✔) |
+| Definition | `docs/05-planning/backlog.md` § TASK-016 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-016`) |
 
+**Also eligible:** TASK-060 (WPF shell and layout, depends only on TASK-001), the first visible window.
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-015 Multiply, divide, BCD and conversions (Done 2026-10-28 10:25 +0500, Claude Code (Opus 5.5))
+- Started by OpenCode (GLM-5.3-Flash Free) on 2026-10-27 (oracle analysis scripts `poc/task015-*.ps1`, untracked, no engine code); OpenCode
+  hit its usage limit and the user asked Claude Code to continue ("please continue opencode task its limit reach").
+- `src/AssemblyStudio.Engine.I8086/Cpu8086.MulDiv.cs` (new partial class): MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD in new `Cpu8086.MulDiv.cs`. Division follows the 8086 CORD microcode loop, so divide-error FLAGS pushed on the stack match the real chip; divide error (overflow, divisor 0, AAM 0) goes through the router as vector 0, else real vectoring with the 8086 return address (next instruction). 8086 quirks oracle-verified: IDIV rejects -128/-32768, REP negates the IDIV quotient, AAA/AAS adjust AL and AH separately, DAA/DAS high-digit threshold 9Fh when AF was set, DAS low-digit borrow does not set CF. Undefined-flag masks reported per step. 16 oracle files at 100% (229 total) + 21 hand tests incl. AC-031 engine part.
+- `Cpu8086.cs`: dispatch for 27/2F/37/3F/98/99/D4/D5; INT vectoring factored into `VectorInterrupt(vector, flagsToPush, returnIp)` (shared by
+  INT imm8 and the divide error). `Cpu8086.Logic.cs`: `ExecF6F7Group` arms 4-7. The undocumented F6/F7 /1 TEST alias still halts (FR-037).
+- Tests: `MulDivBcdTests.cs` (21); the TASK-014 test that expected MUL to halt was removed (MUL is now in scope).
+- No new dependencies. Release build 0 warnings, 0 errors. Solution tests 425/425 passed.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Claude Code (Opus 5.5) (taken over from OpenCode (GLM-5.3-Flash Free) on the user's request) |
+| Started / finished | 2026-10-27 (OpenCode, time not recorded) / 2026-10-28 10:25 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-015 |
 
 ---
 

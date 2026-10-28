@@ -413,7 +413,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done (2026-10-28 10:25 +0500, Claude Code (Opus 5.5); analysis started by OpenCode (GLM-5.3-Flash Free)) |
 | Milestone | M1 |
 | Requirements | FR-036, FR-038, FR-048, NFR-017 |
 | Decisions / design | ADR-0003 |

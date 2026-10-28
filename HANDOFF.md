@@ -5,40 +5,39 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-27 16:12 +0500 by OpenCode (GLM-5.3-Flash Free), after completing TASK-014; Git-state line updated after the push (16:30 +0500) |
-| Current task | **TASK-015 Multiply, divide, BCD and conversions: `Approved`, not started, no owner** |
-| Last completed | TASK-014 Logic, shift and rotate instructions (Done 2026-10-27 16:12 +0500) |
-| Git state | HEAD `dca31a0` "docs: update HANDOFF.md with final TASK-014 commit state", **pushed to origin/master** (2026-10-27 16:30 +0500; includes TASK-013 `ccd2595`/`9082aca`/`ef7bc8c`, TASK-014 `84077c5`/`33a234f`). Untracked, not ours: `.idea/vcs.xml`, `.opencode/`, `opencode.jsonc` |
+| Written | 2026-10-28 10:25 +0500 by Claude Code (Opus 5.5), after completing TASK-015 (taken over from OpenCode on the user's request) |
+| Current task | **TASK-016 Control transfer and interrupts: `Approved`, not started, no owner** (TASK-060 WPF shell also eligible) |
+| Last completed | TASK-015 Multiply, divide, BCD and conversions (Done 2026-10-28 10:25 +0500) |
+| Git state | HEAD `ddc5fe5` "SDLC-009: OpenCode support (D-016 approved)", not pushed (origin/master at `357251e`). TASK-015 changes **uncommitted** (see `WORK_LOG.md` for the file list). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-27 16:12 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` -> **389/389 passed** (2026-10-27 16:12 +0500); engine test project 330/330 - **all 213 in-scope SingleStepTests oracle files pass 100%** (71 TASK-012 data transfer + 84 TASK-013 arithmetic + 58 TASK-014 logic/shift/rotate) + 107 hand/other tests.
+- `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-28, this session).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` -> **425/425 passed** (2026-10-28, this session); **229 SingleStepTests oracle files at 100%** (71 TASK-012 + 84 TASK-013 + 58 TASK-014 + 16 TASK-015).
 
 ## Changes since the previous handoff
-- TASK-014 in new `Cpu8086.Logic.cs`: AND/OR/XOR rm/r families (bases 08/20/30 - reuse the TASK-013 `Arith` core, `opcode>>3` maps onto `ArithKind`) and acc-imm (0C/24/34); TEST (84/85, A8/A9, F6/F7 arm 0 - AND flags, result discarded, AF untouched); NOT (F6/F7 arm 2, no flags); shifts/rotates D0-D3 all /reg via `ExecShiftGroup`.
-- 8086 count semantics: count NOT masked, count 0 = full no-op (not even flags), OF only for count 1 (oracle-verified: ROL/RCL/SHL = MSB(result)^CF; ROR = bit7^bit6 of result; RCR = MSB(orig)^MSB(result); SHR = MSB(orig); SAR = 0), count>1 leaves OF untouched, rotates never touch SF/ZF/PF/AF.
-- **Undocumented D0-D3 /6 = SETMO** (the backlog's "/6 handling decision"): operand becomes all ones (0xFF/0xFFFF), no-op at CL count 0, flags = real chip's raw values (SF=1, ZF=0, PF=1, CF=OF=AF=0; metadata 0xF72A reports them undefined).
-- `ExecNeg` refactored to `ExecNegCore(m, cursor, wide)`; new `ExecF6F7Group` dispatches arms 0/2/3. The undocumented F6/F7 /1 TEST alias and MUL/DIV arms 4-7 halt unsupported (FR-037; /1 not in approved scope).
-- Oracle harness extended by 58 TASK-014 files - all pass on the first run; 23 hand tests in new `LogicShiftRotateTests.cs` (3 of my hand-computed expectations were wrong initially - XOR bytes, AND imm value, RCR direction - engine was right in all three).
+- SDLC-009 (OpenCode support, D-016) committed as `ddc5fe5`. `.opencode/` and `opencode.jsonc` are now tracked project files.
+- TASK-015 in new `Cpu8086.MulDiv.cs`: MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD.
+- Division follows the 8086 CORD microcode loop (`Cord`), so the FLAGS pushed by a divide error match the real chip. Divide error (quotient overflow, divisor 0, AAM 0): `IInterruptRouter.Intercept(0, state-at-the-instruction)`; with no handler, real vectoring that pushes the *next* instruction's IP (8086).
+- Oracle-verified 8086 quirks: IDIV rejects -128/-32768; REP prefix negates the IDIV quotient; AAA/AAS adjust AL and AH separately; DAA/DAS high-digit threshold is 9Fh when AF was set on entry; DAS low-digit borrow does not set CF.
+- INT vectoring factored into `VectorInterrupt(vector, flagsToPush, returnIp)`; TASK-016's INT 3/INTO/IRET should reuse it.
+- TASK-015 steps report undefined-flag masks (`StepResult.UndefinedFlags`); TASK-012..014 still report `None`.
 
 ## Failed tests and known issues
-- None failing. Notes: F6/F7 arms 1/4/5/6/7 halt until TASK-015 (multiply/divide); FF arms 2/3/4/5/7 halt until their tasks; D0-D3 /6 SETMO intentionally executes as the undocumented real-chip behavior, not a halt.
+- None failing. F6/F7 /1 (undocumented TEST alias) and FF arms 2/3/4/5/7 halt until their tasks. IMUL with a REP prefix is not negated (no oracle evidence; the oracle has no such cases).
 
 ## Decisions and constraints to respect
-- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-015. Core has **no project references**; Engine.I8086 references only Core (Iced arrives with TASK-019).
+- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016. Core has **no project references**; Engine.I8086 references only Core.
 - Engine API exposes snapshots, not live state (ADR-0002/0003). Decode is pure: halt restores CS:IP, nothing modified (FR-037).
-- Undefined flags: deterministic value + reported mask (ADR-0003 A3) - the oracle harness masks via metadata.json (per-opcode `flags-mask`, reg-subkey when present). Pinned NASM 3.02 per ADR-0005.
-- `Cpu8086` is not thread-safe; the debug-session worker thread is the only caller (ADR-0004 A2).
-- 8-bit register encoding: index 0-3 -> AL,CL,DL,BL; 4-7 -> AH,CH,DH,BH. Sreg field aliases `reg&3`.
-- TASK-014 quirks still in force (from TASK-012/013): PUSH SP pushes decremented SP; POP SP loads popped value; POPF `(popped|0xF002)&~0x0028`.
-- Hand-test helper pattern: `NewCpu` needs TWO overloads (`NewCpu(params byte[] code)` and `NewCpu(Core.CpuState state, params byte[] code)`) - a single optional+params signature fails overload resolution (CS1503/CS0019).
+- Undefined flags: deterministic value + reported mask (ADR-0003 A3); the oracle harness masks via metadata.json.
+- `Cpu8086` is not thread-safe (ADR-0004 A2). Runtime error policy for INT 0 with the default vector belongs to TASK-032.
+- Hand-test helper pattern: `NewCpu` needs two overloads (see existing test files).
 
 ## Exact next action
-1. Optional: push the TASK-013 + TASK-014 commits to origin (user asks; push only on user request).
-2. User runs `/assembly-implement TASK-015` (multiply, divide, BCD and conversions - F6/F7 arms 4-7, AAS/AAD/AAM/DAA/DAS etc. per the backlog scope; the `ExecF6F7Group` dispatcher is the seam for arms 4-7).
+1. User decides on committing the TASK-015 changes (and pushing `ddc5fe5` + the TASK-015 commit).
+2. User runs `/assembly-implement TASK-016` (control transfer and interrupts), or `/assembly-implement TASK-060` for the first visible WPF window.
 3. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,
 `.claude/skills/**`, `.agent/**`, all root shared memory files (update them per protocol, never
-regenerate them), `WORK_LOG.md` history (append only), and the user's `.idea/`, `.mcp.json`, and `.opencode/`.
+regenerate them), `WORK_LOG.md` history (append only), and the user's `.idea/` and `.mcp.json`.

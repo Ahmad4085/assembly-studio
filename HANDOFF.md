@@ -8,7 +8,7 @@
 | Written | 2026-10-28 15:28 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-019 |
 | Current task | **TASK-020 Engine conformance and performance gate: `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
 | Last completed | TASK-019 Disassembler adapter (Iced) (Done 2026-10-28 15:24 +0500) |
-| Git state | HEAD `e43d4a0` (not pushed). TASK-019 changes uncommitted (ready to commit on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `c2cdd8d` (not pushed). TASK-019 is committed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 15:13 +0500).

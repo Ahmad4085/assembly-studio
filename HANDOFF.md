@@ -8,7 +8,7 @@
 | Written | 2026-10-28 11:31 +0500 by Claude Code (Opus 5.5), after completing TASK-060 |
 | Current task | **TASK-016 Control transfer and interrupts: `Approved`, not started, no owner** (TASK-061 themes also eligible) |
 | Last completed | TASK-060 WPF shell and layout (Done 2026-10-28 11:31 +0500) |
-| Git state | HEAD `d56a1b4` (TASK-015 `37e7422` + HANDOFF), **not pushed** (origin/master at `357251e`). TASK-060 changes **uncommitted**. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
+| Git state | TASK-060 committed as `ff88c29` (on the user's request, 2026-10-28) after `d56a1b4`/`37e7422`/`ddc5fe5`; this HANDOFF update is a follow-up docs commit. **Not pushed** (origin/master at `357251e`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-28 11:31 +0500).
@@ -34,7 +34,7 @@
 - `Cpu8086` is not thread-safe (ADR-0004 A2). Runtime error policy for INT 0 belongs to TASK-032.
 
 ## Exact next action
-1. Optional: commit TASK-060 and push (`ddc5fe5`, `37e7422`, `d56a1b4`, plus TASK-060) — only on the user's request.
+1. Optional: push `ddc5fe5`, `37e7422`, `d56a1b4`, `ff88c29` and the HANDOFF commit — only on the user's request.
 2. User runs `/assembly-implement TASK-016` (engine) or `/assembly-implement TASK-061` (themes and contrast test).
 3. In parallel (user action): TASK-006 test VMs.
 

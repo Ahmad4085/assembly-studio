@@ -4,17 +4,38 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-017 String instructions and REP prefixes
+## Next: TASK-018 Flag ops, misc and the full opcode table
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (approved) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Definition | `docs/05-planning/backlog.md` § TASK-017 (goal, scope, tests, DoD) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-017`) |
+| Definition | `docs/05-planning/backlog.md` § TASK-018 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-018`) |
 
 **Also eligible:** TASK-061 Themes, tokens and contrast test (depends on TASK-060, Done); TASK-067 Settings service (also needs TASK-040).
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-017 String instructions and REP prefixes (Done 2026-10-28 13:28 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented in `src/AssemblyStudio.Engine.I8086/Cpu8086.Strings.cs` and `Cpu8086.cs`:
+  - MOVSB/MOVSW (A4/A5), CMPSB/CMPSW (A6/A7), STOSB/STOSW (AA/AB), LODSB/LODSW (AC/AD), SCASB/SCASW (AE/AF).
+  - Prefix support: F2 (REPNZ / REPNE) and F3 (REP / REPZ / REPE).
+  - Segment rules: Destination is always [ES:DI] (unoverridable); Source defaults to [DS:SI] and respects segment overrides (CS/DS/ES/SS).
+  - Direction flag: DF=0 increments SI/DI by 1 (byte) or 2 (word); DF=1 decrements SI/DI by 1 (byte) or 2 (word); 16-bit address wrap.
+  - Flags: MOVS, STOS, LODS leave flags unchanged; CMPS and SCAS compute arithmetic flags via subtraction (CF, AF, ZF, SF, PF, OF).
+  - Loop behavior: CX=0 with REP prefix is a no-op (advances IP past instruction without touching registers, memory or flags); REPE stops on mismatch (ZF=0); REPNE stops on match (ZF=1); without REP prefix executes single iteration without touching CX.
+  - Documented decision on per-iteration step semantics: In `ICpu.StepInstruction`, an instruction with a REP prefix executes as a single, complete instruction step until termination, advancing IP past the instruction.
+- Tests: 10 SingleStepTests oracle files at 100% (A4, A5, A6, A7, AA, AB, AC, AD, AE, AF; 276 oracle files total) + 16 hand tests in `StringInstructionTests.cs`; all 466 engine tests passed.
+- Release build 0 warnings, 0 errors.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 13:05 / 2026-10-28 13:28 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-017 |
 
 ---
 

@@ -749,3 +749,22 @@
 - **Unresolved issues:** none for TASK-016.
 - **Next step:** `/assembly-implement TASK-017` (string instructions and REP prefixes) or `/assembly-implement TASK-061` (themes).
 
+
+### 2026-10-28 13:05 – 13:28 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-017 String instructions and REP prefixes
+- **Summary:** Ran `/assembly-implement TASK-017` (String instructions and REP prefixes). Implemented all 8086 string instructions and repeat prefixes in new partial class `src/AssemblyStudio.Engine.I8086/Cpu8086.Strings.cs` and `Cpu8086.cs`:
+  - MOVSB/MOVSW (A4/A5), CMPSB/CMPSW (A6/A7), STOSB/STOSW (AA/AB), LODSB/LODSW (AC/AD), SCASB/SCASW (AE/AF).
+  - Prefix support: F2 (REPNZ / REPNE) and F3 (REP / REPZ / REPE).
+  - Segment rules: Destination is always [ES:DI] (unoverridable); Source defaults to [DS:SI] and respects segment overrides (CS/DS/ES/SS).
+  - Direction flag: DF=0 increments SI/DI by 1 (byte) or 2 (word); DF=1 decrements SI/DI by 1 (byte) or 2 (word); 16-bit address wrap.
+  - Flags: MOVS, STOS, LODS leave flags unchanged; CMPS and SCAS compute arithmetic flags via subtraction (CF, AF, ZF, SF, PF, OF).
+  - Loop behavior: CX=0 with REP prefix is a no-op (advances IP past instruction without touching registers, memory or flags); REPE stops on mismatch (ZF=0); REPNE stops on match (ZF=1); without REP prefix executes single iteration without touching CX.
+  - Documented decision on per-iteration step semantics: In `ICpu.StepInstruction`, an instruction with a REP prefix executes as a single, complete instruction step until termination, advancing IP past the instruction.
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/Cpu8086.Strings.cs` (new), `src/AssemblyStudio.Engine.I8086/Cpu8086.cs`, `tests/AssemblyStudio.Engine.I8086.Tests/StringInstructionTests.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/SingleStepOracleTests.cs`, `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 13:20 +0500).
+  - `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **466/466 passed** (2026-10-28 13:23 +0500; all 276 SingleStepTests oracle files pass 100%, 16 hand tests passed).
+  - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 13:23 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **564/565 passed** (1 failure: pre-existing DEF-001 App smoke test in background runner; 2026-10-28 13:27 +0500).
+- **Git state after:** uncommitted changes for TASK-017 (commit only when user requests). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-017. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-018` (Flag ops, misc and full opcode table) or `/assembly-implement TASK-061` (themes).

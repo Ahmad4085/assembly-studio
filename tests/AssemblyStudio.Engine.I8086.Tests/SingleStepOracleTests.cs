@@ -73,6 +73,10 @@ public class SingleStepOracleTests
         "C2.json.gz", "C3.json.gz", "CA.json.gz", "CB.json.gz",
         "FF.2.json.gz", "FF.3.json.gz", "FF.4.json.gz", "FF.5.json.gz",
         "CC.json.gz", "CD.json.gz", "CE.json.gz", "CF.json.gz",
+        // TASK-017: string instructions and REP prefixes (MOVS, CMPS, STOS, LODS, SCAS)
+        "A4.json.gz", "A5.json.gz", "A6.json.gz", "A7.json.gz",
+        "AA.json.gz", "AB.json.gz", "AC.json.gz", "AD.json.gz",
+        "AE.json.gz", "AF.json.gz",
     ]);
 
     private static readonly string[] RegNames = ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di", "cs", "ds", "es", "ss", "ip", "flags"];

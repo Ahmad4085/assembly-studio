@@ -45,7 +45,7 @@
 | TASK-014 | Logic, shift and rotate instructions | M1 | TASK-011 | M | FR-036, FR-048, NFR-017 | Done |
 | TASK-015 | Multiply, divide, BCD and conversions | M1 | TASK-011 | M | FR-036, FR-038, FR-048, NFR-017 | Done |
 | TASK-016 | Control transfer and interrupts | M1 | TASK-011 | M | FR-036, FR-038, NFR-017 | Done |
-| TASK-017 | String instructions and REP prefixes | M1 | TASK-011 | M | FR-036, NFR-017 | Approved |
+| TASK-017 | String instructions and REP prefixes | M1 | TASK-011 | M | FR-036, NFR-017 | Done |
 | TASK-018 | Flag ops, misc and the full opcode table | M1 | TASK-012, TASK-013, TASK-014, TASK-015, TASK-016, TASK-017 | L | FR-036, FR-037, FR-045, NFR-017 | Approved |
 | TASK-019 | Disassembler adapter (Iced) | M1 | TASK-010 | M | FR-053, FR-058 | Approved |
 | TASK-020 | Engine conformance and performance gate | M1 | TASK-018, TASK-019 | L | NFR-002, NFR-003, NFR-016, NFR-017, FR-036 | Approved |
@@ -469,7 +469,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done (2026-10-28 13:28 +0500, Antigravity (IDE, Gemini 3.8 Flash)) |
 | Milestone | M1 |
 | Requirements | FR-036, NFR-017 |
 | Decisions / design | ADR-0003 |

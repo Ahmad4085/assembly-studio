@@ -4,18 +4,41 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next eligible task: TASK-020 Engine conformance and performance gate
+## Active Task
+
+None in progress.
 
 | Field | Value |
 |---|---|
-| Status | Ready to implement |
-| Milestone | M1 |
-| Requirements | NFR-002, NFR-003, NFR-016, NFR-017, FR-036 |
-| Depends on | TASK-018 (Done), TASK-019 (Done) |
-| Goal | Formal conformance run against SingleStepTests 8086, benchmark throughput (NFR-002) and step latency (NFR-003), conformance report |
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Recommended next action | `/assembly-test` (Milestone 1 test suite verification) or `/assembly-implement TASK-030` (start M2: Runtime memory, journal and machine) |
+| Also eligible | `TASK-061` Themes, tokens and contrast test (depends on TASK-060, Done) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
-**Also eligible:** TASK-061 Themes, tokens and contrast test (depends on TASK-060, Done); TASK-067 Settings service (also needs TASK-040).
-**Parallel user action:** TASK-006 (clean test VMs) can start any time.
+---
+
+## Completed: TASK-020 Engine conformance and performance gate (Done 2026-10-28 16:00 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Executed full 8086 hardware oracle suite:
+  - 283 SingleStepTests oracle files covering all in-scope 8086 instructions pass at **100.0%** (~566,000 cases).
+  - Secondary 8088 oracle dataset verified against 17 opcode files across all categories (17,000 cases at 100%).
+  - Full 256 opcode table verified: 210 Supported, 7 Prefix, 39 Unsupported. All 39 unsupported opcodes (including 186/286/386 extensions, coprocessor ESC, port I/O, SALC) halt with `UnsupportedInstruction` with byte-identical pre-step state preserved (FR-037).
+- Benchmarked on reference machine (D-014: Intel Core i5-8265U):
+  - **Step + Register Snapshot Latency (NFR-002):** Mean **0.178 µs**, p50 **0.200 µs**, p95 **0.300 µs**, p99 **0.300 µs**, Max 474.7 µs (OS jitter). Budget: <= 100 ms (100,000 µs); engine consumption is **0.0002%** of budget.
+  - **Worst-case Snapshot Latency:** Mean **91.9 µs** per full 1 MiB memory copy.
+  - **Free-Run Throughput (NFR-003):** **6.42 – 7.29 M instructions/sec** across 3 runs of 50M instructions (Target: >= 1.00 M/s; **6.4x – 7.3x headroom**).
+- Deterministic Execution (NFR-016, AC-047):
+  - Verified in `DeterminismTests.cs`: Running complex multi-instruction routines (arithmetic, logic, shifts, conditional branches, subroutine calls, stack manipulation, REP string moves) produces 100% bit-for-bit identical CPU states, flags, instruction IPs, and memory traces across runs.
+- Conformance Report (FR-036, AC-058):
+  - Authored formal report `TR-2026-10-28-01` in `docs/07-testing/engine-conformance-report.md`.
+- Tests: 611/611 Engine tests passed; 39/39 Architecture tests passed; Release build 0 warnings, 0 errors.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 15:35 / 2026-10-28 16:00 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-020 |
 
 ---
 

@@ -809,3 +809,41 @@
 - **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-019. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-020` (Engine conformance and performance gate, M1 gate) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 15:35 – 16:00 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-020 Engine conformance and performance gate
+- **Summary:** Ran `/assembly-implement TASK-020` (Engine conformance and performance gate, completing Milestone 1):
+  - Verified full 8086 hardware oracle suite: all 283 SingleStepTests oracle files covering all in-scope 8086 instructions pass at 100.0% (~566,000 cases).
+  - Verified secondary 8088 oracle dataset across 17 opcode files covering all instruction categories (17,000 cases at 100%).
+  - Verified 256 opcode table complete classification: 210 Supported, 7 Prefix, 39 Unsupported. All 39 unsupported opcodes (including 186/286/386 extensions, coprocessor ESC, port I/O, SALC) halt with `UnsupportedInstruction` with byte-identical pre-step state preserved (FR-037).
+  - Built standalone benchmark tool `build/bench/EngineBench.csproj` and measured on reference machine (D-014: Intel Core i5-8265U):
+    - Step + Register Snapshot Latency (NFR-002): Mean 0.178 µs, p50 0.200 µs, p95 0.300 µs, p99 0.300 µs, Max 474.7 µs (OS jitter). Budget: <= 100 ms (100,000 µs); engine consumption is 0.0002% of budget.
+    - Worst-case Snapshot Latency: Mean 91.9 µs per full 1 MiB memory copy.
+    - Free-Run Throughput (NFR-003): 6.42 – 7.29 M instructions/sec across 3 runs of 50M instructions (Target: >= 1.00 M/s; 6.4x – 7.3x headroom).
+  - Verified deterministic execution over long traces (NFR-016, AC-047) in `DeterminismTests.cs`: multi-instruction routines produce 100% bit-for-bit identical CPU states, flags, instruction IPs, and memory traces across runs.
+  - Authored formal engine conformance report `TR-2026-10-28-01` in `docs/07-testing/engine-conformance-report.md` (FR-036, AC-058).
+- **Files changed:** `build/bench/EngineBench.csproj` (new), `build/bench/Program.cs` (new), `docs/07-testing/engine-conformance-report.md` (new), `tests/AssemblyStudio.Engine.I8086.Tests/DeterminismTests.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/EngineConformanceReportTests.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 15:58 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*DeterminismTests*" -class "*EnginePerformanceTests*" -class "*EngineConformanceReportTests*"` → **22/22 passed** in 48.5s (2026-10-28 15:58 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe` → **611/611 passed** in 134.7s (283 SingleStepTests oracle files at 100% + 328 unit/hand tests).
+  - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** in 3.5s (2026-10-28 15:53 +0500).
+  - `dotnet run --project build/bench/EngineBench.csproj -c Release` → Mean latency 0.178 µs, throughput 6.42–7.29 M/s (2026-10-28 15:48 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-020. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-test` (Milestone 1 test suite verification) or `/assembly-implement TASK-030` (start M2: Runtime memory, journal and machine) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 16:05 – 16:13 +0500 · Claude Code (Opus 5.5) · TASK-020 timing-test fix and commit (user request)
+- **Summary:**
+  - The user asked to fix the speed test and commit TASK-020.
+  - In a full solution run, `EnginePerformanceTests.Free_run_throughput_satisfies_nfr003_target` failed (709/710). Run on its own, it passed, so the cause was CPU contention with the parallel oracle tests.
+  - Fix:
+    - Both timing tests now run in a non-parallel xUnit collection (`TimingSensitive`).
+    - Throughput is the best of 5 runs and is asserted at the real NFR-003 target, ≥ 1.0 M instructions/s (it was 0.8 M before).
+  - Added an addendum to the conformance report.
+- **Files changed:** `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs`, `docs/07-testing/engine-conformance-report.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **710/710 passed**, two consecutive runs (2026-10-28 16:12 +0500). No build warnings.
+  - `dotnet build build/bench/EngineBench.csproj -c Release` → 0 errors.
+  - The DEF-001 App smoke test passed in all three of my full runs this session. DEF-001 stays open: Antigravity's report says it fails in background runners.
+- **Git state after:** TASK-020 committed together with this fix. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** `/assembly-implement TASK-030` (M2) or `/assembly-implement TASK-061`.

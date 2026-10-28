@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-28 14:06 +0500 by Antigravity (TASK-018 done) |
-| Current phase | **6 Implementation**, milestone M0 (TASK-006 user action pending) and M1 (in progress) |
-| Current milestone | M1 8086 engine (headless) — in progress; M0 Foundation nearly complete (TASK-006 user action pending) |
-| Active task | None in progress. Next: M1 `TASK-019` Disassembler adapter (Iced) (`Ready`); `TASK-061` (themes) also eligible. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-28 16:13 +0500 by Claude Code (Opus 5.5) (TASK-020 timing-test fix, committed) |
+| Current phase | **6 Implementation**, milestone M1 completed, M2 start (or M4 in progress) |
+| Current milestone | M1 8086 engine (headless) — Complete; M2 Runtime, DOS and toolchain starting; M0 Foundation nearly complete (TASK-006 user action pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-030` Runtime memory, journal and machine; M4 `TASK-061` Themes, tokens and contrast test. Recommended: `/assembly-test` milestone run. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-019` (disassembler) or `TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-test` (milestone verification) or `/assembly-implement TASK-030` (runtime memory). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-020 Engine conformance and performance gate | 2026-10-28 16:00 +0500 | Conformance report `docs/07-testing/engine-conformance-report.md` (TR-2026-10-28-01); full 283 SingleStepTests oracle files pass at 100.0% (~566,000 cases); secondary 8088 oracle suite verified; complete 256-opcode table classified (210 Supported, 7 Prefix, 39 Unsupported); NFR-002 step+snapshot latency mean 0.178 µs (p95 0.300 µs, budget <=100 ms); worst-case 1 MiB memory snapshot copy 91.9 µs; NFR-003 free-run throughput 6.42–7.29 M instr/s (target >=1.00 M/s); NFR-016 bit-for-bit execution determinism over long traces verified; 611/611 Engine tests pass |
 | TASK-019 Disassembler adapter (Iced) | 2026-10-28 15:24 +0500 | `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs` implementing `IDisassembler` via `Iced 1.21.0` (MIT) with NASM formatter (space-after-comma, lowercase hex, explicit segment display), 8086-only filtering rejecting 186+, 286+, 386+ opcodes and prefixes (FS, GS, 0x66, 0x67) and undocumented SALC (0xD6); ADR-0003 unverified claims resolved in `docs/decisions/ADR-0003-execution-engine.md` and verified in tests; 76 tests in `IcedDisassemblerTests` (including instruction length agreement across thousands of SingleStepTests oracle cases); solution tests 687/688 passed (1 pre-existing DEF-001 App smoke test failure) |
 | TASK-018 Flag ops, misc and the full opcode table | 2026-10-28 14:06 +0500 | CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB), HLT (F4, halts HaltReason.Halt), WAIT (9B, no-op) in `Cpu8086.FlagsMisc.cs` and `Cpu8086.cs`; comprehensive `OpcodeTable.cs` classifying all 256 opcode bytes; reference docs in `docs/06-implementation/opcode-support.md`; 7 SingleStepTests oracle files at 100% (283 total) + 40 hand tests in `FlagsMiscAndOpcodeTableTests` (including exhaustive 256 opcode table agreement and ModR/M group arm tests); 513/513 engine tests passed |
 | TASK-017 String instructions and REP prefixes | 2026-10-28 13:28 +0500 | MOVSB/MOVSW (A4/A5), CMPSB/CMPSW (A6/A7), STOSB/STOSW (AA/AB), LODSB/LODSW (AC/AD), SCASB/SCASW (AE/AF) with F2/F3 prefixes in `Cpu8086.Strings.cs`; unoverridable ES:DI destination, overridable DS:SI source; DF=0/1 pointer delta with 16-bit wrapping; CX=0 no-op; REPE/REPNE early loop termination; per-iteration step semantics decision documented; 10 SingleStepTests oracle files at 100% (276 total) + 16 hand tests in `StringInstructionTests`; 466/466 engine tests passed |
@@ -80,8 +81,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-28 15:24 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-28 15:24 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **687/688 passed** (xunit.v3 MTP runner; 283 SingleStepTests oracle files at 100%; 589/589 Engine tests pass; 1 failure in App smoke test: DEF-001) |
+| Product build (2026-10-28 15:58 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-28 15:58 +0500) | `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **611/611 passed** (283 SingleStepTests oracle files at 100%; 328 unit/hand/oracle/performance/determinism tests); solution tests 709/710 passed (1 pre-existing DEF-001 App smoke test failure). **2026-10-28 16:13 +0500 (Claude Code):** after the timing-test fix, `dotnet test --solution AssemblyStudio.slnx -c Release` → **710/710 passed** in two consecutive runs |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

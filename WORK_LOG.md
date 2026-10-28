@@ -847,3 +847,68 @@
   - The DEF-001 App smoke test passed in all three of my full runs this session. DEF-001 stays open: Antigravity's report says it fails in background runners.
 - **Git state after:** TASK-020 committed together with this fix. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** `/assembly-implement TASK-030` (M2) or `/assembly-implement TASK-061`.
+
+### 2026-10-28 16:30 – 16:40 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-030 Runtime memory, journal and machine
+- **Summary:** Ran `/assembly-implement TASK-030` (Runtime memory, journal and machine; kicks off Milestone 2):
+  - Implemented `RealModeMemory` in `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs`:
+    - 1 MiB physical address space (`1024 * 1024` bytes, NFR-015, FR-033).
+    - 20-bit physical address wrapping: `((segment << 4) + offset) & 0xFFFFF` (FR-059, ADR-0004 §2).
+    - 16-bit word segment offset wrap: `Read16` and `Write16` wrap `(ushort)(offset + 1)` within the segment (e.g. at 0xFFFF).
+    - Per-step write journal tracking `MemoryChange(PhysicalAddress, OldValue)`.
+    - `TakeJournal()` atomically snapshots and clears the active journal.
+    - `Rollback(changes)` and `RollbackJournal()` revert writes in reverse chronological order restoring pre-write values without generating new journal entries (FR-056).
+    - `ExtractChangedRanges(changes)` extracts and merges contiguous, non-overlapping sorted `AddressRange` spans with deduplication.
+    - Helpers: `ReadPhysical`, `WritePhysical`, `LoadBytes` (unjournaled bulk loading), `CopyTo`, and `Reset`.
+  - Implemented `AddressRange` in `src/AssemblyStudio.Runtime/Memory/AddressRange.cs`.
+  - Implemented `NullConsoleDevice` in `src/AssemblyStudio.Runtime/Console/NullConsoleDevice.cs` as a safe fallback.
+  - Implemented `Machine` in `src/AssemblyStudio.Runtime/Machine.cs` implementing `IMachine` composing `ICpu`, `IMemory`, `IConsoleDevice`, and optional `IInterruptRouter` and `IOsServices`.
+  - Authored 30 unit tests in `tests/AssemblyStudio.Runtime.Tests/RealModeMemoryTests.cs` and `MachineTests.cs`.
+- **Files changed:** `src/AssemblyStudio.Runtime/Memory/AddressRange.cs` (new), `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs` (new), `src/AssemblyStudio.Runtime/Console/NullConsoleDevice.cs` (new), `src/AssemblyStudio.Runtime/Machine.cs` (new), `tests/AssemblyStudio.Runtime.Tests/RealModeMemoryTests.cs` (new), `tests/AssemblyStudio.Runtime.Tests/MachineTests.cs` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 16:38 +0500).
+  - `& ...\AssemblyStudio.Runtime.Tests.exe` → **30/30 passed** in 0.54s (2026-10-28 16:38 +0500).
+  - `& ...\AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 0.53s (2026-10-28 16:38 +0500).
+  - Core unit test suite executables (Core, Os.Dos, Nasm, Debugging, Content) → **18/18 passed** (2026-10-28 16:38 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*DeterminismTests*" -class "*EnginePerformanceTests*" -class "*IcedDisassemblerTests*"` → **80/80 passed** in 12.1s (2026-10-28 16:39 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-030. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-031` (.COM loader and PSP) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 16:45 – 16:55 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-031 .COM loader and PSP
+- **Summary:** Ran `/assembly-implement TASK-031` (.COM loader and PSP):
+  - Implemented `ProgramSegmentPrefix` in `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs`:
+    - Full 256-byte (0x100) structure initialized at `pspSegment:0000h` per FR-034 and research R-DOS §3:
+      - 00h: `CD 20` (INT 20h termination).
+      - 02h: Top of memory segment (`0x1800` for 64 KiB block).
+      - 05h: CALL far to `PSP:0050h` (`9A 50 00 [psp_lo] [psp_hi]`).
+      - 0Ah..15h: Saved INT 22h, 23h, 24h vectors copied from IVT.
+      - 16h: Parent PSP segment (`pspSegment`).
+      - 18h..2Bh: Job file table (20 bytes: handles 0..4 open, 5..19 unused 0xFF).
+      - 2Ch: Environment segment (`0x0000`).
+      - 50h: `CD 21 CB` (`INT 21h; RETF`).
+      - 5Ch..6Bh: Unopened FCB 1 (zeroed).
+      - 6Ch..7Fh: Unopened FCB 2 (zeroed).
+      - 80h..FFh: Command tail / DTA (`00 0D` when empty; length byte, characters, CR terminator when provided; max 126 chars).
+  - Implemented `ComLoader` and `ComLoadResult` in `src/AssemblyStudio.Runtime/Loading/`:
+    - Places PSP at `0x0800`.
+    - Loads binary image at `0x0800:0100h`.
+    - Enforces maximum allowable .COM image size: 65,278 bytes (`0xFEFE = 0xFFFE - 0x0100`), ensuring the program cannot overwrite the stack return word.
+    - Stores word `0000h` at `SS:SP` (`0x0800:FFFEh`), providing the return address for near `RET` to `PSP:0000h` (`INT 20h`) to terminate cleanly (AC-064).
+    - Clears memory journal after load so initial baseline state generates zero change highlights (FR-056).
+    - Initializes CPU registers: `CS=DS=ES=SS=0x0800`, `IP=0x0100`, `SP=0xFFFE`, `AX=BX=CX=DX=SI=DI=BP=0x0000`, `Flags=0x0002` (AC-021, ADR-0004 §2).
+  - Authored 9 unit tests in `tests/AssemblyStudio.Runtime.Tests/ComLoaderTests.cs`:
+    - AC-021 verified verbatim.
+    - Byte-level PSP verification against the research table across all 14 fields.
+    - Command tail formatting, CR termination, and 126-char truncation.
+    - IVT vector persistence.
+    - Near RET to INT 20h termination path.
+    - Max image size boundary checks.
+    - Custom program segment verification.
+- **Files changed:** `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs` (new), `src/AssemblyStudio.Runtime/Loading/ComLoadResult.cs` (new), `src/AssemblyStudio.Runtime/Loading/ComLoader.cs` (new), `tests/AssemblyStudio.Runtime.Tests/ComLoaderTests.cs` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 16:53 +0500).
+  - `& ...\AssemblyStudio.Runtime.Tests.exe` → **39/39 passed** in 4.6s (2026-10-28 16:51 +0500).
+  - `& ...\AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 0.53s (2026-10-28 16:52 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-031. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-032` (Interrupt router and runtime error policy) or `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-061` (themes).

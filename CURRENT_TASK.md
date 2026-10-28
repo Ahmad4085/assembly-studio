@@ -12,9 +12,87 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
-| Recommended next action | `/assembly-test` (Milestone 1 test suite verification) or `/assembly-implement TASK-030` (start M2: Runtime memory, journal and machine) |
-| Also eligible | `TASK-061` Themes, tokens and contrast test (depends on TASK-060, Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031 Done) |
+| Recommended next action | `/assembly-implement TASK-032` (start Interrupt router and runtime error policy) |
+| Also eligible | `TASK-033` (Console device), `TASK-040` (NASM runner), `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---
+
+## Completed: TASK-031 .COM loader and PSP (Done 2026-10-28 16:55 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented `ProgramSegmentPrefix` in `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs`:
+  - 256-byte (0x100) structure initialized at `pspSegment:0000h` (FR-034, research R-DOS §3):
+    - `00h`: `CD 20` (INT 20h termination).
+    - `02h`: Top of memory segment (`0x1800` for 64 KiB block).
+    - `05h`: CALL far to `PSP:0050h` (`9A 50 00 [psp_lo] [psp_hi]`).
+    - `0Ah..15h`: Saved INT 22h (terminate), INT 23h (Ctrl-C), INT 24h (critical error) vectors copied from IVT.
+    - `16h`: Parent PSP segment (`pspSegment`).
+    - `18h..2Bh`: Job file table (20 bytes: handles 0..4 open, 5..19 unused 0xFF).
+    - `2Ch`: Environment segment (`0x0000`).
+    - `50h`: `CD 21 CB` (`INT 21h; RETF`).
+    - `5Ch..6Bh`: Unopened FCB 1 (zeroed).
+    - `6Ch..7Fh`: Unopened FCB 2 (zeroed).
+    - `80h..FFh`: Command tail / DTA (`00 0D` when empty; length byte, characters, CR terminator when provided; max 126 chars).
+- Implemented `ComLoader` and `ComLoadResult` in `src/AssemblyStudio.Runtime/Loading/`:
+  - Places PSP at 0800h (`DefaultProgramSegment = 0x0800`).
+  - Loads binary image at `0800:0100h` (`DefaultEntryPoint = 0x0100`).
+  - Max image size enforced: `MaxComImageSize = 65,278` bytes (`0xFEFE = 0xFFFE - 0x0100`), ensuring the program does not overwrite the stack return word.
+  - Places word `0000h` at `SS:SP` (`0800:FFFEh`), providing the return target for a near `RET` to `PSP:0000h` (`INT 20h`) to terminate cleanly (AC-064).
+  - Clears memory journal after load so initial baseline state generates zero change highlights (FR-056).
+  - Initializes CPU registers: `CS=DS=ES=SS=0800h`, `IP=0100h`, `SP=FFFEh`, `AX=BX=CX=DX=SI=DI=BP=0000h`, `Flags=0002h` (AC-021, ADR-0004 §2).
+- Tests in `tests/AssemblyStudio.Runtime.Tests/ComLoaderTests.cs`:
+  - 9 comprehensive unit tests verifying AC-021 verbatim, byte-level PSP field verification against the research table, command tail formatting and truncation, IVT vector preservation, near RET termination path, max size boundary checks, and custom segment support.
+- Verification:
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
+  - `AssemblyStudio.Runtime.Tests.exe` → **39/39 passed** in 4.6s.
+  - `AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 0.53s.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 16:45 / 2026-10-28 16:55 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-031 |
+
+---
+
+## Completed: TASK-030 Runtime memory, journal and machine (Done 2026-10-28 16:40 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented `RealModeMemory` in `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs`:
+  - Implements `IMemory` with exactly 1 MiB physical address space (`1024 * 1024` bytes, NFR-015, FR-033).
+  - 20-bit physical address calculation: `((segment << 4) + offset) & 0xFFFFF` (modulo 1 MiB wrapping, no A20 on 8086, FR-059, ADR-0004 §2).
+  - Word access wrapping within 16-bit segment: `Read16` and `Write16` wrap offset + 1 to 0x0000 at segment boundary (e.g. offset 0xFFFF has low byte at 0xFFFF, high byte at 0x0000 of same segment).
+  - Little-endian byte ordering.
+  - Per-step write journal tracking `MemoryChange(PhysicalAddress, OldValue)`:
+    - `TakeJournal()` atomically snapshots and clears the current journal.
+    - `Rollback(changes)` and `RollbackJournal()` revert writes in reverse chronological order restoring pre-write values without generating new journal entries (FR-056).
+    - `ExtractChangedRanges(changes)` extracts and merges contiguous, non-overlapping sorted `AddressRange` spans with deduplication.
+  - Direct memory access helpers: `ReadPhysical`, `WritePhysical`, `LoadBytes` (unjournaled bulk loading for loader/tests), `CopyTo`, and `Reset`.
+- Implemented `AddressRange` in `src/AssemblyStudio.Runtime/Memory/AddressRange.cs`:
+  - Contiguous interval `[StartAddress, StartAddress + Length)` with `EndAddress`, `Contains`, and `CanMergeWith`.
+- Implemented `NullConsoleDevice` in `src/AssemblyStudio.Runtime/Console/NullConsoleDevice.cs`:
+  - Safe default fallback for `IMachine.Console` discarding output and reporting empty input queue.
+- Implemented `Machine` in `src/AssemblyStudio.Runtime/Machine.cs`:
+  - Implements `IMachine` composing `ICpu`, `IMemory`, `IConsoleDevice`, and optional `IInterruptRouter` and `IOsServices` (ADR-0004 §2).
+  - `Step()` helper executing `Cpu.StepInstruction()`.
+- Tests in `tests/AssemblyStudio.Runtime.Tests/`:
+  - 30 unit tests in `RealModeMemoryTests.cs` and `MachineTests.cs`:
+    - 1 MiB boundary, address wrap, aliasing, little-endian word access, word segment wrapping at 0xFFFF offset, combined 20-bit + segment wrap.
+    - Journal recording for byte and word writes, `TakeJournal` clearing and persistence across steps.
+    - Contiguous range coalescing, disjoint ranges, deduplicated repeat writes, empty input.
+    - Rollback of single, disjoint, and repeat overwrites at the same address.
+    - Unjournaled `LoadBytes`, span `CopyTo`, and `Reset`.
+    - Machine composition, default fallbacks, step delegation, and null console behavior.
+- Verification:
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
+  - `AssemblyStudio.Runtime.Tests.exe` → **30/30 passed** in 0.54s.
+  - `AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 0.53s.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 16:30 / 2026-10-28 16:40 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-030 |
 
 ---
 

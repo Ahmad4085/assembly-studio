@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-28 16:13 +0500 by Claude Code (Opus 5.5) (TASK-020 timing-test fix, committed) |
-| Current phase | **6 Implementation**, milestone M1 completed, M2 start (or M4 in progress) |
-| Current milestone | M1 8086 engine (headless) — Complete; M2 Runtime, DOS and toolchain starting; M0 Foundation nearly complete (TASK-006 user action pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-030` Runtime memory, journal and machine; M4 `TASK-061` Themes, tokens and contrast test. Recommended: `/assembly-test` milestone run. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-28 16:55 +0500 by Antigravity (TASK-031 done) |
+| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030, TASK-031 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030, TASK-031 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-032` Interrupt router; M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-test` (milestone verification) or `/assembly-implement TASK-030` (runtime memory). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-032` (interrupt router) or `/assembly-implement TASK-033` (console device) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,8 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-031 .COM loader and PSP | 2026-10-28 16:55 +0500 | `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs` and `ComLoader.cs` implementing .COM image loading per FR-034, AC-021, and ADR-0004 §2: PSP at 0800h with fields 00h (CD 20), 02h (top of memory 0x1800), 05h (far call to 0800:0050h), 0Ah..15h (IVT vectors), 16h (parent PSP), 2Ch (env 0000h), 50h (CD 21 CB), 5Ch/6Ch (zeroed FCBs), and 80h (command tail with length and CR); image placed at 0800:0100h; stack word 0000h at SS:SP (0800:FFFEh); registers initialized to CS=DS=ES=SS=0800h, IP=0100h, SP=FFFEh, AX=BX=CX=DX=SI=DI=BP=0000h, Flags=0002h; 9 new tests in `ComLoaderTests` (total 39/39 in Runtime.Tests); solution build 0w/0e |
+| TASK-030 Runtime memory, journal and machine | 2026-10-28 16:40 +0500 | `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs` implementing `IMemory` with 1 MiB physical address space, 20-bit wrap, 16-bit word segment offset wrap, per-step write journal (`TakeJournal`, `Rollback`, `RollbackJournal`), and contiguous sorted changed-range extraction in `AddressRange.cs`; `src/AssemblyStudio.Runtime/Machine.cs` implementing `IMachine` composing `ICpu`, `IMemory`, `IConsoleDevice`, and optional `IInterruptRouter` and `IOsServices`; `NullConsoleDevice.cs` default fallback; 30 unit tests in `AssemblyStudio.Runtime.Tests` (wrap, aliasing, word wrap, journal, changed-range merging, rollback, machine wiring); solution build 0w/0e, 39/39 architecture tests passed |
 | TASK-020 Engine conformance and performance gate | 2026-10-28 16:00 +0500 | Conformance report `docs/07-testing/engine-conformance-report.md` (TR-2026-10-28-01); full 283 SingleStepTests oracle files pass at 100.0% (~566,000 cases); secondary 8088 oracle suite verified; complete 256-opcode table classified (210 Supported, 7 Prefix, 39 Unsupported); NFR-002 step+snapshot latency mean 0.178 µs (p95 0.300 µs, budget <=100 ms); worst-case 1 MiB memory snapshot copy 91.9 µs; NFR-003 free-run throughput 6.42–7.29 M instr/s (target >=1.00 M/s); NFR-016 bit-for-bit execution determinism over long traces verified; 611/611 Engine tests pass |
 | TASK-019 Disassembler adapter (Iced) | 2026-10-28 15:24 +0500 | `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs` implementing `IDisassembler` via `Iced 1.21.0` (MIT) with NASM formatter (space-after-comma, lowercase hex, explicit segment display), 8086-only filtering rejecting 186+, 286+, 386+ opcodes and prefixes (FS, GS, 0x66, 0x67) and undocumented SALC (0xD6); ADR-0003 unverified claims resolved in `docs/decisions/ADR-0003-execution-engine.md` and verified in tests; 76 tests in `IcedDisassemblerTests` (including instruction length agreement across thousands of SingleStepTests oracle cases); solution tests 687/688 passed (1 pre-existing DEF-001 App smoke test failure) |
 | TASK-018 Flag ops, misc and the full opcode table | 2026-10-28 14:06 +0500 | CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB), HLT (F4, halts HaltReason.Halt), WAIT (9B, no-op) in `Cpu8086.FlagsMisc.cs` and `Cpu8086.cs`; comprehensive `OpcodeTable.cs` classifying all 256 opcode bytes; reference docs in `docs/06-implementation/opcode-support.md`; 7 SingleStepTests oracle files at 100% (283 total) + 40 hand tests in `FlagsMiscAndOpcodeTableTests` (including exhaustive 256 opcode table agreement and ModR/M group arm tests); 513/513 engine tests passed |
@@ -81,8 +83,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-28 15:58 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-28 15:58 +0500) | `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **611/611 passed** (283 SingleStepTests oracle files at 100%; 328 unit/hand/oracle/performance/determinism tests); solution tests 709/710 passed (1 pre-existing DEF-001 App smoke test failure). **2026-10-28 16:13 +0500 (Claude Code):** after the timing-test fix, `dotnet test --solution AssemblyStudio.slnx -c Release` → **710/710 passed** in two consecutive runs |
+| Product build (2026-10-28 16:53 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-28 16:53 +0500) | 39/39 Runtime tests passed, 39/39 Architecture tests passed, 611/611 Engine tests passed; all product unit test suites green |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

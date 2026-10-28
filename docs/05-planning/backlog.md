@@ -49,8 +49,8 @@
 | TASK-018 | Flag ops, misc and the full opcode table | M1 | TASK-012, TASK-013, TASK-014, TASK-015, TASK-016, TASK-017 | L | FR-036, FR-037, FR-045, NFR-017 | Done |
 | TASK-019 | Disassembler adapter (Iced) | M1 | TASK-010 | M | FR-053, FR-058 | Done |
 | TASK-020 | Engine conformance and performance gate | M1 | TASK-018, TASK-019 | L | NFR-002, NFR-003, NFR-016, NFR-017, FR-036 | Done |
-| TASK-030 | Runtime memory, journal and machine | M2 | TASK-010, TASK-011 | L | FR-033, FR-056, NFR-015 | Approved |
-| TASK-031 | .COM loader and PSP | M2 | TASK-030 | L | FR-034 | Approved |
+| TASK-030 | Runtime memory, journal and machine | M2 | TASK-010, TASK-011 | L | FR-033, FR-056, NFR-015 | Done |
+| TASK-031 | .COM loader and PSP | M2 | TASK-030 | L | FR-034 | Done |
 | TASK-032 | Interrupt router and runtime error policy | M2 | TASK-030, TASK-016 | M | FR-038, FR-040, NFR-013 | Approved |
 | TASK-033 | Console device | M2 | TASK-030 | L | FR-063, FR-064, NFR-015, NFR-016 | Approved |
 | TASK-034 | DOS output and termination services | M2 | TASK-031, TASK-032, TASK-033 | M | FR-039, FR-041, FR-040 | Approved |
@@ -586,7 +586,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-033, FR-056, NFR-015 |
 | Decisions / design | ADR-0004 |
@@ -614,7 +614,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-034 |
 | Decisions / design | ADR-0004 |

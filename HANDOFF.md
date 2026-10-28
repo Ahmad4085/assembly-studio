@@ -8,7 +8,7 @@
 | Written | 2026-10-28 17:53 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-032 |
 | Current task | **None in progress. Milestone 2 in progress. Next eligible: M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
 | Last completed | TASK-032 Interrupt router and runtime error policy (Done 2026-10-28 17:53 +0500) |
-| Git state | HEAD `f4faf79` (uncommitted changes for TASK-032). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `7a61c36` (TASK-032 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 17:49 +0500).

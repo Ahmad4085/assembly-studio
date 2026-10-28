@@ -123,6 +123,7 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             0xEA => ExecJmpFar(opcode),
             0xE8 => ExecCallNear(opcode),
             0x9A => ExecCallFar(opcode),
+            0x9B => ExecWait(opcode),
             0xC3 => ExecRetNear(opcode),
             0xC2 => ExecRetNearImm(opcode),
             0xCB => ExecRetFar(opcode),
@@ -130,16 +131,29 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             0xCC => ExecInt3(opcode),
             0xCE => ExecInto(opcode),
             0xCF => ExecIret(opcode),
+            0xF4 => ExecHlt(opcode),
+            0xF5 => ExecCmc(opcode),
+            0xF8 => ExecClc(opcode),
+            0xF9 => ExecStc(opcode),
+            0xFA => ExecCli(opcode),
+            0xFB => ExecSti(opcode),
+            0xFC => ExecCld(opcode),
+            0xFD => ExecStd(opcode),
             _ => null,
         };
 
         if (result is not null)
         {
-            // For executed instructions the report carries the instruction's own address: the
-            // state as it stood at entry (CS:IP on the first byte, prefixes included).
-            return result.Value.Outcome == StepOutcome.Executed
-                ? result.Value with { InstructionCs = before.CS, InstructionIp = before.IP }
-                : result.Value;
+            // For executed instructions and deliberate halts (HLT) the report carries the
+            // instruction's own address: the state as it stood at entry (CS:IP on the first byte,
+            // prefixes included).
+            return result.Value.Outcome switch
+            {
+                StepOutcome.Executed => result.Value with { InstructionCs = before.CS, InstructionIp = before.IP },
+                StepOutcome.Halted when result.Value.HaltReason == HaltReason.Halt =>
+                    result.Value with { InstructionCs = before.CS, InstructionIp = before.IP },
+                _ => result.Value,
+            };
         }
 
         // Halt with the state inspectable at the instruction: CS:IP restored, nothing modified (FR-037).

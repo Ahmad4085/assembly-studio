@@ -77,6 +77,8 @@ public class SingleStepOracleTests
         "A4.json.gz", "A5.json.gz", "A6.json.gz", "A7.json.gz",
         "AA.json.gz", "AB.json.gz", "AC.json.gz", "AD.json.gz",
         "AE.json.gz", "AF.json.gz",
+        // TASK-018: flag operations (CMC, CLC, STC, CLI, STI, CLD, STD)
+        "F5.json.gz", "F8.json.gz", "F9.json.gz", "FA.json.gz", "FB.json.gz", "FC.json.gz", "FD.json.gz",
     ]);
 
     private static readonly string[] RegNames = ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di", "cs", "ds", "es", "ss", "ip", "flags"];

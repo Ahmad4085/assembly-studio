@@ -768,3 +768,23 @@
 - **Git state after:** committed as `398ee36` (`TASK-017: String instructions and REP prefixes`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-017. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-018` (Flag ops, misc and full opcode table) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 13:43 – 14:06 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-018 Flag ops, misc and the full opcode table
+- **Summary:** Ran `/assembly-implement TASK-018` (Flag ops, misc and the full opcode table). Completed the final CPU instruction set implementation task for Milestone 1:
+  - Implemented flag manipulation instructions in `src/AssemblyStudio.Engine.I8086/Cpu8086.FlagsMisc.cs`: CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB).
+  - Implemented processor control and synchronization: HLT (F4) halts execution reporting `StepOutcome.Halted` and `HaltReason.Halt`, with IP advanced past HLT; WAIT/FWAIT (9B) is a no-op on 8086 without 8087 coprocessor.
+  - Prefix LOCK (F0) is ignored per ADR-0003 §4 in `Decoder.ParsePrefixes`.
+  - Coprocessor ESC (D8-DF) and Port I/O (E4-E7, EC-EF) explicitly unsupported in MVP, halting with `UnsupportedInstruction` and state preserved byte-identical (FR-037).
+  - Undocumented aliases (0F, 60-6F, C0-C1, C8-C9, D6, F1) halt with `UnsupportedInstruction`.
+  - Created `OpcodeTable.cs` enumerating and classifying all 256 opcode bytes into Supported (206), Prefix (7), and Unsupported (43).
+  - Created `docs/06-implementation/opcode-support.md` documenting complete opcode space, policies, Group ModR/M arms, and full 256-opcode reference table for help (FR-045).
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/Cpu8086.FlagsMisc.cs` (new), `src/AssemblyStudio.Engine.I8086/OpcodeTable.cs` (new), `src/AssemblyStudio.Engine.I8086/Cpu8086.cs`, `tests/AssemblyStudio.Engine.I8086.Tests/FlagsMiscAndOpcodeTableTests.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/SingleStepOracleTests.cs`, `docs/06-implementation/opcode-support.md` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 13:52 +0500).
+  - `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release --filter "FullyQualifiedName~FlagsMiscAndOpcodeTableTests"` → **40/40 passed** (2026-10-28 13:57 +0500).
+  - `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **513/513 passed** (2026-10-28 14:01 +0500; all 283 SingleStepTests oracle files pass 100%, all 40 hand tests passed).
+  - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 14:02 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **611/612 passed** (1 failure: pre-existing DEF-001 App smoke test in background runner; 2026-10-28 14:06 +0500).
+- **Git state after:** uncommitted changes for TASK-018 (commit only when user requests). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-018. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-019` (Disassembler adapter (Iced)) or `/assembly-implement TASK-061` (themes).

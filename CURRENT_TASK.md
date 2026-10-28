@@ -4,17 +4,39 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-018 Flag ops, misc and the full opcode table
+## Next: TASK-019 Disassembler adapter (Iced)
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (approved) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Definition | `docs/05-planning/backlog.md` § TASK-018 (goal, scope, tests, DoD) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-018`) |
+| Definition | `docs/05-planning/backlog.md` § TASK-019 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-019`) |
 
 **Also eligible:** TASK-061 Themes, tokens and contrast test (depends on TASK-060, Done); TASK-067 Settings service (also needs TASK-040).
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-018 Flag ops, misc and the full opcode table (Done 2026-10-28 14:06 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented in `src/AssemblyStudio.Engine.I8086/Cpu8086.FlagsMisc.cs` and `Cpu8086.cs`:
+  - Flag operations: CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB).
+  - Processor control: HLT (F4) halts execution reporting `StepOutcome.Halted` and `HaltReason.Halt`, with IP advanced past HLT.
+  - Synchronization: WAIT / FWAIT (9B) is a no-op on 8086 without 8087 coprocessor (advances IP by 1, flags/registers untouched).
+  - Prefix LOCK (F0) is ignored per ADR-0003 §4 in `Decoder.ParsePrefixes`.
+  - Coprocessor ESC (D8-DF) and Port I/O (E4-E7, EC-EF) explicitly unsupported in MVP, halting with `UnsupportedInstruction` and state preserved byte-identical (FR-037).
+  - Undocumented aliases (0F, 60-6F, C0-C1, C8-C9, D6, F1) halt with `UnsupportedInstruction`.
+  - Created `OpcodeTable.cs` enumerating and classifying all 256 opcode bytes into Supported (206), Prefix (7), and Unsupported (43).
+  - Created `docs/06-implementation/opcode-support.md` documenting complete opcode space, policies, Group ModR/M arms, and full 256-opcode reference table for help (FR-045).
+- Tests: 7 SingleStepTests oracle files at 100% (F5, F8, F9, FA, FB, FC, FD; 283 oracle files total) + 40 hand tests in `FlagsMiscAndOpcodeTableTests.cs` (including exhaustive 256 opcode table agreement and ModR/M group arm tests); all 513 engine tests passed.
+- Release build 0 warnings, 0 errors.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 13:43 / 2026-10-28 14:06 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-018 |
 
 ---
 

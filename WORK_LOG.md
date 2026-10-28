@@ -722,3 +722,30 @@
 - **Unresolved issues:** none blocking. Manual checks at 100/125/200 % DPI and multi-monitor (AC-059), reference-machine startup (TASK-086),
   Windows 10 LTSC fonts (TASK-070) remain with their tasks.
 - **Next step:** `/assembly-implement TASK-016` or `TASK-061`
+
+### 2026-10-28 12:00 – 12:45 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-016 Control transfer and interrupts
+- **Summary:** Ran `/assembly-implement TASK-016` (Control transfer and interrupts). Implemented all 8086 control transfer instructions in new partial class `src/AssemblyStudio.Engine.I8086/Cpu8086.ControlTransfer.cs` and `Cpu8086.Arithmetic.cs`:
+  - 70-7F conditional jumps: all 16 condition codes evaluated against FLAGS, 8-bit sign-extended displacement, 16-bit IP wrap; FLAGS remain completely untouched.
+  - E3 JCXZ: jumps on CX=0; leaves FLAGS untouched.
+  - E0-E2 Loops: LOOP, LOOPE/LOOPZ, LOOPNE/LOOPNZ decrement CX without flag modification; jump conditions verified.
+  - EB, E9, EA: JMP short (rel8), near (rel16), and far (ptr16:16).
+  - E8, 9A: CALL near (rel16) and far (ptr16:16), pushing return address and segment.
+  - C2, C3, CA, CB: RET near/far with optional immediate byte stack cleanup.
+  - FF /2-/5: Group 5 near/far indirect CALL and JMP; mod=3 halts `UnsupportedInstruction`.
+  - CC (INT 3), CD (INT imm8), CE (INTO on OF=1): Router interception evaluated first; null router vectors through IVT with FLAGS/CS/return IP push and IF/TF clear.
+  - CF (IRET): Pops IP, CS, and FLAGS with canonical 8086 reserved bits.
+  - Fixed IVT entry calculation from `vector * 2` to `vector * 4` (2-byte IP + 2-byte CS per vector in real hardware).
+- **Files changed:** `src/AssemblyStudio.Engine.I8086/Cpu8086.ControlTransfer.cs` (new), `src/AssemblyStudio.Engine.I8086/Cpu8086.cs`, `src/AssemblyStudio.Engine.I8086/Cpu8086.Arithmetic.cs`, `tests/AssemblyStudio.Engine.I8086.Tests/ControlTransferTests.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/Cpu8086Tests.cs`, `tests/AssemblyStudio.Engine.I8086.Tests/SingleStepOracleTests.cs`, `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `docs/07-testing/defects.md` (new), `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet test tests\AssemblyStudio.Engine.I8086.Tests\AssemblyStudio.Engine.I8086.Tests.csproj -c Release --filter "FullyQualifiedName~ControlTransferTests"` → 37/37 passed.
+  - `SingleStepOracleTests`: all 37 TASK-016 oracle files at 100% pass (266 oracle files total now).
+  - `dotnet test tests\AssemblyStudio.Engine.I8086.Tests\AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **440/440 passed**.
+  - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **538/539 passed** (1 failure: DEF-001 App smoke test in background runner).
+- **Incidents:**
+  - `vector * 2` in `VectorInterrupt` was corrected to `vector * 4` (the real 8086 hardware IVT layout).
+  - Pre-existing test `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` failed in background execution; logged as `DEF-001` in `docs/07-testing/defects.md`.
+- **Git state after:** uncommitted changes for TASK-016. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-016.
+- **Next step:** `/assembly-implement TASK-017` (string instructions and REP prefixes) or `/assembly-implement TASK-061` (themes).
+

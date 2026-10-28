@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-28 11:31 +0500 by Claude Code (Opus 5.5) (TASK-060 done) |
+| Last updated | 2026-10-28 12:45 +0500 by Antigravity (TASK-016 done) |
 | Current phase | **6 Implementation**, milestone M0 (TASK-006 user action pending) and M1 (in progress) |
 | Current milestone | M1 8086 engine (headless) — in progress; M0 Foundation nearly complete (TASK-006 user action pending) |
-| Active task | None in progress. Next: `TASK-016` Control transfer and interrupts (`Approved`); `TASK-061` (themes) now eligible. Parallel user action: `TASK-006` (clean test VMs) |
+| Active task | None in progress. Next: M1 `TASK-017` String instructions and REP prefixes (`Ready`); `TASK-061` (themes) also eligible. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-016` (engine) or `TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-017` (engine) or `TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-016 Control transfer and interrupts | 2026-10-28 12:45 +0500 | Jumps (70-7F, E3, EB, E9, EA), loops (E0-E2), calls (E8, 9A), returns (C2, C3, CA, CB), interrupts (CC, CD, CE, CF) and FF /2-/5 in `Cpu8086.ControlTransfer.cs` and `Cpu8086.Arithmetic.cs`; 4-byte IVT entry fix; 37 SingleStepTests oracle files at 100% (266 total) + 37 hand tests in `ControlTransferTests`; 440/440 engine tests passed |
 | TASK-060 WPF shell and layout | 2026-10-28 11:31 +0500 | Main window per ui-spec §2 in `src/AssemblyStudio.App/Shell/` (MVVM, CommunityToolkit.Mvvm 8.4.2 per ADR-0007): menus (UI-002 skeleton, every command with access key and shortcut; later-task commands disabled), command bar, status bar (UI-016, app version), Learn / editor / machine column / bottom tab group + memory/stack regions with keyboard-resizable splitters, empty states only (no machine data). F6/Shift+F6 region cycling, View ▸ Go to (Ctrl+Alt+R/F/M/K/O/P/U/H/B/L), region toggles, Reset Layout; compact layout below 1280 px; layout persisted in `settings.json` "layout"; 2 px focus ring; PerMonitorV2 manifest; Windows text scaling applied to font tokens; strings in `Strings.resx`; dark tokens only (TASK-061 owns themes). Startup measured 1.5–2.5 s on the dev machine (NFR-005). Release build 0w/0e; 465/465 solution tests |
 | TASK-015 Multiply, divide, BCD and conversions | 2026-10-28 10:25 +0500 | MUL/IMUL/DIV/IDIV (F6/F7 /4-/7), AAA/AAS/DAA/DAS, AAM/AAD, CBW/CWD in new `Cpu8086.MulDiv.cs`. Division follows the 8086 CORD microcode loop, so divide-error FLAGS pushed on the stack match the real chip; divide error (overflow, divisor 0, AAM 0) goes through the router as vector 0, else real vectoring with the 8086 return address (next instruction). 8086 quirks oracle-verified: IDIV rejects -128/-32768, REP negates the IDIV quotient, AAA/AAS adjust AL and AH separately, DAA/DAS high-digit threshold 9Fh when AF was set, DAS low-digit borrow does not set CF. Undefined-flag masks reported per step. 16 oracle files at 100% (229 total) + 21 hand tests incl. AC-031 engine part. Release build 0w/0e; 425/425 solution tests |
 | TASK-014 Logic, shift and rotate instructions | 2026-10-27 16:12 +0500 | AND/OR/XOR (rm/r bases 08/20/30 + acc-imm 0C/24/34, reusing the shared `Arith` core), TEST (84/85, A8/A9, F6/F7 /0 — result discarded, AF untouched), NOT (F6/F7 /2, no flags), shifts/rotates D0-D3 all /reg with 8086 count semantics (count not masked, count 0 = full no-op, OF only for count 1 with oracle-verified rules, count>1 leaves OF untouched, rotates touch only CF/OF); undocumented /6 = SETMO (operand all ones, oracle raw-flag values); 58 SingleStepTests oracle files at 100% first run (213 total) + 23 hand tests. Release build 0w/0e; 389/389 solution tests |
@@ -76,14 +77,14 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-28 11:31 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-28 11:31 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **465/465 passed** (xunit.v3 MTP runner; 229 SingleStepTests oracle files at 100%; 41 App tests incl. the WPF smoke tests and the startup measurement) |
-| Coverage (2026-10-27 12:00 +0500) | `build/coverage.ps1` → exit 0; all product assemblies "n/a (no coverable lines)" (skeleton). Target ≥ 85% engine/runtime (NFR-021) not yet measurable |
+| Product build (2026-10-28 12:45 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-28 12:45 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **538/539 passed** (xunit.v3 MTP runner; 266 SingleStepTests oracle files at 100%; 440/440 Engine tests pass; 1 failure in App smoke test: DEF-001) |
+| Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | None |
+| Failed tests / open defects | DEF-001: `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` fails in non-interactive/background runner (`docs/07-testing/defects.md`) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

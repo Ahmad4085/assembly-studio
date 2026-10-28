@@ -4,17 +4,42 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-016 Control transfer and interrupts
+## Next: TASK-017 String instructions and REP prefixes
 
 | Field | Value |
 |---|---|
 | Status | **Ready** (approved) |
 | Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Definition | `docs/05-planning/backlog.md` § TASK-016 (goal, scope, tests, DoD) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-016`) |
+| Definition | `docs/05-planning/backlog.md` § TASK-017 (goal, scope, tests, DoD) |
+| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-017`) |
 
-**Also eligible (depend on TASK-060, now Done):** TASK-061 Themes, tokens and contrast test; TASK-067 Settings service (also needs TASK-040).
+**Also eligible:** TASK-061 Themes, tokens and contrast test (depends on TASK-060, Done); TASK-067 Settings service (also needs TASK-040).
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-016 Control transfer and interrupts (Done 2026-10-28 12:45 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented in `src/AssemblyStudio.Engine.I8086/Cpu8086.ControlTransfer.cs` and `Cpu8086.Arithmetic.cs`:
+  - 70-7F conditional jumps: all 16 conditions, 8-bit sign-extended displacement, 16-bit IP wrap, flags unchanged.
+  - E3 JCXZ: jumps on CX=0 without flag modification.
+  - E0-E2 Loops: LOOP, LOOPE/LOOPZ, LOOPNE/LOOPNZ decrement CX without touching flags; jump conditions verified.
+  - EB, E9, EA: JMP short, near, and far.
+  - E8, 9A: CALL near and far, pushing return addresses and segment appropriately.
+  - C2, C3, CA, CB: RET near/far with optional immediate byte stack popping.
+  - FF /2-/5: Indirect near and far CALL/JMP; mod=3 halts UnsupportedInstruction.
+  - CC (INT 3), CD (INT imm8), CE (INTO on OF=1): Router interception evaluated first; null router vectors through IVT with FLAGS/CS/IP push and IF/TF clear.
+  - CF (IRET): Pops IP, CS, and FLAGS with canonical 8086 reserved bits.
+  - Fixed IVT entry calculation from `vector * 2` to `vector * 4` (2-byte IP + 2-byte CS per vector in real hardware).
+- Tests: 37 SingleStepTests oracle files at 100% (266 oracle files total) + 37 hand tests in `ControlTransferTests.cs`; all 440 engine tests passed.
+- Defects: DEF-001 opened for pre-existing `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` in App.Tests.
+- Release build 0 warnings, 0 errors.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 12:00 / 2026-10-28 12:45 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-016 |
 
 ---
 

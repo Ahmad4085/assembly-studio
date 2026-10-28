@@ -166,8 +166,8 @@ public class Cpu8086Tests
     {
         // No router: every interrupt vectors normally.
         var (cpu, memory) = NewCpu([0xCD, 0x21], router: null);
-        memory[0x00042] = 0x00; memory[0x00043] = 0x30; // IVT[0x21] offset = 0x3000
-        memory[0x00044] = 0x00; memory[0x00045] = 0x12; // IVT[0x21] segment = 0x1200
+        memory[0x00084] = 0x00; memory[0x00085] = 0x30; // IVT[0x21] offset = 0x3000 (0x21 * 4 = 0x84)
+        memory[0x00086] = 0x00; memory[0x00087] = 0x12; // IVT[0x21] segment = 0x1200
 
         var result = cpu.StepInstruction();
 
@@ -191,8 +191,8 @@ public class Cpu8086Tests
     {
         // SP near zero: pushes wrap; every pushed byte lands inside the 1 MiB space.
         var (cpu, memory) = NewCpu([0xCD, 0x21], router: null);
-        memory[0x00042] = 0x00; memory[0x00043] = 0x30;
-        memory[0x00044] = 0x00; memory[0x00045] = 0x12;
+        memory[0x00084] = 0x00; memory[0x00085] = 0x30;
+        memory[0x00086] = 0x00; memory[0x00087] = 0x12;
         cpu.SetState(Initial with { SP = 0x0002 });
 
         _ = cpu.StepInstruction();

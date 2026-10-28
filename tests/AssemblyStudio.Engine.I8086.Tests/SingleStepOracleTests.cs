@@ -64,6 +64,15 @@ public class SingleStepOracleTests
         // TASK-015: MUL/IMUL/DIV/IDIV (F6/F7 /4-/7, incl. divide errors vectoring through INT 0), BCD adjust, CBW/CWD
         "F6.4.json.gz", "F6.5.json.gz", "F6.6.json.gz", "F6.7.json.gz", "F7.4.json.gz", "F7.5.json.gz", "F7.6.json.gz", "F7.7.json.gz",
         "27.json.gz", "2F.json.gz", "37.json.gz", "3F.json.gz", "D4.json.gz", "D5.json.gz", "98.json.gz", "99.json.gz",
+        // TASK-016: control transfer and interrupts (jumps, calls, returns, loops, interrupts)
+        "70.json.gz", "71.json.gz", "72.json.gz", "73.json.gz", "74.json.gz", "75.json.gz", "76.json.gz", "77.json.gz",
+        "78.json.gz", "79.json.gz", "7A.json.gz", "7B.json.gz", "7C.json.gz", "7D.json.gz", "7E.json.gz", "7F.json.gz",
+        "E0.json.gz", "E1.json.gz", "E2.json.gz", "E3.json.gz",
+        "E8.json.gz", "E9.json.gz", "EA.json.gz", "EB.json.gz",
+        "9A.json.gz",
+        "C2.json.gz", "C3.json.gz", "CA.json.gz", "CB.json.gz",
+        "FF.2.json.gz", "FF.3.json.gz", "FF.4.json.gz", "FF.5.json.gz",
+        "CC.json.gz", "CD.json.gz", "CE.json.gz", "CF.json.gz",
     ]);
 
     private static readonly string[] RegNames = ["ax", "bx", "cx", "dx", "sp", "bp", "si", "di", "cs", "ds", "es", "ss", "ip", "flags"];

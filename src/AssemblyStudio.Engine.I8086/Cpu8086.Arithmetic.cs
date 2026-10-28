@@ -240,12 +240,39 @@ public sealed partial class Cpu8086
     {
         ushort cursor = (ushort)(op.OpcodeIp + 1);
         ModRmInfo m = ReadModRm(ref cursor, op.SegmentOverride);
+        var s = _state;
         switch (m.Reg)
         {
             case 0: return ExecIncDecRmCore(m, cursor, wide: true, isInc: true);
             case 1: return ExecIncDecRmCore(m, cursor, wide: true, isInc: false);
+            case 2: // CALL near indirect (rm16)
+                ushort callNearIp = ReadRm16(s, m);
+                Push(ref s, cursor);
+                s = s with { IP = callNearIp };
+                _state = s;
+                return Executed(callNearIp);
+            case 3: // CALL far indirect (m16:16)
+                if (!m.IsMemory) return HaltUnsupported();
+                ushort callFarIp = memory.Read16(m.EaSegment, m.EaOffset);
+                ushort callFarCs = memory.Read16(m.EaSegment, (ushort)(m.EaOffset + 2));
+                Push(ref s, s.CS);
+                Push(ref s, cursor);
+                s = s with { CS = callFarCs, IP = callFarIp };
+                _state = s;
+                return Executed(callFarIp);
+            case 4: // JMP near indirect (rm16)
+                ushort jmpNearIp = ReadRm16(s, m);
+                s = s with { IP = jmpNearIp };
+                _state = s;
+                return Executed(jmpNearIp);
+            case 5: // JMP far indirect (m16:16)
+                if (!m.IsMemory) return HaltUnsupported();
+                ushort jmpFarIp = memory.Read16(m.EaSegment, m.EaOffset);
+                ushort jmpFarCs = memory.Read16(m.EaSegment, (ushort)(m.EaOffset + 2));
+                s = s with { CS = jmpFarCs, IP = jmpFarIp };
+                _state = s;
+                return Executed(jmpFarIp);
             case 6:
-                var s = _state;
                 // The 8086 PUSH SP quirk applies to the register form of FF /6 as well.
                 ushort value = ReadRm16(s, m);
                 if (!m.IsMemory && m.Rm == 4)

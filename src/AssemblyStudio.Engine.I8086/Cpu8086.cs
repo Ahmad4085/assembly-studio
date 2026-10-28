@@ -105,6 +105,21 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
             0xD4 => ExecAam(opcode),
             0xD5 => ExecAad(opcode),
             0x9D => ExecPopf(opcode),
+            >= 0x70 and <= 0x7F => ExecJcc(opcode),
+            0xE3 => ExecJcxz(opcode),
+            0xE0 or 0xE1 or 0xE2 => ExecLoop(opcode),
+            0xEB => ExecJmpShort(opcode),
+            0xE9 => ExecJmpNear(opcode),
+            0xEA => ExecJmpFar(opcode),
+            0xE8 => ExecCallNear(opcode),
+            0x9A => ExecCallFar(opcode),
+            0xC3 => ExecRetNear(opcode),
+            0xC2 => ExecRetNearImm(opcode),
+            0xCB => ExecRetFar(opcode),
+            0xCA => ExecRetFarImm(opcode),
+            0xCC => ExecInt3(opcode),
+            0xCE => ExecInto(opcode),
+            0xCF => ExecIret(opcode),
             _ => null,
         };
 
@@ -160,8 +175,8 @@ public sealed partial class Cpu8086(IMemory memory, IInterruptRouter? interruptR
 
         _state = _state with
         {
-            IP = memory.Read16(0, (ushort)(vector * 2)),
-            CS = memory.Read16(0, (ushort)((vector * 2) + 2)),
+            IP = memory.Read16(0, (ushort)(vector * 4)),
+            CS = memory.Read16(0, (ushort)((vector * 4) + 2)),
             Flags = (ushort)(flagsToPush & ~(ushort)(FlagBit.IF | FlagBit.TF)),
         };
     }

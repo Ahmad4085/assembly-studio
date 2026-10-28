@@ -788,3 +788,24 @@
 - **Git state after:** committed as `7e5ac5d` (`TASK-018: Flag ops, misc and the full opcode table`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-018. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-019` (Disassembler adapter (Iced)) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 14:45 – 15:24 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-019 Disassembler adapter (Iced)
+- **Summary:** Ran `/assembly-implement TASK-019` (Disassembler adapter (Iced)). Pinned `Iced 1.21.0` (MIT) in `Directory.Packages.props` and implemented `IDisassembler` in `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`:
+  - 16-bit decoding with NASM formatter configured with `SpaceAfterOperandSeparator = true`, `UppercaseHex = false`, and `ShowUselessPrefixes = true`.
+  - Static helper `(string? Text, int Length) DisassembleInstruction(ReadOnlySpan<byte> bytes, ushort ip = 0)` for low-allocation decoding with relative branch resolution.
+  - Strict 8086-only filtering:
+    - Rejects invalid encodings (`instruction.IsInvalid` or length 0).
+    - Rejects 386+ segment prefixes (`Register.FS`, `Register.GS`).
+    - Validates CPU features: requires all `instruction.CpuidFeatures` to be `CpuidFeature.INTEL8086` or `CpuidFeature.INTEL8086_ONLY`, filtering out 186+, 286+, 386+ extensions (e.g. `PUSHA`, `ENTER`, `SHL r, imm`, 32-bit registers/addressing).
+    - Filters out 386+ prefixes (`0x66` operand size, `0x67` address size, `0x64` FS, `0x65` GS).
+    - Rejects undocumented/unsupported MVP opcodes (e.g. `0xD6` SALC halts engine per ADR-0003 §4 and returns `null` from disassembler).
+  - Resolved ADR-0003 unverified claim in `docs/decisions/ADR-0003-execution-engine.md`: verified `Iced 1.21.0` on .NET 10, confirmed `INTEL8086_ONLY` tags `Code.Popw_CS`, and verified that Iced's 16-bit decoder treats `0x0F` as invalid (lone byte) or 286+ two-byte escape, producing `null` in `IcedDisassembler` which matches the engine's `UnsupportedInstruction` halt.
+- **Files changed:** `Directory.Packages.props`, `src/AssemblyStudio.Engine.I8086/AssemblyStudio.Engine.I8086.csproj`, `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs` (new), `tests/AssemblyStudio.Engine.I8086.Tests/IcedDisassemblerTests.cs` (new), `docs/decisions/ADR-0003-execution-engine.md`, `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 15:13 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*IcedDisassemblerTests*"` → **76/76 passed** (2026-10-28 15:13 +0500; 28 instructions across all categories, 9 prefix variations, relative branches, 186/286/386 rejection, ADR-0003 verification, and length agreement across 17 SingleStepTests oracle files at 100%).
+  - `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 15:17 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **687/688 passed** (589/589 Engine tests pass; 1 failure: pre-existing DEF-001 App smoke test in background runner; 2026-10-28 15:21 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-019. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-020` (Engine conformance and performance gate, M1 gate) or `/assembly-implement TASK-061` (themes).

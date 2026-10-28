@@ -47,7 +47,7 @@
 | TASK-016 | Control transfer and interrupts | M1 | TASK-011 | M | FR-036, FR-038, NFR-017 | Done |
 | TASK-017 | String instructions and REP prefixes | M1 | TASK-011 | M | FR-036, NFR-017 | Done |
 | TASK-018 | Flag ops, misc and the full opcode table | M1 | TASK-012, TASK-013, TASK-014, TASK-015, TASK-016, TASK-017 | L | FR-036, FR-037, FR-045, NFR-017 | Done |
-| TASK-019 | Disassembler adapter (Iced) | M1 | TASK-010 | M | FR-053, FR-058 | Approved |
+| TASK-019 | Disassembler adapter (Iced) | M1 | TASK-010 | M | FR-053, FR-058 | Done |
 | TASK-020 | Engine conformance and performance gate | M1 | TASK-018, TASK-019 | L | NFR-002, NFR-003, NFR-016, NFR-017, FR-036 | Approved |
 | TASK-030 | Runtime memory, journal and machine | M2 | TASK-010, TASK-011 | L | FR-033, FR-056, NFR-015 | Approved |
 | TASK-031 | .COM loader and PSP | M2 | TASK-030 | L | FR-034 | Approved |
@@ -526,7 +526,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M1 |
 | Requirements | FR-053, FR-058 |
 | Decisions / design | ADR-0003 |
@@ -1873,7 +1873,7 @@ FR-009, FR-010, FR-043, FR-044, FR-059, FR-060, FR-061, FR-062, FR-073, FR-074, 
 | Task | Verifies |
 |---|---|
 | TASK-004 | coverlet MTP package name and xunit.v3 4.0.2 compatibility |
-| TASK-019 | Iced 1.21.0 on .NET 10, INTEL8086_ONLY coverage |
+| TASK-019 | Iced 1.21.0 on .NET 10, INTEL8086_ONLY coverage (Verified in TASK-019) |
 | TASK-043 | <10> nesting, nested includes, %rep, sections in macros |
 | TASK-061 | WPF text scaling |
 | TASK-064 | AvalonEdit 6.3.1 on net10.0-windows |

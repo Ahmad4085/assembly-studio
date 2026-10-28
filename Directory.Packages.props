@@ -11,5 +11,7 @@
     <PackageVersion Include="coverlet.MTP" Version="10.1.0" />
     <!-- MVVM source generators for the WPF app (ADR-0007: CommunityToolkit.Mvvm 8.4.2, MIT) -->
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <!-- 8086 instruction disassembler (ADR-0003: Iced 1.21.0, MIT) -->
+    <PackageVersion Include="Iced" Version="1.21.0" />
   </ItemGroup>
 </Project>

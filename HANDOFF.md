@@ -5,36 +5,45 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-28 14:06 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-018 |
-| Current task | **TASK-019 Disassembler adapter (Iced): `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
-| Last completed | TASK-018 Flag ops, misc and the full opcode table (Done 2026-10-28 14:06 +0500) |
-| Git state | HEAD `7e5ac5d` (not pushed). TASK-018 is committed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-28 15:28 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-019 |
+| Current task | **TASK-020 Engine conformance and performance gate: `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
+| Last completed | TASK-019 Disassembler adapter (Iced) (Done 2026-10-28 15:24 +0500) |
+| Git state | HEAD `e43d4a0` (not pushed). TASK-019 changes uncommitted (ready to commit on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 13:52 +0500).
-- `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **513/513 passed** (2026-10-28 14:01 +0500); 283 oracle files at 100%.
-- `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 14:02 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **611/612 passed** (1 failure: pre-existing DEF-001 in App.Tests; 2026-10-28 14:06 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 15:13 +0500).
+- `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*IcedDisassemblerTests*"` → **76/76 passed** (2026-10-28 15:13 +0500).
+- `dotnet test tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj -c Release` → **589/589 passed** (283 oracle files at 100% + 76 disassembler tests + all hand tests).
+- `dotnet test tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj -c Release` → **39/39 passed** (2026-10-28 15:17 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **687/688 passed** (1 failure: pre-existing DEF-001 in App.Tests; 2026-10-28 15:21 +0500).
 
 ## Changes since the previous handoff
-- TASK-018: Flag ops, misc and the full opcode table implemented, completing all instruction set implementation tasks in Milestone 1:
-  - Flag operations: CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB) in `src/AssemblyStudio.Engine.I8086/Cpu8086.FlagsMisc.cs` and dispatch in `Cpu8086.cs`.
-  - Processor control: HLT (F4) halts execution reporting `StepOutcome.Halted` and `HaltReason.Halt`, with IP advanced past HLT.
-  - Synchronization: WAIT / FWAIT (9B) is a no-op on 8086 without 8087 coprocessor (advances IP by 1, flags/registers untouched).
-  - Prefix LOCK (F0) is ignored per ADR-0003 §4 in `Decoder.ParsePrefixes`.
-  - Coprocessor ESC (D8-DF) and Port I/O (E4-E7, EC-EF) explicitly unsupported in MVP, halting with `UnsupportedInstruction` and state preserved byte-identical (FR-037).
-  - Undocumented aliases (0F, 60-6F, C0-C1, C8-C9, D6, F1) halt with `UnsupportedInstruction`.
-  - Created `OpcodeTable.cs` in `AssemblyStudio.Engine.I8086` enumerating and classifying all 256 opcode bytes into Supported (206), Prefix (7), and Unsupported (43).
-  - Created `docs/06-implementation/opcode-support.md` documenting complete opcode space, policies, Group ModR/M arms, and full 256-opcode reference table for help (FR-045).
-- Tests:
-  - 7 SingleStepTests oracle files added to `SingleStepOracleTests.cs` (F5, F8, F9, FA, FB, FC, FD), passing 100% across all cases (283 total oracle files).
-  - 40 hand tests in `FlagsMiscAndOpcodeTableTests.cs` verifying CLC, STC, CMC, CLD, STD, CLI, STI, WAIT, HLT, Coprocessor ESC, Port I/O, undocumented aliases, Group 3/4/5 ModR/M arm boundaries, and an exhaustive 256-opcode table agreement test ensuring the engine matches the table for all 256 opcodes.
+- **TASK-019 Disassembler adapter (Iced)** implemented:
+  - Pinned `Iced 1.21.0` (MIT) in `Directory.Packages.props` and added reference in `src/AssemblyStudio.Engine.I8086/AssemblyStudio.Engine.I8086.csproj`.
+  - Implemented `IDisassembler` in `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`:
+    - 16-bit decoding with NASM formatter configured with `SpaceAfterOperandSeparator = true`, `UppercaseHex = false`, and `ShowUselessPrefixes = true`.
+    - Static helper `(string? Text, int Length) DisassembleInstruction(ReadOnlySpan<byte> bytes, ushort ip = 0)` for low-allocation decoding with relative branch target resolution.
+    - Strict 8086-only filtering:
+      - Rejects invalid encodings (`instruction.IsInvalid` or length 0).
+      - Rejects 386+ segment prefixes (`Register.FS`, `Register.GS`).
+      - Validates CPU features: requires all `instruction.CpuidFeatures` to be `CpuidFeature.INTEL8086` or `CpuidFeature.INTEL8086_ONLY`, filtering out 186+, 286+, 386+ extensions (e.g. `PUSHA`, `ENTER`, `SHL r, imm`, 32-bit registers/addressing).
+      - Filters out 386+ prefixes (`0x66` operand size, `0x67` address size, `0x64` FS, `0x65` GS).
+      - Rejects undocumented/unsupported MVP opcodes (e.g. `0xD6` SALC halts engine per ADR-0003 §4 and returns `null` from disassembler).
+  - Resolved ADR-0003 unverified claim in `docs/decisions/ADR-0003-execution-engine.md`: verified `Iced 1.21.0` on .NET 10, confirmed `INTEL8086_ONLY` tags `Code.Popw_CS`, and verified that Iced's 16-bit decoder treats `0x0F` as invalid (lone byte) or 286+ two-byte escape, producing `null` in `IcedDisassembler` which matches the engine's `UnsupportedInstruction` halt.
+- Tests in `tests/AssemblyStudio.Engine.I8086.Tests/IcedDisassemblerTests.cs`:
+  - 28 documented 8086 instructions across all categories verified for NASM text and length agreement.
+  - 9 prefix combinations (REP, REPE, REPNE, CS/ES/SS/DS segment overrides) tested.
+  - Relative branch target calculations using IP.
+  - Rejection of 186+ opcodes, 286/386+ opcodes and prefixes, and undocumented opcodes.
+  - Length agreement test across 17 SingleStepTests oracle files (thousands of test cases): 100% agreement between Iced decoded length and oracle instruction byte length.
+  - ADR-0003 verification test.
+  - 76/76 disassembler tests passed.
 
 ## Milestone 1 Status
-- **Instruction set complete**: All 8086 opcode families (Data transfer, Arithmetic, Logic/shift/rotate, Mul/div/BCD, Control transfer, Strings, Flags/misc) are implemented, tested against 283 SingleStepTests hardware oracle files (100% pass), and documented.
+- **Instruction set**: complete (283 SingleStepTests oracle files at 100%).
+- **Disassembly**: complete (`IcedDisassembler` with 8086-only filtering and NASM formatter).
 - Remaining in Milestone 1:
-  - `TASK-019`: Disassembler adapter (Iced) — `Ready`
-  - `TASK-020`: Engine conformance and performance gate — depends on TASK-018, TASK-019
+  - `TASK-020`: Engine conformance and performance gate — ready to run.
 
 ## Failed tests and known issues
 - `DEF-001`: `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` fails in non-interactive/background runners because WPF top-level Menu does not maintain submenu open state without active window focus. Recorded in `docs/07-testing/defects.md`.
@@ -43,10 +52,11 @@
 - ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016.
 - Core has no project references; Engine.I8086 references only Core.
 - Every unsupported opcode halts with `UnsupportedInstruction` and pre-step state preserved (FR-037).
+- Disassembler returns `null` on invalid or non-8086 instructions.
 
 ## Exact next action
-1. Optional: commit TASK-018 pending changes (`git add ...; git commit -m "TASK-018: Flag ops, misc and the full opcode table"`).
-2. User runs `/assembly-implement TASK-019` (Disassembler adapter (Iced)) or `/assembly-implement TASK-061` (themes and contrast test).
+1. Optional / when requested: commit TASK-019 changes (`git add ...; git commit -m "TASK-019: Disassembler adapter (Iced)"`).
+2. Run `/assembly-implement TASK-020` (Engine conformance and performance gate, M1 gate) or `/assembly-implement TASK-061` (themes and contrast test).
 3. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert

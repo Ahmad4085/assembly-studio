@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-019 Disassembler adapter (Iced) | 2026-10-28 15:24 +0500 | `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs` implementing `IDisassembler` via `Iced 1.21.0` (MIT) with NASM formatter (space-after-comma, lowercase hex, explicit segment display), 8086-only filtering rejecting 186+, 286+, 386+ opcodes and prefixes (FS, GS, 0x66, 0x67) and undocumented SALC (0xD6); ADR-0003 unverified claims resolved in `docs/decisions/ADR-0003-execution-engine.md` and verified in tests; 76 tests in `IcedDisassemblerTests` (including instruction length agreement across thousands of SingleStepTests oracle cases); solution tests 687/688 passed (1 pre-existing DEF-001 App smoke test failure) |
 | TASK-018 Flag ops, misc and the full opcode table | 2026-10-28 14:06 +0500 | CLC (F8), STC (F9), CMC (F5), CLD (FC), STD (FD), CLI (FA), STI (FB), HLT (F4, halts HaltReason.Halt), WAIT (9B, no-op) in `Cpu8086.FlagsMisc.cs` and `Cpu8086.cs`; comprehensive `OpcodeTable.cs` classifying all 256 opcode bytes; reference docs in `docs/06-implementation/opcode-support.md`; 7 SingleStepTests oracle files at 100% (283 total) + 40 hand tests in `FlagsMiscAndOpcodeTableTests` (including exhaustive 256 opcode table agreement and ModR/M group arm tests); 513/513 engine tests passed |
 | TASK-017 String instructions and REP prefixes | 2026-10-28 13:28 +0500 | MOVSB/MOVSW (A4/A5), CMPSB/CMPSW (A6/A7), STOSB/STOSW (AA/AB), LODSB/LODSW (AC/AD), SCASB/SCASW (AE/AF) with F2/F3 prefixes in `Cpu8086.Strings.cs`; unoverridable ES:DI destination, overridable DS:SI source; DF=0/1 pointer delta with 16-bit wrapping; CX=0 no-op; REPE/REPNE early loop termination; per-iteration step semantics decision documented; 10 SingleStepTests oracle files at 100% (276 total) + 16 hand tests in `StringInstructionTests`; 466/466 engine tests passed |
 | TASK-016 Control transfer and interrupts | 2026-10-28 12:45 +0500 | Jumps (70-7F, E3, EB, E9, EA), loops (E0-E2), calls (E8, 9A), returns (C2, C3, CA, CB), interrupts (CC, CD, CE, CF) and FF /2-/5 in `Cpu8086.ControlTransfer.cs` and `Cpu8086.Arithmetic.cs`; 4-byte IVT entry fix; 37 SingleStepTests oracle files at 100% (266 total) + 37 hand tests in `ControlTransferTests`; 440/440 engine tests passed |
@@ -79,8 +80,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-28 14:06 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-28 14:06 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **611/612 passed** (xunit.v3 MTP runner; 283 SingleStepTests oracle files at 100%; 513/513 Engine tests pass; 1 failure in App smoke test: DEF-001) |
+| Product build (2026-10-28 15:24 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-28 15:24 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **687/688 passed** (xunit.v3 MTP runner; 283 SingleStepTests oracle files at 100%; 589/589 Engine tests pass; 1 failure in App smoke test: DEF-001) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

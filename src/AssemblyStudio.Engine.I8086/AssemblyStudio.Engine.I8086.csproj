@@ -3,6 +3,9 @@
   <ItemGroup>
     <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Iced" />
+  </ItemGroup>
   <!-- The decode layer is the hand-test seam for EA modes and wraps (TASK-011 test requirements). -->
   <ItemGroup>
     <InternalsVisibleTo Include="AssemblyStudio.Engine.I8086.Tests" />

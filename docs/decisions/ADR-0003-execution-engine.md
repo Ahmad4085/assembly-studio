@@ -46,7 +46,7 @@ step + snapshot at 0.091 µs and about 48 M instructions/s [Measured].
 ## Validation
 - Per-opcode SingleStepTests pass rate 100%, plus the hand-written spec tests (`docs/sdlc/guides/cpu-instruction-testing.md`) (NFR-017, AC-058).
 - A benchmark in CI-like conditions confirms NFR-002/003 on the reference machine (AC-056).
-- **Unverified:** Iced 1.21.0 on .NET 10 and whether `INTEL8086_ONLY` covers POP CS. Validated by the first disassembler task test.
+- **Verified (TASK-019, 2026-10-28):** Iced 1.21.0 on .NET 10 is fully verified. `CpuidFeature.INTEL8086_ONLY` exists and tags `Code.Popw_CS`. In 16-bit decoding, Iced treats `0x0F` as invalid (lone byte) or as the 286+ two-byte opcode prefix; `IcedDisassembler` returns `null`, exactly matching the engine's `UnsupportedInstruction` halt per ADR-0003 §4. Verified by `IcedDisassemblerTests.Adr0003_unverified_items_verified`.
 
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).

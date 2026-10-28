@@ -4,17 +4,50 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Next: TASK-019 Disassembler adapter (Iced)
+## Next eligible task: TASK-020 Engine conformance and performance gate
 
 | Field | Value |
 |---|---|
-| Status | **Ready** (approved) |
-| Owner | — (unassigned. The next agent sets itself as owner when starting) |
-| Definition | `docs/05-planning/backlog.md` § TASK-019 (goal, scope, tests, DoD) |
-| Procedure | `docs/sdlc/procedures/assembly-implement.md` (invoke with `/assembly-implement TASK-019`) |
+| Status | Ready to implement |
+| Milestone | M1 |
+| Requirements | NFR-002, NFR-003, NFR-016, NFR-017, FR-036 |
+| Depends on | TASK-018 (Done), TASK-019 (Done) |
+| Goal | Formal conformance run against SingleStepTests 8086, benchmark throughput (NFR-002) and step latency (NFR-003), conformance report |
 
 **Also eligible:** TASK-061 Themes, tokens and contrast test (depends on TASK-060, Done); TASK-067 Settings service (also needs TASK-040).
 **Parallel user action:** TASK-006 (clean test VMs) can start any time.
+
+---
+
+## Completed: TASK-019 Disassembler adapter (Iced) (Done 2026-10-28 15:24 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented in `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`:
+  - `IDisassembler` implementation using `Iced 1.21.0` (MIT, pinned in `Directory.Packages.props`) with 16-bit decoding.
+  - NASM formatter configured with `SpaceAfterOperandSeparator = true`, `UppercaseHex = false`, and `ShowUselessPrefixes = true`.
+  - Static helper `(string? Text, int Length) DisassembleInstruction(ReadOnlySpan<byte> bytes, ushort ip = 0)` for zero/low allocation decoding with relative branch resolution.
+  - Strict 8086-only filtering:
+    - Rejects invalid encodings (`instruction.IsInvalid` or length 0).
+    - Rejects 386+ segment prefixes (`Register.FS`, `Register.GS`).
+    - Validates CPU features: requires all `instruction.CpuidFeatures` to be `CpuidFeature.INTEL8086` or `CpuidFeature.INTEL8086_ONLY`, filtering out 186+, 286+, 386+ extensions (e.g. `PUSHA`, `ENTER`, `SHL r, imm`, 32-bit registers/addressing).
+    - Filters out 386+ prefixes (`0x66` operand size, `0x67` address size, `0x64` FS, `0x65` GS).
+    - Rejects undocumented/unsupported MVP opcodes (e.g. `0xD6` SALC halts engine per ADR-0003 §4 and returns `null` from disassembler).
+  - Resolved ADR-0003 unverified claim in `docs/decisions/ADR-0003-execution-engine.md`: verified `Iced 1.21.0` on .NET 10, confirmed `INTEL8086_ONLY` tags `Code.Popw_CS`, and verified that Iced's 16-bit decoder treats `0x0F` as invalid (lone byte) or 286+ two-byte escape, producing `null` in `IcedDisassembler` which matches the engine's `UnsupportedInstruction` halt.
+- Tests in `tests/AssemblyStudio.Engine.I8086.Tests/IcedDisassemblerTests.cs`:
+  - 28 documented 8086 instructions across all categories verified for NASM text and length agreement.
+  - 9 prefix combinations (REP, REPE, REPNE, CS/ES/SS/DS segment overrides) tested.
+  - Relative branch target calculations using IP.
+  - Rejection of 186+ opcodes, 286/386+ opcodes and prefixes, and undocumented opcodes.
+  - Length agreement test across 17 SingleStepTests oracle files (thousands of test cases): 100% agreement between Iced decoded length and oracle instruction byte length.
+  - ADR-0003 verification test.
+  - 76/76 disassembler tests passed.
+- Architecture rules: 39/39 passed (`AssemblyStudio.ArchitectureTests`).
+- Solution tests: 687/688 passed (1 pre-existing DEF-001 App smoke test failure). Release build 0 warnings, 0 errors.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 14:45 / 2026-10-28 15:24 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-019 |
 
 ---
 

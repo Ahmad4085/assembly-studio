@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-28 16:55 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-031 |
+| Written | 2026-10-28 17:28 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after committing TASK-030 and TASK-031 |
 | Current task | **None in progress. Milestone 2 in progress. Next eligible: M2 `TASK-032` Interrupt router; M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
-| Last completed | TASK-031 .COM loader and PSP (Done 2026-10-28 16:55 +0500) |
-| Git state | HEAD `cbe65e9` (uncommitted changes for TASK-030 and TASK-031). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Last completed | TASK-031 .COM loader and PSP (Done 2026-10-28 16:55 +0500, committed in `c582b25`) |
+| Git state | HEAD `c582b25` (TASK-030 and TASK-031 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 16:53 +0500).
@@ -66,9 +66,8 @@
 - Initial stack word at `0x0800:FFFEh` is `0x0000`.
 
 ## Exact next action
-1. Optional / when requested: commit TASK-030 and TASK-031 changes (`git add ...; git commit -m "TASK-031: .COM loader and PSP"`).
-2. Run `/assembly-implement TASK-032` (Interrupt router and runtime error policy), or `/assembly-implement TASK-033` (Console device), or `/assembly-implement TASK-061` (themes).
-3. In parallel (user action): TASK-006 test VMs.
+1. Run `/assembly-implement TASK-032` (Interrupt router and runtime error policy), or `/assembly-implement TASK-033` (Console device), or `/assembly-implement TASK-040` (NASM runner), or `/assembly-implement TASK-061` (themes).
+2. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -1,5 +1,6 @@
 using AssemblyStudio.Core;
 using AssemblyStudio.Runtime.Console;
+using AssemblyStudio.Runtime.Interrupts;
 using AssemblyStudio.Runtime.Memory;
 
 namespace AssemblyStudio.Runtime;
@@ -49,6 +50,11 @@ public sealed class Machine : IMachine
         Console = console ?? new NullConsoleDevice();
         InterruptRouter = interruptRouter;
         OsServices = osServices;
+
+        if (interruptRouter is InterruptRouter router)
+        {
+            router.Machine = this;
+        }
     }
 
     /// <summary>

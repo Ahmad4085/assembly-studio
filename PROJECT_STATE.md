@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-28 16:55 +0500 by Antigravity (TASK-031 done) |
-| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030, TASK-031 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030, TASK-031 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-032` Interrupt router; M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-28 17:52 +0500 by Antigravity (TASK-032 done) |
+| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..032 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..032 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-032` (interrupt router) or `/assembly-implement TASK-033` (console device) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-033` (console device) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-032 Interrupt router and runtime error policy | 2026-10-28 17:52 +0500 | `src/AssemblyStudio.Runtime/Interrupts/` (`IvtStubs.cs`, `RuntimeHaltInfo.cs`, `RuntimeErrorPolicy.cs`, `InterruptRouter.cs`) implementing `IInterruptRouter` per FR-038, FR-040, NFR-013, AC-029, AC-031, ADR-0004 §3: IVT default stubs at reserved segment 0xF000 with IRET opcodes (0xCF); default vs program-installed vector detection (program-modified vectors return null to let CPU vector through IVT with real 8086 semantics); CPU exceptions (INT 0..4) halt with RuntimeError naming condition and address (AC-031 divide error); unsupported interrupts/functions halt with UnsupportedService naming interrupt and AH (AC-029 INT 21h function 3Dh); structured What/Where/Next diagnostic records; OS services delegation; 18 new unit tests in `InterruptRouterTests` (total 57/57 in Runtime.Tests); solution build 0w/0e, 39/39 architecture tests passed |
 | TASK-031 .COM loader and PSP | 2026-10-28 16:55 +0500 | `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs` and `ComLoader.cs` implementing .COM image loading per FR-034, AC-021, and ADR-0004 §2: PSP at 0800h with fields 00h (CD 20), 02h (top of memory 0x1800), 05h (far call to 0800:0050h), 0Ah..15h (IVT vectors), 16h (parent PSP), 2Ch (env 0000h), 50h (CD 21 CB), 5Ch/6Ch (zeroed FCBs), and 80h (command tail with length and CR); image placed at 0800:0100h; stack word 0000h at SS:SP (0800:FFFEh); registers initialized to CS=DS=ES=SS=0800h, IP=0100h, SP=FFFEh, AX=BX=CX=DX=SI=DI=BP=0000h, Flags=0002h; 9 new tests in `ComLoaderTests` (total 39/39 in Runtime.Tests); solution build 0w/0e |
 | TASK-030 Runtime memory, journal and machine | 2026-10-28 16:40 +0500 | `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs` implementing `IMemory` with 1 MiB physical address space, 20-bit wrap, 16-bit word segment offset wrap, per-step write journal (`TakeJournal`, `Rollback`, `RollbackJournal`), and contiguous sorted changed-range extraction in `AddressRange.cs`; `src/AssemblyStudio.Runtime/Machine.cs` implementing `IMachine` composing `ICpu`, `IMemory`, `IConsoleDevice`, and optional `IInterruptRouter` and `IOsServices`; `NullConsoleDevice.cs` default fallback; 30 unit tests in `AssemblyStudio.Runtime.Tests` (wrap, aliasing, word wrap, journal, changed-range merging, rollback, machine wiring); solution build 0w/0e, 39/39 architecture tests passed |
 | TASK-020 Engine conformance and performance gate | 2026-10-28 16:00 +0500 | Conformance report `docs/07-testing/engine-conformance-report.md` (TR-2026-10-28-01); full 283 SingleStepTests oracle files pass at 100.0% (~566,000 cases); secondary 8088 oracle suite verified; complete 256-opcode table classified (210 Supported, 7 Prefix, 39 Unsupported); NFR-002 step+snapshot latency mean 0.178 µs (p95 0.300 µs, budget <=100 ms); worst-case 1 MiB memory snapshot copy 91.9 µs; NFR-003 free-run throughput 6.42–7.29 M instr/s (target >=1.00 M/s); NFR-016 bit-for-bit execution determinism over long traces verified; 611/611 Engine tests pass |

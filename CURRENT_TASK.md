@@ -12,10 +12,62 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
-| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031 Done) |
-| Recommended next action | `/assembly-implement TASK-032` (start Interrupt router and runtime error policy) |
-| Also eligible | `TASK-033` (Console device), `TASK-040` (NASM runner), `TASK-061` (Themes) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031, TASK-032 Done; 3/12) |
+| Recommended next action | `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-040` (NASM runner) |
+| Also eligible | `TASK-061` (Themes) |
+| Blocked until TASK-033 | `TASK-034` (DOS output and termination) depends on TASK-031 ✔, TASK-032 ✔, TASK-033 |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---
+
+## Completed: TASK-032 Interrupt router and runtime error policy (Done 2026-10-28 17:53 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented `IvtStubs` in `src/AssemblyStudio.Runtime/Interrupts/IvtStubs.cs`:
+  - Default reserved stub segment `0xF000` (physical `0xF0000`).
+  - Stubs for all 256 interrupt vectors allocated at `0xF000:(vector * 4)`.
+  - Populates each stub address with an `IRET` instruction opcode (`0xCF`, ADR-0004 §2–3).
+  - Populates IVT (0000:0000h..03FFh) with `(offset, segment)` pairs pointing to the reserved stubs.
+  - `IsDefaultVector(memory, vector)` accurately distinguishes default vectors from program-installed vectors.
+- Implemented `RuntimeHaltInfo` and `RuntimeErrorPolicy` in `src/AssemblyStudio.Runtime/Interrupts/`:
+  - Conforms to the What/Where/Next contract (FR-038, FR-040, FR-066, NFR-024, AC-029, AC-031, AC-055).
+  - CPU exceptions (INT 0..4):
+    - Vector 0: `RTE001` Divide error (AC-031).
+    - Vector 1: `RTE002` Single-step trap.
+    - Vector 2: `RTE003` Non-maskable interrupt.
+    - Vector 3: `RTE004` Breakpoint interrupt (INT 3).
+    - Vector 4: `RTE005` Overflow trap (INTO with OF=1).
+  - Unsupported services and interrupts:
+    - Vector 0x21: `RTE021` naming function (e.g. `INT 21h function 3Dh (AH=3Dh) is unsupported`, AC-029).
+    - General INT: `RTE020` naming interrupt and function AH.
+- Implemented `InterruptRouter` in `src/AssemblyStudio.Runtime/Interrupts/InterruptRouter.cs`:
+  - Implements `IInterruptRouter`.
+  - Program-installed vector check: returns `null`, letting CPU vector through IVT with real 8086 semantics (push Flags/CS/IP, clear IF/TF, ADR-0004 §3).
+  - CPU exceptions with default vector halt with `HaltReason.RuntimeError` and populate `LastHalt` (FR-038).
+  - OS services delegation (`IOsServices.HandleService`), passthrough of `Executed`, `WaitingForInput`, or `UnsupportedService` halts.
+  - Unsupported interrupts and functions halt with `HaltReason.UnsupportedService` and populate `LastHalt` (FR-040, NFR-013).
+  - Auto-wired in `Machine.cs` (`router.Machine = this;`).
+- Tests in `tests/AssemblyStudio.Runtime.Tests/InterruptRouterTests.cs`:
+  - 18 unit tests (Runtime.Tests now 57/57 passed):
+    - IVT stub initialization and IRET opcodes across all 256 vectors.
+    - Program-installed vector detection.
+    - AC-031 divide error halt at CS:IP with what/where/next runtime error message.
+    - AC-029 unsupported INT 21h function 3Dh halt naming function 3Dh with what/where/next, no host file access.
+    - CPU exceptions (INT 1, 2, 3, 4) with stable codes RTE002..RTE005.
+    - Unsupported software interrupts (INT 10h, 13h, 16h, 2Fh) with RTE020.
+    - Program-installed vector for INT 21h and divide error vectors through IVT and executes guest handler.
+    - OS services delegation (Executed, WaitingForInput, UnsupportedService, fallback).
+- Verification:
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
+  - `AssemblyStudio.Runtime.Tests.exe` → **57/57 passed** in 0.72s.
+  - `AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 1.47s.
+  - Core suites (Core, Os.Dos, Nasm, Debugging, Content) → **18/18 passed**.
+  - Engine quick regression suite (Determinism, Performance, Disassembler) → **80/80 passed** in 14.7s.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 17:41 / 2026-10-28 17:53 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-032 |
 
 ---
 

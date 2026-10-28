@@ -912,3 +912,33 @@
 - **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-031. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-032` (Interrupt router and runtime error policy) or `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 17:41 – 17:53 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-032 Interrupt router and runtime error policy
+- **Summary:** Ran `/assembly-implement TASK-032` (Interrupt router and runtime error policy):
+  - Implemented `IvtStubs` in `src/AssemblyStudio.Runtime/Interrupts/IvtStubs.cs`:
+    - Reserved stub segment `0xF000` (physical `0xF0000`, ADR-0004 §2–3).
+    - Allocates 4-byte stubs for all 256 vectors at `0xF000:(vector * 4)`, containing an `IRET` opcode (`0xCF`).
+    - Initializes IVT at `0000:0000h..03FFh` pointing each vector to its default reserved stub.
+    - `IsDefaultVector(memory, vector)` accurately detects default versus program-installed vectors.
+  - Implemented `RuntimeHaltInfo` and `RuntimeErrorPolicy` in `src/AssemblyStudio.Runtime/Interrupts/`:
+    - Conforms to the What/Where/Next contract (FR-038, FR-040, FR-066, NFR-024, AC-029, AC-031, AC-055).
+    - CPU exceptions (INT 0..4): `RTE001` Divide error, `RTE002` Single-step trap, `RTE003` Non-maskable interrupt, `RTE004` Breakpoint interrupt, `RTE005` Overflow trap.
+    - Unsupported services: `RTE021` for INT 21h functions naming AH, `RTE020` for general unsupported interrupts.
+  - Implemented `InterruptRouter` in `src/AssemblyStudio.Runtime/Interrupts/InterruptRouter.cs`:
+    - Implements `IInterruptRouter`.
+    - Program-installed vectors return `null` so CPU vectors normally through IVT (push Flags/CS/IP, clear IF/TF, ADR-0004 §3).
+    - CPU exceptions with default vector halt with `HaltReason.RuntimeError` and populate `LastHalt` (FR-038).
+    - OS services delegation (`IOsServices.HandleService`), passthrough of `Executed`, `WaitingForInput`, and `UnsupportedService`.
+    - Unsupported interrupts/functions halt with `HaltReason.UnsupportedService` and populate `LastHalt` (FR-040, NFR-013).
+  - Wired auto-attachment in `src/AssemblyStudio.Runtime/Machine.cs`.
+  - Authored 18 unit tests in `tests/AssemblyStudio.Runtime.Tests/InterruptRouterTests.cs`.
+- **Files changed:** `src/AssemblyStudio.Runtime/Interrupts/IvtStubs.cs` (new), `src/AssemblyStudio.Runtime/Interrupts/RuntimeHaltInfo.cs` (new), `src/AssemblyStudio.Runtime/Interrupts/RuntimeErrorPolicy.cs` (new), `src/AssemblyStudio.Runtime/Interrupts/InterruptRouter.cs` (new), `src/AssemblyStudio.Runtime/Machine.cs`, `tests/AssemblyStudio.Runtime.Tests/InterruptRouterTests.cs` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 17:49 +0500).
+  - `& ...\AssemblyStudio.Runtime.Tests.exe` → **57/57 passed** in 0.72s (2026-10-28 17:49 +0500).
+  - `& ...\AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 1.47s (2026-10-28 17:49 +0500).
+  - Core test executables (Core, Os.Dos, Nasm, Debugging, Content) → **18/18 passed** (2026-10-28 17:49 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*DeterminismTests*" -class "*EnginePerformanceTests*" -class "*IcedDisassemblerTests*"` → **80/80 passed** in 14.7s (2026-10-28 17:50 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-032. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes).

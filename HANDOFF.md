@@ -8,7 +8,7 @@
 | Written | 2026-10-28 10:25 +0500 by Claude Code (Opus 5.5), after completing TASK-015 (taken over from OpenCode on the user's request) |
 | Current task | **TASK-016 Control transfer and interrupts: `Approved`, not started, no owner** (TASK-060 WPF shell also eligible) |
 | Last completed | TASK-015 Multiply, divide, BCD and conversions (Done 2026-10-28 10:25 +0500) |
-| Git state | HEAD `ddc5fe5` "SDLC-009: OpenCode support (D-016 approved)", not pushed (origin/master at `357251e`). TASK-015 changes **uncommitted** (see `WORK_LOG.md` for the file list). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
+| Git state | TASK-015 committed as `37e7422` (on the user's request, 2026-10-28), after `ddc5fe5` (SDLC-009); this HANDOFF update is a follow-up docs commit. **Not pushed** (origin/master at `357251e`). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` (OpenCode's analysis scripts) |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` -> 0 warnings, 0 errors (2026-10-28, this session).
@@ -33,7 +33,7 @@
 - Hand-test helper pattern: `NewCpu` needs two overloads (see existing test files).
 
 ## Exact next action
-1. User decides on committing the TASK-015 changes (and pushing `ddc5fe5` + the TASK-015 commit).
+1. Optional: push `ddc5fe5`, `37e7422` and the HANDOFF commit (push only on user request).
 2. User runs `/assembly-implement TASK-016` (control transfer and interrupts), or `/assembly-implement TASK-060` for the first visible WPF window.
 3. In parallel (user action): TASK-006 test VMs.
 

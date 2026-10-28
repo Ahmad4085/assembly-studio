@@ -8,7 +8,7 @@
 | Written | 2026-10-28 12:45 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-016 |
 | Current task | **TASK-017 String instructions and REP prefixes: `Ready`, approved, not started, no owner** (TASK-061 themes also eligible) |
 | Last completed | TASK-016 Control transfer and interrupts (Done 2026-10-28 12:45 +0500) |
-| Git state | HEAD `2bc54a3` (unpushed). Working tree has uncommitted TASK-016 changes (`Cpu8086.ControlTransfer.cs`, `Cpu8086.cs`, `Cpu8086.Arithmetic.cs`, `ControlTransferTests.cs`, `Cpu8086Tests.cs`, `SingleStepOracleTests.cs`, docs). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `e3812b0` (not pushed). TASK-016 is committed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors (2026-10-28 12:45 +0500).

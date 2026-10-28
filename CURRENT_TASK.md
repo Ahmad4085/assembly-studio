@@ -12,11 +12,56 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
-| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031, TASK-032 Done; 3/12) |
-| Recommended next action | `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-040` (NASM runner) |
-| Also eligible | `TASK-061` (Themes) |
-| Blocked until TASK-033 | `TASK-034` (DOS output and termination) depends on TASK-031 ✔, TASK-032 ✔, TASK-033 |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031, TASK-032, TASK-033 Done; 4/12) |
+| Recommended next action | `/assembly-implement TASK-034` (Basic DOS services: output and termination — now UNBLOCKED!) |
+| Also eligible | `TASK-040` (NASM runner), `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---
+
+## Completed: TASK-033 Console device (Done 2026-10-28 18:05 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Implemented `InputEvent` in `src/AssemblyStudio.Runtime/Console/InputEvent.cs`:
+  - Immutable record struct `InputEvent(ulong InstructionCount, byte Value)` stamping input bytes with CPU execution count (ADR-0004 §5, NFR-016).
+- Implemented `ConsoleDevice` in `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs`:
+  - Output buffer capped at 1 MiB (`DefaultMaxCapacity = 1024 * 1024` bytes, NFR-015, AC-045).
+  - Circular buffer implementation guaranteeing O(1) appending and oldest content trimming with zero reallocations.
+  - Tracking metrics: `TotalBytesWritten`, `TotalBytesTrimmed`, `HasTrimmed`, `BufferLength`.
+  - Snapshot delta API: `TakeOutput()` returns pending output string and clears delta (ADR-0007 §2).
+  - Chronological buffer decoding: `ToByteArray()` and `GetAllText()` using CP437.
+  - DOS column counter (ADR-0004 §6, R-DOS §2):
+    - CR (0Dh) resets column to 0.
+    - BS (08h) decrements column without dropping below 0.
+    - TAB (09h) advances column to next multiple of 8 (`(col + 8) & ~7`).
+    - BEL (07h) increments `BelCount` without advancing column.
+    - Printable characters (>= 20h) advance column by 1.
+    - Control characters (< 20h) do not advance column.
+  - Input queue with recording and deterministic replay (NFR-016, AC-047):
+    - Live mode: `EnqueueInput`, `TryReadInput` dequeues and appends stamped `InputEvent` to `RecordedInputs`.
+    - Replay mode: `SetReplayInputs` loads recorded events; `TryReadInput` releases bytes only when `CurrentInstructionCount` reaches the stamped instruction count.
+  - Reset / Clear: `Clear()` resets output, delta, column, BEL, and live queue, preserving recorded log (FR-063).
+- Tests in `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`:
+  - 22 unit tests (Runtime.Tests now 79/79 passed):
+    - Delta draining and full text retrieval.
+    - Column counter arithmetic (CR, BS non-underflow, TAB stops 8/16/24, printable, LF/control bytes).
+    - BEL character counting and bell ringing.
+    - AC-045 cap and trim at arbitrary capacity and under 1 MB flood.
+    - Input queue FIFO ordering and empty checks.
+    - Input recording with instruction counts.
+    - AC-047 deterministic replay verifying step-synchronized byte release.
+    - Clear and reset state preservation.
+- Verification:
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
+  - `AssemblyStudio.Runtime.Tests.exe` → **79/79 passed** in 1.10s.
+  - `AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 1.58s.
+  - Core suites (Core, Os.Dos, Nasm, Debugging, Content) → **18/18 passed**.
+  - Engine quick regression suite → **80/80 passed** in 12.8s.
+
+| Field | Value |
+|---|---|
+| Status | Done (all DoD items met) |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-28 17:58 / 2026-10-28 18:05 +0500 |
+| Definition | `docs/05-planning/backlog.md` § TASK-033 |
 
 ---
 

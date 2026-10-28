@@ -41,7 +41,7 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 |---|---|---|---|
 | M0 | Foundation | TASK-001–006 | **In progress** (TASK-001..005 Done) |
 | M1 | 8086 engine (headless) | TASK-010–020 | **Completed** (TASK-010..020 Done) |
-| M2 | Runtime, DOS and toolchain | TASK-030–044 | **In progress** (TASK-030..032 Done) |
+| M2 | Runtime, DOS and toolchain | TASK-030–044 | **In progress** (TASK-030..033 Done) |
 | M3 | Debug session (headless) | TASK-050–054 | Not started |
 | M4 | App shell and editor | TASK-060–070 | **In progress** (TASK-060 Done) |
 | M5 | Debugger UI and visualization | TASK-080–086 | Not started |

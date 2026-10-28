@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-28 17:52 +0500 by Antigravity (TASK-032 done) |
-| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..032 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..032 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-033` Console device; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-28 18:04 +0500 by Antigravity (TASK-033 done) |
+| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..033 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..033 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-034` DOS output and termination services (UNBLOCKED); M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-033` (console device) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-034` (DOS output and termination services) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-033 Console device | 2026-10-28 18:04 +0500 | `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs` implementing `IConsoleDevice` per FR-063, FR-064, NFR-015, NFR-016, AC-045, AC-047, and ADR-0004 §6: circular output buffer capped at 1 MiB with oldest content trimmed; snapshot delta API (`TakeOutput`) decoding CP437; column counter tracking TAB (modulo 8), CR (reset to 0), BS (decrement), and printable characters; BEL (07h) event counter; input queue with instruction-stamped event recording (`InputEvent.cs`) and deterministic replay; 22 new unit tests in `ConsoleDeviceTests` (total 79/79 in Runtime.Tests); solution build 0w/0e, 39/39 architecture tests passed |
 | TASK-032 Interrupt router and runtime error policy | 2026-10-28 17:52 +0500 | `src/AssemblyStudio.Runtime/Interrupts/` (`IvtStubs.cs`, `RuntimeHaltInfo.cs`, `RuntimeErrorPolicy.cs`, `InterruptRouter.cs`) implementing `IInterruptRouter` per FR-038, FR-040, NFR-013, AC-029, AC-031, ADR-0004 §3: IVT default stubs at reserved segment 0xF000 with IRET opcodes (0xCF); default vs program-installed vector detection (program-modified vectors return null to let CPU vector through IVT with real 8086 semantics); CPU exceptions (INT 0..4) halt with RuntimeError naming condition and address (AC-031 divide error); unsupported interrupts/functions halt with UnsupportedService naming interrupt and AH (AC-029 INT 21h function 3Dh); structured What/Where/Next diagnostic records; OS services delegation; 18 new unit tests in `InterruptRouterTests` (total 57/57 in Runtime.Tests); solution build 0w/0e, 39/39 architecture tests passed |
 | TASK-031 .COM loader and PSP | 2026-10-28 16:55 +0500 | `src/AssemblyStudio.Runtime/Loading/ProgramSegmentPrefix.cs` and `ComLoader.cs` implementing .COM image loading per FR-034, AC-021, and ADR-0004 §2: PSP at 0800h with fields 00h (CD 20), 02h (top of memory 0x1800), 05h (far call to 0800:0050h), 0Ah..15h (IVT vectors), 16h (parent PSP), 2Ch (env 0000h), 50h (CD 21 CB), 5Ch/6Ch (zeroed FCBs), and 80h (command tail with length and CR); image placed at 0800:0100h; stack word 0000h at SS:SP (0800:FFFEh); registers initialized to CS=DS=ES=SS=0800h, IP=0100h, SP=FFFEh, AX=BX=CX=DX=SI=DI=BP=0000h, Flags=0002h; 9 new tests in `ComLoaderTests` (total 39/39 in Runtime.Tests); solution build 0w/0e |
 | TASK-030 Runtime memory, journal and machine | 2026-10-28 16:40 +0500 | `src/AssemblyStudio.Runtime/Memory/RealModeMemory.cs` implementing `IMemory` with 1 MiB physical address space, 20-bit wrap, 16-bit word segment offset wrap, per-step write journal (`TakeJournal`, `Rollback`, `RollbackJournal`), and contiguous sorted changed-range extraction in `AddressRange.cs`; `src/AssemblyStudio.Runtime/Machine.cs` implementing `IMachine` composing `ICpu`, `IMemory`, `IConsoleDevice`, and optional `IInterruptRouter` and `IOsServices`; `NullConsoleDevice.cs` default fallback; 30 unit tests in `AssemblyStudio.Runtime.Tests` (wrap, aliasing, word wrap, journal, changed-range merging, rollback, machine wiring); solution build 0w/0e, 39/39 architecture tests passed |

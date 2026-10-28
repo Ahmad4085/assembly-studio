@@ -942,3 +942,35 @@
 - **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-032. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-033` (Console device) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-28 17:58 – 18:05 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-033 Console device
+- **Summary:** Ran `/assembly-implement TASK-033` (Console device):
+  - Implemented `InputEvent` in `src/AssemblyStudio.Runtime/Console/InputEvent.cs`:
+    - Immutable record struct `InputEvent(ulong InstructionCount, byte Value)` stamping input events with CPU execution instruction count (ADR-0004 §5, NFR-016).
+  - Implemented `ConsoleDevice` in `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs`:
+    - 1 MiB output buffer (`DefaultMaxCapacity = 1024 * 1024` bytes, NFR-015, AC-045).
+    - Circular buffer with O(1) appending and automatic oldest content trimming without heap reallocations.
+    - Snapshot delta API: `TakeOutput()` returns pending output string and clears delta (ADR-0007 §2).
+    - Full text retrieval: `ToByteArray()` and `GetAllText()` decoding via IBM PC CP437.
+    - DOS column counter (ADR-0004 §6, R-DOS §2):
+      - CR (0Dh) resets column to 0.
+      - BS (08h) decrements column without underflowing.
+      - TAB (09h) advances column to next multiple of 8 (`(col + 8) & ~7`).
+      - BEL (07h) increments `BelCount` without advancing column.
+      - Printable characters (>= 20h) advance column by 1.
+      - Control characters (< 20h) do not advance column.
+    - Input queue with event recording and deterministic replay (NFR-016, AC-047):
+      - Live mode: `EnqueueInput`, `TryReadInput` dequeues and appends stamped `InputEvent` to `RecordedInputs`.
+      - Replay mode: `SetReplayInputs` loads recorded events; `TryReadInput` returns bytes only when `CurrentInstructionCount` reaches the stamped instruction count.
+    - Reset / Clear: `Clear()` resets output, delta, column, BEL, and live queue, preserving recorded log (FR-063).
+  - Authored 22 unit tests in `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`.
+- **Files changed:** `src/AssemblyStudio.Runtime/Console/InputEvent.cs` (new), `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs` (new), `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs` (new), `docs/05-planning/backlog.md`, `ROADMAP.md`, `PROJECT_STATE.md`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 18:03 +0500).
+  - `& ...\AssemblyStudio.Runtime.Tests.exe` → **79/79 passed** in 1.10s (2026-10-28 18:03 +0500).
+  - `& ...\AssemblyStudio.ArchitectureTests.exe` → **39/39 passed** in 1.58s (2026-10-28 18:03 +0500).
+  - Core test executables (Core, Os.Dos, Nasm, Debugging, Content) → **18/18 passed** (2026-10-28 18:03 +0500).
+  - `& ...\AssemblyStudio.Engine.I8086.Tests.exe -class "*DeterminismTests*" -class "*EnginePerformanceTests*" -class "*IcedDisassemblerTests*"` → **80/80 passed** in 12.8s (2026-10-28 18:03 +0500).
+- **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none for TASK-033. Pre-existing DEF-001 remains open.
+- **Next step:** `/assembly-implement TASK-034` (Basic DOS services: output and termination — unblocked by TASK-033!) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes).

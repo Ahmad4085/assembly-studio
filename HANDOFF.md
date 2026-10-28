@@ -8,7 +8,7 @@
 | Written | 2026-10-28 16:13 +0500 by Claude Code (Opus 5.5), after fixing the TASK-020 timing test and committing TASK-020 (TASK-020 itself by Antigravity (IDE, Gemini 3.8 Flash), 16:00) |
 | Current task | **None in progress. Milestone 1 Complete. Next eligible: M2 `TASK-030` Runtime memory, journal and machine; M4 `TASK-061` Themes, tokens and contrast test; recommended: `/assembly-test`** |
 | Last completed | TASK-020 Engine conformance and performance gate (Done 2026-10-28 16:00 +0500) |
-| Git state | HEAD `dc1aede` (uncommitted changes for TASK-020). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `ce3f6ea` (TASK-020 committed, including the timing-test fix). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 15:58 +0500).

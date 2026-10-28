@@ -8,7 +8,7 @@
 | Written | 2026-10-28 18:05 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-033 |
 | Current task | **None in progress. Milestone 2 in progress. Next eligible: M2 `TASK-034` Basic DOS services: output and termination (UNBLOCKED); M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
 | Last completed | TASK-033 Console device (Done 2026-10-28 18:05 +0500) |
-| Git state | HEAD `20ff911` (uncommitted changes for TASK-033). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `ed716a9` (TASK-033 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-28 18:03 +0500).

@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 14:06 +0500 by Claude Code (Opus 5.5) (TASK-051 done) |
-| Current phase | **6 Implementation**: M1 and M2 complete; M3 in progress (TASK-050..051 done); M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
-| Current milestone | M3 Debug session (headless), in progress: TASK-050, TASK-051 done |
-| Active task | None in progress. Next eligible: `TASK-052` breakpoints/Step Over, `TASK-053` input/Ctrl-C/replay (M3); `TASK-061` themes (M4). User: `TASK-006`, DEF-003 decision |
+| Last updated | 2026-10-29 15:00 +0500 by Antigravity (IDE, Gemini 3.8 Flash) (TASK-052 done) |
+| Current phase | **6 Implementation**: M1 and M2 complete; M3 in progress (TASK-050..052 done); M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
+| Current milestone | M3 Debug session (headless), in progress: TASK-050, TASK-051, TASK-052 done (3/5) |
+| Active task | None in progress. Next eligible: `TASK-053` input/Ctrl-C/replay (M3); `TASK-061` themes (M4). User: `TASK-006`, DEF-003 decision |
 
-| Next recommended action | `/assembly-implement TASK-052` or `TASK-053`. User: TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-implement TASK-053` or `TASK-061`. User: TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-052 Breakpoints and Step Over | 2026-10-29 15:00 +0500 | Core `Breakpoint(Location, IsBound, Offset, IsEnabled)` and `PauseReason.Breakpoint`; `IDebugSession` breakpoint APIs (`Breakpoints`, `ToggleBreakpoint`, `SetBreakpoint`, `RemoveBreakpoint`, `RebindBreakpoints`, `StepOver`); `DebugSession`: fast O(1) active breakpoint lookup array (`bool[65536]`), continuation past hit breakpoints, `StepOver` with temporary breakpoint after CALL/INT instructions, stopping early on user breakpoints, errors, user pause, budget exhaustion or termination, non-CALL/INT single-step fallback; 12 new unit and integration tests in `BreakpointStepOverTests.cs` (Debugging suite 40/40); Release build 0w/0e; 1032/1033 solution tests passed (DEF-001 pre-existing) |
 | TASK-051 Snapshots (ADR-0007 v1.1) | 2026-10-29 14:06 +0500 | Core `HistoryEntry` (HistoryDelta now a list), `IDisassembler.Decode`, `IDebugSession.History/WatchMemory/UnwatchMemory`. `Debugging/Snapshots`: history ring 1,000, current instruction + source line, ≤ 4 × 4 KiB windows, 16-word stack; ≤ 30/s running snapshots (27.7/s measured) without current instruction. 13 new tests incl. snapshot = machine, AC-048, AC-049; step → snapshot 0.24 ms median, 0.33 ms p95. Release build 0w/0e; full solution 1021/1021 (twice) |
 | TASK-050 Debug session worker and commands | 2026-10-29 13:41 +0500 | Core `IDebugSession`/`PauseReason`; `Debugging/DebugSession`: dedicated worker + command channel, machine factory (Reset reloads), Run/Pause/StopSession/Reset/StepInto, per-instruction command check, per-run budget (default 10M), states per ui-spec §4, faults → Error, snapshots with folded memory changes and console delta, published state consistent with snapshot. 15 new tests incl. AC-027, AC-030 (Pause 3 ms, Stop 0.4 ms), AC-054. Release build 0w/0e; full solution 1009/1009 |
 | TASK-044 Program-level test harness (M2 complete) | 2026-10-29 13:25 +0500 | New `tests/AssemblyStudio.ProgramTests` (in the solution): `ProgramHarness` (NASM build → load → headless run, scripted or replayed input, budget, CPU trace) with NASM program fixtures; AC-021/022/023/029/031/064 at runtime level and AC-047 replay pass (14 tests). DEF-004 (toolchain timing flakes under load) fixed. Release build 0w/0e; full solution 994/994 |
@@ -95,8 +96,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 13:58 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 14:05 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1021/1021 passed** in two consecutive runs (3m 48s, 3m 28s); Debugging 28/28 |
+| Product build (2026-10-29 14:27 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 14:57 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1032/1033 passed** (1 open known defect DEF-001 in App.Tests); Debugging 40/40 |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

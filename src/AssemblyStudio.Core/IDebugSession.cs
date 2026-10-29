@@ -17,6 +17,9 @@ public enum PauseReason
 
     /// <summary>The run used up its instruction budget; the user may continue (Run) or stop (FR-042, AC-030).</summary>
     BudgetExhausted,
+
+    /// <summary>A breakpoint was hit (FR-052, AC-032, ui-spec §4/§10).</summary>
+    Breakpoint,
 }
 
 /// <summary>
@@ -77,6 +80,47 @@ public interface IDebugSession : IDisposable
     /// <summary>Reloads the original image into a fresh machine: initial registers, cleared console (FR-035).</summary>
     void Reset();
 
+    /// <summary>All breakpoints configured in the session (FR-052).</summary>
+    IReadOnlyList<Breakpoint> Breakpoints { get; }
+
+    /// <summary>
+    /// Toggles a line breakpoint: removes it if one already exists at <paramref name="file"/>:<paramref name="line"/>,
+    /// otherwise adds an enabled breakpoint (FR-052).
+    /// </summary>
+    /// <param name="file">Full path of the source file, or <see langword="null"/> for the untitled document.</param>
+    /// <param name="line">1-based line number.</param>
+    /// <returns><see langword="true"/> if a breakpoint was added; <see langword="false"/> if one was removed.</returns>
+    bool ToggleBreakpoint(string? file, int line);
+
+    /// <summary>
+    /// Adds or updates a line breakpoint (FR-052).
+    /// </summary>
+    /// <param name="file">Full path of the source file, or <see langword="null"/> for the untitled document.</param>
+    /// <param name="line">1-based line number.</param>
+    /// <param name="enabled">Whether the breakpoint is enabled.</param>
+    void SetBreakpoint(string? file, int line, bool enabled = true);
+
+    /// <summary>
+    /// Removes a line breakpoint (FR-052).
+    /// </summary>
+    /// <param name="file">Full path of the source file, or <see langword="null"/> for the untitled document.</param>
+    /// <param name="line">1-based line number.</param>
+    /// <returns><see langword="true"/> if a breakpoint was found and removed; <see langword="false"/> otherwise.</returns>
+    bool RemoveBreakpoint(string? file, int line);
+
+    /// <summary>
+    /// Re-evaluates all breakpoints with a new source map after a rebuild (FR-052).
+    /// </summary>
+    /// <param name="sourceMap">The new source map, or <see langword="null"/> if the build produced none.</param>
+    void RebindBreakpoints(ISourceMap? sourceMap);
+
     /// <summary>Executes exactly one instruction (FR-049).</summary>
     void StepInto();
+
+    /// <summary>
+    /// Executes a CALL or INT and runs until control returns to the next instruction, stopping earlier at
+    /// breakpoints, errors or termination. For other instructions, executes exactly one instruction like
+    /// <see cref="StepInto"/> (FR-050, AC-033).
+    /// </summary>
+    void StepOver();
 }

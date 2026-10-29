@@ -993,7 +993,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M3 |
 | Requirements | FR-050, FR-052 |
 | Decisions / design | ADR-0007, ADR-0005 |

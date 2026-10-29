@@ -6,16 +6,41 @@
 
 ## Active Task
 
-None in progress.
-
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
-| Milestone 3 progress | M3: Debug session (TASK-050, TASK-051 Done; 2/5) |
-| Recommended next action | `/assembly-implement TASK-052` (breakpoints and Step Over) or `/assembly-implement TASK-053` (input, Ctrl-C, replay) |
+| Milestone 3 progress | M3: Debug session (TASK-050, TASK-051, TASK-052 Done; 3/5) |
+| Recommended next action | `/assembly-implement TASK-053` (input routing, Ctrl-C, replay) |
 | Also eligible | `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---
+
+## Completed: TASK-052 Breakpoints and Step Over (Done 2026-10-29 15:00 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- Core:
+  - `Breakpoint`: `public readonly record struct Breakpoint(SourceLocation Location, bool IsBound, ushort? Offset = null, bool IsEnabled = true);`
+  - `PauseReason.Breakpoint`: added to enum for breakpoint pause reporting (FR-052, AC-032).
+  - `IDebugSession`: added `Breakpoints`, `ToggleBreakpoint`, `SetBreakpoint`, `RemoveBreakpoint`, `RebindBreakpoints`, `StepOver`.
+- `src/AssemblyStudio.Debugging/DebugSession.cs`:
+  - `_activeBreakpoints`: `bool[65536]` fast array lookup ensuring O(1) nanosecond pre-instruction check in `RunUntilStopped()`. Rebuilt and atomically swapped under lock on breakpoint mutations.
+  - Breakpoint continuation past current IP: `_lastBreakpointHit` records hit location to prevent re-pausing on resume without executing.
+  - Breakpoints persist across `Reset()` (FR-052).
+  - `StepOver`: decodes current instruction with `IDisassembler.Decode`. For CALL/INT (`call`, `int`, `int3`, `into`), sets a temporary breakpoint at next instruction (`IP + Length`) and executes run loop until reached; pauses with `PauseReason.Step` (or `PauseReason.Breakpoint` if user breakpoint also present); stops early if user breakpoint hit inside procedure, user pause, budget exhaustion, runtime error, or termination. Non-CALL/INT instructions step one instruction (`PauseReason.Step`).
+- Tests: `tests/AssemblyStudio.Debugging.Tests/BreakpointStepOverTests.cs` (12 new tests):
+  - AC-032 (looping program with breakpoint before line 10, multiple loop iterations, removal and run to termination).
+  - AC-033 (step over 20-instruction procedure to instruction after call; step over stopping early on breakpoint inside procedure).
+  - Step over INT 21h, step over non-call instructions, step over stopping early on termination or runtime error.
+  - Bound/unbound state and rebinding after rebuild, disabled breakpoint, reset persistence, entry point breakpoint, toggle/remove semantics.
+- Verification: Release build 0w/0e; 40/40 Debugging tests; 39/39 Architecture tests; 1032/1033 solution tests (DEF-001 pre-existing).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-29 14:20 / 15:00 +0500 |
+
+---
 
 ---|---|
 | Status | In progress |

@@ -46,7 +46,12 @@ public sealed class DebugSession : IDebugSession
     private readonly Dictionary<int, byte> _changedBytes = [];
     private readonly Lock _snapshotLock = new();
     private readonly IDisassembler _disassembler;
-    private readonly ISourceMap? _sourceMap;
+    private ISourceMap? _sourceMap;
+    private readonly List<Breakpoint> _breakpoints = [];
+    private readonly Lock _breakpointLock = new();
+    private volatile bool[] _activeBreakpoints = new bool[65536];
+    private (ushort Cs, ushort Ip)? _temporaryBreakpoint;
+    private (ushort Cs, ushort Ip)? _lastBreakpointHit;
     private readonly ExecutionHistory _history = new();
     private readonly List<MemoryWatch> _watches = [];
     private readonly Lock _watchLock = new();
@@ -92,6 +97,7 @@ public sealed class DebugSession : IDebugSession
         Stop,
         Reset,
         StepInto,
+        StepOver,
         Refresh,
     }
 
@@ -172,6 +178,127 @@ public sealed class DebugSession : IDebugSession
     /// <inheritdoc />
     public void StepInto() => Post(CommandKind.StepInto);
 
+    /// <inheritdoc />
+    public void StepOver() => Post(CommandKind.StepOver);
+
+    /// <inheritdoc />
+    public IReadOnlyList<Breakpoint> Breakpoints
+    {
+        get
+        {
+            lock (_breakpointLock)
+            {
+                return [.. _breakpoints];
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public bool ToggleBreakpoint(string? file, int line)
+    {
+        lock (_breakpointLock)
+        {
+            int index = _breakpoints.FindIndex(b => b.Location.Line == line && SameFile(b.Location.File, file));
+            if (index >= 0)
+            {
+                _breakpoints.RemoveAt(index);
+                UpdateActiveBreakpoints();
+                return false;
+            }
+
+            ushort? offset = Volatile.Read(ref _sourceMap)?.FirstOffsetOf(file, line);
+            _breakpoints.Add(new Breakpoint(new SourceLocation(file, line), offset.HasValue, offset, IsEnabled: true));
+            UpdateActiveBreakpoints();
+            return true;
+        }
+    }
+
+    /// <inheritdoc />
+    public void SetBreakpoint(string? file, int line, bool enabled = true)
+    {
+        lock (_breakpointLock)
+        {
+            int index = _breakpoints.FindIndex(b => b.Location.Line == line && SameFile(b.Location.File, file));
+            ushort? offset = Volatile.Read(ref _sourceMap)?.FirstOffsetOf(file, line);
+            var bp = new Breakpoint(new SourceLocation(file, line), offset.HasValue, offset, enabled);
+            if (index >= 0)
+            {
+                _breakpoints[index] = bp;
+            }
+            else
+            {
+                _breakpoints.Add(bp);
+            }
+
+            UpdateActiveBreakpoints();
+        }
+    }
+
+    /// <inheritdoc />
+    public bool RemoveBreakpoint(string? file, int line)
+    {
+        lock (_breakpointLock)
+        {
+            int index = _breakpoints.FindIndex(b => b.Location.Line == line && SameFile(b.Location.File, file));
+            if (index >= 0)
+            {
+                _breakpoints.RemoveAt(index);
+                UpdateActiveBreakpoints();
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    /// <inheritdoc />
+    public void RebindBreakpoints(ISourceMap? sourceMap)
+    {
+        lock (_breakpointLock)
+        {
+            Volatile.Write(ref _sourceMap, sourceMap);
+            for (int i = 0; i < _breakpoints.Count; i++)
+            {
+                Breakpoint bp = _breakpoints[i];
+                ushort? offset = sourceMap?.FirstOffsetOf(bp.Location.File, bp.Location.Line);
+                _breakpoints[i] = new Breakpoint(bp.Location, offset.HasValue, offset, bp.IsEnabled);
+            }
+
+            UpdateActiveBreakpoints();
+        }
+    }
+
+    private void UpdateActiveBreakpoints()
+    {
+        var table = new bool[65536];
+        foreach (Breakpoint bp in _breakpoints)
+        {
+            if (bp.IsEnabled && bp.IsBound && bp.Offset.HasValue)
+            {
+                table[bp.Offset.Value] = true;
+            }
+        }
+
+        _activeBreakpoints = table;
+    }
+
+    private static bool SameFile(string? a, string? b)
+    {
+        if (a is null || b is null)
+        {
+            return a == b;
+        }
+
+        try
+        {
+            return string.Equals(Path.GetFullPath(a), Path.GetFullPath(b), StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     /// <summary>Stops the worker thread. A run in progress is interrupted before its next instruction.</summary>
     public void Dispose()
     {
@@ -225,6 +352,8 @@ public sealed class DebugSession : IDebugSession
                 _lastStep = null;
                 _history.Clear();
                 _historyView = [];
+                _temporaryBreakpoint = null;
+                _lastBreakpointHit = null;
 
                 _changedBytes.Clear();
                 Interlocked.Exchange(ref _instructionsExecuted, 0);
@@ -239,6 +368,8 @@ public sealed class DebugSession : IDebugSession
             case CommandKind.Stop:
                 if (_machine is not null)
                 {
+                    _temporaryBreakpoint = null;
+                    _lastBreakpointHit = null;
                     DrainJournal();
                     SetState(SessionState.Idle, PauseReason.None);
                     Publish();
@@ -258,6 +389,7 @@ public sealed class DebugSession : IDebugSession
             case CommandKind.StepInto:
                 if (CanExecute())
                 {
+                    _lastBreakpointHit = null;
                     StepResult result = Step();
                     if (result.Outcome == StepOutcome.Executed)
                     {
@@ -267,6 +399,10 @@ public sealed class DebugSession : IDebugSession
                     Publish();
                 }
 
+                break;
+
+            case CommandKind.StepOver:
+                ExecuteStepOver();
                 break;
 
             case CommandKind.Run:
@@ -290,6 +426,54 @@ public sealed class DebugSession : IDebugSession
     /// <summary>Execution can continue from Paused and from WaitingForInput (the INT re-executes).</summary>
     private bool CanExecute() => _machine is not null && _state is SessionState.Paused or SessionState.WaitingForInput;
 
+    private void ExecuteStepOver()
+    {
+        if (!CanExecute())
+        {
+            return;
+        }
+
+        CpuState cpu = _machine!.Cpu.State;
+        Span<byte> buffer = stackalloc byte[6];
+        for (int i = 0; i < 6; i++)
+        {
+            buffer[i] = _machine.Memory.Read8(cpu.CS, (ushort)(cpu.IP + i));
+        }
+
+        DecodedInstruction? decoded = _disassembler.Decode(buffer, cpu.IP);
+        if (decoded is not null && IsCallOrInterrupt(decoded.Value.Text))
+        {
+            ushort nextIp = (ushort)(cpu.IP + decoded.Value.Length);
+            _temporaryBreakpoint = (cpu.CS, nextIp);
+            RunUntilStopped();
+        }
+        else
+        {
+            _lastBreakpointHit = null;
+            StepResult result = Step();
+            if (result.Outcome == StepOutcome.Executed)
+            {
+                SetState(SessionState.Paused, PauseReason.Step);
+            }
+
+            Publish();
+        }
+    }
+
+    private static bool IsCallOrInterrupt(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        string trimmed = text.Trim();
+        return trimmed.StartsWith("call", StringComparison.OrdinalIgnoreCase)
+            || trimmed.StartsWith("int", StringComparison.OrdinalIgnoreCase)
+            || trimmed.Contains(" call ", StringComparison.OrdinalIgnoreCase)
+            || trimmed.Contains(" int ", StringComparison.OrdinalIgnoreCase);
+    }
+
     private void RunUntilStopped()
     {
         SetState(SessionState.Running, PauseReason.None);
@@ -298,16 +482,53 @@ public sealed class DebugSession : IDebugSession
         long budget = Interlocked.Read(ref _budget);
         long executed = 0;
         var sinceSnapshot = Stopwatch.StartNew();
+
+        bool skipBreakpointAtCurrentIp = _lastBreakpointHit.HasValue
+            && _lastBreakpointHit.Value.Cs == _machine!.Cpu.State.CS
+            && _lastBreakpointHit.Value.Ip == _machine.Cpu.State.IP;
+        _lastBreakpointHit = null;
+
         while (true)
         {
             if (Volatile.Read(ref _pendingCommands) > 0)
             {
+                _temporaryBreakpoint = null;
                 SetState(SessionState.Paused, PauseReason.UserPause); // published by the command that interrupted the run
                 return;
             }
 
+            CpuState cpu = _machine!.Cpu.State;
+
+            // Check temporary breakpoint (Step Over)
+            if (_temporaryBreakpoint.HasValue && _temporaryBreakpoint.Value.Cs == cpu.CS && _temporaryBreakpoint.Value.Ip == cpu.IP)
+            {
+                _temporaryBreakpoint = null;
+                bool isUserBp = cpu.CS == _programSegment && _activeBreakpoints[cpu.IP];
+                if (isUserBp)
+                {
+                    _lastBreakpointHit = (cpu.CS, cpu.IP);
+                }
+
+                SetState(SessionState.Paused, isUserBp ? PauseReason.Breakpoint : PauseReason.Step);
+                Publish();
+                return;
+            }
+
+            // Check user breakpoint (pauses BEFORE executing the instruction)
+            if (!skipBreakpointAtCurrentIp && cpu.CS == _programSegment && _activeBreakpoints[cpu.IP])
+            {
+                _temporaryBreakpoint = null;
+                _lastBreakpointHit = (cpu.CS, cpu.IP);
+                SetState(SessionState.Paused, PauseReason.Breakpoint);
+                Publish();
+                return;
+            }
+
+            skipBreakpointAtCurrentIp = false;
+
             if (executed >= budget)
             {
+                _temporaryBreakpoint = null;
                 SetState(SessionState.Paused, PauseReason.BudgetExhausted);
                 Publish();
                 return;
@@ -316,6 +537,7 @@ public sealed class DebugSession : IDebugSession
             StepResult result = Step();
             if (result.Outcome != StepOutcome.Executed)
             {
+                _temporaryBreakpoint = null;
                 Publish();
                 return;
             }
@@ -414,7 +636,7 @@ public sealed class DebugSession : IDebugSession
                 _state,
                 termination?.Path.ToString(),
                 termination?.ExitCode,
-                _state == SessionState.Running ? null : SnapshotContent.CurrentInstruction(_machine, _disassembler, _sourceMap, _programSegment),
+                _state == SessionState.Running ? null : SnapshotContent.CurrentInstruction(_machine, _disassembler, Volatile.Read(ref _sourceMap), _programSegment),
                 watches.Length == 0 ? null : SnapshotContent.MemoryWindows(_machine.Memory, watches),
                 SnapshotContent.Stack(_machine),
                 delta);

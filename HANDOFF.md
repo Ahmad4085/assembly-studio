@@ -8,7 +8,7 @@
 | Written | 2026-10-29 12:58 +0500 by Claude Code (Opus 5.5), after completing TASK-043 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..036, TASK-040..043 Done; 11/12). Next eligible: M2 `TASK-044` program-level test harness; M4 `TASK-061` themes** |
 | Last completed | TASK-043 Listing/map parsing and source map (Done 2026-10-29 12:58 +0500) |
-| Git state | HEAD `e0c3386` + uncommitted TASK-043 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `40024f0` (TASK-043 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 12:52 +0500).
@@ -41,7 +41,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-043. Files:
+1. Done: TASK-043 committed. Files were:
    - `src/AssemblyStudio.Core/ISourceMap.cs`, `src/AssemblyStudio.Core/BuildResult.cs`
    - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/*`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.{cs,resx}`
    - `tests/AssemblyStudio.Toolchain.Nasm.Tests/SourceMapTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/**`

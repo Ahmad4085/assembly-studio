@@ -8,7 +8,7 @@
 | Written | 2026-10-29 13:41 +0500 by Claude Code (Opus 5.5), after completing TASK-050 |
 | Current task | **None in progress. M1, M2 complete; M3 in progress (TASK-050 Done). Next eligible: `TASK-051` snapshots, `TASK-053` input/Ctrl-C/replay; M4 `TASK-061` themes** |
 | Last completed | TASK-050 Debug session worker and commands (Done 2026-10-29 13:41 +0500) |
-| Git state | HEAD `3431cf2` + uncommitted TASK-050 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `fb6fa91` (TASK-050 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 13:36 +0500).
@@ -44,7 +44,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-050. Files:
+1. Done: TASK-050 committed. Files were:
    - `src/AssemblyStudio.Core/IDebugSession.cs`, `src/AssemblyStudio.Debugging/DebugSession.cs`
    - `tests/AssemblyStudio.Debugging.Tests/{AssemblyStudio.Debugging.Tests.csproj, DebugSessionTests.cs}`
    - `docs/05-planning/backlog.md`, shared memory files

@@ -156,6 +156,39 @@ public sealed partial class NasmAssembler : IAssembler
                 await File.WriteAllTextAsync(source, request.UnsavedText, Utf8NoBom, cancellationToken).ConfigureAwait(false);
             }
 
+            ProcessRun preprocess = await ProcessRunner.RunAsync(
+                assembler.Path!, ["-Xgnu", "-E", source], workingDirectory, _options.Timeout, _options.OutputCap, cancellationToken).ConfigureAwait(false);
+
+            BuildOutcome preprocessOutcome = Classify(preprocess);
+            if (preprocessOutcome is BuildOutcome.Cancelled or BuildOutcome.TimedOut or BuildOutcome.Crashed)
+            {
+                var failDiagnostics = new List<Diagnostic>(BuildMessagesFor(preprocessOutcome, preprocess, [], request));
+                if (assembler.Status != AssemblerStatus.Ready)
+                {
+                    failDiagnostics.Add(BuildMessages.Create(BuildMessages.VersionWarning, null, null, assembler.Problem));
+                }
+
+                return new BuildResult(preprocessOutcome, ReadOnlyMemory<byte>.Empty, preprocess.StandardError, preprocess.Truncated, preprocess.ExitCode, stopwatch.Elapsed, assembler)
+                {
+                    Diagnostics = failDiagnostics,
+                };
+            }
+
+            IReadOnlyList<Diagnostic> cpuDiagnostics = CpuDirectiveGuard.Scan(preprocess.StandardOutput, source, request.SourcePath, workingDirectory);
+            if (cpuDiagnostics.Count > 0)
+            {
+                var failDiagnostics = new List<Diagnostic>(cpuDiagnostics);
+                if (assembler.Status != AssemblerStatus.Ready)
+                {
+                    failDiagnostics.Add(BuildMessages.Create(BuildMessages.VersionWarning, null, null, assembler.Problem));
+                }
+
+                return new BuildResult(BuildOutcome.Failed, ReadOnlyMemory<byte>.Empty, preprocess.StandardError, preprocess.Truncated, preprocess.ExitCode, stopwatch.Elapsed, assembler)
+                {
+                    Diagnostics = failDiagnostics,
+                };
+            }
+
             string image = Path.Combine(work, "program.com");
             string[] arguments =
             [

@@ -1105,3 +1105,33 @@
 - **Git state after:** uncommitted TASK-041 changes on top of `6755510` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-003 (new, needs a decision). DEF-001 and DEF-002 are still open.
 - **Next step:** `/assembly-implement TASK-042` (CPU-directive guard).
+
+### 2026-10-29 12:15 – 12:40 +0500 · Antigravity (IDE, Gemini 3.8 Flash) · TASK-042 CPU-directive guard
+- **Summary:** Ran `/assembly-implement TASK-042` (user request). Lock was free; TASK-041 was committed in `9f364bd` / `b191212`.
+  - **`CpuDirectiveGuard`** (`src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs`):
+    - Scans preprocessed NASM output (`-Xgnu -E`, FR-027, ADR-0005 §3) for CPU directives requesting a processor level other than 8086.
+    - Parses NASM `%line <line>[+<step>] [<file>]` markers to accurately track line numbers across empty lines, multi-line blocks, macros, and included files.
+    - Matches normalized directive lines `^\s*\[\s*cpu\s+(?<level>[^\]\s]+)\s*\]\s*$` (case-insensitive), avoiding false-positives on string literals.
+    - Directives in the main file are mapped to the document path (or `null` for untitled documents); directives in included files are resolved relative to the working directory.
+    - Disallows 186/286/386/486/586/686/pentium/x64 and allows `8086`.
+  - **Message Catalog** (`BuildMessages.cs` + `BuildMessages.resx`):
+    - Added stable code `BLD009` (`UnsupportedCpu`, severity Error).
+    - Resource texts for `BLD009_What`: "The CPU directive '{0}' is not supported. Assembly Studio targets the 8086 processor."
+    - Resource texts for `BLD009_Next`: "Remove the CPU directive or change it to 8086, then build again."
+  - **`NasmAssembler.BuildAsync` Integration**:
+    - Invokes `nasm -Xgnu -E <source>` before full binary assembly.
+    - Handles timeout (`BLD002`), crash (`BLD003`), cancellation (`BLD005`).
+    - If non-8086 CPU directives are detected, halts build immediately with `BuildOutcome.Failed`, empty binary output, and `BLD009` diagnostics without running binary assembly.
+  - **Tests**:
+    - `CpuDirectiveGuardTests` (8 unit tests): allowed `8086`, rejected non-8086 (186, 286, 386, 486, 586, 686, PENTIUM, x64), macro definition line reporting, include file path and line reporting, untitled vs saved file mapping, multiple directives reporting, string literals non-flagging, blank line counting.
+    - `BuildDiagnosticsTests` (5 new integration tests): AC-018 instruction beyond 8086 rejected with `ASM001`, AC-018 bypass attempt with `cpu 386` rejected with `BLD009`, `cpu 386` hidden in macro rejected with `BLD009`, `cpu 286` in include file rejected with `BLD009`, explicit `cpu 8086` builds successfully.
+    - Toolchain test suite now 79/79 passed.
+- **Files changed:** `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.cs`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.resx`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs` (new), `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/CpuDirectiveGuardTests.cs` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `WORK_LOG.md`, `HANDOFF.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (12:17 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release` → **79/79 passed** (12:18 +0500).
+  - `dotnet test --project tests/AssemblyStudio.ArchitectureTests -c Release` → **39/39 passed** (12:18 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **934/935 passed** in 3m 12s (12:33 +0500). Only pre-existing DEF-001 in App.Tests failed.
+- **Git state after:** uncommitted TASK-042 changes on top of `b191212` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-001, DEF-002, DEF-003 open.
+- **Next step:** `/assembly-implement TASK-043` (source map from listing + map).

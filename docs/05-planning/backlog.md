@@ -849,7 +849,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-027 |
 | Decisions / design | ADR-0005 |

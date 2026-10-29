@@ -44,6 +44,9 @@ internal static class BuildMessages
     /// <summary>The assembler's version is older than 3.02 or unknown (FR-024).</summary>
     public const string VersionWarning = "BLD008";
 
+    /// <summary>A CPU directive requests a processor level other than 8086 (FR-027, ADR-0005 §3).</summary>
+    public const string UnsupportedCpu = "BLD009";
+
     /// <summary>The largest .COM image: 64 KiB minus the 256-byte PSP (FR-031).</summary>
     public const int MaxComImageSize = 65_280;
 
@@ -61,6 +64,7 @@ internal static class BuildMessages
         [ImageTooLarge] = DiagnosticSeverity.Error,
         [MasmHint] = DiagnosticSeverity.Info,
         [VersionWarning] = DiagnosticSeverity.Warning,
+        [UnsupportedCpu] = DiagnosticSeverity.Error,
     };
 
     /// <summary>Codes whose "what" text comes from the assembler instead of the catalog.</summary>

@@ -12,9 +12,9 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
-| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040, TASK-041 Done; 9/12) |
-| Recommended next action | `/assembly-implement TASK-042` (CPU-directive guard) |
-| Also eligible | `TASK-043` (listing/map source map), `TASK-061` (Themes) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040..042 Done; 10/12) |
+| Recommended next action | `/assembly-implement TASK-043` (listing/map source map) |
+| Also eligible | `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---|---|
@@ -94,6 +94,35 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-042 CPU-directive guard (Done 2026-10-29 12:35 +0500, Antigravity (IDE, Gemini 3.8 Flash))
+- `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs`:
+  - Scans preprocessed NASM output (`-Xgnu -E`, FR-027, ADR-0005 §3) for CPU directives requesting a processor level other than 8086.
+  - Accurately tracks NASM `%line <line>[+<step>] [<file>]` directives across blank lines, instruction blocks, macro expansions, and include files.
+  - Matches normalized directive lines `^\s*\[\s*cpu\s+(?<level>[^\]\s]+)\s*\]\s*$` (case-insensitive) while ignoring string literals like `db "[cpu 386]"`.
+  - Maps main source file to `documentPath` (or `null` if untitled); resolves included files relative to `workingDirectory`.
+  - Allows `8086`; rejects `186`, `286`, `386`, `486`, `586`, `686`, `PENTIUM`, `x64`, etc.
+- Catalog additions (`BuildMessages.cs` and `BuildMessages.resx`):
+  - Stable code `BLD009` (`UnsupportedCpu`, severity `DiagnosticSeverity.Error`).
+  - Text templates for `BLD009_What` and `BLD009_Next`.
+- `NasmAssembler.BuildAsync`:
+  - Runs `nasm -Xgnu -E <source>` prior to binary assembly.
+  - Halts build immediately on non-8086 CPU directives returning `BuildOutcome.Failed`, empty binary, and `BLD009` diagnostics without assembling machine code.
+  - Passes through timeout (`BLD002`), crash (`BLD003`), and cancellation (`BLD005`).
+- Tests:
+  - 8 new unit tests in `CpuDirectiveGuardTests` (allowed 8086, non-8086 rejection, macro reporting, include reporting, untitled/saved mapping, multiple directives, string literal safety, blank line counting).
+  - 5 new integration tests in `BuildDiagnosticsTests` verifying AC-018 instruction rejection with `ASM001`, `cpu 386` bypass rejection with `BLD009`, hidden-in-macro bypass rejection with `BLD009`, include file bypass rejection with `BLD009`, and explicit `cpu 8086` successful assembly.
+  - Toolchain test suite now **79/79 passed**.
+- Solution verification:
+  - Release build `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors**.
+  - `AssemblyStudio.ArchitectureTests` → **39/39 passed**.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **934/935 passed** (1 pre-existing defect DEF-001 in App.Tests).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Antigravity (IDE, Gemini 3.8 Flash) |
+| Started / finished | 2026-10-29 12:15 / 12:35 +0500 |
 
 ## Completed: TASK-041 Diagnostics, message catalog, MASM hint, size limit (Done 2026-10-29 11:53 +0500, Claude Code (Opus 5.5))
 - Core: `Diagnostic(Code, Severity, What, File, Line, NextStep)` and `DiagnosticSeverity`; `BuildResult.Diagnostics` (init, additive).

@@ -216,6 +216,103 @@ public sealed class BuildDiagnosticsTests : IDisposable
         Assert.Equal(65_280, result.Image.Length);
     }
 
+    // ---- AC-018: CPU-directive guard and 8086-only instruction validation (FR-027, ADR-0005 §3) ----
+
+    [Fact]
+    public async Task AC_018_instruction_beyond_8086_is_rejected_at_build()
+    {
+        const string source =
+            "org 100h\n" +
+            "pusha\n" +      // 80186+ instruction
+            "int 20h\n";
+
+        BuildResult result = await Build(Assembler(), null, source);
+
+        Assert.Equal(BuildOutcome.Failed, result.Outcome);
+        Assert.True(result.Image.IsEmpty);
+        Diagnostic error = Assert.Single(result.Diagnostics, d => d.Severity == DiagnosticSeverity.Error);
+        Assert.Equal("ASM001", error.Code);
+        Assert.Equal(2, error.Line);
+        Assert.Contains("cpu level", error.What, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task AC_018_cpu_directive_bypass_attempt_is_rejected_by_cpu_guard()
+    {
+        const string source =
+            "org 100h\n" +
+            "cpu 386\n" +
+            "pusha\n" +
+            "int 20h\n";
+
+        BuildResult result = await Build(Assembler(), null, source);
+
+        Assert.Equal(BuildOutcome.Failed, result.Outcome);
+        Assert.True(result.Image.IsEmpty);
+        Diagnostic error = Assert.Single(result.Diagnostics);
+        Assert.Equal("BLD009", error.Code);
+        Assert.Equal(DiagnosticSeverity.Error, error.Severity);
+        Assert.Equal(2, error.Line);
+        Assert.Contains("386", error.What, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Cpu_directive_hidden_in_a_macro_is_rejected_by_cpu_guard()
+    {
+        const string source =
+            "%macro SETCPU 0\n" +
+            "cpu 386\n" +        // line 2: non-8086 directive inside macro
+            "%endmacro\n" +
+            "org 100h\n" +
+            "SETCPU\n" +
+            "pusha\n" +
+            "int 20h\n";
+
+        BuildResult result = await Build(Assembler(), null, source);
+
+        Assert.Equal(BuildOutcome.Failed, result.Outcome);
+        Assert.True(result.Image.IsEmpty);
+        Diagnostic error = Assert.Single(result.Diagnostics);
+        Assert.Equal("BLD009", error.Code);
+        Assert.Equal(DiagnosticSeverity.Error, error.Severity);
+        Assert.Equal(2, error.Line);
+        Assert.Contains("386", error.What, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Cpu_directive_in_an_included_file_is_rejected_by_cpu_guard()
+    {
+        string incPath = Save("helpers.inc", "cpu 286\nnop\n");
+        string mainPath = Save("main.asm", "org 100h\n%include \"helpers.inc\"\nint 20h\n");
+
+        BuildResult result = await Build(Assembler(), mainPath, null);
+
+        Assert.Equal(BuildOutcome.Failed, result.Outcome);
+        Assert.True(result.Image.IsEmpty);
+        Diagnostic error = Assert.Single(result.Diagnostics);
+        Assert.Equal("BLD009", error.Code);
+        Assert.Equal(DiagnosticSeverity.Error, error.Severity);
+        Assert.Equal(incPath, error.File);
+        Assert.Equal(1, error.Line);
+        Assert.Contains("286", error.What, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Explicit_cpu_8086_directive_builds_successfully()
+    {
+        const string source =
+            "org 100h\n" +
+            "cpu 8086\n" +
+            "mov ax, 1\n" +
+            "int 20h\n";
+
+        BuildResult result = await Build(Assembler(), null, source);
+
+        Assert.Equal(BuildOutcome.Succeeded, result.Outcome);
+        Assert.False(result.Image.IsEmpty);
+        Assert.Empty(result.Diagnostics);
+    }
+
     // ---- AC-055 (catalog part): every message has a code, what, where and next step ----
 
     [Fact]

@@ -71,4 +71,10 @@
   <data name="BLD008_Next" xml:space="preserve">
     <value>Use the bundled NASM 3.02 (clear the assembler path in Settings), or install NASM 3.02 or later.</value>
   </data>
+  <data name="BLD009_What" xml:space="preserve">
+    <value>The CPU directive '{0}' is not supported. Assembly Studio targets the 8086 processor.</value>
+  </data>
+  <data name="BLD009_Next" xml:space="preserve">
+    <value>Remove the CPU directive or change it to 8086, then build again.</value>
+  </data>
 </root>

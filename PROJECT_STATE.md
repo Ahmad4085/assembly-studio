@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 11:53 +0500 by Claude Code (Opus 5.5) (TASK-041 done) |
-| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..036, TASK-040..041 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..036, TASK-040..041 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-042` CPU guard / `TASK-043` source map; NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-29 12:35 +0500 by Antigravity (IDE, Gemini 3.8 Flash) (TASK-042 done) |
+| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..036, TASK-040..042 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..036, TASK-040..042 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-043` source map; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-042` (CPU-directive guard) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-043` (listing/map source map) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-042 CPU-directive guard | 2026-10-29 12:35 +0500 | `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs` scanning preprocessed NASM (`-Xgnu -E`) output for non-8086 CPU directives; catalog code `BLD009` in `BuildMessages` resources; rejection of 186/286/386/486/pentium/x64 directives; macro and include directive source-mapping; 8 new unit tests in `CpuDirectiveGuardTests` + 5 new integration tests in `BuildDiagnosticsTests` (toolchain suite 79/79 passed); Release build 0w/0e; 934/935 solution tests passed (DEF-001 pre-existing) |
 | TASK-041 Diagnostics, message catalog, MASM hint, size limit | 2026-10-29 11:53 +0500 | Core `Diagnostic`/`DiagnosticSeverity`, `BuildResult.Diagnostics`. `Toolchain.Nasm/Diagnostics`: GNU parser (all severities, temp copy → document), resource-based catalog ASM001–003/BLD001–008 (code, what, next; where = file/line), MASM hint, 65,280-byte limit (BLD006). 22 new tests (toolchain 58/58) incl. AC-013 toolchain part, AC-014, AC-020, AC-055 catalog completeness. Release build 0w/0e; full solution 914/914. DEF-003 opened (loader limit 65,278) |
 | TASK-040 NASM runner | 2026-10-29 11:16 +0500 | Core `IAssembler`/`BuildRequest`/`BuildResult`/`AssemblerInfo`. `NasmAssembler`: configured path overrides bundled (validated, no fallback); `nasm -v` check with 3.02 warning; no shell, argument list, per-build temp folder, working dir = source folder, 10 s timeout and cancellation with tree kill, 1 MiB cap per stream, unsaved text via temp copy; outcomes Succeeded/Failed/AssemblerMissing/TimedOut/Crashed/Cancelled; duration measured. Map to stdout (`[map all]`) because NASM's map directive can't take a path with spaces (ADR-0005 flag deviation). Toolchain 36/36 incl. AC-015/016/019 toolchain parts, malicious names, 1,000-line build ≈ 110 ms. Release build 0w/0e; full solution 892/892 |
 | TASK-036 DOS buffered input and Ctrl-C | 2026-10-29 11:04 +0500 | `DosServices`: INT 21h 0Ah (MVP editing: max 0, full → BEL, `^X` echo, TAB, BS/DEL, LF, Enter CR-only, Esc cancel; template keys ignored); break checks in 01h/02h/08h/09h/0Ah (^C, ^S pause, ^P consumed); Ctrl-C protocol (`^C` CR LF, default INT 23h → `TerminationPath.CtrlC`; program handler IRET/RETF retry, RETF+CF terminates). Core/Runtime additive: `IConsoleDevice.TryPeekInput`, `TerminationPath.CtrlC`. Os.Dos 72/72 incl. AC-023 runtime part. Release build 0w/0e; full solution 862/862 (a first full run stalled, DEF-002, not reproduced) |
@@ -90,8 +91,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 11:48 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 11:52 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **914/914 passed** in 3m 23s (all 9 test projects; Toolchain.Nasm 58/58) |
+| Product build (2026-10-29 12:17 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 12:33 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **934/935 passed** in 3m 12s (Toolchain.Nasm 79/79; pre-existing DEF-001 in App.Tests) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

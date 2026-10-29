@@ -1228,3 +1228,34 @@
 - **Git state after:** uncommitted TASK-050 changes on top of `3431cf2` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision) are still open.
 - **Next step:** `/assembly-implement TASK-051` or `TASK-053`.
+
+### 2026-10-29 13:46 – 14:06 +0500 · Claude Code (Opus 5.5) · TASK-051 Snapshots (ADR-0007 v1.1)
+- **Summary:** Ran `/assembly-implement TASK-051` (user request). The lock was free; TASK-050 was committed.
+  - **Core changes found necessary:**
+    - `MachineSnapshot.HistoryDelta` was an `int`, but ADR-0007 v1.1 means "instructions executed since the last snapshot" and the history panel needs address and disassembly. It's now `IReadOnlyList<HistoryEntry>`; only Core tests and `DebugSession` used it.
+    - `IDisassembler` gained `Decode(bytes, ip)` → `DecodedInstruction(Text, Length)`, implemented in `IcedDisassembler` over its existing `DisassembleInstruction`. It gives exact instruction bytes and branch targets at the real IP (the old `Disassemble` decodes at IP 0).
+    - `IDebugSession` gained `History`, `WatchMemory(seg, off, len)` (≤ 4 × 4 KiB; returns an id; posts a refresh so a paused session publishes the window at once) and `UnwatchMemory`.
+  - **`Debugging/Snapshots`:**
+    - `ExecutionHistory`: a ring of 1,000 records (CS, IP, 6 bytes packed in a `ulong`). Allocation-free per instruction; disassembled only when published. A step that halts, terminates or waits is un-recorded.
+    - `SnapshotContent`: the current instruction (exact bytes, disassembly; source line via `ISourceMap.Find` only when CS = the program segment, taken from the entry CS), memory windows and a 16-word stack window, all as copies.
+  - **`DebugSession`:**
+    - Constructor `(loadMachine, IDisassembler, ISourceMap?)`.
+    - Running snapshots at most 30 per second, checked every 1,024 instructions, with no current instruction (FR-057).
+    - `History` (last 1,000) is published together with the snapshot.
+  - **Semantics, documented in HANDOFF for the view-model tasks:** memory changes, console and history are deltas since the previous published snapshot, running ones included.
+- **Files changed:** `src/AssemblyStudio.Core/{MachineSnapshot.cs, IDisassembler.cs, IDebugSession.cs}`, `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`, `src/AssemblyStudio.Debugging/DebugSession.cs`, `src/AssemblyStudio.Debugging/Snapshots/{ExecutionHistory.cs, SnapshotContent.cs}` (new), `tests/AssemblyStudio.Core.Tests/MachineSnapshotTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs (new)}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (13:58 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Debugging.Tests -c Release`, first run 23/28. All five were test expectations:
+    - The NASM formatter writes `0ah` and `0103h`, not `0x…` (3 tests).
+    - This engine reports undefined flags for MUL/DIV/BCD, not AND (the test now uses `mul bl`).
+    - The TASK-050 memory-change test assumed one snapshot per run; with running snapshots it now merges deltas.
+    - Then **28/28 in 3 consecutive runs**.
+  - Step latency: the first measurement (16 ms) was the test's 1 ms polling (Windows timer tick). Measured with the publish event: **0.24 ms median, 0.33 ms p95** for 200 steps with a 4 KiB window.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release`:
+    - 13:57 → 1020/1021. AC-027 assumed the console output arrives in the pause snapshot; under load it arrived in a running snapshot. The test now appends all deltas.
+    - Then **1021/1021 at 14:02 and 14:05** (two consecutive runs).
+  - Running snapshot rate measured: 29 snapshots in 1,011 ms = **27.7/s**.
+- **Git state after:** uncommitted TASK-051 changes on top of `86f8ba0` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision) are still open.
+- **Next step:** `/assembly-implement TASK-052` or `TASK-053`.

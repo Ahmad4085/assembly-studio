@@ -5,25 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-29 13:41 +0500 by Claude Code (Opus 5.5), after completing TASK-050 |
-| Current task | **None in progress. M1, M2 complete; M3 in progress (TASK-050 Done). Next eligible: `TASK-051` snapshots, `TASK-053` input/Ctrl-C/replay; M4 `TASK-061` themes** |
-| Last completed | TASK-050 Debug session worker and commands (Done 2026-10-29 13:41 +0500) |
-| Git state | HEAD `fb6fa91` (TASK-050 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-29 14:06 +0500 by Claude Code (Opus 5.5), after completing TASK-051 |
+| Current task | **None in progress. M1, M2 complete; M3 in progress (TASK-050..051 Done). Next eligible: `TASK-052` breakpoints/Step Over, `TASK-053` input/Ctrl-C/replay; M4 `TASK-061` themes** |
+| Last completed | TASK-051 Snapshots (Done 2026-10-29 14:06 +0500) |
+| Git state | HEAD `86f8ba0` + uncommitted TASK-051 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 13:36 +0500).
-- `dotnet test --project tests/AssemblyStudio.Debugging.Tests -c Release` → **16/16 passed**, 5 consecutive runs (2026-10-29 13:37 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1009/1009 passed** in 3m 19s (2026-10-29 13:40 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 13:58 +0500).
+- `dotnet test --project tests/AssemblyStudio.Debugging.Tests -c Release` → **28/28 passed** (3 consecutive runs).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1021/1021 passed**, two consecutive runs (2026-10-29 14:02 and 14:05 +0500).
 
 ## Changes since the previous handoff
-- **TASK-050 Debug session worker and commands** (Claude Code, uncommitted):
-  - Core `src/AssemblyStudio.Core/IDebugSession.cs`: `IDebugSession` and `PauseReason`. The stop command is `StopSession()` (CA1716).
-  - `src/AssemblyStudio.Debugging/DebugSession.cs`: constructor `DebugSession(Func<IMachine> loadMachine)`. The composition root (App) or tests build the machine (engine + runtime + DOS + `ComLoader.Load`), as in `DebugSessionTests.Loader`.
-  - Notes for TASK-051 (snapshots):
-    - `Publish()` builds the snapshot on the worker; extend it with CurrentInstruction, windows, stack and history; add ≤ 30/s publishing during Run.
-    - The run loop currently publishes only at start and stop. Memory changes are folded per byte in `_changedBytes`.
-  - Note for TASK-053: a `SendInput` command must enqueue into the console and, when the state is WaitingForInput, continue the interrupted Run (or step); `ConsoleDevice.InstructionCountProvider` should use `InstructionsExecuted`.
-  - `tests/AssemblyStudio.Debugging.Tests` now references Engine.I8086, Runtime and Os.Dos (test project only).
+- **TASK-051 Snapshots** (Claude Code, uncommitted):
+  - Core: `HistoryEntry`; `MachineSnapshot.HistoryDelta` is `IReadOnlyList<HistoryEntry>` (was `int`); `IDisassembler.Decode(bytes, ip)` + `DecodedInstruction`; `IDebugSession.History`, `WatchMemory`, `UnwatchMemory`.
+  - `src/AssemblyStudio.Debugging/Snapshots/{ExecutionHistory.cs, SnapshotContent.cs}`. `DebugSession(loadMachine, disassembler, sourceMap?)`.
+  - **For the view-model tasks (TASK-081..084):** `MemoryChanges`, `ConsoleDelta` and `HistoryDelta` are deltas **since the previous published snapshot**, including running snapshots (≤ 30/s) and the refresh snapshot that `WatchMemory` posts while paused.
+    - The console view must append every delta.
+    - For FR-056 ("changed since the previous pause"), merge `MemoryChanges` from all snapshots after the last paused one.
+    - Register and flag changes come from diffing paused snapshots' `Cpu`.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -44,11 +43,13 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-050 committed. Files were:
-   - `src/AssemblyStudio.Core/IDebugSession.cs`, `src/AssemblyStudio.Debugging/DebugSession.cs`
-   - `tests/AssemblyStudio.Debugging.Tests/{AssemblyStudio.Debugging.Tests.csproj, DebugSessionTests.cs}`
+1. When the user asks: commit TASK-051. Files:
+   - `src/AssemblyStudio.Core/{MachineSnapshot.cs, IDisassembler.cs, IDebugSession.cs}`
+   - `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`
+   - `src/AssemblyStudio.Debugging/{DebugSession.cs, Snapshots/*}`
+   - `tests/AssemblyStudio.Core.Tests/MachineSnapshotTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs}`
    - `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-051` (snapshots) or `TASK-053` (input routing, Ctrl-C, replay). Or `TASK-061` (themes).
+2. `/assembly-implement TASK-052` (breakpoints via `ISourceMap.FirstOffsetOf`, Step Over with a temporary breakpoint) or `TASK-053` (SendInput/SendCtrlC, replay). Or `TASK-061` (themes).
 3. User decisions pending: DEF-003 (size limit). TASK-006 test VMs.
 
 ## Do not overwrite or revert

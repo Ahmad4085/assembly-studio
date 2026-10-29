@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AssemblyStudio.Core;
 using AssemblyStudio.Engine.I8086;
+using AssemblyStudio.Engine.I8086.Disassembly;
 using AssemblyStudio.Os.Dos;
 using AssemblyStudio.Runtime;
 using AssemblyStudio.Runtime.Console;
@@ -19,6 +20,8 @@ public sealed class DebugSessionTests
 {
     private const ushort Psp = ComLoader.DefaultProgramSegment;
     private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(10);
+
+    private static readonly IcedDisassembler Disassembler = new();
 
     private static readonly byte[] EndlessLoop = [0xEB, 0xFE]; // jmp $
 
@@ -83,7 +86,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void A_new_session_loads_the_program_and_is_paused_at_the_entry_point()
     {
-        using var session = new DebugSession(Loader(Hello));
+        using var session = new DebugSession(Loader(Hello), Disassembler);
 
         MachineSnapshot loaded = WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
@@ -97,7 +100,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void Step_into_executes_exactly_one_instruction()
     {
-        using var session = new DebugSession(Loader(Hello));
+        using var session = new DebugSession(Loader(Hello), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.StepInto();
@@ -112,7 +115,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void Run_executes_to_termination_and_publishes_output_and_exit_code()
     {
-        using var session = new DebugSession(Loader(Hello));
+        using var session = new DebugSession(Loader(Hello), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.Run();
@@ -127,7 +130,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void A_runtime_error_halts_the_session_with_the_state_inspectable()
     {
-        using var session = new DebugSession(Loader(DivideByZero));
+        using var session = new DebugSession(Loader(DivideByZero), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.Run();
@@ -147,8 +150,28 @@ public sealed class DebugSessionTests
     [Fact]
     public void AC_027_pause_shows_the_state_stop_ends_the_session_and_reset_runs_like_the_first_time()
     {
-        using var session = new DebugSession(Loader(PrintAThenLoop));
+        using var session = new DebugSession(Loader(PrintAThenLoop), Disassembler);
         MachineSnapshot loaded = WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
+
+        // Console output is reported per snapshot since the previous one (running snapshots included), so the
+        // console a panel shows is the output of all snapshots since the last reset.
+        var console = new System.Text.StringBuilder();
+        session.SnapshotPublished += (_, snapshot) =>
+        {
+            lock (console)
+            {
+                console.Append(snapshot.ConsoleDelta);
+            }
+        };
+        string TakeConsole()
+        {
+            lock (console)
+            {
+                string text = console.ToString();
+                console.Clear();
+                return text;
+            }
+        }
 
         session.Run();
         WaitFor(session, s => s.InstructionsExecuted >= 10); // past the print, inside the loop
@@ -156,7 +179,7 @@ public sealed class DebugSessionTests
         MachineSnapshot paused = WaitFor(session, s => IsPaused(s, PauseReason.UserPause));
 
         Assert.Equal(0x0106, paused.Cpu.IP); // in the loop
-        Assert.Equal("A", paused.ConsoleDelta);
+        Assert.Equal("A", TakeConsole());
 
         session.StopSession();
         WaitFor(session, s => s.LatestSnapshot is { State: SessionState.Idle });
@@ -164,14 +187,14 @@ public sealed class DebugSessionTests
         session.Reset();
         MachineSnapshot reset = WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
         Assert.Equal(loaded.Cpu, reset.Cpu);              // initial registers restored
-        Assert.Equal(string.Empty, reset.ConsoleDelta);  // console cleared
+        Assert.Equal(string.Empty, TakeConsole());        // console cleared: nothing new since the reload
         Assert.Equal(0UL, session.InstructionsExecuted);
 
         session.Run();
         WaitFor(session, s => s.InstructionsExecuted >= 10);
         session.Pause();
         MachineSnapshot again = WaitFor(session, s => IsPaused(s, PauseReason.UserPause));
-        Assert.Equal(("A", paused.Cpu.IP), (again.ConsoleDelta, again.Cpu.IP)); // the next run behaves like the first
+        Assert.Equal(("A", paused.Cpu.IP), (TakeConsole(), again.Cpu.IP)); // the next run behaves like the first
     }
 
     // ---- AC-030: runaway program ----
@@ -179,7 +202,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void AC_030_commands_return_at_once_while_an_endless_loop_runs()
     {
-        using var session = new DebugSession(Loader(EndlessLoop));
+        using var session = new DebugSession(Loader(EndlessLoop), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         var stopwatch = Stopwatch.StartNew();
@@ -198,7 +221,7 @@ public sealed class DebugSessionTests
     [InlineData(true)]
     public void AC_030_pause_and_stop_take_effect_within_500_ms(bool stop)
     {
-        using var session = new DebugSession(Loader(EndlessLoop));
+        using var session = new DebugSession(Loader(EndlessLoop), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
         session.Run();
         WaitFor(session, s => s.State == SessionState.Running);
@@ -225,7 +248,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void AC_030_an_endless_loop_pauses_at_the_budget_and_run_continues_with_a_new_budget()
     {
-        using var session = new DebugSession(Loader(EndlessLoop)) { InstructionBudget = 200_000 };
+        using var session = new DebugSession(Loader(EndlessLoop), Disassembler) { InstructionBudget = 200_000 };
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.Run();
@@ -239,7 +262,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void The_default_budget_is_10_million()
     {
-        using var session = new DebugSession(Loader(EndlessLoop));
+        using var session = new DebugSession(Loader(EndlessLoop), Disassembler);
 
         Assert.Equal(10_000_000UL, session.InstructionBudget);
         Assert.Throws<ArgumentOutOfRangeException>(() => session.InstructionBudget = 0);
@@ -250,7 +273,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void AC_054_a_budget_of_1000_pauses_after_exactly_1000_instructions()
     {
-        using var session = new DebugSession(Loader(EndlessLoop)) { InstructionBudget = 1_000 };
+        using var session = new DebugSession(Loader(EndlessLoop), Disassembler) { InstructionBudget = 1_000 };
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.Run();
@@ -264,14 +287,27 @@ public sealed class DebugSessionTests
     [Fact]
     public void Memory_changes_of_a_long_run_are_reported_once_per_byte_with_the_original_value()
     {
-        using var session = new DebugSession(Loader(IncrementForever)) { InstructionBudget = 300_001 }; // odd: the next instruction is the jmp
+        using var session = new DebugSession(Loader(IncrementForever), Disassembler) { InstructionBudget = 300_001 }; // odd: the next instruction is the jmp
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
+        var changes = new System.Collections.Concurrent.ConcurrentQueue<MemoryChange>();
+        session.SnapshotPublished += (_, snapshot) =>
+        {
+            foreach (MemoryChange change in snapshot.MemoryChanges)
+            {
+                changes.Enqueue(change);
+            }
+        };
 
         session.Run();
         MachineSnapshot paused = WaitFor(session, s => IsPaused(s, PauseReason.BudgetExhausted));
 
+        // Each snapshot reports the changes since the previous one (running snapshots included, ADR-0007 §2), one
+        // entry per byte; merged from the start of the run, each byte keeps the value before its first write.
         int word = (Psp << 4) + 0x0200;
-        Assert.Equal([new MemoryChange(word, 0x00), new MemoryChange(word + 1, 0x00)], paused.MemoryChanges);
+        Assert.Equal(paused.MemoryChanges.Count, paused.MemoryChanges.Select(c => c.PhysicalAddress).Distinct().Count());
+        Assert.Equal(
+            [new MemoryChange(word, 0x00), new MemoryChange(word + 1, 0x00)],
+            changes.GroupBy(c => c.PhysicalAddress).Select(g => g.First()).OrderBy(c => c.PhysicalAddress));
 
         session.StepInto();
         MachineSnapshot stepped = WaitFor(session, s => IsPaused(s, PauseReason.Step));
@@ -285,7 +321,7 @@ public sealed class DebugSessionTests
     {
         bool broken = true;
         Func<IMachine> load = Loader(Hello);
-        using var session = new DebugSession(() => broken ? new FaultyMachine(load()) : load());
+        using var session = new DebugSession(() => broken ? new FaultyMachine(load()) : load(), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
 
         session.StepInto();
@@ -301,7 +337,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void A_loader_fault_becomes_a_session_error()
     {
-        using var session = new DebugSession(() => throw new InvalidOperationException("image too large"));
+        using var session = new DebugSession(() => throw new InvalidOperationException("image too large"), Disassembler);
 
         WaitFor(session, s => s.LatestSnapshot is { State: SessionState.Error });
     }
@@ -309,7 +345,7 @@ public sealed class DebugSessionTests
     [Fact]
     public void Dispose_interrupts_a_run()
     {
-        var session = new DebugSession(Loader(EndlessLoop));
+        var session = new DebugSession(Loader(EndlessLoop), Disassembler);
         WaitFor(session, s => IsPaused(s, PauseReason.Loaded));
         session.Run();
         WaitFor(session, s => s.State == SessionState.Running);

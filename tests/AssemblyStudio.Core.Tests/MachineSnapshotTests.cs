@@ -13,7 +13,7 @@ public class MachineSnapshotTests
         CpuState atSnapshot = new(0xB804, 0, 0, 0, 0xFFFE, 0, 0, 0, 0x0800, 0x0800, 0x0800, 0x0800, 0x0100, 0x0202);
         var snapshot = new MachineSnapshot(
             atSnapshot, FlagBit.None, [], "", SessionState.Paused,
-            null, null, null, null, null, 0);
+            null, null, null, null, null, []);
 
         CpuState later = atSnapshot with { AX = 0x0000, IP = 0x0103, Flags = 0x0246 };
         Assert.NotEqual(atSnapshot, later);
@@ -26,7 +26,7 @@ public class MachineSnapshotTests
     [Fact]
     public void Equal_snapshots_are_equal()
     {
-        var a = new MachineSnapshot(default, FlagBit.ZF, [new MemoryChange(0x100, 0x00)], "hi", SessionState.Paused, null, null, null, null, null, 1);
+        var a = new MachineSnapshot(default, FlagBit.ZF, [new MemoryChange(0x100, 0x00)], "hi", SessionState.Paused, null, null, null, null, null, [new HistoryEntry(0x0800, 0x0100, [0x90], "nop")]);
         var b = a with { };
 
         Assert.Equal(a, b);
@@ -36,14 +36,14 @@ public class MachineSnapshotTests
     [Fact]
     public void With_expression_produces_a_new_snapshot()
     {
-        var initial = new MachineSnapshot(default, FlagBit.None, [], "", SessionState.Running, null, null, null, null, null, 5);
+        var initial = new MachineSnapshot(default, FlagBit.None, [], "", SessionState.Running, null, null, null, null, null, []);
 
-        var after = initial with { State = SessionState.Paused, HistoryDelta = 6 };
+        var after = initial with { State = SessionState.Paused, HistoryDelta = [new HistoryEntry(0x0800, 0x0100, [0x90], "nop")] };
 
         Assert.Equal(SessionState.Paused, after.State);
-        Assert.Equal(6, after.HistoryDelta);
+        Assert.Single(after.HistoryDelta);
         Assert.Equal(SessionState.Running, initial.State);
-        Assert.Equal(5, initial.HistoryDelta);
+        Assert.Empty(initial.HistoryDelta);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class MachineSnapshotTests
 
         var snapshot = new MachineSnapshot(
             default, FlagBit.CF, [], "A>", SessionState.Halted,
-            "unsupported instruction", null, current, windows, stack, 2);
+            "unsupported instruction", null, current, windows, stack, []);
 
         Assert.True(snapshot.CurrentInstruction.HasValue);
         Assert.Equal("mov ax, 0x0004", snapshot.CurrentInstruction!.Value.Disassembly);

@@ -12,6 +12,25 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
+| Milestone 3 progress | M3: Debug session (TASK-050, TASK-051 Done; 2/5) |
+| Recommended next action | `/assembly-implement TASK-052` (breakpoints and Step Over) or `/assembly-implement TASK-053` (input, Ctrl-C, replay) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 13:46 +0500 |
+| Milestone | M3 (Debug session, headless) |
+| Goal | Publish immutable snapshots with CPU state, undefined mask, changes, console delta, location, current instruction, memory windows, stack window and history |
+| Scope (in) | `WatchMemory` (≤ 4 windows × 4 KiB); immediate publish on step/pause, ≤ 30/s while running with not-current state; history ring buffer 1,000 |
+| Out of scope | View models |
+| Requirements | FR-046, FR-048, FR-053–FR-058, NFR-018, NFR-002; ADR-0007 v1.1; AC-048, AC-049 (session level) |
+| Expected files | `src/AssemblyStudio.Debugging/Snapshots/`, `DebugSession.cs`, Core snapshot/disassembler types, tests |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
 | Milestone 3 progress | M3: Debug session (TASK-050 Done; 1/5) |
 | Recommended next action | `/assembly-implement TASK-051` (Snapshots) or `/assembly-implement TASK-053` (input routing, Ctrl-C, replay; depends only on 050/036) |
 | Also eligible | `TASK-061` (Themes) |
@@ -150,6 +169,33 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-051 Snapshots (ADR-0007 v1.1) (Done 2026-10-29 14:06 +0500, Claude Code (Opus 5.5))
+- Core:
+  - `MachineSnapshot.HistoryDelta` is now `IReadOnlyList<HistoryEntry>`; it was an `int` count, which can't feed the history panel.
+  - New `HistoryEntry(Cs, Ip, Bytes, Disassembly)`.
+  - `IDisassembler.Decode(bytes, ip)` → `DecodedInstruction(Text, Length)` (Iced adapter): exact instruction bytes and real branch targets.
+  - `IDebugSession`: `History`, `WatchMemory(seg, off, len)` and `UnwatchMemory(id)`.
+- `src/AssemblyStudio.Debugging/Snapshots/`:
+  - `ExecutionHistory`: an allocation-free ring of 1,000 (CS, IP, 6 bytes), disassembled only when published. An instruction that halts, terminates or waits is not recorded.
+  - `SnapshotContent`: the current instruction with its source line (program segment only), memory windows and a 16-word stack window.
+- `DebugSession`:
+  - Takes `(loadMachine, IDisassembler, ISourceMap?)`.
+  - Snapshots now carry the current instruction (null while running), windows (≤ 4 × 4 KiB; a watch posts an immediate refresh), stack and history delta. `History` holds the last 1,000.
+  - While running it publishes at most 30 per second (measured 27.7/s).
+- Tests: `SnapshotTests` (13 new):
+  - Snapshot = machine (NFR-018), exact bytes and real branch target, source line (program segment only), undefined flags.
+  - AC-049 (20 steps → 20 ordered entries with disassembly), a halted instruction not in history, the 1,000 cap.
+  - AC-048 (running snapshots not current, ≤ 30/s, refreshed on pause).
+  - Watch limits, immediate refresh and immutability; step latency 0.24 ms median / 0.33 ms p95 (NFR-002 budget 100 ms).
+  - Two TASK-050 tests were updated to the per-snapshot delta semantics.
+- Release build 0 warnings / 0 errors; full solution 1021/1021 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 13:46 / 14:06 +0500 |
 
 ## Completed: TASK-050 Debug session worker and commands (Done 2026-10-29 13:41 +0500, Claude Code (Opus 5.5))
 - Core: `IDebugSession` (Run, Pause, StopSession, Reset, StepInto; State, PauseReason, InstructionBudget, InstructionsExecuted, LastStep, LatestSnapshot, SnapshotPublished) and `PauseReason` (Loaded, Step, UserPause, BudgetExhausted).

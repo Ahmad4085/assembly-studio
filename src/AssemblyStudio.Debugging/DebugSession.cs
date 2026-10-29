@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using System.Threading.Channels;
 using AssemblyStudio.Core;
+using AssemblyStudio.Debugging.Snapshots;
 
 namespace AssemblyStudio.Debugging;
 
@@ -15,9 +17,12 @@ namespace AssemblyStudio.Debugging;
 /// becomes <see cref="SessionState.Error"/>; the session stays usable (NFR-010).
 /// </para>
 /// <para>
-/// Snapshots: after each command, with the CPU state, the memory changes since the last snapshot (one entry per
-/// changed byte, so a long run can't grow them without limit, NFR-015), the console output since the last
-/// snapshot and the session state. Current instruction, memory windows, stack and history are TASK-051.
+/// Snapshots (ADR-0007 §2 and v1.1) are built on the worker from the live machine as immutable copies (NFR-018):
+/// CPU state, undefined-flag mask, memory changes since the last snapshot (one entry per changed byte, so a long
+/// run can't grow them without limit, NFR-015), console output since the last snapshot, session state,
+/// termination, the current instruction with its source line, the subscribed memory windows, the stack window
+/// and the history delta. One is published immediately after each command (step, pause, stop, reset) and at
+/// most 30 per second while running; running snapshots have no current instruction ("not current", FR-057).
 /// </para>
 /// </summary>
 public sealed class DebugSession : IDebugSession
@@ -25,13 +30,29 @@ public sealed class DebugSession : IDebugSession
     /// <summary>The default instruction budget per run (FR-042).</summary>
     public const ulong DefaultInstructionBudget = 10_000_000;
 
+    /// <summary>The most memory regions a session can watch (ADR-0007 v1.1).</summary>
+    public const int MaxMemoryWatches = 4;
+
+    /// <summary>The largest watched region, in bytes (ADR-0007 v1.1).</summary>
+    public const int MaxMemoryWatchLength = 4096;
+
     private const int JournalDrainInterval = 65_536;
+    private const int RunningCheckInterval = 1_024;
+    private static readonly TimeSpan RunningPublishInterval = TimeSpan.FromMilliseconds(1000.0 / 30);
 
     private readonly Func<IMachine> _loadMachine;
     private readonly Channel<Command> _commands = Channel.CreateUnbounded<Command>(new UnboundedChannelOptions { SingleReader = true });
     private readonly Thread _worker;
     private readonly Dictionary<int, byte> _changedBytes = [];
     private readonly Lock _snapshotLock = new();
+    private readonly IDisassembler _disassembler;
+    private readonly ISourceMap? _sourceMap;
+    private readonly ExecutionHistory _history = new();
+    private readonly List<MemoryWatch> _watches = [];
+    private readonly Lock _watchLock = new();
+    private int _nextWatchId;
+    private ushort _programSegment;
+    private IReadOnlyList<HistoryEntry> _historyView = [];
 
     private IMachine? _machine;
     private int _pendingCommands;
@@ -40,16 +61,22 @@ public sealed class DebugSession : IDebugSession
     private long _instructionsExecuted;
     private long _budget = (long)DefaultInstructionBudget;
     private StepResult? _lastStep;
-    private Published _published = new(null, PauseReason.None, null);
+    private Published _published = new(null, PauseReason.None, null, []);
     private bool _disposed;
 
     /// <summary>Creates the session and loads the program: the state becomes <see cref="SessionState.Paused"/>
     /// with <see cref="PauseReason.Loaded"/> once the worker has loaded it.</summary>
-    /// <param name="loadMachine">Returns a new machine with the program loaded and the CPU at its entry point.</param>
-    public DebugSession(Func<IMachine> loadMachine)
+    /// <param name="loadMachine">Returns a new machine with the program loaded and the CPU at its entry point; the
+    /// entry CS is taken as the program segment the source map refers to.</param>
+    /// <param name="disassembler">Decodes the current instruction and the history (FR-053, FR-058).</param>
+    /// <param name="sourceMap">The build's source map, or <see langword="null"/> when there is none (FR-053).</param>
+    public DebugSession(Func<IMachine> loadMachine, IDisassembler disassembler, ISourceMap? sourceMap = null)
     {
         ArgumentNullException.ThrowIfNull(loadMachine);
+        ArgumentNullException.ThrowIfNull(disassembler);
         _loadMachine = loadMachine;
+        _disassembler = disassembler;
+        _sourceMap = sourceMap;
         _worker = new Thread(WorkerLoop) { IsBackground = true, Name = "Assembly Studio debug session" };
         _worker.Start();
         Post(CommandKind.Reset);
@@ -65,6 +92,7 @@ public sealed class DebugSession : IDebugSession
         Stop,
         Reset,
         StepInto,
+        Refresh,
     }
 
     /// <inheritdoc />
@@ -93,6 +121,41 @@ public sealed class DebugSession : IDebugSession
 
     /// <inheritdoc />
     public MachineSnapshot? LatestSnapshot => ReadPublished().Snapshot;
+
+    /// <inheritdoc />
+    public IReadOnlyList<HistoryEntry> History => ReadPublished().History;
+
+    /// <inheritdoc />
+    public int WatchMemory(ushort segment, ushort offset, int length)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(length, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(length, MaxMemoryWatchLength);
+        int id;
+        lock (_watchLock)
+        {
+            if (_watches.Count >= MaxMemoryWatches)
+            {
+                throw new InvalidOperationException($"At most {MaxMemoryWatches} memory regions can be watched.");
+            }
+
+            id = ++_nextWatchId;
+            _watches.Add(new MemoryWatch(id, segment, offset, length));
+        }
+
+        Post(CommandKind.Refresh);
+        return id;
+    }
+
+    /// <inheritdoc />
+    public void UnwatchMemory(int id)
+    {
+        lock (_watchLock)
+        {
+            _watches.RemoveAll(w => w.Id == id);
+        }
+
+        Post(CommandKind.Refresh);
+    }
 
     /// <inheritdoc />
     public void Run() => Post(CommandKind.Run);
@@ -160,10 +223,13 @@ public sealed class DebugSession : IDebugSession
             case CommandKind.Reset:
                 _machine = null;
                 _lastStep = null;
+                _history.Clear();
+                _historyView = [];
 
                 _changedBytes.Clear();
                 Interlocked.Exchange(ref _instructionsExecuted, 0);
                 _machine = _loadMachine();
+                _programSegment = _machine.Cpu.State.CS;
                 _machine.Memory.TakeJournal();
                 _machine.Console.TakeOutput();
                 SetState(SessionState.Paused, PauseReason.Loaded);
@@ -210,6 +276,14 @@ public sealed class DebugSession : IDebugSession
                 }
 
                 break;
+
+            case CommandKind.Refresh:
+                if (_machine is not null && _state != SessionState.Running)
+                {
+                    Publish(); // new memory windows while paused; a run includes them in its next snapshot
+                }
+
+                break;
         }
     }
 
@@ -223,6 +297,7 @@ public sealed class DebugSession : IDebugSession
 
         long budget = Interlocked.Read(ref _budget);
         long executed = 0;
+        var sinceSnapshot = Stopwatch.StartNew();
         while (true)
         {
             if (Volatile.Read(ref _pendingCommands) > 0)
@@ -250,14 +325,26 @@ public sealed class DebugSession : IDebugSession
             {
                 DrainJournal();
             }
+
+            if (executed % RunningCheckInterval == 0 && sinceSnapshot.Elapsed >= RunningPublishInterval)
+            {
+                Publish(); // "running - not current" (FR-057), at most 30 per second
+                sinceSnapshot.Restart();
+            }
         }
     }
 
     /// <summary>Executes one instruction and moves the state to Halted, Terminated or WaitingForInput when the step ends there.</summary>
     private StepResult Step()
     {
-        StepResult result = _machine!.Cpu.StepInstruction();
+        CpuState before = _machine!.Cpu.State;
+        _history.Record(_machine.Memory, before.CS, before.IP);
+        StepResult result = _machine.Cpu.StepInstruction();
         _lastStep = result;
+        if (result.Outcome != StepOutcome.Executed)
+        {
+            _history.Unrecord(); // the instruction didn't complete
+        }
 
         switch (result.Outcome)
         {
@@ -298,7 +385,7 @@ public sealed class DebugSession : IDebugSession
         MachineSnapshot snapshot;
         if (_machine is null)
         {
-            snapshot = new MachineSnapshot(default, FlagBit.None, [], string.Empty, _state, null, null, null, null, null, 0);
+            snapshot = new MachineSnapshot(default, FlagBit.None, [], string.Empty, _state, null, null, null, null, null, []);
         }
         else
         {
@@ -307,6 +394,18 @@ public sealed class DebugSession : IDebugSession
             _changedBytes.Clear();
             StepResult? last = _lastStep;
             ProgramTermination? termination = _state == SessionState.Terminated ? last?.Termination : null;
+            MemoryWatch[] watches;
+            lock (_watchLock)
+            {
+                watches = [.. _watches];
+            }
+
+            IReadOnlyList<HistoryEntry> delta = _history.TakeDelta(_disassembler);
+            if (delta.Count > 0)
+            {
+                _historyView = [.. _historyView.Skip(Math.Max(0, _historyView.Count + delta.Count - ExecutionHistory.Capacity)), .. delta];
+            }
+
             snapshot = new MachineSnapshot(
                 _machine.Cpu.State,
                 last?.UndefinedFlags ?? FlagBit.None,
@@ -315,15 +414,15 @@ public sealed class DebugSession : IDebugSession
                 _state,
                 termination?.Path.ToString(),
                 termination?.ExitCode,
-                null,
-                null,
-                null,
-                0);
+                _state == SessionState.Running ? null : SnapshotContent.CurrentInstruction(_machine, _disassembler, _sourceMap, _programSegment),
+                watches.Length == 0 ? null : SnapshotContent.MemoryWindows(_machine.Memory, watches),
+                SnapshotContent.Stack(_machine),
+                delta);
         }
 
         lock (_snapshotLock)
         {
-            _published = new Published(snapshot, _pauseReason, _lastStep);
+            _published = new Published(snapshot, _pauseReason, _lastStep, _historyView);
         }
 
         SnapshotPublished?.Invoke(this, snapshot);
@@ -338,7 +437,7 @@ public sealed class DebugSession : IDebugSession
     }
 
     /// <summary>What readers see: the latest snapshot with the pause reason and step result it was published with.</summary>
-    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep);
+    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep, IReadOnlyList<HistoryEntry> History);
 
     private readonly record struct Command(CommandKind Kind);
 }

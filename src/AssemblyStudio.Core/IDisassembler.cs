@@ -13,4 +13,16 @@ public interface IDisassembler
     /// <param name="bytes">Instruction bytes starting at the instruction address (at least the
     /// instruction length; up to 6 bytes is enough for any 8086 instruction).</param>
     string? Disassemble(ReadOnlySpan<byte> bytes);
+
+    /// <summary>Decodes the first instruction in <paramref name="bytes"/> located at offset <paramref name="ip"/>
+    /// (so relative jump and call targets show their real address) and returns its text and length, or
+    /// <see langword="null"/> when the bytes are not a valid 8086 encoding.</summary>
+    /// <param name="bytes">Instruction bytes starting at the instruction address (6 bytes cover any 8086 instruction).</param>
+    /// <param name="ip">The instruction's offset in its code segment.</param>
+    DecodedInstruction? Decode(ReadOnlySpan<byte> bytes, ushort ip);
 }
+
+/// <summary>A decoded instruction: its NASM-like text and its length in bytes.</summary>
+/// <param name="Text">The instruction text, such as "mov ax, bx".</param>
+/// <param name="Length">The instruction length in bytes.</param>
+public readonly record struct DecodedInstruction(string Text, int Length);

@@ -49,6 +49,13 @@ public readonly record struct CurrentInstruction(
 /// <param name="Bytes">The region contents (≤ 4 KiB).</param>
 public readonly record struct MemoryWindow(ushort Segment, ushort Offset, IReadOnlyList<byte> Bytes);
 
+/// <summary>One executed instruction in the execution history (FR-058, ADR-0007 v1.1).</summary>
+/// <param name="Cs">CS of the instruction.</param>
+/// <param name="Ip">IP of the instruction.</param>
+/// <param name="Bytes">The instruction bytes as executed.</param>
+/// <param name="Disassembly">Decoded text via <see cref="IDisassembler"/>, or <see langword="null"/> when not decodable.</param>
+public readonly record struct HistoryEntry(ushort Cs, ushort Ip, IReadOnlyList<byte> Bytes, string? Disassembly);
+
 /// <summary>An immutable copy of N words from SS:SP (ADR-0007 v1.1; default 16). Word 0 is [SS:SP].</summary>
 /// <param name="Words">The stack words, starting at SS:SP.</param>
 public readonly record struct StackWindow(IReadOnlyList<ushort> Words);
@@ -70,7 +77,7 @@ public readonly record struct StackWindow(IReadOnlyList<ushort> Words);
 /// <param name="CurrentInstruction">The decoded current instruction, when the session is current (ADR-0007 v1.1).</param>
 /// <param name="MemoryWindows">Copies of the subscribed memory regions, when subscribed (ADR-0007 v1.1).</param>
 /// <param name="Stack">The stack window copy, when subscribed (ADR-0007 v1.1).</param>
-/// <param name="HistoryDelta">Instructions executed since the last snapshot, bounded by the 1,000-entry history (ADR-0007 v1.1).</param>
+/// <param name="HistoryDelta">Instructions executed since the last snapshot, oldest first, bounded by the 1,000-entry history (ADR-0007 v1.1).</param>
 public readonly record struct MachineSnapshot(
     CpuState Cpu,
     FlagBit UndefinedFlags,
@@ -82,4 +89,4 @@ public readonly record struct MachineSnapshot(
     CurrentInstruction? CurrentInstruction,
     IReadOnlyList<MemoryWindow>? MemoryWindows,
     StackWindow? Stack,
-    int HistoryDelta);
+    IReadOnlyList<HistoryEntry> HistoryDelta);

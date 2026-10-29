@@ -39,6 +39,13 @@ public sealed class IcedDisassembler : IDisassembler
         return text;
     }
 
+    /// <inheritdoc />
+    public DecodedInstruction? Decode(ReadOnlySpan<byte> bytes, ushort ip)
+    {
+        var (text, length) = DisassembleInstruction(bytes, ip);
+        return text is null ? null : new DecodedInstruction(text, length);
+    }
+
     /// <summary>
     /// Decodes the first instruction in <paramref name="bytes"/> at the specified <paramref name="ip"/>
     /// and returns its NASM text along with the decoded instruction length.

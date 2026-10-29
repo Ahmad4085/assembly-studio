@@ -48,6 +48,19 @@ public interface IDebugSession : IDisposable
     /// <summary>The latest published snapshot, or <see langword="null"/> before the first one.</summary>
     MachineSnapshot? LatestSnapshot { get; }
 
+    /// <summary>The execution history: the last executed instructions (at most 1,000), oldest first (FR-058).</summary>
+    IReadOnlyList<HistoryEntry> History { get; }
+
+    /// <summary>Subscribes a memory region: each snapshot then carries an immutable copy of it in
+    /// <see cref="MachineSnapshot.MemoryWindows"/>, in subscription order (ADR-0007 v1.1; at most 4 regions of at
+    /// most 4 KiB). Returns an id for <see cref="UnwatchMemory"/>. The offset wraps within the segment.</summary>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is not 1–4096.</exception>
+    /// <exception cref="InvalidOperationException">Four regions are already subscribed.</exception>
+    int WatchMemory(ushort segment, ushort offset, int length);
+
+    /// <summary>Ends a <see cref="WatchMemory"/> subscription. Unknown ids are ignored.</summary>
+    void UnwatchMemory(int id);
+
     /// <summary>Raised on the worker thread after each command is processed. Handlers must return quickly and
     /// marshal to the UI thread themselves (ADR-0007 §3).</summary>
     event EventHandler<MachineSnapshot>? SnapshotPublished;

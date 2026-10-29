@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-29 12:40 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-042 |
+| Written | 2026-10-29 12:42 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-042 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..036, TASK-040..042 Done; 10/12). Next eligible: M2 `TASK-043` source map; M4 `TASK-061` themes** |
-| Last completed | TASK-042 CPU-directive guard (Done 2026-10-29 12:35 +0500) |
-| Git state | Uncommitted TASK-042 changes on top of `b191212`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Last completed | TASK-042 CPU-directive guard (Done 2026-10-29 12:35 +0500, committed in `71d32fe`) |
+| Git state | HEAD `71d32fe` (TASK-042 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 12:17 +0500).

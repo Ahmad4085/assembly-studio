@@ -1054,3 +1054,28 @@
 - **Git state after:** uncommitted TASK-036 changes on top of `acdaed1` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-002 (full-run stall, not reproduced). DEF-001 is still open.
 - **Next step:** `/assembly-implement TASK-040` (NASM runner).
+
+### 2026-10-29 11:05 – 11:16 +0500 · Claude Code (Opus 5.5) · TASK-040 NASM runner
+- **Summary:** Ran `/assembly-implement TASK-040` (user request). The lock was free; TASK-036 was committed.
+  - **Core abstractions** (ADR-0002 places `IAssembler` in Core): `IAssembler` (`Check()`, `BuildAsync(BuildRequest, CancellationToken)`), `BuildRequest(SourcePath, UnsavedText)`, `BuildResult(Outcome, Image, Output, OutputTruncated, ExitCode, Duration, Assembler)`, `BuildOutcome`, `AssemblerInfo`, `AssemblerOrigin`, `AssemblerStatus`.
+  - **`NasmAssembler`:**
+    - The configured path overrides the bundled one (FR-023). An invalid configured path is reported, with no silent fallback (AC-016).
+    - `ValidateConfiguredPath` is for Settings (AC-015): a full local `.exe` path; network paths are rejected before any file-system lookup, because the first version's lookup of a `\server` path took about 3 s.
+    - `nasm -v` is checked before each build and cached per file (path, time, size). Statuses: Ready / OlderVersion (< 3.02, warning, still builds) / UnknownVersion / Missing / InvalidPath / NotRunnable (FR-024).
+  - **`ProcessRunner`** (NFR-014): no shell, `ArgumentList`, stdin closed, 10 s timeout and user cancellation with `Kill(entireProcessTree: true)`, each output stream captured up to 1 MiB with the rest drained and flagged.
+  - **Builds:**
+    - Each build gets its own temp folder, deleted afterwards. The working directory is the source folder (untitled: the temp folder), so `%include` works.
+    - Unsaved text is written to `<tmp>\src\<original name>` as UTF-8 without BOM, so the file isn't saved and nothing is written in the user's folder (FR-025).
+    - Classification: exit 0 + image → Succeeded; NTSTATUS exit (≥ 0xC0000000) → Crashed; killed → TimedOut / Cancelled; anything else → Failed (FR-030). `Duration` is measured (NFR-006).
+  - **Deviation from the ADR-0005 §2 flag text:** `--before "[map all]"` sends the map to stdout, separate from the diagnostics on stderr. Measured: `[map all "path with spaces"]` fails ("unable to open map file `\"C:\…\nasm'"), so a temp path under a user folder with spaces would break the build. The intent (map in the build sandbox, nothing next to the source) is unchanged. The user is informed; this may warrant a minor ADR-0005 amendment.
+- **Files changed:** `src/AssemblyStudio.Core/IAssembler.cs` (new), `src/AssemblyStudio.Core/BuildResult.cs` (new), `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs` (new), `NasmOptions.cs` (new), `ProcessRunner.cs` (new), `AssemblyStudio.Toolchain.Nasm.csproj` (`InternalsVisibleTo`), `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmAssemblerTests.cs` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (11:12 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release`:
+    - First run: 33/36. The configured-path status was wrong for badly formed paths (fixed). A test file name contained `>`, which Windows doesn't allow (test fixed).
+    - Then **36/36 passed** (11:13 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **892/892 passed** in 3m 17s (11:15 +0500). Afterwards, no `ping.exe` from the hang stub was left running.
+  - The tests cover: real NASM builds (saved, unsaved, untitled, includes, injected 8086 restriction, error output); malicious file names (`& … &`, `-o …`, `;'%PATH%$(x)`) building normally with nothing extra written; AC-015 (path, origin, version); AC-016 (missing bundled; invalid, network, non-.exe and missing configured paths; no build attempted); AC-019 (a hanging stub killed after the 1 s test timeout, a crashing stub reported as Crashed, and the next build succeeding); non-zero exit with no output; cancellation; the output cap; and NFR-006 (1,000-line build ≈ 110 ms).
+- **Git state after:** uncommitted TASK-040 changes on top of `874d077` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001 and DEF-002 are still open.
+- **Next step:** `/assembly-implement TASK-041`.

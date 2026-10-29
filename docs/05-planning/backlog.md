@@ -56,7 +56,7 @@
 | TASK-034 | DOS output and termination services | M2 | TASK-031, TASK-032, TASK-033 | M | FR-039, FR-041, FR-040 | Done |
 | TASK-035 | DOS character input services | M2 | TASK-034 | M | FR-039, FR-064 | Done |
 | TASK-036 | DOS buffered input and Ctrl-C | M2 | TASK-035 | M | FR-039, FR-064 | Done |
-| TASK-040 | NASM runner | M2 | TASK-005, TASK-010 | M | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006 | Approved |
+| TASK-040 | NASM runner | M2 | TASK-005, TASK-010 | M | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006 | Done |
 | TASK-041 | Diagnostics, message catalog, MASM hint, size limit | M2 | TASK-040 | L | FR-021, FR-029, FR-030, FR-031, FR-066, NFR-024 | Approved |
 | TASK-042 | CPU-directive guard | M2 | TASK-040 | L | FR-027 | Approved |
 | TASK-043 | Listing/map parsing and source map | M2 | TASK-040 | H | FR-028, FR-052, FR-053 | Approved |
@@ -788,7 +788,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006 |
 | Decisions / design | ADR-0005 |

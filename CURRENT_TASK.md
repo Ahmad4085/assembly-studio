@@ -12,6 +12,25 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040 Done; 8/12) |
+| Recommended next action | `/assembly-implement TASK-041` (Diagnostics, message catalog, MASM hint, size limit) |
+| Also eligible | `TASK-042` (CPU-directive guard), `TASK-043` (listing/map source map), `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 11:05 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | `IAssembler` process handling: locate, version-check, sandboxed invocation, timeout, output cap, failure kinds |
+| Scope (in) | Bundled vs configured path, version ≥ 3.02 warning; ArgumentList, temp dir, working dir = source folder (untitled: temp), 10 s timeout with tree kill, 1 MiB cap; unsaved documents assembled from a temp copy; build time measured (NFR-006) |
+| Out of scope | Diagnostics parsing (TASK-041), CPU guard (TASK-042), listing/map parsing (TASK-043) |
+| Requirements | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006; ADR-0005 |
+| Expected files | `src/AssemblyStudio.Toolchain.Nasm/`, Core assembler abstractions (ADR-0002 lists `IAssembler` in Core), `tests/AssemblyStudio.Toolchain.Nasm.Tests/` |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036 Done; 7/12). All DOS services done; NASM tasks 040–044 remain |
 | Recommended next action | `/assembly-implement TASK-040` (NASM runner) |
 | Also eligible | `TASK-061` (Themes) |
@@ -56,6 +75,23 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-040 NASM runner (Done 2026-10-29 11:16 +0500, Claude Code (Opus 5.5))
+- Core (ADR-0002 lists these in Core): `IAssembler` (`Check()`, `BuildAsync`), `BuildRequest`, `BuildResult`, `BuildOutcome` (Succeeded, Failed, AssemblerMissing, TimedOut, Crashed, Cancelled), `AssemblerInfo`, `AssemblerOrigin`, `AssemblerStatus`.
+- `src/AssemblyStudio.Toolchain.Nasm/`: `NasmAssembler`, `NasmOptions`, `ProcessRunner`.
+  - Locating: the configured path overrides the bundled one, with no fallback when it is invalid. `ValidateConfiguredPath` requires a full local `.exe` path; network paths are rejected before any lookup.
+  - Version: `nasm -v` is checked before each build (cached per file) → Ready / OlderVersion (< 3.02, warning) / UnknownVersion / Missing / InvalidPath / NotRunnable.
+  - Process: no shell, `ArgumentList`, per-build temp folder (deleted afterwards), working directory = source folder (untitled: temp), 10 s timeout and cancellation with process-tree kill, each stream capped at 1 MiB (flagged). Unsaved text goes through a temp copy that keeps the file name. A crash is an NTSTATUS exit code.
+  - Build time is measured (`Duration`).
+- **Implementation deviation from ADR-0005 §2 (flag text):** `[map all]` without a file name, so the map goes to stdout, separate from the diagnostics on stderr. NASM's map directive can't take a path containing spaces (measured: quoting fails). Intent unchanged: nothing is written next to the source.
+- Tests: 35 new in `NasmAssemblerTests` (toolchain 36/36), covering AC-015, AC-016 and AC-019 (toolchain parts), malicious file names, the output cap, cancellation, and a 1,000-line build in about 110 ms (NFR-006 ≤ 2 s).
+- Release build 0 warnings / 0 errors; full solution 892/892.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 11:05 / 11:16 +0500 |
 
 ## Completed: TASK-036 DOS buffered input and Ctrl-C (Done 2026-10-29 11:04 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.Os.Dos/DosServices.cs`: INT 21h AH=0Ah with the MVP editing keys (STRIN.ASM).

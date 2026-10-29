@@ -8,7 +8,7 @@
 | Written | 2026-10-29 11:04 +0500 by Claude Code (Opus 5.5), after completing TASK-036 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..036 Done; all DOS services done). Next eligible: M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
 | Last completed | TASK-036 DOS buffered input and Ctrl-C (Done 2026-10-29 11:04 +0500) |
-| Git state | HEAD `acdaed1` + uncommitted TASK-036 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `d245190` (TASK-036 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 10:36 +0500).
@@ -57,7 +57,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-036. Files:
+1. Done: TASK-036 committed. Files were:
    - `src/AssemblyStudio.Core/IConsoleDevice.cs`, `src/AssemblyStudio.Core/ProgramTermination.cs`
    - `src/AssemblyStudio.Os.Dos/DosServices.cs`
    - `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs`, `src/AssemblyStudio.Runtime/Console/NullConsoleDevice.cs`

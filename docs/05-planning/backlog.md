@@ -61,7 +61,7 @@
 | TASK-042 | CPU-directive guard | M2 | TASK-040 | L | FR-027 | Approved |
 | TASK-043 | Listing/map parsing and source map | M2 | TASK-040 | H | FR-028, FR-052, FR-053 | Done |
 | TASK-044 | Program-level test harness | M2 | TASK-036, TASK-043 | M | FR-039, FR-041, NFR-016, NFR-020 | Done |
-| TASK-050 | Debug session worker and commands | M3 | TASK-030, TASK-032 | M | FR-035, FR-042, FR-049, FR-051, FR-067, NFR-004, NFR-015 | Approved |
+| TASK-050 | Debug session worker and commands | M3 | TASK-030, TASK-032 | M | FR-035, FR-042, FR-049, FR-051, FR-067, NFR-004, NFR-015 | Done |
 | TASK-051 | Snapshots (ADR-0007 v1.1) | M3 | TASK-050, TASK-019, TASK-043 | M | FR-046, FR-048, FR-053, FR-054, FR-055, FR-056, FR-057, FR-058, NFR-018, NFR-002 | Approved |
 | TASK-052 | Breakpoints and Step Over | M3 | TASK-051 | M | FR-050, FR-052 | Approved |
 | TASK-053 | Input routing, Ctrl-C delivery and replay | M3 | TASK-050, TASK-036 | L | FR-064, NFR-016 | Approved |
@@ -933,7 +933,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M3 |
 | Requirements | FR-035, FR-042, FR-049, FR-051, FR-067, NFR-004, NFR-015 |
 | Decisions / design | ADR-0007 |

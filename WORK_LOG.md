@@ -1199,3 +1199,32 @@
 - **Git state after:** uncommitted TASK-044 changes on top of `4a94950` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-003 (decision pending). DEF-001 and DEF-002 are still open. DEF-004 is fixed.
 - **Next step:** `/assembly-test` for milestone M2, then `/assembly-implement TASK-050`.
+
+### 2026-10-29 13:31 – 13:41 +0500 · Claude Code (Opus 5.5) · TASK-050 Debug session worker and commands
+- **Summary:** Ran `/assembly-implement TASK-050` (user request). The lock was free; TASK-044 was committed.
+  - **Core** (ADR-0002 lists `IDebugSession` in Core):
+    - `IDebugSession`: commands Run, Pause, StopSession, Reset, StepInto; read-only State, PauseReason, InstructionsExecuted, LastStep, LatestSnapshot; settable InstructionBudget; event SnapshotPublished.
+    - `PauseReason`: Loaded, Step, UserPause, BudgetExhausted. It's needed for UI-012 "reason paused" and the AC-030 budget message.
+    - `Stop()` was rejected by CA1716 (VB keyword), so the command is named `StopSession()`.
+  - **`DebugSession`:**
+    - One dedicated background thread reads a command channel. Commands return at once (FR-067).
+    - The session takes a `Func<IMachine>` that returns a freshly loaded machine, so Debugging references only Core (ADR-0002). Reset calls it again, so the next run behaves like the first (FR-035).
+    - Run checks a pending-command counter before every instruction. Pause/Stop measured at 3.26 ms and 0.41 ms (NFR-004: 500 ms).
+    - The budget counts per Run (FR-042, default 10,000,000, configurable). When it runs out the state is Paused(BudgetExhausted); Run continues with a new budget.
+    - Step outcomes map to Halted / Terminated / WaitingForInput. Engine or loader exceptions become Error and Reset recovers (NFR-010).
+    - A snapshot is published after each command. Memory changes are folded to one entry per byte (original value) and drained every 65,536 instructions, so an endless loop can't grow the journal without limit (NFR-015).
+  - **Race found by the tests and fixed:**
+    - The worker set State/PauseReason before publishing, so a reader could see the new reason (Step) with the previous snapshot (IP 0100). Two different tests failed intermittently because of it.
+    - State, PauseReason and LastStep are now read from one published record, updated under the same lock as the snapshot.
+    - Two other test-side races were also fixed: pausing before any instruction had run, and an even budget leaving the `inc` as the next instruction.
+- **Files changed:** `src/AssemblyStudio.Core/IDebugSession.cs` (new), `src/AssemblyStudio.Debugging/DebugSession.cs` (new), `tests/AssemblyStudio.Debugging.Tests/AssemblyStudio.Debugging.Tests.csproj` (references Engine/Runtime/Os.Dos), `tests/AssemblyStudio.Debugging.Tests/DebugSessionTests.cs` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (13:36 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Debugging.Tests -c Release`:
+    - 14/16, then 15/16 twice (the races above), then 16/16.
+    - After the publish fix: **16/16 in 5 consecutive runs** (13:37 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **1009/1009 passed** in 3m 19s (13:40 +0500).
+  - Covered: load state, Step Into (exactly one instruction), Run to termination (output, exit code), halt on divide error, AC-027 (pause / stop / reset: initial registers, cleared console, same behavior again), AC-030 (commands post in < 100 ms during an endless loop; Pause and Stop < 500 ms; budget pause and continue), AC-054 (budget 1,000 → exactly 1,000), memory-change folding, engine and loader faults → Error with Reset recovery, Dispose interrupting a run.
+- **Git state after:** uncommitted TASK-050 changes on top of `3431cf2` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision) are still open.
+- **Next step:** `/assembly-implement TASK-051` or `TASK-053`.

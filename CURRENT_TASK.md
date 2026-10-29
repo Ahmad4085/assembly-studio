@@ -11,6 +11,25 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
+| Milestone 3 progress | M3: Debug session (TASK-050 Done; 1/5) |
+| Recommended next action | `/assembly-implement TASK-051` (Snapshots) or `/assembly-implement TASK-053` (input routing, Ctrl-C, replay; depends only on 050/036) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 13:31 +0500 |
+| Milestone | M3 (Debug session, headless) |
+| Goal | Run the machine on a dedicated worker with a command channel and session states |
+| Scope (in) | Run/Pause/Stop/Reset/StepInto, per-instruction cancellation, budget (default 10,000,000, configurable); session states as in ui-spec §4 |
+| Out of scope | Breakpoints (TASK-052), snapshot detail (TASK-051), input commands (TASK-053) |
+| Requirements | FR-035, FR-042, FR-049, FR-051, FR-067, NFR-004, NFR-015; ADR-0007 §2; AC-027, AC-030, AC-054 (session level) |
+| Expected files | `src/AssemblyStudio.Debugging/`, Core `IDebugSession` (ADR-0002), `tests/AssemblyStudio.Debugging.Tests/` |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestones | **M1 8086 engine** (TASK-010..020) and **M2 Runtime, DOS and toolchain** (TASK-030..036, TASK-040..044): all tasks Done |
 | Recommended next action | `/assembly-test` (M2 milestone verification), then `/assembly-implement TASK-050` (M3: debug session worker) |
 | Also eligible | `TASK-061` (Themes) |
@@ -131,6 +150,24 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-050 Debug session worker and commands (Done 2026-10-29 13:41 +0500, Claude Code (Opus 5.5))
+- Core: `IDebugSession` (Run, Pause, StopSession, Reset, StepInto; State, PauseReason, InstructionBudget, InstructionsExecuted, LastStep, LatestSnapshot, SnapshotPublished) and `PauseReason` (Loaded, Step, UserPause, BudgetExhausted).
+  - `Stop` was renamed `StopSession` because of CA1716 (`Stop` is a VB keyword).
+- `src/AssemblyStudio.Debugging/DebugSession.cs`:
+  - Dedicated background worker with a command channel. Takes a factory for a freshly loaded `IMachine`, so Debugging stays Core-only; Reset calls the factory again.
+  - Run checks for a new command before every instruction. The budget is per Run (default 10,000,000, configurable); exhausting it gives Paused(BudgetExhausted), and Run continues with a new budget.
+  - Halted / Terminated / WaitingForInput come from the step outcome. Engine or loader exceptions become Error, and Reset recovers.
+  - Snapshots after each command: CPU, undefined flags, memory changes since the last snapshot (one entry per byte, drained every 65,536 instructions), console delta, state, termination path/exit.
+  - State, PauseReason and LastStep are read from the published snapshot record, so they always agree with it.
+- Tests: `DebugSessionTests` (15 new), on real machines from hand-assembled images. AC-027, AC-030 (Pause 3 ms, Stop 0.4 ms measured), AC-054, budget continue, memory-change folding, engine and loader faults, Dispose.
+- Release build 0 warnings / 0 errors; full solution 1009/1009.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 13:31 / 13:41 +0500 |
 
 ## Completed: TASK-044 Program-level test harness (Done 2026-10-29 13:25 +0500, Claude Code (Opus 5.5))
 - New test project `tests/AssemblyStudio.ProgramTests` (added to `AssemblyStudio.slnx`).

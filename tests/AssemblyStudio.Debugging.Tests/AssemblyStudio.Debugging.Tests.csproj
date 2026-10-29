@@ -4,5 +4,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AssemblyStudio.Debugging\AssemblyStudio.Debugging.csproj" />
+    <!-- The session tests run real machines (engine, runtime, DOS) behind the session's machine factory. -->
+    <ProjectReference Include="..\..\src\AssemblyStudio.Engine.I8086\AssemblyStudio.Engine.I8086.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Runtime\AssemblyStudio.Runtime.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Os.Dos\AssemblyStudio.Os.Dos.csproj" />
   </ItemGroup>
 </Project>

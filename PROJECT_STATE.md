@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 13:25 +0500 by Claude Code (Opus 5.5) (TASK-044 done, M2 complete) |
-| Current phase | **6 Implementation**: M1 and M2 complete; M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain **complete** (TASK-030..036, TASK-040..044). Next: M3 Debug session (TASK-050..054) |
-| Active task | None in progress. Next eligible: `TASK-050` debug session worker (M3); `TASK-061` themes (M4). Parallel user action: `TASK-006` (clean test VMs); decide DEF-003 |
+| Last updated | 2026-10-29 13:41 +0500 by Claude Code (Opus 5.5) (TASK-050 done) |
+| Current phase | **6 Implementation**: M1 and M2 complete; M3 in progress (TASK-050 done); M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
+| Current milestone | M3 Debug session (headless), in progress: TASK-050 done |
+| Active task | None in progress. Next eligible: `TASK-051` snapshots, `TASK-053` input/Ctrl-C/replay (M3); `TASK-061` themes (M4). User: `TASK-006`, DEF-003 decision |
 
-| Next recommended action | `/assembly-test` for the M2 milestone, then `/assembly-implement TASK-050`. User: TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-implement TASK-051` (snapshots) or `TASK-053`. User: TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-050 Debug session worker and commands | 2026-10-29 13:41 +0500 | Core `IDebugSession`/`PauseReason`; `Debugging/DebugSession`: dedicated worker + command channel, machine factory (Reset reloads), Run/Pause/StopSession/Reset/StepInto, per-instruction command check, per-run budget (default 10M), states per ui-spec §4, faults → Error, snapshots with folded memory changes and console delta, published state consistent with snapshot. 15 new tests incl. AC-027, AC-030 (Pause 3 ms, Stop 0.4 ms), AC-054. Release build 0w/0e; full solution 1009/1009 |
 | TASK-044 Program-level test harness (M2 complete) | 2026-10-29 13:25 +0500 | New `tests/AssemblyStudio.ProgramTests` (in the solution): `ProgramHarness` (NASM build → load → headless run, scripted or replayed input, budget, CPU trace) with NASM program fixtures; AC-021/022/023/029/031/064 at runtime level and AC-047 replay pass (14 tests). DEF-004 (toolchain timing flakes under load) fixed. Release build 0w/0e; full solution 994/994 |
 | TASK-043 Listing/map parsing and source map | 2026-10-29 12:58 +0500 | Core `ISourceMap`/`SourceLocation`/`SourceMapping`, `BuildResult.SourceMap`. `Toolchain.Nasm/SourceMapping`: listing + map → source map (macro → invoking line, `%rep` → own lines, nested includes, sections incl. switch inside a macro); BLD010 when unreadable. POC-002 fixtures + 5 new fixtures; 3 verifiers (bytes, symbols, ndisasm boundaries) green on all 10 buildable fixtures. Found and fixed: nesting marker shifts a column for `<9>`+ (mutation-checked). `docs/06-implementation/task-043-verification.md`. Toolchain 124/124; Release build 0w/0e; full solution 980/980 |
 | TASK-042 CPU-directive guard | 2026-10-29 12:35 +0500 | `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs` scanning preprocessed NASM (`-Xgnu -E`) output for non-8086 CPU directives; catalog code `BLD009` in `BuildMessages` resources; rejection of 186/286/386/486/pentium/x64 directives; macro and include directive source-mapping; 8 new unit tests in `CpuDirectiveGuardTests` + 5 new integration tests in `BuildDiagnosticsTests` (toolchain suite 79/79 passed); Release build 0w/0e; 934/935 solution tests passed (DEF-001 pre-existing) |
@@ -93,8 +94,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 13:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 13:24 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **994/994 passed** in 3m 01s (all 10 test projects; ProgramTests 14/14). Two earlier runs that day (13:11, 13:16) each failed one toolchain timing test under load: DEF-004, fixed |
+| Product build (2026-10-29 13:36 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 13:40 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1009/1009 passed** in 3m 19s (10 test projects; Debugging 16/16, stable over 5 consecutive runs) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

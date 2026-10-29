@@ -8,7 +8,7 @@
 | Written | 2026-10-29 10:16 +0500 by Claude Code (Opus 5.5), after completing TASK-034 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..034 Done). Next eligible: M2 `TASK-035` DOS character input services; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
 | Last completed | TASK-034 DOS output and termination services (Done 2026-10-29 10:16 +0500) |
-| Git state | HEAD `113331d` + uncommitted TASK-034 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `9817bac` (TASK-034 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 10:12 +0500).
@@ -45,7 +45,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-034. Files:
+1. Done: TASK-034 committed. Files were:
    - `src/AssemblyStudio.Core/ProgramTermination.cs`, `src/AssemblyStudio.Core/StepResult.cs`, `src/AssemblyStudio.Core/MachineSnapshot.cs`
    - `src/AssemblyStudio.Os.Dos/DosServices.cs`, `src/AssemblyStudio.Os.Dos/DosServiceError.cs`
    - `tests/AssemblyStudio.Os.Dos.Tests/*`

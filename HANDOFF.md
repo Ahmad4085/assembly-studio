@@ -8,7 +8,7 @@
 | Written | 2026-10-29 11:53 +0500 by Claude Code (Opus 5.5), after completing TASK-041 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..036, TASK-040..041 Done). Next eligible: M2 `TASK-042` CPU guard, `TASK-043` source map; M4 `TASK-061` themes** |
 | Last completed | TASK-041 Diagnostics, message catalog, MASM hint, size limit (Done 2026-10-29 11:53 +0500) |
-| Git state | HEAD `6755510` + uncommitted TASK-041 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `9f364bd` (TASK-041 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 11:48 +0500).
@@ -41,7 +41,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-041. Files:
+1. Done: TASK-041 committed. Files were:
    - `src/AssemblyStudio.Core/Diagnostic.cs`, `src/AssemblyStudio.Core/BuildResult.cs`
    - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/*`
    - `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmAssemblerTests.cs`

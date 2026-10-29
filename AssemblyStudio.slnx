@@ -12,6 +12,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/AssemblyStudio.Core.Tests/AssemblyStudio.Core.Tests.csproj" />
     <Project Path="tests/AssemblyStudio.Engine.I8086.Tests/AssemblyStudio.Engine.I8086.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.ProgramTests/AssemblyStudio.ProgramTests.csproj" />
     <Project Path="tests/AssemblyStudio.Runtime.Tests/AssemblyStudio.Runtime.Tests.csproj" />
     <Project Path="tests/AssemblyStudio.Os.Dos.Tests/AssemblyStudio.Os.Dos.Tests.csproj" />
     <Project Path="tests/AssemblyStudio.Toolchain.Nasm.Tests/AssemblyStudio.Toolchain.Nasm.Tests.csproj" />

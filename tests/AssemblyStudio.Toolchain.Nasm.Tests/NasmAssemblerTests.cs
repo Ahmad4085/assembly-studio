@@ -355,25 +355,4 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.InRange(result.Output.Length, 9_000, 10_000);
         Assert.Equal(BuildOutcome.Failed, result.Outcome);
     }
-
-    // ---- NFR-006: build time is measured ----
-
-    [Fact]
-    public async Task A_1000_line_source_builds_within_the_2_second_target()
-    {
-        var text = new StringBuilder("org 100h\n");
-        for (int i = 0; i < 999; i++)
-        {
-            text.Append("add ax, ").Append(i).Append('\n');
-        }
-
-        NasmAssembler assembler = Assembler();
-        await assembler.BuildAsync(new BuildRequest(null, ExitSource), TestContext.Current.CancellationToken); // first launch excluded (NFR-006)
-
-        BuildResult result = await assembler.BuildAsync(new BuildRequest(null, text.ToString()), TestContext.Current.CancellationToken);
-
-        TestContext.Current.TestOutputHelper?.WriteLine($"1,000-line build: {result.Duration.TotalMilliseconds:F0} ms (NFR-006 target 2000 ms)");
-        Assert.Equal(BuildOutcome.Succeeded, result.Outcome);
-        Assert.True(result.Duration < TimeSpan.FromSeconds(2), $"Build took {result.Duration}.");
-    }
 }

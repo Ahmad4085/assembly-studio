@@ -349,7 +349,7 @@ public sealed partial class NasmAssembler : IAssembler
         ProcessRun run;
         try
         {
-            run = ProcessRunner.RunAsync(path, ["-v"], Path.GetDirectoryName(path)!, _options.Timeout, _options.OutputCap, CancellationToken.None)
+            run = ProcessRunner.RunAsync(path, ["-v"], Path.GetDirectoryName(path)!, _options.VersionCheckTimeout, _options.OutputCap, CancellationToken.None)
                 .GetAwaiter().GetResult();
         }
         catch (System.ComponentModel.Win32Exception ex)
@@ -361,7 +361,7 @@ public sealed partial class NasmAssembler : IAssembler
         {
             return new AssemblerInfo(path, origin, null, AssemblerStatus.NotRunnable,
                 run.TimedOut
-                    ? $"The assembler at {path} did not answer a version request within {_options.Timeout.TotalSeconds:0} s."
+                    ? $"The assembler at {path} did not answer a version request within {_options.VersionCheckTimeout.TotalSeconds:0} s."
                     : $"The assembler at {path} failed when asked for its version (exit code {run.ExitCode}).");
         }
 

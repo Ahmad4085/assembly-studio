@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 12:58 +0500 by Claude Code (Opus 5.5) (TASK-043 done) |
-| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..036, TASK-040..043 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..036, TASK-040..043 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-044` program-level test harness (last M2 task); M4 `TASK-061` themes. Parallel user action: `TASK-006` (clean test VMs); decide DEF-003 |
+| Last updated | 2026-10-29 13:25 +0500 by Claude Code (Opus 5.5) (TASK-044 done, M2 complete) |
+| Current phase | **6 Implementation**: M1 and M2 complete; M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain **complete** (TASK-030..036, TASK-040..044). Next: M3 Debug session (TASK-050..054) |
+| Active task | None in progress. Next eligible: `TASK-050` debug session worker (M3); `TASK-061` themes (M4). Parallel user action: `TASK-006` (clean test VMs); decide DEF-003 |
 
-| Next recommended action | `/assembly-implement TASK-044` (program-level test harness) or `/assembly-implement TASK-061` (themes). User: TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-test` for the M2 milestone, then `/assembly-implement TASK-050`. User: TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-044 Program-level test harness (M2 complete) | 2026-10-29 13:25 +0500 | New `tests/AssemblyStudio.ProgramTests` (in the solution): `ProgramHarness` (NASM build → load → headless run, scripted or replayed input, budget, CPU trace) with NASM program fixtures; AC-021/022/023/029/031/064 at runtime level and AC-047 replay pass (14 tests). DEF-004 (toolchain timing flakes under load) fixed. Release build 0w/0e; full solution 994/994 |
 | TASK-043 Listing/map parsing and source map | 2026-10-29 12:58 +0500 | Core `ISourceMap`/`SourceLocation`/`SourceMapping`, `BuildResult.SourceMap`. `Toolchain.Nasm/SourceMapping`: listing + map → source map (macro → invoking line, `%rep` → own lines, nested includes, sections incl. switch inside a macro); BLD010 when unreadable. POC-002 fixtures + 5 new fixtures; 3 verifiers (bytes, symbols, ndisasm boundaries) green on all 10 buildable fixtures. Found and fixed: nesting marker shifts a column for `<9>`+ (mutation-checked). `docs/06-implementation/task-043-verification.md`. Toolchain 124/124; Release build 0w/0e; full solution 980/980 |
 | TASK-042 CPU-directive guard | 2026-10-29 12:35 +0500 | `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs` scanning preprocessed NASM (`-Xgnu -E`) output for non-8086 CPU directives; catalog code `BLD009` in `BuildMessages` resources; rejection of 186/286/386/486/pentium/x64 directives; macro and include directive source-mapping; 8 new unit tests in `CpuDirectiveGuardTests` + 5 new integration tests in `BuildDiagnosticsTests` (toolchain suite 79/79 passed); Release build 0w/0e; 934/935 solution tests passed (DEF-001 pre-existing) |
 | TASK-041 Diagnostics, message catalog, MASM hint, size limit | 2026-10-29 11:53 +0500 | Core `Diagnostic`/`DiagnosticSeverity`, `BuildResult.Diagnostics`. `Toolchain.Nasm/Diagnostics`: GNU parser (all severities, temp copy → document), resource-based catalog ASM001–003/BLD001–008 (code, what, next; where = file/line), MASM hint, 65,280-byte limit (BLD006). 22 new tests (toolchain 58/58) incl. AC-013 toolchain part, AC-014, AC-020, AC-055 catalog completeness. Release build 0w/0e; full solution 914/914. DEF-003 opened (loader limit 65,278) |
@@ -92,8 +93,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 12:52 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 12:57 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **980/980 passed** in 4m 19s (all 9 test projects; Toolchain.Nasm 124/124) |
+| Product build (2026-10-29 13:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 13:24 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **994/994 passed** in 3m 01s (all 10 test projects; ProgramTests 14/14). Two earlier runs that day (13:11, 13:16) each failed one toolchain timing test under load: DEF-004, fixed |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

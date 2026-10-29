@@ -20,6 +20,10 @@ public sealed record NasmOptions
     /// <summary>Build timeout; the process tree is killed when it is exceeded.</summary>
     public TimeSpan Timeout { get; init; } = DefaultTimeout;
 
+    /// <summary>Timeout for the <c>nasm -v</c> version check, separate from the build timeout so that a short
+    /// build timeout can't make a slow-starting assembler look unusable.</summary>
+    public TimeSpan VersionCheckTimeout { get; init; } = DefaultTimeout;
+
     /// <summary>Maximum characters captured from each output stream.</summary>
     public int OutputCap { get; init; } = DefaultOutputCap;
 

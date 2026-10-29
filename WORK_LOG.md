@@ -1163,3 +1163,39 @@
 - **Git state after:** uncommitted TASK-043 changes on top of `e0c3386` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision pending) are still open.
 - **Next step:** `/assembly-implement TASK-044` (last M2 task).
+
+### 2026-10-29 13:03 – 13:28 +0500 · Claude Code (Opus 5.5) · TASK-044 Program-level test harness (M2 complete)
+- **Summary:** Ran `/assembly-implement TASK-044` (user request). The lock was free; TASK-043 was committed.
+  - **New test project** `tests/AssemblyStudio.ProgramTests` (references Core, Engine.I8086, Runtime, Os.Dos, Toolchain.Nasm), added to `AssemblyStudio.slnx` with `dotnet sln add`.
+  - **`ProgramHarness`** (ADR-0008 §4; the API TASK-091 samples will reuse):
+    - `BuildAsync(source)` with the bundled NASM; the test fails with the diagnostics if the build fails.
+    - `Run(build, InputScript, budget, trace)` composes a fresh machine (`RealModeMemory`, `DosServices`, `InterruptRouter`, `Cpu8086`, `ConsoleDevice`, `Machine`), loads the image with `ComLoader`, and steps headless.
+    - Typed input: one chunk queued per wait. Replay: `SetReplayInputs`. The console's instruction count = executed instructions.
+    - Returns a `ProgramRun`: end (Terminated / Halted / WaitingForInput / BudgetExhausted), output, termination, router halt, DOS error, recorded input, register trace, machine.
+  - **NASM program fixtures** `Programs/`: `hello`, `echo` (0Ah), `open-file` (3Ch then 3Dh), `divide-error`, `exit-int20/00h/4ch/ret`, `count` (endless loop).
+  - **Tests (14), all at runtime level:**
+    - AC-021: initial registers, image at PSP:0100h, PSP INT 20h / INT 21h-RETF / empty tail, return word.
+    - AC-022: hello output, 4Ch exit 0, 0 warnings, source map present.
+    - AC-023: waits with "Name: ", then echo and print.
+    - AC-029: INT 21h 3Ch halts with RTE021 at the source-mapped INT, and no `HARNESS.TXT` is created in the current or program folder.
+    - AC-031: RTE001 divide error at the source-mapped `div bl` line, `Where` = CS:IP.
+    - AC-064: all four paths and exit codes.
+    - AC-047: replaying the recording gives an identical register trace and output. Two live runs are identical. A diverging recording diverges.
+    - Also: chunked typing with BS; the budget.
+    - First run 13/14: a test changed one typed letter and expected the register trace to differ. Letters only reach memory, so the test now ends the line early. The harness documents that the trace is registers only.
+  - **DEF-004 (TASK-040 code), found by the full runs:**
+    - 13:11: the hang test reported AssemblerMissing, because the version check used the 1 s test build timeout under load. Fix: `NasmOptions.VersionCheckTimeout`.
+    - 13:16: the 1,000-line build took 2.6 s under load (alone: 0.18 / 0.18 / 0.39 s in three runs). Fix: `BuildTimeTests`, non-parallel and best of 3 (CA1711 needed the collection type renamed to `BuildTimeSensitive`).
+- **Files changed:** `AssemblyStudio.slnx`, `tests/AssemblyStudio.ProgramTests/{AssemblyStudio.ProgramTests.csproj, ProgramHarness.cs, ProgramTests.cs, Programs/*.asm}` (new), `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/NasmOptions.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmAssemblerTests.cs` (build-time test moved out), `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs` (new), `docs/05-planning/backlog.md`, `docs/07-testing/defects.md` (DEF-004), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (13:20 +0500).
+  - `dotnet test --project tests/AssemblyStudio.ProgramTests -c Release` → **14/14 passed** (13:09 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release`:
+    - 13:11 → 993/994 (hang test, DEF-004).
+    - 13:16 → 993/994 (build time, DEF-004).
+    - 13:20 → 994/994, but on stale binaries because the build had failed (CA1711), so not counted.
+    - 13:24 → **994/994 passed** in 3m 01s.
+    - 13:28 → **994/994 passed** in 3m 09s.
+- **Git state after:** uncommitted TASK-044 changes on top of `4a94950` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-003 (decision pending). DEF-001 and DEF-002 are still open. DEF-004 is fixed.
+- **Next step:** `/assembly-test` for milestone M2, then `/assembly-implement TASK-050`.

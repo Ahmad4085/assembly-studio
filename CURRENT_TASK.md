@@ -11,6 +11,24 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Completed Milestones | **M1 8086 engine** (TASK-010..020) and **M2 Runtime, DOS and toolchain** (TASK-030..036, TASK-040..044): all tasks Done |
+| Recommended next action | `/assembly-test` (M2 milestone verification), then `/assembly-implement TASK-050` (M3: debug session worker) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 13:03 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | Assemble → load → run headless with scripted input and assert output, exit path and trace |
+| Scope (in) | Harness API used by samples later; fixtures for hello, input echo, unsupported service, divide error, four exit paths |
+| Out of scope | UI |
+| Requirements | FR-039, FR-041, NFR-016, NFR-020; ADR-0008 §4; AC-021/022/023/029/031/064 (runtime level), AC-047 (replay, runtime level) |
+| Expected files | `tests/AssemblyStudio.ProgramTests/` (new test project, added to `AssemblyStudio.slnx`) |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040..043 Done; 11/12) |
 | Recommended next action | `/assembly-implement TASK-044` (Program-level test harness, last M2 task) |
@@ -113,6 +131,23 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-044 Program-level test harness (Done 2026-10-29 13:25 +0500, Claude Code (Opus 5.5))
+- New test project `tests/AssemblyStudio.ProgramTests` (added to `AssemblyStudio.slnx`).
+- `ProgramHarness`: build with the bundled NASM → load into a fresh machine (real engine, runtime, router, DOS, console) → run headless.
+  - Inputs: scripted input (one chunk per wait) or replay of a recording; an instruction budget; an optional CPU trace.
+  - Result `ProgramRun`: end kind, output, termination, halt/DOS error, recorded input, machine.
+- NASM program fixtures in `Programs/`: hello, echo (0Ah), open-file (3Ch/3Dh), divide-error, the four exit paths, and an endless loop.
+- Tests (14): AC-021, AC-022, AC-023, AC-029, AC-031 and AC-064 at runtime level; AC-047 replay (identical trace and output; diverging input diverges); chunked input; budget.
+- Also fixed **DEF-004**, flaky toolchain timing tests from TASK-040 under full-suite load: a separate `NasmOptions.VersionCheckTimeout`, and the build-time test moved to a non-parallel best-of-3 class.
+- Release build 0 warnings / 0 errors. Full solution 994/994 (13:24) and a confirming re-run.
+- **Milestone M2 complete.**
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 13:03 / 13:25 +0500 |
 
 ## Completed: TASK-043 Listing/map parsing and source map (Done 2026-10-29 12:58 +0500, Claude Code (Opus 5.5))
 - Core: `ISourceMap` (`Find(offset)`, `FirstOffsetOf(file, line)`), `SourceLocation`, `SourceMapping`; `BuildResult.SourceMap` (init, additive).

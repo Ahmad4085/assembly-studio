@@ -8,7 +8,7 @@
 | Written | 2026-10-29 13:25 +0500 by Claude Code (Opus 5.5), after completing TASK-044 (M2 complete) |
 | Current task | **None in progress. M1 and M2 complete. Next: `/assembly-test` for M2, then M3 `TASK-050` debug session worker; M4 `TASK-061` themes also eligible** |
 | Last completed | TASK-044 Program-level test harness (Done 2026-10-29 13:25 +0500) |
-| Git state | HEAD `4a94950` + uncommitted TASK-044 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `1e4ea1d` (TASK-044 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 13:20 +0500).
@@ -41,7 +41,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-044. Files:
+1. Done: TASK-044 committed. Files were:
    - `AssemblyStudio.slnx`, `tests/AssemblyStudio.ProgramTests/**`
    - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/NasmOptions.cs`
    - `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmAssemblerTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs`

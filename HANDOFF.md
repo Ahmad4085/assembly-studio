@@ -8,7 +8,7 @@
 | Written | 2026-10-29 10:24 +0500 by Claude Code (Opus 5.5), after completing TASK-035 |
 | Current task | **None in progress. Milestone 2 in progress (TASK-030..035 Done). Next eligible: M2 `TASK-036` DOS buffered input and Ctrl-C; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
 | Last completed | TASK-035 DOS character input services (Done 2026-10-29 10:24 +0500) |
-| Git state | HEAD `e04af30` + uncommitted TASK-035 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `af75e43` (TASK-035 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 10:23 +0500).
@@ -50,7 +50,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-035 (`src/AssemblyStudio.Os.Dos/DosServices.cs`, `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs`, `docs/05-planning/backlog.md`, shared memory files).
+1. Done: TASK-035 committed (`src/AssemblyStudio.Os.Dos/DosServices.cs`, `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs`, `docs/05-planning/backlog.md`, shared memory files).
 2. `/assembly-implement TASK-036`: INT 21h 0Ah, plus Ctrl-C checks in 01h/02h/08h/09h/0Ah (never 07h); default INT 23h terminates with reason Ctrl-C; program handler IRET/RETF protocol; ^S, and ^P documented as unsupported.
    - Ctrl-C termination needs a termination path value: add `TerminationPath.CtrlC` in Core, which would be additive.
    - Or `TASK-040` (NASM runner), or `TASK-061` (themes).

@@ -12,12 +12,47 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..035 Done; 6/12) |
+| Recommended next action | `/assembly-implement TASK-036` (DOS buffered input and Ctrl-C) |
+| Also eligible | `TASK-040` (NASM runner), `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 10:19 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | INT 21h 01h, 07h, 08h (extended keys 00h + scan code) and the WaitingForInput mechanism |
+| Scope (in) | Echo rules; extended-key 00h + scan code; empty queue → WaitingForInput with CS:IP on the INT, re-executed on input |
+| Out of scope | Buffered input 0Ah and Ctrl-C/^S/^P handling (TASK-036) |
+| Requirements | FR-039, FR-064, ADR-0004 §4–5 |
+| Expected files | `src/AssemblyStudio.Os.Dos/DosServices.cs`, `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs` |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..034 Done; 5/12) |
 | Recommended next action | `/assembly-implement TASK-035` (DOS character input services) |
 | Also eligible | `TASK-040` (NASM runner), `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-035 DOS character input services (Done 2026-10-29 10:24 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.Os.Dos/DosServices.cs`: INT 21h AH=01h (read with echo), 07h and 08h (read without echo).
+  - AL returns the input byte.
+  - 01h echoes through the DOS output path: TAB echoes as spaces with AL=09h; Enter echoes CR only.
+  - Extended keys are queued as 00h + scan code, so the call returns 00h and the next call returns the scan code. 01h echoes both bytes, as DOS does.
+  - Empty queue → `WaitingForInput` with the state untouched (CS:IP on the INT); the INT re-executes when input arrives.
+  - 07h and 08h differ only in the Ctrl-C check, which is TASK-036.
+- Tests: 12 new in `DosServicesTests`, covering each function, extended keys, wait/resume and a program that waits, echoes, prints and exits.
+- Release build 0 warnings / 0 errors. Os.Dos 42/42; full solution 829/829.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 10:19 / 10:24 +0500 |
 
 ## Completed: TASK-034 DOS output and termination services (Done 2026-10-29 10:16 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.Os.Dos/DosServices.cs` (`IOsServices`):

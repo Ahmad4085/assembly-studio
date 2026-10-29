@@ -1001,3 +1001,20 @@
 - **Git state after:** see HANDOFF.md. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-001 is still open (pre-existing). Note for TASK-050: the session must surface `DosServices.LastError` for `RuntimeError` halts that come from a DOS service (DOS001/DOS002), because the router records `LastHalt` only for unsupported services.
 - **Next step:** `/assembly-implement TASK-035` (DOS character input services).
+
+### 2026-10-29 10:19 – 10:24 +0500 · Claude Code (Opus 5.5) · TASK-035 DOS character input services
+- **Summary:** Ran `/assembly-implement TASK-035` (user request). The lock was free; TASK-034 was committed.
+  - `DosServices` now handles INT 21h AH=01h (read with echo) and 07h/08h (read without echo). AL returns the input byte.
+  - 01h echoes through the same DOS output path as 02h: TAB echoes as spaces while AL stays 09h; Enter echoes CR only.
+  - Extended keys are queued as 00h + scan code, so the call returns 00h and the next call returns the scan code. 01h echoes both bytes, as DOS does.
+  - An empty console queue returns `WaitingForInput` with the CPU state untouched (CS:IP on the INT), so the INT re-executes when input arrives (ADR-0004 §5).
+  - 07h and 08h currently behave the same; the Ctrl-C/^S/^P differences are TASK-036.
+- **Files changed:** `src/AssemblyStudio.Os.Dos/DosServices.cs`, `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (10:23 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Os.Dos.Tests -c Release` → **42/42 passed** (10:23 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **829/829 passed** (10:24 +0500).
+  - The 12 new tests cover each function, extended keys, a wait/resume test for each function, and a program that waits for a key, echoes it, prints it again and exits through 4Ch, run through the real engine, router, loader and console.
+- **Git state after:** uncommitted TASK-035 changes on top of `e04af30` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001 is still open (pre-existing).
+- **Next step:** `/assembly-implement TASK-036` (DOS buffered input and Ctrl-C).

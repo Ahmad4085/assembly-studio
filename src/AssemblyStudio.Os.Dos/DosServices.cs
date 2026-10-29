@@ -4,9 +4,17 @@ namespace AssemblyStudio.Os.Dos;
 
 /// <summary>
 /// The MVP DOS service subset (C06, ADR-0004 §4, §7) with DOS 3.3/4.0 semantics from the MS-DOS v4.0
-/// source (`docs/02-research/dos-services.md` §2): INT 21h AH=02h (write character), 09h (write
-/// '$'-terminated string), 00h and 4Ch (terminate), and INT 20h (terminate). The input functions
-/// 01h, 07h, 08h and 0Ah are TASK-035/036; until then they halt as unsupported (FR-040).
+/// source (`docs/02-research/dos-services.md` §2): INT 21h AH=01h (read character with echo), 02h
+/// (write character), 07h and 08h (read character without echo), 09h (write '$'-terminated string),
+/// 00h and 4Ch (terminate), and INT 20h (terminate). Buffered input 0Ah and the Ctrl-C checks are
+/// TASK-036; until then 0Ah halts as unsupported (FR-040).
+/// <para>
+/// Input comes from the console queue one byte per call. An extended key is queued as 00h followed
+/// by its scan code, so 01h/07h/08h return 00h and the next call returns the scan code (01h echoes
+/// both bytes, as DOS does). When the queue is empty the call returns
+/// <see cref="StepOutcome.WaitingForInput"/> with the state untouched: CS:IP stays on the INT, so the
+/// call re-executes when input arrives (ADR-0004 §5).
+/// </para>
 /// <para>
 /// Like the DOS kernel, the service keeps its own output column: TAB is expanded to spaces up to the
 /// next multiple of 8, CR resets the column, BS moves it back one (not destructive), and DEL and the
@@ -68,11 +76,30 @@ public sealed class DosServices : IOsServices
         return function switch
         {
             0x00 => TerminateRequiringPsp(state, TerminationPath.Int21hFunction00h, "INT 21h AH=00h"),
+            0x01 => ReadCharacter(state, machine, echo: true),
             0x02 => WriteCharacter(state, machine),
+            0x07 or 0x08 => ReadCharacter(state, machine, echo: false), // they differ only in the Ctrl-C check (TASK-036)
             0x09 => WriteString(state, machine),
             0x4C => Terminated(state, TerminationPath.Int21hFunction4Ch, (byte)state.AX),
             _ => Halted(state, HaltReason.UnsupportedService),
         };
+    }
+
+    /// <summary>AH=01h/07h/08h: AL returns the next input byte; 01h echoes it through the output path
+    /// (a TAB echoes as spaces but AL keeps 09h).</summary>
+    private StepResult ReadCharacter(CpuState state, IMachine machine, bool echo)
+    {
+        if (!machine.Console.TryReadInput(out byte value))
+        {
+            return new StepResult(StepOutcome.WaitingForInput, state.CS, state.IP, HaltReason.None, FlagBit.None);
+        }
+
+        if (echo)
+        {
+            Output(machine.Console, value);
+        }
+
+        return Completed(state, machine, value);
     }
 
     /// <summary>AH=02h: writes DL; AL returns the last character output (20h for a TAB).</summary>

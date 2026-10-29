@@ -5,17 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-29 10:16 +0500 by Claude Code (Opus 5.5), after completing TASK-034 |
-| Current task | **None in progress. Milestone 2 in progress (TASK-030..034 Done). Next eligible: M2 `TASK-035` DOS character input services; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
-| Last completed | TASK-034 DOS output and termination services (Done 2026-10-29 10:16 +0500) |
-| Git state | HEAD `9817bac` (TASK-034 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-29 10:24 +0500 by Claude Code (Opus 5.5), after completing TASK-035 |
+| Current task | **None in progress. Milestone 2 in progress (TASK-030..035 Done). Next eligible: M2 `TASK-036` DOS buffered input and Ctrl-C; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test** |
+| Last completed | TASK-035 DOS character input services (Done 2026-10-29 10:24 +0500) |
+| Git state | HEAD `e04af30` + uncommitted TASK-035 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 10:12 +0500).
-- `dotnet test --project tests/AssemblyStudio.Os.Dos.Tests -c Release` → **30/30 passed** (2026-10-29 10:12 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **817/817 passed** (2026-10-29 10:15 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 10:23 +0500).
+- `dotnet test --project tests/AssemblyStudio.Os.Dos.Tests -c Release` → **42/42 passed** (2026-10-29 10:23 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **829/829 passed** (2026-10-29 10:24 +0500).
 
 ## Changes since the previous handoff
+- **TASK-035 DOS character input services** (Claude Code, uncommitted):
+  - `DosServices` now handles INT 21h AH=01h (echo through `Output`), 07h and 08h (no echo).
+  - Extended keys arrive as 00h + scan code, so the call returns 00h and the next call returns the scan code.
+  - Empty queue → `WaitingForInput` with the state untouched; the INT re-executes when input arrives.
+  - 12 new tests in `DosServicesTests.cs`.
 - **TASK-034 DOS output and termination services** (Claude Code):
   - `src/AssemblyStudio.Os.Dos/DosServices.cs` implements `IOsServices`: INT 21h AH=02h, 09h, 00h and 4Ch, plus INT 20h.
     - DOS's own output column: TAB → spaces to the next multiple of 8; CR → 0; BS → −1; DEL and bytes below 20h raw.
@@ -45,12 +50,10 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-034 committed. Files were:
-   - `src/AssemblyStudio.Core/ProgramTermination.cs`, `src/AssemblyStudio.Core/StepResult.cs`, `src/AssemblyStudio.Core/MachineSnapshot.cs`
-   - `src/AssemblyStudio.Os.Dos/DosServices.cs`, `src/AssemblyStudio.Os.Dos/DosServiceError.cs`
-   - `tests/AssemblyStudio.Os.Dos.Tests/*`
-   - `docs/05-planning/backlog.md` and the shared memory files
-2. `/assembly-implement TASK-035` (DOS character input services 01h/07h/08h), or `TASK-040` (NASM runner), or `TASK-061` (themes).
+1. When the user asks: commit TASK-035 (`src/AssemblyStudio.Os.Dos/DosServices.cs`, `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs`, `docs/05-planning/backlog.md`, shared memory files).
+2. `/assembly-implement TASK-036`: INT 21h 0Ah, plus Ctrl-C checks in 01h/02h/08h/09h/0Ah (never 07h); default INT 23h terminates with reason Ctrl-C; program handler IRET/RETF protocol; ^S, and ^P documented as unsupported.
+   - Ctrl-C termination needs a termination path value: add `TerminationPath.CtrlC` in Core, which would be additive.
+   - Or `TASK-040` (NASM runner), or `TASK-061` (themes).
 3. In parallel (user action): TASK-006 test VMs.
 
 ## Do not overwrite or revert

@@ -54,7 +54,7 @@
 | TASK-032 | Interrupt router and runtime error policy | M2 | TASK-030, TASK-016 | M | FR-038, FR-040, NFR-013 | Done |
 | TASK-033 | Console device | M2 | TASK-030 | L | FR-063, FR-064, NFR-015, NFR-016 | Done |
 | TASK-034 | DOS output and termination services | M2 | TASK-031, TASK-032, TASK-033 | M | FR-039, FR-041, FR-040 | Done |
-| TASK-035 | DOS character input services | M2 | TASK-034 | M | FR-039, FR-064 | Approved |
+| TASK-035 | DOS character input services | M2 | TASK-034 | M | FR-039, FR-064 | Done |
 | TASK-036 | DOS buffered input and Ctrl-C | M2 | TASK-035 | M | FR-039, FR-064 | Approved |
 | TASK-040 | NASM runner | M2 | TASK-005, TASK-010 | M | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006 | Approved |
 | TASK-041 | Diagnostics, message catalog, MASM hint, size limit | M2 | TASK-040 | L | FR-021, FR-029, FR-030, FR-031, FR-066, NFR-024 | Approved |
@@ -731,7 +731,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-039, FR-064 |
 | Decisions / design | ADR-0004 |

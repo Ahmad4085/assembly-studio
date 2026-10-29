@@ -229,6 +229,144 @@ public class DosServicesTests
         Assert.Equal(before, rig.Cpu.State);
     }
 
+    // ---- AH=01h/07h/08h read character (TASK-035) ----
+
+    [Fact]
+    public void Function_01h_returns_the_input_byte_in_al_and_echoes_it()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput((byte)'a');
+        rig.Place(Int21, ax: 0x0100);
+        CpuState before = rig.Cpu.State;
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, result.Outcome);
+        Assert.Equal("a", rig.Output);
+        Assert.Equal(before with { AX = 0x0161, IP = 0x0102 }, rig.Cpu.State);
+        Assert.Equal(1, rig.Dos.Column);
+    }
+
+    [Fact]
+    public void Function_01h_echoes_a_tab_as_spaces_but_returns_09h()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput(0x09);
+        rig.Place(Int21, ax: 0x0100);
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal(new string(' ', 8), rig.Output);
+        Assert.Equal(0x09, rig.Cpu.State.AX & 0xFF);
+    }
+
+    [Fact]
+    public void Function_01h_echoes_enter_as_cr_only()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput(0x0D);
+        rig.Place(Int21, ax: 0x0100);
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("\r", rig.Output);
+        Assert.Equal(0x0D, rig.Cpu.State.AX & 0xFF);
+    }
+
+    [Theory]
+    [InlineData(0x07)]
+    [InlineData(0x08)]
+    public void Functions_07h_and_08h_return_the_input_byte_without_echo(byte function)
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput((byte)'q');
+        rig.Place(Int21, ax: (ushort)(function << 8));
+        CpuState before = rig.Cpu.State;
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal(string.Empty, rig.Output);
+        Assert.Equal(before with { AX = (ushort)((function << 8) | 'q'), IP = 0x0102 }, rig.Cpu.State);
+    }
+
+    [Theory]
+    [InlineData(0x01, "\0;")]
+    [InlineData(0x07, "")]
+    [InlineData(0x08, "")]
+    public void An_extended_key_returns_00h_then_its_scan_code_on_the_next_call(byte function, string echo)
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput([0x00, 0x3B]); // F1
+        rig.Place(Int21, ax: (ushort)(function << 8));
+
+        rig.Cpu.StepInstruction();
+        Assert.Equal(0x00, rig.Cpu.State.AX & 0xFF);
+
+        rig.Place(Int21, ax: (ushort)(function << 8));
+        rig.Cpu.StepInstruction();
+        Assert.Equal(0x3B, rig.Cpu.State.AX & 0xFF);
+
+        Assert.Equal(echo, rig.Output);
+    }
+
+    [Theory]
+    [InlineData(0x01)]
+    [InlineData(0x07)]
+    [InlineData(0x08)]
+    public void An_empty_queue_waits_on_the_int_and_the_call_completes_when_input_arrives(byte function)
+    {
+        var rig = new Rig();
+        rig.Place(Int21, ax: (ushort)(function << 8));
+        CpuState before = rig.Cpu.State;
+
+        StepResult first = rig.Cpu.StepInstruction();
+        StepResult second = rig.Cpu.StepInstruction();
+
+        foreach (StepResult waiting in new[] { first, second })
+        {
+            Assert.Equal(StepOutcome.WaitingForInput, waiting.Outcome);
+            Assert.Equal(HaltReason.None, waiting.HaltReason);
+            Assert.Equal((ushort)0x0100, waiting.InstructionIp);
+        }
+
+        Assert.Equal(before, rig.Cpu.State); // CS:IP still on the INT, nothing changed
+        Assert.Equal(string.Empty, rig.Output);
+
+        rig.Console.EnqueueInput((byte)'z');
+        StepResult resumed = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, resumed.Outcome);
+        Assert.Equal((byte)'z', (byte)rig.Cpu.State.AX);
+        Assert.Equal(0x0102, rig.Cpu.State.IP);
+    }
+
+    [Fact]
+    public void A_program_waits_for_a_key_echoes_it_prints_it_again_and_exits()
+    {
+        byte[] image =
+        [
+            0xB4, 0x01,       // mov ah, 01h
+            0xCD, 0x21,       // int 21h        ; read with echo
+            0x88, 0xC2,       // mov dl, al
+            0xB4, 0x02,       // mov ah, 02h
+            0xCD, 0x21,       // int 21h        ; print it
+            0xB8, 0x00, 0x4C, // mov ax, 4C00h
+            0xCD, 0x21,       // int 21h
+        ];
+        var rig = new Rig();
+        ComLoader.Load(rig.Machine, image);
+
+        StepResult waiting = rig.RunToEnd();
+        Assert.Equal(StepOutcome.WaitingForInput, waiting.Outcome);
+        Assert.Equal(0x0102, waiting.InstructionIp);
+
+        rig.Console.EnqueueInput((byte)'k');
+        StepResult end = rig.RunToEnd();
+
+        Assert.Equal("kk", rig.Output);
+        Assert.Equal(new ProgramTermination(TerminationPath.Int21hFunction4Ch, 0x00), end.Termination);
+    }
+
     // ---- Termination ----
 
     [Fact]

@@ -1018,3 +1018,39 @@
 - **Git state after:** uncommitted TASK-035 changes on top of `e04af30` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none new. DEF-001 is still open (pre-existing).
 - **Next step:** `/assembly-implement TASK-036` (DOS buffered input and Ctrl-C).
+
+### 2026-10-29 10:28 – 11:04 +0500 · Claude Code (Opus 5.5) · TASK-036 DOS buffered input and Ctrl-C
+- **Summary:** Ran `/assembly-implement TASK-036` (user request). The lock was free; TASK-035 was committed.
+  - **INT 21h 0Ah** (STRIN.ASM, MVP editing keys):
+    - Buffer `[0]` = max including CR (0 returns at once without reading input). On Enter, `[1]` = count without CR, then the characters and CR. The buffer is written on Enter; the line in progress is kept across `WaitingForInput` steps.
+    - A character that doesn't fit sounds BEL. Control characters echo as `^X` and are stored raw; TAB echoes as spaces.
+    - BS/DEL erase the last character's cells (BS SP BS per cell). LF echoes CR LF and isn't stored. Enter echoes CR only.
+    - Esc prints `\` CR LF and restarts the line.
+    - Extended (template) keys are consumed and ignored (MVP deviation, R-DOS §4). AL is unchanged.
+  - **Break checks (STATCHK)** in 01h/02h/08h/09h/0Ah, never 07h:
+    - ^C → Ctrl-C; ^S → pause until the next key, which is discarded (^C still breaks); ^P consumed and ignored (unsupported). Other keys stay queued.
+    - Input only arrives between instructions, so one check before each read and before each 02h/09h output equals DOS's per-character check.
+  - **Ctrl-C protocol:**
+    - Prints `^C` CR LF, then INT 23h through `IMachine.InterruptRouter.Intercept(0x23, …)`.
+    - The default vector comes back to `DosServices` as vector 23h and terminates (`TerminationPath.CtrlC`, exit 00h).
+    - A program vector is entered with a real interrupt frame whose return address is the INT 21h. IRET, or RETF with CF clear, retries the function; RETF with CF set terminates. After RETF the FLAGS word left on the stack is removed and the handler's **live** CF decides, as in CTRLC.ASM.
+    - My first version read the stacked word; the RETF+STC test caught it, and a dedicated regression test now pins it.
+  - **Core/Runtime, additive** (needed so the break check doesn't consume other keys): `IConsoleDevice.TryPeekInput`, implemented replay-aware in `ConsoleDevice` and in `NullConsoleDevice` and the `MachineTests` double; plus `TerminationPath.CtrlC`.
+- **Files changed:**
+  - Source: `src/AssemblyStudio.Os.Dos/DosServices.cs`, `src/AssemblyStudio.Core/IConsoleDevice.cs`, `src/AssemblyStudio.Core/ProgramTermination.cs`, `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs`, `src/AssemblyStudio.Runtime/Console/NullConsoleDevice.cs`.
+  - Tests: `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`, `tests/AssemblyStudio.Runtime.Tests/MachineTests.cs`.
+  - Docs: `docs/05-planning/backlog.md`, `docs/07-testing/defects.md` (DEF-002), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (10:36 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Os.Dos.Tests -c Release`:
+    - First run: 69/72. Two tests stepped into empty memory (a test bug, fixed by stepping explicitly). One was a real bug in RETF+CF detection, fixed.
+    - Then **72/72 passed** (10:36 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` (10:36):
+    - **Stalled.** Only the engine test process kept running for over 20 minutes (one core busy, memory growing). Stopped at 10:57; no result.
+    - Logged as **DEF-002**. TASK-036 changed no engine code.
+  - `dotnet test --project tests/AssemblyStudio.Engine.I8086.Tests -c Release --no-build --output Detailed` → **611/611 passed** in 2m 49s (10:57–11:00).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release --no-build` → **862/862 passed** (11:00–11:03).
+  - AC-023 runtime part: a program reads a line with 0Ah while waiting for input, echoes `abc`, prints it back with 09h and exits through 4Ch. NASM-built ACs stay with TASK-044.
+- **Git state after:** uncommitted TASK-036 changes on top of `acdaed1` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-002 (full-run stall, not reproduced). DEF-001 is still open.
+- **Next step:** `/assembly-implement TASK-040` (NASM runner).

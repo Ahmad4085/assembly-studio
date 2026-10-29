@@ -354,4 +354,37 @@ public class ConsoleDeviceTests
         console.ClearRecording();
         Assert.Empty(console.RecordedInputs);
     }
+
+    // ---- TryPeekInput (DOS break checks, TASK-036) ---------------------------------------
+
+    [Fact]
+    public void TryPeekInput_returns_the_next_byte_without_taking_or_recording_it()
+    {
+        var console = new ConsoleDevice();
+        Assert.False(console.TryPeekInput(out _));
+
+        console.EnqueueInput([(byte)'a', (byte)'b']);
+
+        Assert.True(console.TryPeekInput(out byte peeked));
+        Assert.Equal((byte)'a', peeked);
+        Assert.Equal(2, console.PendingInputCount);
+        Assert.Empty(console.RecordedInputs);
+        Assert.True(console.TryReadInput(out byte read));
+        Assert.Equal((byte)'a', read);
+    }
+
+    [Fact]
+    public void TryPeekInput_in_replay_sees_an_event_only_from_its_instruction_count()
+    {
+        var console = new ConsoleDevice();
+        console.SetReplayInputs([new InputEvent(5, (byte)'x')]);
+
+        console.CurrentInstructionCount = 4;
+        Assert.False(console.TryPeekInput(out _));
+
+        console.CurrentInstructionCount = 5;
+        Assert.True(console.TryPeekInput(out byte peeked));
+        Assert.Equal((byte)'x', peeked);
+        Assert.Equal(1, console.PendingInputCount);
+    }
 }

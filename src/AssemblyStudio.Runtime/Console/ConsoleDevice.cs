@@ -345,6 +345,24 @@ public sealed class ConsoleDevice : IConsoleDevice
         return false;
     }
 
+    /// <inheritdoc />
+    public bool TryPeekInput(out byte value)
+    {
+        if (ReplayMode)
+        {
+            if (_replayQueue.TryPeek(out InputEvent next) && next.InstructionCount <= GetEffectiveInstructionCount())
+            {
+                value = next.Value;
+                return true;
+            }
+
+            value = 0;
+            return false;
+        }
+
+        return _inputQueue.TryPeek(out value);
+    }
+
     /// <summary>
     /// Clears the output buffer, pending delta, column counter, BEL counter, and live input queue (FR-063).
     /// Does not clear the recorded input log unless <see cref="ClearRecording"/> is called.

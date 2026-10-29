@@ -367,6 +367,433 @@ public class DosServicesTests
         Assert.Equal(new ProgramTermination(TerminationPath.Int21hFunction4Ch, 0x00), end.Termination);
     }
 
+    // ---- AH=0Ah buffered input (TASK-036) ----
+
+    private const ushort Buffer = 0x0200;
+
+    private static Rig LineInput(byte max, string typed, byte initialCount = 0)
+    {
+        var rig = new Rig();
+        rig.Memory.Write8(Psp, Buffer, max);
+        rig.Memory.Write8(Psp, Buffer + 1, initialCount);
+        rig.Console.EnqueueInput(Encoding.Latin1.GetBytes(typed));
+        rig.Place(Int21, ax: 0x0A55, dx: Buffer);
+        return rig;
+    }
+
+    private static string Stored(Rig rig)
+    {
+        int count = rig.Memory.Read8(Psp, Buffer + 1);
+        var bytes = new byte[count + 1];
+        for (int i = 0; i <= count; i++)
+        {
+            bytes[i] = rig.Memory.Read8(Psp, (ushort)(Buffer + 2 + i));
+        }
+
+        return Encoding.Latin1.GetString(bytes);
+    }
+
+    [Fact]
+    public void Function_0Ah_stores_count_chars_and_cr_echoes_cr_only_and_keeps_al()
+    {
+        Rig rig = LineInput(10, "abc\r");
+        CpuState before = rig.Cpu.State;
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, result.Outcome);
+        Assert.Equal("abc\r", Stored(rig));
+        Assert.Equal(10, rig.Memory.Read8(Psp, Buffer)); // max untouched
+        Assert.Equal("abc\r", rig.Output);
+        Assert.Equal(before with { IP = 0x0102 }, rig.Cpu.State); // AL (55h) unchanged
+    }
+
+    [Fact]
+    public void Function_0Ah_waits_between_keys_and_writes_the_buffer_only_on_enter()
+    {
+        Rig rig = LineInput(10, "ab", initialCount: 7);
+
+        StepResult waiting = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.WaitingForInput, waiting.Outcome);
+        Assert.Equal("ab", rig.Output); // echoed as typed
+        Assert.Equal(7, rig.Memory.Read8(Psp, Buffer + 1)); // not written yet
+        Assert.Equal(0x0100, rig.Cpu.State.IP);
+
+        rig.Console.EnqueueInput("c\r"u8);
+        StepResult done = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, done.Outcome);
+        Assert.Equal("abc\r", Stored(rig));
+        Assert.Equal("abc\r", rig.Output);
+    }
+
+    [Fact]
+    public void Function_0Ah_with_max_0_returns_at_once_without_reading_input()
+    {
+        Rig rig = LineInput(0, "x");
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, result.Outcome);
+        Assert.Equal(0x0102, rig.Cpu.State.IP);
+        Assert.Equal(1, rig.Console.PendingInputCount);
+        Assert.Equal(string.Empty, rig.Output);
+    }
+
+    [Theory]
+    [InlineData(3, "abc\r", "ab\r", "ab\a\r")]
+    [InlineData(1, "a\r", "\r", "\a\r")]
+    public void Function_0Ah_sounds_bel_for_a_character_that_does_not_fit(byte max, string typed, string stored, string output)
+    {
+        Rig rig = LineInput(max, typed);
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal(stored, Stored(rig));
+        Assert.Equal(output, rig.Output);
+    }
+
+    [Theory]
+    [InlineData("ab\bc\r", "ac\r", "ab\b \bc\r")]
+    [InlineData("ab\u007Fc\r", "ac\r", "ab\b \bc\r")]
+    [InlineData("\b\r", "\r", "\r")]
+    [InlineData("\u0001\b\r", "\r", "^A\b \b\b \b\r")]
+    public void Function_0Ah_bs_and_del_erase_the_last_character_cells(string typed, string stored, string output)
+    {
+        Rig rig = LineInput(10, typed);
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal(stored, Stored(rig));
+        Assert.Equal(output, rig.Output);
+    }
+
+    [Fact]
+    public void Function_0Ah_stores_a_tab_echoes_spaces_and_erases_all_of_them()
+    {
+        Rig rig = LineInput(10, "x\t\b\r");
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("x\r", Stored(rig));
+        Assert.Equal("x" + new string(' ', 7) + string.Concat(Enumerable.Repeat("\b \b", 7)) + "\r", rig.Output);
+        Assert.Equal(0, rig.Dos.Column);
+    }
+
+    [Fact]
+    public void Function_0Ah_echoes_control_characters_as_caret_letter_and_stores_them_raw()
+    {
+        Rig rig = LineInput(10, "\u0001\r");
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("\u0001\r", Stored(rig));
+        Assert.Equal("^A\r", rig.Output);
+    }
+
+    [Fact]
+    public void Function_0Ah_lf_echoes_cr_lf_and_is_not_stored()
+    {
+        Rig rig = LineInput(10, "a\nb\r");
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("ab\r", Stored(rig));
+        Assert.Equal("a\r\nb\r", rig.Output);
+    }
+
+    [Fact]
+    public void Function_0Ah_esc_prints_backslash_cr_lf_and_restarts_the_line()
+    {
+        Rig rig = LineInput(10, "ab\u001Bcd\r");
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("cd\r", Stored(rig));
+        Assert.Equal("ab\\\r\ncd\r", rig.Output);
+    }
+
+    [Fact]
+    public void Function_0Ah_ignores_extended_template_keys_in_the_mvp()
+    {
+        Rig rig = LineInput(10, "\0;x\r"); // F1, then x
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("x\r", Stored(rig));
+        Assert.Equal("x\r", rig.Output);
+    }
+
+    // ---- Ctrl-C, ^S and ^P (TASK-036) ----
+
+    [Theory]
+    [InlineData(0x01)]
+    [InlineData(0x08)]
+    [InlineData(0x02)]
+    public void Ctrl_c_in_a_checked_function_prints_caret_c_and_terminates_with_the_default_handler(byte function)
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput([CtrlC, (byte)'x']);
+        rig.Place(Int21, ax: (ushort)(function << 8), dx: 'A');
+        CpuState before = rig.Cpu.State;
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Terminated, result.Outcome);
+        Assert.Equal(new ProgramTermination(TerminationPath.CtrlC, 0x00), result.Termination);
+        Assert.Equal("^C\r\n", rig.Output);
+        Assert.Equal(before, rig.Cpu.State);
+        Assert.Equal(1, rig.Console.PendingInputCount); // only the ^C was taken
+    }
+
+    [Fact]
+    public void Ctrl_c_before_a_09h_string_terminates_without_printing_it()
+    {
+        var rig = new Rig();
+        rig.PlaceString(0x0200, "Hello$");
+        rig.Console.EnqueueInput(CtrlC);
+        rig.Place(Int21, ax: 0x0900, dx: 0x0200);
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(TerminationPath.CtrlC, result.Termination?.Path);
+        Assert.Equal("^C\r\n", rig.Output);
+    }
+
+    [Fact]
+    public void Ctrl_c_while_editing_a_0Ah_line_terminates_and_leaves_the_buffer_untouched()
+    {
+        Rig rig = LineInput(10, "ab\u0003", initialCount: 7);
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(TerminationPath.CtrlC, result.Termination?.Path);
+        Assert.Equal("ab^C\r\n", rig.Output);
+        Assert.Equal(7, rig.Memory.Read8(Psp, Buffer + 1));
+    }
+
+    [Fact]
+    public void Function_07h_returns_ctrl_c_s_and_p_as_ordinary_characters()
+    {
+        foreach (byte key in new[] { CtrlC, CtrlS, CtrlP })
+        {
+            var rig = new Rig();
+            rig.Console.EnqueueInput(key);
+            rig.Place(Int21, ax: 0x0700);
+
+            StepResult result = rig.Cpu.StepInstruction();
+
+            Assert.Equal(StepOutcome.Executed, result.Outcome);
+            Assert.Equal(key, (byte)rig.Cpu.State.AX);
+        }
+    }
+
+    [Fact]
+    public void Output_leaves_ordinary_queued_keys_for_the_program()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput((byte)'x');
+        rig.Place(Int21, ax: 0x0200, dx: 'A');
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("A", rig.Output);
+        Assert.Equal(1, rig.Console.PendingInputCount);
+    }
+
+    [Fact]
+    public void Ctrl_p_is_consumed_and_ignored()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput([CtrlP, (byte)'x']);
+        rig.Place(Int21, ax: 0x0200, dx: 'A');
+
+        rig.Cpu.StepInstruction();
+
+        Assert.Equal("A", rig.Output);
+        Assert.True(rig.Console.TryReadInput(out byte left));
+        Assert.Equal((byte)'x', left);
+    }
+
+    [Fact]
+    public void Ctrl_s_pauses_output_until_the_next_key_which_is_discarded()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput(CtrlS);
+        rig.Place(Int21, ax: 0x0200, dx: 'A');
+
+        StepResult paused = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.WaitingForInput, paused.Outcome);
+        Assert.Equal(string.Empty, rig.Output);
+
+        rig.Console.EnqueueInput((byte)'k');
+        StepResult resumed = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, resumed.Outcome);
+        Assert.Equal("A", rig.Output);
+        Assert.Equal(0, rig.Console.PendingInputCount);
+    }
+
+    [Fact]
+    public void Ctrl_c_after_ctrl_s_still_breaks()
+    {
+        var rig = new Rig();
+        rig.Console.EnqueueInput([CtrlS, CtrlC]);
+        rig.Place(Int21, ax: 0x0200, dx: 'A');
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(TerminationPath.CtrlC, result.Termination?.Path);
+    }
+
+    [Fact]
+    public void A_program_int_23h_with_the_default_vector_terminates_with_ctrl_c()
+    {
+        var rig = new Rig();
+        rig.Place([0xCD, 0x23]);
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(new ProgramTermination(TerminationPath.CtrlC, 0x00), result.Termination);
+        Assert.Equal(string.Empty, rig.Output);
+    }
+
+    private const ushort HandlerSegment = 0x3000;
+
+    /// <summary>Installs a program INT 23h handler at 3000:0000 and runs a 01h call with ^C then 'y' queued.</summary>
+    private static Rig WithCtrlCHandler(byte[] handler)
+    {
+        var rig = new Rig();
+        for (int i = 0; i < handler.Length; i++)
+        {
+            rig.Memory.Write8(HandlerSegment, (ushort)i, handler[i]);
+        }
+
+        rig.Memory.Write16(0, 0x23 * 4, 0x0000);
+        rig.Memory.Write16(0, (0x23 * 4) + 2, HandlerSegment);
+        rig.Console.EnqueueInput([CtrlC, (byte)'y']);
+        rig.Place(Int21, ax: 0x0100);
+        return rig;
+    }
+
+    [Fact]
+    public void A_program_ctrl_c_handler_is_entered_with_an_interrupt_frame_returning_to_the_int_21h()
+    {
+        Rig rig = WithCtrlCHandler([0xCF]); // IRET
+        CpuState before = rig.Cpu.State with { Flags = 0x0202 };
+        rig.Cpu.SetState(before);
+
+        StepResult result = rig.Cpu.StepInstruction();
+
+        Assert.Equal(StepOutcome.Executed, result.Outcome);
+        Assert.Equal("^C\r\n", rig.Output);
+        CpuState inHandler = rig.Cpu.State;
+        Assert.Equal(HandlerSegment, inHandler.CS);
+        Assert.Equal(0x0000, inHandler.IP);
+        Assert.Equal(0xFFF8, inHandler.SP);
+        Assert.Equal(0, inHandler.Flags & (ushort)(FlagBit.IF | FlagBit.TF));
+        Assert.Equal(0x0100, rig.Memory.Read16(Psp, 0xFFF8)); // return IP = the INT 21h
+        Assert.Equal(Psp, rig.Memory.Read16(Psp, 0xFFFA));
+        Assert.Equal(0x0202, rig.Memory.Read16(Psp, 0xFFFC));
+    }
+
+    [Theory]
+    [InlineData(new byte[] { 0xCF })]       // IRET
+    [InlineData(new byte[] { 0xF8, 0xCB })] // CLC / RETF
+    public void A_program_ctrl_c_handler_returning_with_iret_or_retf_cf_clear_retries_the_function(byte[] handler)
+    {
+        Rig rig = WithCtrlCHandler(handler);
+
+        for (int i = 0; i < handler.Length; i++)
+        {
+            rig.Cpu.StepInstruction(); // INT 21h → ^C → handler, then the handler instructions
+        }
+
+        StepResult retried = rig.Cpu.StepInstruction(); // the handler's return (IRET/RETF)
+        Assert.Equal((Psp, (ushort)0x0100), (rig.Cpu.State.CS, rig.Cpu.State.IP));
+        retried = rig.Cpu.StepInstruction(); // INT 21h retried
+
+        Assert.Equal(StepOutcome.Executed, retried.Outcome);
+        CpuState after = rig.Cpu.State;
+        Assert.Equal(0x0102, after.IP);
+        Assert.Equal((byte)'y', (byte)after.AX);
+        Assert.Equal(Psp, after.CS);
+        Assert.Equal(0xFFFE, after.SP); // the FLAGS word a RETF leaves behind is removed
+        Assert.Equal("^C\r\ny", rig.Output);
+    }
+
+    [Fact]
+    public void After_retf_the_handlers_live_carry_decides_not_the_flags_word_left_on_the_stack()
+    {
+        Rig rig = WithCtrlCHandler([0xF8, 0xCB]); // CLC / RETF
+        rig.Cpu.SetState(rig.Cpu.State with { Flags = 0x0003 }); // CF set in the stacked FLAGS
+
+        for (int i = 0; i < 4; i++) // INT 21h → handler, CLC, RETF, INT 21h retried
+        {
+            rig.Cpu.StepInstruction();
+        }
+
+        Assert.Equal((byte)'y', (byte)rig.Cpu.State.AX);
+        Assert.Equal(0x0102, rig.Cpu.State.IP);
+    }
+
+    [Fact]
+    public void A_program_ctrl_c_handler_returning_with_retf_and_cf_set_terminates()
+    {
+        Rig rig = WithCtrlCHandler([0xF9, 0xCB]); // STC / RETF
+
+        StepResult result = default;
+        for (int i = 0; i < 4; i++) // INT 21h → handler, STC, RETF, INT 21h again
+        {
+            result = rig.Cpu.StepInstruction();
+        }
+
+        Assert.Equal(new ProgramTermination(TerminationPath.CtrlC, 0x00), result.Termination);
+        Assert.Equal(0xFFFE, rig.Cpu.State.SP);
+        Assert.Equal("^C\r\n", rig.Output);
+    }
+
+    // ---- AC-023 (runtime part): read a line with 0Ah and print it ----
+
+    [Fact]
+    public void AC_023_a_program_waits_for_a_line_echoes_it_and_prints_it()
+    {
+        byte[] code =
+        [
+            0xBA, 0x20, 0x01,                   // mov dx, buf (0120h)
+            0xB4, 0x0A,                         // mov ah, 0Ah
+            0xCD, 0x21,                         // int 21h
+            0x8A, 0x1E, 0x21, 0x01,             // mov bl, [buf+1]
+            0xB7, 0x00,                         // mov bh, 0
+            0xC6, 0x87, 0x22, 0x01, 0x24,       // mov byte [bx+buf+2], '$'
+            0xBA, 0x22, 0x01,                   // mov dx, buf+2
+            0xB4, 0x09,                         // mov ah, 09h
+            0xCD, 0x21,                         // int 21h
+            0xB8, 0x00, 0x4C,                   // mov ax, 4C00h
+            0xCD, 0x21,                         // int 21h
+        ];
+        byte[] image = [.. code, 0x90, 0x90, 20, 0, .. new byte[21]];
+        Assert.Equal(0x20, code.Length + 2);
+        var rig = new Rig();
+        ComLoader.Load(rig.Machine, image);
+
+        StepResult waiting = rig.RunToEnd();
+        Assert.Equal(StepOutcome.WaitingForInput, waiting.Outcome);
+        Assert.Equal(0x0105, waiting.InstructionIp);
+
+        rig.Console.EnqueueInput("abc\r"u8);
+        StepResult end = rig.RunToEnd();
+
+        Assert.Equal("abc\rabc", rig.Output);
+        Assert.Equal(new ProgramTermination(TerminationPath.Int21hFunction4Ch, 0x00), end.Termination);
+    }
+
+    private const byte CtrlC = 0x03;
+    private const byte CtrlP = 0x10;
+    private const byte CtrlS = 0x13;
+
     // ---- Termination ----
 
     [Fact]

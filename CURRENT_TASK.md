@@ -12,6 +12,25 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036 Done; 7/12). All DOS services done; NASM tasks 040–044 remain |
+| Recommended next action | `/assembly-implement TASK-040` (NASM runner) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 10:28 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | INT 21h 0Ah (MVP editing keys) and the Ctrl-C/INT 23h protocol |
+| Scope (in) | 0Ah buffer format, max 0, full → BEL, BS/DEL, Enter (CR only), Esc cancel; Ctrl-C checks in 01/02/08/09/0Ah (never 07h); default INT 23h terminates (Ctrl-C); program handler IRET/RETF protocol; ^S pause; ^P consumed and unsupported |
+| Out of scope | Template keys F1–F7 (post-MVP) |
+| Requirements | FR-039, FR-064, ADR-0004 §4, D-015 |
+| Expected files | `src/AssemblyStudio.Os.Dos/DosServices.cs`, tests in `tests/AssemblyStudio.Os.Dos.Tests/` |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..035 Done; 6/12) |
 | Recommended next action | `/assembly-implement TASK-036` (DOS buffered input and Ctrl-C) |
 | Also eligible | `TASK-040` (NASM runner), `TASK-061` (Themes) |
@@ -37,6 +56,30 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-036 DOS buffered input and Ctrl-C (Done 2026-10-29 11:04 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.Os.Dos/DosServices.cs`: INT 21h AH=0Ah with the MVP editing keys (STRIN.ASM).
+  - Buffer format: max including CR; count without CR; chars + CR. The buffer is written on Enter. Max 0 returns at once.
+  - A character that doesn't fit → BEL. Control characters echo as `^X`; TAB echoes as spaces.
+  - BS/DEL erase the last character's cells. LF echoes CR LF and is not stored. Enter echoes CR only.
+  - Esc prints `\` CR LF and restarts the line.
+  - Extended (template) keys are consumed and ignored in the MVP.
+  - The line in progress is kept across `WaitingForInput` steps.
+- Break checks in 01h/02h/08h/09h/0Ah (never 07h): ^C → Ctrl-C protocol; ^S → pause until the next key (discarded; ^C still breaks); ^P consumed and ignored (unsupported). Other keys stay queued.
+- Ctrl-C protocol: prints `^C` CR LF, then INT 23h through the router.
+  - Default vector → terminate (`TerminationPath.CtrlC`, exit 00h).
+  - A program handler is entered with a real frame returning to the INT 21h.
+  - IRET, or RETF with CF clear → the function is retried. RETF with CF set → terminate. The handler's live CF decides (CTRLC.ASM); the stacked FLAGS word is removed.
+  - A program INT 23h with the default vector also terminates.
+- Core/Runtime (additive): `IConsoleDevice.TryPeekInput` (replay-aware in `ConsoleDevice`), so the break check doesn't consume other keys; `TerminationPath.CtrlC`.
+- Tests: 30 new in `DosServicesTests` (Os.Dos 72/72), including the AC-023 runtime part; 2 new peek tests in `ConsoleDeviceTests`.
+- Release build 0 warnings / 0 errors. Full solution 862/862. The first full run stalled (DEF-002, not reproduced).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 10:28 / 11:04 +0500 |
 
 ## Completed: TASK-035 DOS character input services (Done 2026-10-29 10:24 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.Os.Dos/DosServices.cs`: INT 21h AH=01h (read with echo), 07h and 08h (read without echo).

@@ -18,4 +18,9 @@ public interface IConsoleDevice
     /// <summary>Takes one queued input byte; <see langword="false"/> when the queue is empty, which
     /// the router reports as <see cref="StepOutcome.WaitingForInput"/> (ADR-0004 §5).</summary>
     bool TryReadInput(out byte value);
+
+    /// <summary>Returns the byte <see cref="TryReadInput"/> would take next without taking or
+    /// recording it; <see langword="false"/> when none is available. DOS uses it for the Ctrl-C, ^S and
+    /// ^P checks during output, which leave other keys queued (ADR-0004 §4).</summary>
+    bool TryPeekInput(out byte value);
 }

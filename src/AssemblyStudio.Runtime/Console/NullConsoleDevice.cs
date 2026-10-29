@@ -23,4 +23,11 @@ public sealed class NullConsoleDevice : IConsoleDevice
         value = 0;
         return false;
     }
+
+    /// <inheritdoc />
+    public bool TryPeekInput(out byte value)
+    {
+        value = 0;
+        return false;
+    }
 }

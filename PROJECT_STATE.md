@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 10:24 +0500 by Claude Code (Opus 5.5) (TASK-035 done) |
-| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..035 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
-| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..035 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
-| Active task | None in progress. Next eligible: M2 `TASK-036` DOS buffered input and Ctrl-C; M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
+| Last updated | 2026-10-29 11:04 +0500 by Claude Code (Opus 5.5) (TASK-036 done) |
+| Current phase | **6 Implementation**, milestone M2 in progress (TASK-030..036 done), M0 (TASK-006 pending), M4 (TASK-060 done) |
+| Current milestone | M2 Runtime, DOS and toolchain (in progress) — TASK-030..036 done; M1 Complete; M0 nearly complete (TASK-006 pending) |
+| Active task | None in progress. Next eligible: M2 `TASK-040` NASM runner; M4 `TASK-061` Themes, tokens and contrast test. Parallel user action: `TASK-006` (clean test VMs) |
 
-| Next recommended action | `/assembly-implement TASK-036` (DOS buffered input and Ctrl-C) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
+| Next recommended action | `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes). User action TASK-006 (clean test VMs) can start any time |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-036 DOS buffered input and Ctrl-C | 2026-10-29 11:04 +0500 | `DosServices`: INT 21h 0Ah (MVP editing: max 0, full → BEL, `^X` echo, TAB, BS/DEL, LF, Enter CR-only, Esc cancel; template keys ignored); break checks in 01h/02h/08h/09h/0Ah (^C, ^S pause, ^P consumed); Ctrl-C protocol (`^C` CR LF, default INT 23h → `TerminationPath.CtrlC`; program handler IRET/RETF retry, RETF+CF terminates). Core/Runtime additive: `IConsoleDevice.TryPeekInput`, `TerminationPath.CtrlC`. Os.Dos 72/72 incl. AC-023 runtime part. Release build 0w/0e; full solution 862/862 (a first full run stalled, DEF-002, not reproduced) |
 | TASK-035 DOS character input services | 2026-10-29 10:24 +0500 | `DosServices`: INT 21h 01h (echo through the output path; TAB echoes as spaces, AL=09h), 07h/08h (no echo); extended keys 00h + scan code over two calls; empty queue → `WaitingForInput` with CS:IP on the INT, re-executed when input arrives. 12 new tests (Os.Dos 42/42). Release build 0w/0e; full solution 829/829 |
 | TASK-034 DOS output and termination services | 2026-10-29 10:16 +0500 | `src/AssemblyStudio.Os.Dos/DosServices.cs`: INT 21h 02h/09h/00h/4Ch and INT 20h (DOS 3.3/4.0: own column with TAB → spaces, AL returns 02h → last char / 20h for TAB and 09h → 24h, CS = PSP check for 20h/00h → DOS001, RET to PSP:0000 → `ReturnToPsp`, 09h without '$' → DOS002 deviation). Core additions: `StepOutcome.Terminated`, `StepResult.Termination` (`ProgramTermination`). 30/30 Os.Dos tests incl. AC-064 (all four paths) and AC-022 runtime part through the real engine/router/loader. Release build 0w/0e; full solution 817/817 |
 | TASK-033 Console device | 2026-10-28 18:04 +0500 | `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs` implementing `IConsoleDevice` per FR-063, FR-064, NFR-015, NFR-016, AC-045, AC-047, and ADR-0004 §6: circular output buffer capped at 1 MiB with oldest content trimmed; snapshot delta API (`TakeOutput`) decoding CP437; column counter tracking TAB (modulo 8), CR (reset to 0), BS (decrement), and printable characters; BEL (07h) event counter; input queue with instruction-stamped event recording (`InputEvent.cs`) and deterministic replay; 22 new unit tests in `ConsoleDeviceTests` (total 79/79 in Runtime.Tests); solution build 0w/0e, 39/39 architecture tests passed |
@@ -87,8 +88,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 10:23 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 10:24 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **829/829 passed** (all 9 test projects; Os.Dos 42/42) |
+| Product build (2026-10-29 10:36 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 11:03 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **862/862 passed** (all 9 test projects; Os.Dos 72/72). An earlier run at 10:36 stalled in the engine tests and was stopped (DEF-002, not reproduced) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

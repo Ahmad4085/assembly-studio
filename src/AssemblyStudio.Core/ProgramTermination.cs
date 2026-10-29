@@ -14,6 +14,9 @@ public enum TerminationPath
 
     /// <summary>A near RET to PSP:0000 through the initial stack word, which runs the INT 20h stored there.</summary>
     ReturnToPsp,
+
+    /// <summary>Ctrl-C: the default INT 23h handler, or a program INT 23h handler returning with RETF and CF set (ADR-0004 §4).</summary>
+    CtrlC,
 }
 
 /// <summary>The termination path and exit code of a program that ended normally (FR-041).</summary>

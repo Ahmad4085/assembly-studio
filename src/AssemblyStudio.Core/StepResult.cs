@@ -12,10 +12,14 @@ public enum StepOutcome
     /// <summary>A service is waiting for console input; CS:IP stays on the INT instruction so it
     /// re-executes when input arrives (ADR-0004 §5).</summary>
     WaitingForInput,
+
+    /// <summary>The program ended normally through a termination service; CS:IP stays on the
+    /// terminating instruction and <see cref="StepResult.Termination"/> holds the path and exit code (FR-041).</summary>
+    Terminated,
 }
 
-/// <summary>Reason a step ended in <see cref="StepOutcome.Halted"/>. <see cref="StepOutcome.Executed"/>
-/// and <see cref="StepOutcome.WaitingForInput"/> always report <see cref="None"/>.</summary>
+/// <summary>Reason a step ended in <see cref="StepOutcome.Halted"/>. <see cref="StepOutcome.Executed"/>,
+/// <see cref="StepOutcome.WaitingForInput"/> and <see cref="StepOutcome.Terminated"/> always report <see cref="None"/>.</summary>
 public enum HaltReason
 {
     /// <summary>Not halted.</summary>
@@ -50,4 +54,9 @@ public readonly record struct StepResult(
     ushort InstructionCs,
     ushort InstructionIp,
     HaltReason HaltReason,
-    FlagBit UndefinedFlags);
+    FlagBit UndefinedFlags)
+{
+    /// <summary>The termination path and exit code when <see cref="Outcome"/> is
+    /// <see cref="StepOutcome.Terminated"/>, else <see langword="null"/> (FR-041).</summary>
+    public ProgramTermination? Termination { get; init; }
+}

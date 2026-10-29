@@ -4,5 +4,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AssemblyStudio.Os.Dos\AssemblyStudio.Os.Dos.csproj" />
+    <!-- The service tests run INT 21h/20h through the real engine, router, loader and console (AC-064, AC-022). -->
+    <ProjectReference Include="..\..\src\AssemblyStudio.Engine.I8086\AssemblyStudio.Engine.I8086.csproj" />
+    <ProjectReference Include="..\..\src\AssemblyStudio.Runtime\AssemblyStudio.Runtime.csproj" />
   </ItemGroup>
 </Project>

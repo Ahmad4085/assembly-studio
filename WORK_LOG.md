@@ -974,3 +974,30 @@
 - **Git state after:** not committed (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none for TASK-033. Pre-existing DEF-001 remains open.
 - **Next step:** `/assembly-implement TASK-034` (Basic DOS services: output and termination — unblocked by TASK-033!) or `/assembly-implement TASK-040` (NASM runner) or `/assembly-implement TASK-061` (themes).
+
+### 2026-10-29 10:01 – 10:16 +0500 · Claude Code (Opus 5.5) · TASK-034 DOS output and termination services
+- **Summary:** Ran `/assembly-implement TASK-034` (user request). The lock was free: TASK-033 Done and handed off by Antigravity.
+  - `src/AssemblyStudio.Os.Dos/DosServices.cs` (`IOsServices`) implements INT 21h AH=02h, 09h, 00h and 4Ch, plus INT 20h, with DOS 3.3/4.0 semantics (research §2):
+    - DOS's own output column, as in CPMIO2.ASM: TAB pads spaces to the next multiple of 8; CR → 0; BS → −1 (not below 0); DEL and the other bytes below 20h are output raw without advancing the column.
+    - AL returns: 02h → the last character output (20h for TAB); 09h → 24h.
+    - After a handled call, IP moves past the INT, skipping prefix bytes.
+  - Termination:
+    - INT 20h and AH=00h require CS = PSP; otherwise the call halts as `RuntimeError` with DOS001 in `LastError`.
+    - AH=4Ch works from any CS, with the exit code in AL.
+    - INT 20h executed at PSP:0000 (after a near RET through the initial stack word) is reported as `ReturnToPsp`.
+    - CS:IP stays on the terminating INT.
+  - Documented deviation: AH=09h with no '$' anywhere in the 64 KiB segment halts with DOS002 and prints nothing. Real DOS would print forever.
+  - Core, additive only: `StepOutcome.Terminated`, plus `StepResult.Termination` of type `ProgramTermination(TerminationPath, ExitCode)` in the new `src/AssemblyStudio.Core/ProgramTermination.cs`.
+    - Needed because the debug session (TASK-050) may only depend on Core, so termination must be expressible there.
+    - The `MachineSnapshot.ExitCode` doc comment was aligned with AC-064 (00h for the paths other than 4Ch).
+  - Out of scope, left for TASK-035/036: the input functions and Ctrl-C checks in 02h/09h. Until then the input functions halt as unsupported via the router.
+- **Files changed:** `src/AssemblyStudio.Os.Dos/DosServices.cs` (new), `src/AssemblyStudio.Os.Dos/DosServiceError.cs` (new), `src/AssemblyStudio.Core/ProgramTermination.cs` (new), `src/AssemblyStudio.Core/StepResult.cs`, `src/AssemblyStudio.Core/MachineSnapshot.cs` (doc comment only), `tests/AssemblyStudio.Os.Dos.Tests/DosServicesTests.cs` (new), `tests/AssemblyStudio.Os.Dos.Tests/AssemblyStudio.Os.Dos.Tests.csproj` (references Engine.I8086 and Runtime, test project only), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (10:12 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Os.Dos.Tests -c Release` → **30/30 passed** (10:12 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **817/817 passed** (10:15 +0500).
+  - The tests run INT 21h/20h through the real `Cpu8086` + `InterruptRouter` + `ConsoleDevice`, including AC-064 (all four termination paths, from hand-assembled .COM images through `ComLoader`) and AC-022, runtime part (hello world prints its message and terminates via 4Ch with exit code 0).
+  - The NASM-built program-level versions of AC-022 and AC-064 stay with TASK-044, so their AC test status stays NOT RUN.
+- **Git state after:** see HANDOFF.md. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-001 is still open (pre-existing). Note for TASK-050: the session must surface `DosServices.LastError` for `RuntimeError` halts that come from a DOS service (DOS001/DOS002), because the router records `LastHalt` only for unsupported services.
+- **Next step:** `/assembly-implement TASK-035` (DOS character input services).

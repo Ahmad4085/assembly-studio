@@ -12,12 +12,33 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
-| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030, TASK-031, TASK-032, TASK-033 Done; 4/12) |
-| Recommended next action | `/assembly-implement TASK-034` (Basic DOS services: output and termination — now UNBLOCKED!) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..034 Done; 5/12) |
+| Recommended next action | `/assembly-implement TASK-035` (DOS character input services) |
 | Also eligible | `TASK-040` (NASM runner), `TASK-061` (Themes) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-034 DOS output and termination services (Done 2026-10-29 10:16 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.Os.Dos/DosServices.cs` (`IOsServices`):
+  - INT 21h AH=02h, 09h, 00h and 4Ch, plus INT 20h, with DOS 3.3/4.0 semantics.
+  - DOS's own output column: TAB → spaces to the next multiple of 8, CR → 0, BS → −1, DEL and bytes below 20h raw.
+  - AL returns: 02h → the last character output (20h for TAB); 09h → 24h.
+  - INT 20h and AH=00h require CS = PSP (otherwise DOS001). A near RET to PSP:0000 is reported as `ReturnToPsp`.
+  - Deviation: 09h with no '$' in the segment → DOS002 halt with no output (real DOS would print forever).
+- Core (additive):
+  - `StepOutcome.Terminated` and `StepResult.Termination` (`ProgramTermination(TerminationPath, ExitCode)`) in the new `ProgramTermination.cs`.
+  - `MachineSnapshot.ExitCode` doc aligned with AC-064.
+- Tests: 30 in `tests/AssemblyStudio.Os.Dos.Tests` (29 new in `DosServicesTests` + the existing skeleton test), run through the real `Cpu8086` + `InterruptRouter` + `ConsoleDevice`.
+  - Covers each function and AC-064 (all four paths: hand-assembled .COM images through `ComLoader`).
+  - Covers AC-022, runtime part (hello world → output + 4Ch exit 0).
+- Release build 0 warnings / 0 errors; full solution 817/817.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 10:01 / 10:16 +0500 |
 
 ## Completed: TASK-033 Console device (Done 2026-10-28 18:05 +0500, Antigravity (IDE, Gemini 3.8 Flash))
 - Implemented `InputEvent` in `src/AssemblyStudio.Runtime/Console/InputEvent.cs`:

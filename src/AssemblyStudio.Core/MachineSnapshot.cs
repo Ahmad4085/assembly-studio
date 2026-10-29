@@ -66,7 +66,7 @@ public readonly record struct StackWindow(IReadOnlyList<ushort> Words);
 /// <param name="ConsoleDelta">Console output since the last snapshot (ADR-0007 §2).</param>
 /// <param name="State">Session state.</param>
 /// <param name="TerminationPath">Termination description when <see cref="SessionState.Terminated"/>, else <see langword="null"/> (FR-041).</param>
-/// <param name="ExitCode">DOS exit code when terminated via 4Ch, else <see langword="null"/>.</param>
+/// <param name="ExitCode">DOS exit code when terminated (AL for 4Ch, 00h for the other paths, AC-064), else <see langword="null"/>.</param>
 /// <param name="CurrentInstruction">The decoded current instruction, when the session is current (ADR-0007 v1.1).</param>
 /// <param name="MemoryWindows">Copies of the subscribed memory regions, when subscribed (ADR-0007 v1.1).</param>
 /// <param name="Stack">The stack window copy, when subscribed (ADR-0007 v1.1).</param>

@@ -12,6 +12,25 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040, TASK-041 Done; 9/12) |
+| Recommended next action | `/assembly-implement TASK-042` (CPU-directive guard) |
+| Also eligible | `TASK-043` (listing/map source map), `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 11:43 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | Parse GNU diagnostics, define stable message codes, add the MASM hint and the .COM size check |
+| Scope (in) | Diagnostics parser (incl. info and warning class); message catalog (code, what, where, next step) in resources; MASM heuristics; 65,280-byte limit |
+| Out of scope | UI |
+| Requirements | FR-021, FR-029, FR-030, FR-031, FR-066, NFR-024; ADR-0005 §4 |
+| Expected files | `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/`, Core `Diagnostic` (ADR-0002), `NasmAssembler` wiring, tests |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040 Done; 8/12) |
 | Recommended next action | `/assembly-implement TASK-041` (Diagnostics, message catalog, MASM hint, size limit) |
 | Also eligible | `TASK-042` (CPU-directive guard), `TASK-043` (listing/map source map), `TASK-061` (Themes) |
@@ -75,6 +94,26 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-041 Diagnostics, message catalog, MASM hint, size limit (Done 2026-10-29 11:53 +0500, Claude Code (Opus 5.5))
+- Core: `Diagnostic(Code, Severity, What, File, Line, NextStep)` and `DiagnosticSeverity`; `BuildResult.Diagnostics` (init, additive).
+- `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/`:
+  - `NasmDiagnosticParser`: GNU format, all severities, message kept as written incl. `[-w+class]`. A temp copy maps to the document (or null when untitled); other files are kept. Unparseable lines stay only in the raw output.
+  - `BuildMessages` (+ `BuildMessages.resx`): catalog codes ASM001–003 and BLD001–008, each with severity, what, next step.
+  - `MasmHint`: `.model/.code/.data/…`, `assume`, `name proc/endp/segment/ends`, `@data`; comments ignored; NASM `segment .text` not matched.
+- `NasmAssembler`:
+  - Parsed diagnostics, plus build messages for missing (BLD001), timeout (BLD002), crash (BLD003), failure without a source diagnostic (BLD004), cancelled (BLD005), version warning (BLD008).
+  - The MASM hint (BLD007) is added on failed builds.
+  - The 65,280-byte .COM limit fails the build with BLD006.
+- Tests: 22 new in `BuildDiagnosticsTests` + code checks in `NasmAssemblerTests` (toolchain 58/58). Covers AC-013 (toolchain part), AC-014, AC-020, and AC-055 catalog completeness.
+- Release build 0 warnings / 0 errors; full solution 914/914.
+- Found **DEF-003**: `ComLoader` allows only 65,278 bytes (its message says 65,280). Not changed; needs a decision.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 11:43 / 11:53 +0500 |
 
 ## Completed: TASK-040 NASM runner (Done 2026-10-29 11:16 +0500, Claude Code (Opus 5.5))
 - Core (ADR-0002 lists these in Core): `IAssembler` (`Check()`, `BuildAsync`), `BuildRequest`, `BuildResult`, `BuildOutcome` (Succeeded, Failed, AssemblerMissing, TimedOut, Crashed, Cancelled), `AssemblerInfo`, `AssemblerOrigin`, `AssemblerStatus`.

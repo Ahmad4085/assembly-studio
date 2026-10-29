@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using AssemblyStudio.Core;
+using AssemblyStudio.Toolchain.Nasm.Diagnostics;
 
 namespace AssemblyStudio.Toolchain.Nasm;
 
@@ -135,7 +136,10 @@ public sealed partial class NasmAssembler : IAssembler
         AssemblerInfo assembler = Check();
         if (!assembler.IsUsable)
         {
-            return new BuildResult(BuildOutcome.AssemblerMissing, ReadOnlyMemory<byte>.Empty, string.Empty, false, null, stopwatch.Elapsed, assembler);
+            return new BuildResult(BuildOutcome.AssemblerMissing, ReadOnlyMemory<byte>.Empty, string.Empty, false, null, stopwatch.Elapsed, assembler)
+            {
+                Diagnostics = [BuildMessages.Create(BuildMessages.AssemblerMissing, null, null, assembler.Problem)],
+            };
         }
 
         string work = Path.Combine(_options.TempRoot, "build-" + Guid.NewGuid().ToString("N"));
@@ -177,15 +181,84 @@ public sealed partial class NasmAssembler : IAssembler
                 outcome = BuildOutcome.Failed;
             }
 
-            return new BuildResult(outcome, bytes, run.StandardError, run.Truncated, run.ExitCode, stopwatch.Elapsed, assembler);
+            var diagnostics = new List<Diagnostic>(NasmDiagnosticParser.Parse(run.StandardError, source, request.SourcePath));
+            if (outcome == BuildOutcome.Succeeded && bytes.Length > BuildMessages.MaxComImageSize)
+            {
+                outcome = BuildOutcome.Failed;
+                diagnostics.Add(BuildMessages.Create(BuildMessages.ImageTooLarge, request.SourcePath, null, bytes.Length));
+                bytes = ReadOnlyMemory<byte>.Empty;
+            }
+
+            diagnostics.AddRange(BuildMessagesFor(outcome, run, diagnostics, request));
+            if (assembler.Status != AssemblerStatus.Ready)
+            {
+                diagnostics.Add(BuildMessages.Create(BuildMessages.VersionWarning, null, null, assembler.Problem));
+            }
+
+            return new BuildResult(outcome, bytes, run.StandardError, run.Truncated, run.ExitCode, stopwatch.Elapsed, assembler)
+            {
+                Diagnostics = diagnostics,
+            };
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            return new BuildResult(BuildOutcome.Cancelled, ReadOnlyMemory<byte>.Empty, string.Empty, false, null, stopwatch.Elapsed, assembler);
+            return new BuildResult(BuildOutcome.Cancelled, ReadOnlyMemory<byte>.Empty, string.Empty, false, null, stopwatch.Elapsed, assembler)
+            {
+                Diagnostics = [BuildMessages.Create(BuildMessages.Cancelled, null, null)],
+            };
         }
         finally
         {
             TryDelete(work);
+        }
+    }
+
+    /// <summary>The build-level messages for an outcome (FR-030), and the MASM hint for a failed build (FR-021).</summary>
+    private IEnumerable<Diagnostic> BuildMessagesFor(BuildOutcome outcome, ProcessRun run, IReadOnlyList<Diagnostic> parsed, BuildRequest request)
+    {
+        switch (outcome)
+        {
+            case BuildOutcome.TimedOut:
+                yield return BuildMessages.Create(BuildMessages.TimedOut, null, null, _options.Timeout.TotalSeconds);
+                break;
+
+            case BuildOutcome.Crashed:
+                yield return BuildMessages.Create(BuildMessages.Crashed, null, null, run.ExitCode);
+                break;
+
+            case BuildOutcome.Cancelled:
+                yield return BuildMessages.Create(BuildMessages.Cancelled, null, null);
+                break;
+
+            case BuildOutcome.Failed when !parsed.Any(d => d.Severity == DiagnosticSeverity.Error):
+                yield return BuildMessages.Create(BuildMessages.FailedWithoutDiagnostics, null, null, run.ExitCode);
+                break;
+        }
+
+        if (outcome == BuildOutcome.Failed && run.ExitCode is not 0 && ReadSource(request) is { } text && MasmHint.Find(text) is { } hint)
+        {
+            yield return BuildMessages.Create(BuildMessages.MasmHint, request.SourcePath, hint.Line, hint.Construct);
+        }
+    }
+
+    private static string? ReadSource(BuildRequest request)
+    {
+        if (request.UnsavedText is not null)
+        {
+            return request.UnsavedText;
+        }
+
+        try
+        {
+            return File.ReadAllText(request.SourcePath!);
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return null;
         }
     }
 

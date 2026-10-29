@@ -202,6 +202,8 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.Contains("Settings", result.Assembler.Problem, StringComparison.Ordinal);
         Assert.Null(result.ExitCode);
         Assert.False(Directory.Exists(TempRoot)); // nothing was prepared
+        Diagnostic missing = Assert.Single(result.Diagnostics);
+        Assert.Equal(("BLD001", result.Assembler.Problem), (missing.Code, missing.What));
     }
 
     [Theory]
@@ -258,6 +260,7 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.Contains("3.02", result.Assembler.Problem, StringComparison.Ordinal);
         Assert.True(result.Assembler.IsUsable);
         Assert.Equal(BuildOutcome.Failed, result.Outcome); // the stub exits 0 without writing an image
+        Assert.Equal(["BLD004", "BLD008"], result.Diagnostics.Select(d => d.Code));
     }
 
     [Fact]
@@ -285,6 +288,7 @@ public sealed class NasmAssemblerTests : IDisposable
 
         Assert.Equal(BuildOutcome.TimedOut, hung.Outcome);
         Assert.Null(hung.ExitCode);
+        Assert.Equal(["BLD002"], hung.Diagnostics.Select(d => d.Code));
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(10), $"The timeout kill took {stopwatch.Elapsed}.");
         AssertNoBuildFolders(TempRoot);
 
@@ -301,6 +305,9 @@ public sealed class NasmAssemblerTests : IDisposable
 
         Assert.Equal(BuildOutcome.Crashed, crashed.Outcome);
         Assert.Equal(unchecked((int)0xC0000005), crashed.ExitCode);
+        Diagnostic crash = Assert.Single(crashed.Diagnostics);
+        Assert.Equal("BLD003", crash.Code);
+        Assert.Contains("0xC0000005", crash.What, StringComparison.Ordinal);
 
         BuildResult next = await Assembler().BuildAsync(new BuildRequest(null, ExitSource), TestContext.Current.CancellationToken);
         Assert.Equal(BuildOutcome.Succeeded, next.Outcome);
@@ -316,6 +323,7 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.Equal(BuildOutcome.Failed, result.Outcome);
         Assert.Equal(2, result.ExitCode);
         Assert.Equal(string.Empty, result.Output);
+        Assert.Equal(["BLD004"], result.Diagnostics.Select(d => d.Code));
     }
 
     [Fact]
@@ -329,6 +337,7 @@ public sealed class NasmAssemblerTests : IDisposable
         BuildResult result = await Assembler(bundled: stub).BuildAsync(new BuildRequest(null, ExitSource), cancel.Token);
 
         Assert.Equal(BuildOutcome.Cancelled, result.Outcome);
+        Assert.Equal(["BLD005"], result.Diagnostics.Select(d => d.Code));
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(10), $"Cancelling took {stopwatch.Elapsed}.");
         AssertNoBuildFolders(TempRoot);
     }

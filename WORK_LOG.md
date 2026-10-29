@@ -1079,3 +1079,29 @@
 - **Git state after:** uncommitted TASK-040 changes on top of `874d077` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none new. DEF-001 and DEF-002 are still open.
 - **Next step:** `/assembly-implement TASK-041`.
+
+### 2026-10-29 11:43 – 11:53 +0500 · Claude Code (Opus 5.5) · TASK-041 Diagnostics, message catalog, MASM hint, size limit
+- **Summary:** Ran `/assembly-implement TASK-041` (user request). The lock was free; TASK-040 was committed.
+  - **Core** (ADR-0002 lists `Diagnostic` in Core): `Diagnostic(Code, Severity, What, File, Line, NextStep)`, `DiagnosticSeverity` (Info/Warning/Error); `BuildResult.Diagnostics` added as an init property (additive).
+  - **`NasmDiagnosticParser`:**
+    - Parses the GNU format with info/warning/error/fatal/panic (fatal/panic → Error) and keeps NASM's message as written, including any `[-w+class]` suffix.
+    - A diagnostic about the temporary copy is reported against the document (the saved path, or null for untitled); other files (includes) are kept.
+    - Lines in any other form stay only in the raw `Output` (FR-029).
+  - **Message catalog** `BuildMessages` + `BuildMessages.resx` (NFR-032). Codes:
+    - ASM001/002/003: NASM error/warning/info; the text is NASM's.
+    - BLD001 assembler missing, BLD002 timeout, BLD003 crash, BLD004 failure without a source diagnostic, BLD005 cancelled, BLD006 image too large, BLD007 MASM hint, BLD008 version warning.
+    - Each has a severity, "what" (a template) and a next step; "where" is the file and line, or the whole build (FR-066, NFR-024).
+  - **MASM hint** (FR-021), only on failed builds: `.model/.code/.data/.stack/.const/.startup/.exit/.386…`, `assume`, `name proc|endp|segment|ends`, `@data`. Comments are ignored, and NASM's `segment .text` doesn't match.
+  - **Size limit** (FR-031): an image over 65,280 bytes fails with BLD006 and no image; exactly 65,280 builds.
+  - **Found DEF-003:** `ComLoader.MaxComImageSize` is 65,278 (its message says 65,280), so 65,279–65,280-byte images build but don't load. Not changed (TASK-031 code, needs a decision).
+  - **Follow-up noted in HANDOFF:** the runtime/DOS messages (RTE0xx, DOS001/002) are still inline strings, not in resources.
+- **Files changed:** `src/AssemblyStudio.Core/Diagnostic.cs` (new), `src/AssemblyStudio.Core/BuildResult.cs`, `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/{BuildMessages.cs, BuildMessages.resx, NasmDiagnosticParser.cs, MasmHint.cs}` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/NasmAssemblerTests.cs` (code assertions), `docs/05-planning/backlog.md`, `docs/07-testing/defects.md` (DEF-003), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (11:48 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release` → **58/58 passed** (11:49 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **914/914 passed** in 3m 23s (11:52 +0500).
+  - The tests run real NASM 3.02 builds for AC-013 (toolchain part: a warning on line 3 and an error on line 7, with line, severity and file), unsaved and untitled file mapping, a warning-only build that succeeds, AC-014 (`.model small`/`.code` → NASM errors plus the BLD007 hint at line 1), and AC-020 (65,281 bytes fails with BLD006; 65,280 builds).
+  - Also: parser and hint unit tests, AC-055 catalog completeness (every code has its texts, and no resource key lacks a code), and every catalog message created with arguments. The failure-kind tests now check BLD001–005/008.
+- **Git state after:** uncommitted TASK-041 changes on top of `6755510` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-003 (new, needs a decision). DEF-001 and DEF-002 are still open.
+- **Next step:** `/assembly-implement TASK-042` (CPU-directive guard).

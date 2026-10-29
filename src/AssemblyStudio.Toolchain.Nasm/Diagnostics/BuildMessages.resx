@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Build message catalog (FR-066, NFR-024, NFR-032). Keys: <code>_What (a format string; absent when the
+       assembler supplies the text) and <code>_Next. Codes are stable: never renumber or reuse one. -->
+  <data name="ASM001_Next" xml:space="preserve">
+    <value>Correct the code on this line, then build again.</value>
+  </data>
+  <data name="ASM002_Next" xml:space="preserve">
+    <value>Check this line: the program was built, but it may not do what you expect.</value>
+  </data>
+  <data name="ASM003_Next" xml:space="preserve">
+    <value>Read this together with the message before it.</value>
+  </data>
+  <data name="BLD001_What" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="BLD001_Next" xml:space="preserve">
+    <value>Open Settings and set the path of nasm.exe, or reinstall Assembly Studio to restore the bundled NASM.</value>
+  </data>
+  <data name="BLD002_What" xml:space="preserve">
+    <value>NASM did not finish within {0} seconds, so the build was stopped.</value>
+  </data>
+  <data name="BLD002_Next" xml:space="preserve">
+    <value>Look for a %rep block or a macro that never ends, then build again.</value>
+  </data>
+  <data name="BLD003_What" xml:space="preserve">
+    <value>NASM stopped unexpectedly (exit code 0x{0:X8}).</value>
+  </data>
+  <data name="BLD003_Next" xml:space="preserve">
+    <value>Build again. If it keeps happening, check the NASM installation in Settings.</value>
+  </data>
+  <data name="BLD004_What" xml:space="preserve">
+    <value>NASM failed (exit code {0}) without reporting a source line. Its output is shown unchanged.</value>
+  </data>
+  <data name="BLD004_Next" xml:space="preserve">
+    <value>Read the NASM output. If it is empty, check the NASM installation in Settings.</value>
+  </data>
+  <data name="BLD005_What" xml:space="preserve">
+    <value>The build was cancelled.</value>
+  </data>
+  <data name="BLD005_Next" xml:space="preserve">
+    <value>Build again when you are ready.</value>
+  </data>
+  <data name="BLD006_What" xml:space="preserve">
+    <value>The program is {0:N0} bytes, but a .COM program can be at most 65,280 bytes (64 KiB minus the 256-byte PSP).</value>
+  </data>
+  <data name="BLD006_Next" xml:space="preserve">
+    <value>Make the program smaller. For example, reserve large buffers with resb in a section .bss, which takes no space in the file.</value>
+  </data>
+  <data name="BLD007_What" xml:space="preserve">
+    <value>This looks like MASM or TASM code ("{0}"). Assembly Studio uses NASM syntax.</value>
+  </data>
+  <data name="BLD007_Next" xml:space="preserve">
+    <value>Open Help ▸ NASM vs MASM to see how to write this in NASM syntax.</value>
+  </data>
+  <data name="BLD008_What" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="BLD008_Next" xml:space="preserve">
+    <value>Use the bundled NASM 3.02 (clear the assembler path in Settings), or install NASM 3.02 or later.</value>
+  </data>
+</root>

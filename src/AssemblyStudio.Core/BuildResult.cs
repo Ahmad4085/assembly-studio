@@ -88,4 +88,10 @@ public sealed record BuildResult(
     bool OutputTruncated,
     int? ExitCode,
     TimeSpan Duration,
-    AssemblerInfo Assembler);
+    AssemblerInfo Assembler)
+{
+    /// <summary>The build messages: the assembler's parsed diagnostics, in output order, followed by the
+    /// build's own messages (failure kind, size limit, MASM hint, version warning). Output lines that
+    /// could not be parsed stay only in <see cref="Output"/>, unmodified (FR-029).</summary>
+    public IReadOnlyList<Diagnostic> Diagnostics { get; init; } = [];
+}

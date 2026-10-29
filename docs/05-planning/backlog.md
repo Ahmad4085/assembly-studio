@@ -59,7 +59,7 @@
 | TASK-040 | NASM runner | M2 | TASK-005, TASK-010 | M | FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, NFR-006 | Done |
 | TASK-041 | Diagnostics, message catalog, MASM hint, size limit | M2 | TASK-040 | L | FR-021, FR-029, FR-030, FR-031, FR-066, NFR-024 | Done |
 | TASK-042 | CPU-directive guard | M2 | TASK-040 | L | FR-027 | Approved |
-| TASK-043 | Listing/map parsing and source map | M2 | TASK-040 | H | FR-028, FR-052, FR-053 | Approved |
+| TASK-043 | Listing/map parsing and source map | M2 | TASK-040 | H | FR-028, FR-052, FR-053 | Done |
 | TASK-044 | Program-level test harness | M2 | TASK-036, TASK-043 | M | FR-039, FR-041, NFR-016, NFR-020 | Approved |
 | TASK-050 | Debug session worker and commands | M3 | TASK-030, TASK-032 | M | FR-035, FR-042, FR-049, FR-051, FR-067, NFR-004, NFR-015 | Approved |
 | TASK-051 | Snapshots (ADR-0007 v1.1) | M3 | TASK-050, TASK-019, TASK-043 | M | FR-046, FR-048, FR-053, FR-054, FR-055, FR-056, FR-057, FR-058, NFR-018, NFR-002 | Approved |
@@ -877,7 +877,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M2 |
 | Requirements | FR-028, FR-052, FR-053 |
 | Decisions / design | ADR-0005 |

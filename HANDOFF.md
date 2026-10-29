@@ -5,36 +5,23 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-29 12:42 +0500 by Antigravity (IDE, Gemini 3.8 Flash), after completing TASK-042 |
-| Current task | **None in progress. Milestone 2 in progress (TASK-030..036, TASK-040..042 Done; 10/12). Next eligible: M2 `TASK-043` source map; M4 `TASK-061` themes** |
-| Last completed | TASK-042 CPU-directive guard (Done 2026-10-29 12:35 +0500, committed in `71d32fe`) |
-| Git state | HEAD `71d32fe` (TASK-042 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-29 12:58 +0500 by Claude Code (Opus 5.5), after completing TASK-043 |
+| Current task | **None in progress. Milestone 2 in progress (TASK-030..036, TASK-040..043 Done; 11/12). Next eligible: M2 `TASK-044` program-level test harness; M4 `TASK-061` themes** |
+| Last completed | TASK-043 Listing/map parsing and source map (Done 2026-10-29 12:58 +0500) |
+| Git state | HEAD `e0c3386` + uncommitted TASK-043 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 12:17 +0500).
-- `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release` → **79/79 passed** (2026-10-29 12:18 +0500).
-- `dotnet test --project tests/AssemblyStudio.ArchitectureTests -c Release` → **39/39 passed** (2026-10-29 12:18 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **934/935 passed** in 3m 12s (2026-10-29 12:33 +0500; only pre-existing DEF-001 in App.Tests).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 12:52 +0500).
+- `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release` → **124/124 passed** (2026-10-29 12:52 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **980/980 passed** in 4m 19s (2026-10-29 12:57 +0500).
 
 ## Changes since the previous handoff
-- **TASK-042 CPU-directive guard** (Antigravity (IDE, Gemini 3.8 Flash), uncommitted):
-  - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs`:
-    - Scans preprocessed NASM output (`-Xgnu -E`, FR-027, ADR-0005 §3) for CPU directives requesting a processor level other than 8086.
-    - Parses `%line <line>[+<step>] [<file>]` to accurately track source files and line numbers across empty lines, multi-line constructs, macros, and includes.
-    - Rejects non-8086 levels (`186`, `286`, `386`, `486`, `586`, `686`, `PENTIUM`, `x64`, etc.) and allows `8086`. Avoids false-positives on string literals.
-    - Reports against `documentPath` for the main file (or `null` if untitled) and relative/full paths for included files.
-  - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.cs` and `BuildMessages.resx`:
-    - Added stable code `BLD009` (`UnsupportedCpu`, severity `DiagnosticSeverity.Error`).
-    - What: *"The CPU directive '{0}' is not supported. Assembly Studio targets the 8086 processor."*
-    - Next: *"Remove the CPU directive or change it to 8086, then build again."*
-  - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`:
-    - In `BuildAsync`, executes `nasm -Xgnu -E <source>` before binary assembly.
-    - If non-8086 CPU directives are detected, halts the build immediately with `BuildOutcome.Failed`, empty binary output, and `BLD009` diagnostics.
-    - Honors timeout (`BLD002`), crash (`BLD003`), and cancellation (`BLD005`).
-  - Tests:
-    - 8 new unit tests in `tests/AssemblyStudio.Toolchain.Nasm.Tests/CpuDirectiveGuardTests.cs`.
-    - 5 new integration tests in `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs` covering AC-018 instruction rejection (`ASM001`), `cpu 386` bypass rejection (`BLD009`), hidden-in-macro bypass rejection (`BLD009`), include file bypass rejection (`BLD009`), and explicit `cpu 8086` build success.
-    - Toolchain test suite expanded from 58 to 79 tests (all passing).
+- **TASK-043 Listing/map parsing and source map** (Claude Code, uncommitted):
+  - Core: `src/AssemblyStudio.Core/ISourceMap.cs` (`ISourceMap`, `SourceLocation`, `SourceMapping`); `BuildResult.SourceMap`.
+  - `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/NasmListing.cs` (+ `NasmMapFile`), `NasmSourceMap.cs`. Wired into `NasmAssembler`. BLD010 added to the catalog.
+  - The namespace `AssemblyStudio.Toolchain.Nasm.SourceMapping` clashes with the Core type `SourceMapping` inside `AssemblyStudio.Toolchain.Nasm.*`; those files use `using LineMapping = AssemblyStudio.Core.SourceMapping;`.
+  - Fixtures 01–12 in `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/`; verification note `docs/06-implementation/task-043-verification.md`.
+- **TASK-042 CPU-directive guard** was done and committed by Antigravity (12:35, `71d32fe`).
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -54,15 +41,12 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Commit TASK-042 when requested by user. Files modified/added:
-   - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.cs`
-   - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.resx`
-   - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs`
-   - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`
-   - `tests/AssemblyStudio.Toolchain.Nasm.Tests/CpuDirectiveGuardTests.cs`
-   - `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs`
-   - `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `WORK_LOG.md`, `HANDOFF.md`
-2. `/assembly-implement TASK-043` (listing + map → `ISourceMap`), or `/assembly-implement TASK-061` (themes).
+1. When the user asks: commit TASK-043. Files:
+   - `src/AssemblyStudio.Core/ISourceMap.cs`, `src/AssemblyStudio.Core/BuildResult.cs`
+   - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/*`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.{cs,resx}`
+   - `tests/AssemblyStudio.Toolchain.Nasm.Tests/SourceMapTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/**`
+   - `docs/06-implementation/task-043-verification.md`, `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-044` (program-level harness: NASM fixtures → build → load → run → assert output/termination; covers AC-021/022/023/029/031/064 and the POC-002 fixtures as regressions), or `TASK-061` (themes).
 3. User decisions pending: DEF-003 (size limit). TASK-006 test VMs.
 
 ## Do not overwrite or revert

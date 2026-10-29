@@ -1135,3 +1135,31 @@
 - **Git state after:** uncommitted TASK-042 changes on top of `b191212` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-001, DEF-002, DEF-003 open.
 - **Next step:** `/assembly-implement TASK-043` (source map from listing + map).
+
+### 2026-10-29 12:42 – 12:58 +0500 · Claude Code (Opus 5.5) · TASK-043 Listing/map parsing and source map
+- **Summary:** Ran `/assembly-implement TASK-043` (user request). Session start: files had changed since my last commit. They were TASK-042 work by Antigravity, committed at 12:41 (`71d32fe`) and handed off at 12:42, and the lock was free, so I proceeded.
+  - **Core** (ADR-0002 lists `ISourceMap` in Core): `ISourceMap` (`Find(ushort offset)` → `SourceMapping?`, `FirstOffsetOf(file, line)`), `SourceLocation(File?, Line)`, `SourceMapping(Location, FromMacroExpansion)`. `BuildResult.SourceMap` added as an init property (additive).
+  - **`Toolchain.Nasm/SourceMapping`:** `NasmListing` (listing rows; the byte parser is ported from POC-002), `NasmMapFile` (origin, section starts, symbols; throws `InvalidDataException` on a malformed map), `NasmSourceMap`:
+    - Macro → outermost invoking line, flagged as an expansion. `%rep` → its own lines (inside a macro: the invoking line). `%include` → the included file, resolved from the working directory first, then the includer's folder. Section-relative offsets → addresses via the map.
+    - A `section` line inside a `%macro` *definition* is ignored.
+    - The temporary copy is reported as the document (null when untitled). `Find` is a binary search; reserved space is excluded.
+  - **`NasmAssembler`:** reads the listing (temp folder) and the map (stdout) after a successful build. If they're unreadable or the output was truncated: no map plus **BLD010** (new catalog code, warning; resx updated).
+  - **ADR-0005 unverified cases**, checked by inspecting real NASM 3.02 listings first:
+    - ≥10-level nesting: NASM shifts the `<n>` marker one column left for `<9>`+ on rows without bytes. The POC's fixed column 36 would read those rows as level 0. The parser now finds the marker by pattern in columns 30–38.
+    - Mutation check: the fixed column makes `Twelve_nested_macro_levels…` fail; restored, it passes.
+    - Nested includes in subfolders, `%rep` (nested too), and a section switch inside a macro all map correctly.
+    - Details and remaining limits: `docs/06-implementation/task-043-verification.md`. ADR-0005 is not edited.
+  - **Fixtures** `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/`: POC-002 01–07 (copied) plus new 08–12 (12 = wrapped data and `.bss`).
+  - **Verifiers** (POC-002, ported): image bytes, map symbols, ndisasm boundaries.
+    - The boundary check skips data rows, because ndisasm decodes data inside `.text` as code. That was found with fixture 12 (data inside `.text`), whose first run reported the string's continuation rows. These are a limitation of the check, not of the mapping; the byte and symbol verifiers pass on that fixture.
+- **Files changed:** `src/AssemblyStudio.Core/ISourceMap.cs` (new), `src/AssemblyStudio.Core/BuildResult.cs`, `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/{NasmListing.cs, NasmSourceMap.cs}` (new), `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/BuildMessages.{cs,resx}` (BLD010), `tests/AssemblyStudio.Toolchain.Nasm.Tests/SourceMapTests.cs` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/**` (new), `docs/06-implementation/task-043-verification.md` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (12:52 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Toolchain.Nasm.Tests -c Release`:
+    - First run: 123/124; the boundary verifier flagged data rows (see above).
+    - Then **124/124 passed** (12:52 +0500).
+    - Mutation run (fixed marker column): the 12-level test **failed** as expected; reverted.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **980/980 passed** in 4m 19s (12:57 +0500).
+- **Git state after:** uncommitted TASK-043 changes on top of `e0c3386` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision pending) are still open.
+- **Next step:** `/assembly-implement TASK-044` (last M2 task).

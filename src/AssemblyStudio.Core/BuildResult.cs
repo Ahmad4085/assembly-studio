@@ -94,4 +94,8 @@ public sealed record BuildResult(
     /// build's own messages (failure kind, size limit, MASM hint, version warning). Output lines that
     /// could not be parsed stay only in <see cref="Output"/>, unmodified (FR-029).</summary>
     public IReadOnlyList<Diagnostic> Diagnostics { get; init; } = [];
+
+    /// <summary>The address ↔ source mapping of a successful build (FR-028), or <see langword="null"/> when the
+    /// build failed or the mapping data could not be read (the debugger then shows no source line, FR-053).</summary>
+    public ISourceMap? SourceMap { get; init; }
 }

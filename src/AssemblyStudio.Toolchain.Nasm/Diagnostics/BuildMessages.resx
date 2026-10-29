@@ -77,4 +77,10 @@
   <data name="BLD009_Next" xml:space="preserve">
     <value>Remove the CPU directive or change it to 8086, then build again.</value>
   </data>
+  <data name="BLD010_What" xml:space="preserve">
+    <value>The program was built, but its source mapping could not be read. The debugger will show addresses without source lines.</value>
+  </data>
+  <data name="BLD010_Next" xml:space="preserve">
+    <value>Build again. If it keeps happening, check that the bundled NASM 3.02 is used (other versions may write a different listing).</value>
+  </data>
 </root>

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AssemblyStudio.Core;
 using AssemblyStudio.Toolchain.Nasm.Diagnostics;
+using AssemblyStudio.Toolchain.Nasm.SourceMapping;
 
 namespace AssemblyStudio.Toolchain.Nasm;
 
@@ -228,9 +229,20 @@ public sealed partial class NasmAssembler : IAssembler
                 diagnostics.Add(BuildMessages.Create(BuildMessages.VersionWarning, null, null, assembler.Problem));
             }
 
+            ISourceMap? sourceMap = null;
+            if (outcome == BuildOutcome.Succeeded)
+            {
+                sourceMap = await ReadSourceMapAsync(Path.Combine(work, "program.lst"), run, source, request.SourcePath, workingDirectory).ConfigureAwait(false);
+                if (sourceMap is null)
+                {
+                    diagnostics.Add(BuildMessages.Create(BuildMessages.SourceMapUnavailable, request.SourcePath, null));
+                }
+            }
+
             return new BuildResult(outcome, bytes, run.StandardError, run.Truncated, run.ExitCode, stopwatch.Elapsed, assembler)
             {
                 Diagnostics = diagnostics,
+                SourceMap = sourceMap,
             };
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -243,6 +255,30 @@ public sealed partial class NasmAssembler : IAssembler
         finally
         {
             TryDelete(work);
+        }
+    }
+
+    /// <summary>Builds the source map from the listing file and the map NASM wrote to standard output (ADR-0005 §5).
+    /// Returns <see langword="null"/> when they can't be read or parsed; the build still succeeds (FR-053).</summary>
+    private static async Task<ISourceMap?> ReadSourceMapAsync(string listingFile, ProcessRun run, string assembledFile, string? documentFile, string workingDirectory)
+    {
+        if (run.Truncated || !File.Exists(listingFile))
+        {
+            return null;
+        }
+
+        try
+        {
+            string listing = await File.ReadAllTextAsync(listingFile, CancellationToken.None).ConfigureAwait(false);
+            return NasmSourceMap.Build(listing, run.StandardOutput, assembledFile, documentFile, workingDirectory);
+        }
+        catch (InvalidDataException)
+        {
+            return null;
+        }
+        catch (IOException)
+        {
+            return null;
         }
     }
 

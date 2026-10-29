@@ -47,6 +47,9 @@ internal static class BuildMessages
     /// <summary>A CPU directive requests a processor level other than 8086 (FR-027, ADR-0005 §3).</summary>
     public const string UnsupportedCpu = "BLD009";
 
+    /// <summary>The build succeeded but its listing or map could not be read, so there is no source mapping (FR-053).</summary>
+    public const string SourceMapUnavailable = "BLD010";
+
     /// <summary>The largest .COM image: 64 KiB minus the 256-byte PSP (FR-031).</summary>
     public const int MaxComImageSize = 65_280;
 
@@ -65,6 +68,7 @@ internal static class BuildMessages
         [MasmHint] = DiagnosticSeverity.Info,
         [VersionWarning] = DiagnosticSeverity.Warning,
         [UnsupportedCpu] = DiagnosticSeverity.Error,
+        [SourceMapUnavailable] = DiagnosticSeverity.Warning,
     };
 
     /// <summary>Codes whose "what" text comes from the assembler instead of the catalog.</summary>

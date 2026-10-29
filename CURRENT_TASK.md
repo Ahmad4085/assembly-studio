@@ -12,6 +12,25 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
+| Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040..043 Done; 11/12) |
+| Recommended next action | `/assembly-implement TASK-044` (Program-level test harness, last M2 task) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 12:42 +0500 |
+| Milestone | M2 (Runtime, DOS and toolchain) |
+| Goal | Productize POC-002's source map and close its unverified cases |
+| Scope (in) | `ISourceMap` from listing + map (macro → invoking line, include → file, sections); POC-002 fixtures + 3 verifiers as regression tests; new fixtures: ≥10-level nesting, nested includes in subfolders, `%rep`, section switch inside a macro. Failures narrow documented scope (FR-045) |
+| Out of scope | Debugger use |
+| Requirements | FR-028, FR-052, FR-053; ADR-0005 §5–6 |
+| Expected files | `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/`, Core `ISourceMap` (ADR-0002), `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/` |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestone | **Milestone 1: 8086 engine (headless)** (TASK-010..020 all Done) |
 | Milestone 2 progress | M2: Runtime, DOS and toolchain (TASK-030..036, TASK-040..042 Done; 10/12) |
 | Recommended next action | `/assembly-implement TASK-043` (listing/map source map) |
 | Also eligible | `TASK-061` (Themes) |
@@ -94,6 +113,24 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time |
 
 ---
+
+## Completed: TASK-043 Listing/map parsing and source map (Done 2026-10-29 12:58 +0500, Claude Code (Opus 5.5))
+- Core: `ISourceMap` (`Find(offset)`, `FirstOffsetOf(file, line)`), `SourceLocation`, `SourceMapping`; `BuildResult.SourceMap` (init, additive).
+- `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/`: `NasmListing` (rows; nesting marker found by pattern), `NasmMapFile`, `NasmSourceMap`.
+  - Macro → outermost invoking line (flagged); `%rep` → own lines; include → file (working dir first, then includer folder); sections via map starts.
+  - A section line inside a macro *definition* is ignored.
+  - The temp copy maps to the document (or null when untitled).
+- `NasmAssembler` builds the map after a successful build. If the map can't be read: no map plus BLD010 (new catalog code, warning).
+- Fixtures in `tests/AssemblyStudio.Toolchain.Nasm.Tests/fixtures/`: POC-002 01–07 plus new 08 (12-level nesting), 09 (nested includes in subfolders), 10 (`%rep`), 11 (section switch in a macro), 12 (wrapped data, `.bss`).
+- **Finding:** NASM's nesting marker moves one column left for `<9>` and deeper on rows without bytes. POC-002's fixed column would read those rows as level 0. Fixed, and mutation-checked.
+- Verification note: `docs/06-implementation/task-043-verification.md`. All four ADR-0005 unverified cases now work; the remaining limits are documented there.
+- Tests: `SourceMapTests` (3 verifiers × 10 fixtures + 14 behavior tests); toolchain 124/124. Release build 0 warnings / 0 errors; full solution 980/980.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 12:42 / 12:58 +0500 |
 
 ## Completed: TASK-042 CPU-directive guard (Done 2026-10-29 12:35 +0500, Antigravity (IDE, Gemini 3.8 Flash))
 - `src/AssemblyStudio.Toolchain.Nasm/Diagnostics/CpuDirectiveGuard.cs`:

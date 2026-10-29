@@ -47,6 +47,10 @@ public class MachineTests
         }
 
         public bool TryPeekInput(out byte value) => TryReadInput(out value);
+
+        public void EnqueueInput(byte value)
+        {
+        }
     }
 
     private sealed class TestRouter : IInterruptRouter

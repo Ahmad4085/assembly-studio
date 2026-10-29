@@ -30,4 +30,10 @@ public sealed class NullConsoleDevice : IConsoleDevice
         value = 0;
         return false;
     }
+
+    /// <inheritdoc />
+    public void EnqueueInput(byte value)
+    {
+        // Discard input in null device.
+    }
 }

@@ -23,4 +23,7 @@ public interface IConsoleDevice
     /// recording it; <see langword="false"/> when none is available. DOS uses it for the Ctrl-C, ^S and
     /// ^P checks during output, which leave other keys queued (ADR-0004 §4).</summary>
     bool TryPeekInput(out byte value);
+
+    /// <summary>Queues one input byte from the keyboard (the debug session delivers typed keys and Ctrl-C, FR-064).</summary>
+    void EnqueueInput(byte value);
 }

@@ -1281,3 +1281,35 @@
 - **Git state after:** uncommitted TASK-052 changes on top of `4b8cc4f` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** none new. DEF-001, DEF-002, and DEF-003 (decision) remain open.
 - **Next step:** `/assembly-implement TASK-053` or `TASK-061`.
+
+### 2026-10-29 15:28 – 15:43 +0500 · Claude Code (Opus 5.5) · TASK-053 Input routing, Ctrl-C delivery and replay
+- **Summary:** Ran `/assembly-implement TASK-053` (user request).
+  - Session start: `IDebugSession.cs` had changed since my last read. It was TASK-052 by Antigravity (breakpoints, Step Over), committed (`f9b826e`, `e9bcdd1`) and handed off; the tree was clean and the lock free.
+  - **Core:**
+    - `IConsoleDevice.EnqueueInput(byte)`: the session can only deliver keys through Core. ConsoleDevice already had the method; NullConsoleDevice and the MachineTests double now implement it.
+    - `InputRecord(AtInstruction, Value)`.
+    - `IDebugSession.SendInput`, `SendCtrlC`, `RecordedInput`, `Replay`.
+  - **`DebugSession`:**
+    - Requests that don't change control flow (input, Ctrl-C, memory refresh) go through an inline queue. A run processes it before each instruction without stopping. An idle worker is woken by an Inline channel command that doesn't count as an interrupting command.
+    - **This fixes a TASK-051 bug of mine:** `WatchMemory` posted an interrupting Refresh, so opening a memory view during a run paused the program. A regression test covers it.
+    - Input is recorded with the live instruction count (`InputRecord`). A program in WaitingForInput continues what produced the wait: a run continues (a Step Over keeps its temporary target), a step completes.
+    - Ctrl-C = 03h in the keyboard queue (D-015); the DOS checks from TASK-036 act on it.
+    - `Replay(recording)` reloads the program and delivers each byte in `Step()` once the count reaches its stamp. Live input is ignored while replaying.
+  - **Public `InstructionsExecuted` is now taken from the published record** (consistent with the snapshot).
+    - The first Debugging run showed TASK-052's `Step_over_on_int_instruction_pauses_at_next_instruction` failing 1 time in 3: it waited on the live counter, then read a not-yet-published snapshot (IP 0102 instead of 0104).
+    - Publishing the counter with the snapshot removes the race without touching the other agent's test.
+- **Files changed:** `src/AssemblyStudio.Core/{IConsoleDevice.cs, IDebugSession.cs}`, `src/AssemblyStudio.Runtime/Console/{ConsoleDevice.cs, NullConsoleDevice.cs}`, `src/AssemblyStudio.Debugging/DebugSession.cs`, `tests/AssemblyStudio.Runtime.Tests/MachineTests.cs`, `tests/AssemblyStudio.Debugging.Tests/InputAndReplayTests.cs` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (15:34 +0500).
+  - `dotnet test --project tests/AssemblyStudio.Debugging.Tests -c Release`:
+    - 49/50, then 50/50, 50/50 (the TASK-052 flake above).
+    - After the counter fix: **50/50 in 5 consecutive runs** (15:36 +0500).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **1043/1043 passed** at 15:38 and 15:42 (two consecutive runs).
+  - New tests (11):
+    - A waiting run continues on input. A waiting step completes. Input sent during a 65,535-iteration loop is delivered without any pause. Type-ahead while paused.
+    - Ctrl-C during 01h → CtrlC termination with `^C` CR LF. Ctrl-C during 07h → exit code 03h.
+    - AC-047: replay in a fresh session and in the same session gives an identical console, CPU state, instruction count, history, termination and recording, and never waits.
+    - Live input is ignored during replay. Reset clears the recording. Watching memory while running doesn't pause.
+- **Git state after:** uncommitted TASK-053 changes on top of `e9bcdd1` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** none new. DEF-001, DEF-002 and DEF-003 (decision) are still open.
+- **Next step:** `/assembly-implement TASK-054` (last M3 task).

@@ -268,6 +268,7 @@ public sealed class ConsoleDevice : IConsoleDevice
     /// Enqueues one byte into the console's live input queue.
     /// </summary>
     /// <param name="value">Byte value to enqueue.</param>
+    /// <remarks>Implements <see cref="IConsoleDevice.EnqueueInput"/>.</remarks>
     public void EnqueueInput(byte value) => _inputQueue.Enqueue(value);
 
     /// <summary>

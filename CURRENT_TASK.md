@@ -6,8 +6,29 @@
 
 ## Active Task
 
+None in progress.
+
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
+| Milestone 3 progress | M3: Debug session (TASK-050..053 Done; 4/5) |
+| Recommended next action | `/assembly-implement TASK-054` (fault containment, fuzz and soak; last M3 task) |
+| Also eligible | `TASK-061` (Themes) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 15:28 +0500 |
+| Milestone | M3 (Debug session, headless) |
+| Goal | Deliver console input and Ctrl-C to the program and replay recorded sessions identically |
+| Scope (in) | SendInput / SendCtrlC commands; replay from recorded input |
+| Out of scope | UI key handling (TASK-074) |
+| Requirements | FR-064, NFR-016, D-015; AC-047 (session level); Ctrl-C during 01h/07h |
+| Expected files | `src/AssemblyStudio.Debugging/DebugSession.cs`, Core `IDebugSession`/`IConsoleDevice` additions, tests |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
 | Milestone 3 progress | M3: Debug session (TASK-050, TASK-051, TASK-052 Done; 3/5) |
@@ -16,6 +37,27 @@
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-053 Input routing, Ctrl-C delivery and replay (Done 2026-10-29 15:43 +0500, Claude Code (Opus 5.5))
+- Core:
+  - `IConsoleDevice.EnqueueInput(byte)` (ConsoleDevice already had it; NullConsoleDevice and the MachineTests double now implement it).
+  - `InputRecord(AtInstruction, Value)`.
+  - `IDebugSession.SendInput(bytes)`, `SendCtrlC()`, `RecordedInput`, `Replay(recording)`.
+  - `InstructionsExecuted` is now "as of the latest snapshot".
+- `DebugSession`:
+  - Input, Ctrl-C (03h, D-015) and memory refreshes go through a separate inline queue that a run handles between instructions **without stopping**. Only Run, Pause, Stop, Reset, Replay and the steps interrupt.
+  - This also fixes a TASK-051 bug: `WatchMemory` during a run paused the program.
+  - Delivered input is recorded with the instruction count. A program waiting for input continues what it was doing: a run keeps running (a Step Over keeps its target), a step completes.
+  - `Replay` reloads the program and delivers each byte at its recorded count; live input is ignored until Reset.
+  - `InstructionsExecuted` is published with the snapshot, which removes an intermittent failure in TASK-052's Step Over test (it read the counter before the snapshot).
+- Tests: `InputAndReplayTests` (11 new): waiting run and step continue on input; input during a run doesn't pause it; type-ahead; Ctrl-C in 01h → CtrlC termination and in 07h → character 03h; AC-047 (replay reproduces console, CPU, count, history, termination, recording) in a new session and in the same session; Reset clears the recording; watch-while-running regression.
+- Release build 0 warnings / 0 errors; Debugging 50/50 in 5 consecutive runs; full solution 1043/1043 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 15:28 / 15:43 +0500 |
 
 ## Completed: TASK-052 Breakpoints and Step Over (Done 2026-10-29 15:00 +0500, Antigravity (IDE, Gemini 3.8 Flash))
 - Core:

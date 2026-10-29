@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Channels;
 using AssemblyStudio.Core;
@@ -23,6 +24,12 @@ namespace AssemblyStudio.Debugging;
 /// termination, the current instruction with its source line, the subscribed memory windows, the stack window
 /// and the history delta. One is published immediately after each command (step, pause, stop, reset) and at
 /// most 30 per second while running; running snapshots have no current instruction ("not current", FR-057).
+/// </para>
+/// <para>
+/// Requests that don't change control flow (keyboard input, Ctrl-C, a memory-window refresh) go through a separate
+/// queue that a run handles between instructions without stopping; only Run, Pause, Stop, Reset, Replay and the
+/// steps interrupt a run. Input is recorded with the instruction count at which it arrived, and a replay delivers
+/// each byte at that count again, so the execution is identical (NFR-016, AC-047).
 /// </para>
 /// </summary>
 public sealed class DebugSession : IDebugSession
@@ -58,6 +65,12 @@ public sealed class DebugSession : IDebugSession
     private int _nextWatchId;
     private ushort _programSegment;
     private IReadOnlyList<HistoryEntry> _historyView = [];
+    private readonly ConcurrentQueue<InlineRequest> _inline = new();
+    private int _inlineCount;
+    private readonly List<InputRecord> _recorded = [];
+    private readonly Lock _inputLock = new();
+    private Queue<InputRecord>? _replay;
+    private WaitResume _waitResume;
 
     private IMachine? _machine;
     private int _pendingCommands;
@@ -66,7 +79,7 @@ public sealed class DebugSession : IDebugSession
     private long _instructionsExecuted;
     private long _budget = (long)DefaultInstructionBudget;
     private StepResult? _lastStep;
-    private Published _published = new(null, PauseReason.None, null, []);
+    private Published _published = new(null, PauseReason.None, null, [], 0);
     private bool _disposed;
 
     /// <summary>Creates the session and loads the program: the state becomes <see cref="SessionState.Paused"/>
@@ -98,7 +111,22 @@ public sealed class DebugSession : IDebugSession
         Reset,
         StepInto,
         StepOver,
+        Replay,
+        Inline,
+    }
+
+    /// <summary>What continues when a program that waits for input gets it.</summary>
+    private enum WaitResume
+    {
+        None,
+        Run,
+        Step,
+    }
+
+    private enum InlineKind
+    {
         Refresh,
+        Input,
     }
 
     /// <inheritdoc />
@@ -120,7 +148,8 @@ public sealed class DebugSession : IDebugSession
     }
 
     /// <inheritdoc />
-    public ulong InstructionsExecuted => (ulong)Interlocked.Read(ref _instructionsExecuted);
+    /// <remarks>As of the latest published snapshot, so it always agrees with <see cref="LatestSnapshot"/>.</remarks>
+    public ulong InstructionsExecuted => ReadPublished().Instructions;
 
     /// <inheritdoc />
     public StepResult? LastStep => ReadPublished().LastStep;
@@ -148,7 +177,7 @@ public sealed class DebugSession : IDebugSession
             _watches.Add(new MemoryWatch(id, segment, offset, length));
         }
 
-        Post(CommandKind.Refresh);
+        PostInline(new InlineRequest(InlineKind.Refresh, null));
         return id;
     }
 
@@ -160,7 +189,7 @@ public sealed class DebugSession : IDebugSession
             _watches.RemoveAll(w => w.Id == id);
         }
 
-        Post(CommandKind.Refresh);
+        PostInline(new InlineRequest(InlineKind.Refresh, null));
     }
 
     /// <inheritdoc />
@@ -180,6 +209,40 @@ public sealed class DebugSession : IDebugSession
 
     /// <inheritdoc />
     public void StepOver() => Post(CommandKind.StepOver);
+
+    /// <inheritdoc />
+    public void SendInput(IReadOnlyList<byte> bytes)
+    {
+        ArgumentNullException.ThrowIfNull(bytes);
+        if (bytes.Count > 0)
+        {
+            PostInline(new InlineRequest(InlineKind.Input, [.. bytes]));
+        }
+    }
+
+    /// <inheritdoc />
+    public void SendCtrlC() => SendInput([0x03]);
+
+    /// <inheritdoc />
+    public IReadOnlyList<InputRecord> RecordedInput
+    {
+        get
+        {
+            lock (_inputLock)
+            {
+                return [.. _recorded];
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public void Replay(IReadOnlyList<InputRecord> recording)
+    {
+        ArgumentNullException.ThrowIfNull(recording);
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        Interlocked.Increment(ref _pendingCommands);
+        _commands.Writer.TryWrite(new Command(CommandKind.Replay, [.. recording]));
+    }
 
     /// <inheritdoc />
     public IReadOnlyList<Breakpoint> Breakpoints
@@ -320,6 +383,15 @@ public sealed class DebugSession : IDebugSession
         _commands.Writer.TryWrite(new Command(kind));
     }
 
+    /// <summary>Queues a request a run handles without stopping; the Inline command wakes an idle worker.</summary>
+    private void PostInline(InlineRequest request)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        _inline.Enqueue(request);
+        Interlocked.Increment(ref _inlineCount);
+        _commands.Writer.TryWrite(new Command(CommandKind.Inline));
+    }
+
     private void WorkerLoop()
     {
         ChannelReader<Command> reader = _commands.Reader;
@@ -327,10 +399,14 @@ public sealed class DebugSession : IDebugSession
         {
             while (reader.TryRead(out Command command))
             {
-                Interlocked.Decrement(ref _pendingCommands);
+                if (command.Kind != CommandKind.Inline)
+                {
+                    Interlocked.Decrement(ref _pendingCommands);
+                }
+
                 try
                 {
-                    Execute(command.Kind);
+                    Execute(command);
                 }
 #pragma warning disable CA1031 // An engine or loader fault becomes a session error; the IDE stays usable (NFR-010).
                 catch (Exception)
@@ -343,26 +419,20 @@ public sealed class DebugSession : IDebugSession
         }
     }
 
-    private void Execute(CommandKind kind)
+    private void Execute(Command command)
     {
-        switch (kind)
+        switch (command.Kind)
         {
             case CommandKind.Reset:
-                _machine = null;
-                _lastStep = null;
-                _history.Clear();
-                _historyView = [];
-                _temporaryBreakpoint = null;
-                _lastBreakpointHit = null;
+                Load(replay: null);
+                break;
 
-                _changedBytes.Clear();
-                Interlocked.Exchange(ref _instructionsExecuted, 0);
-                _machine = _loadMachine();
-                _programSegment = _machine.Cpu.State.CS;
-                _machine.Memory.TakeJournal();
-                _machine.Console.TakeOutput();
-                SetState(SessionState.Paused, PauseReason.Loaded);
-                Publish();
+            case CommandKind.Replay:
+                Load(replay: command.Recording);
+                break;
+
+            case CommandKind.Inline:
+                ProcessInline(running: false);
                 break;
 
             case CommandKind.Stop:
@@ -389,14 +459,7 @@ public sealed class DebugSession : IDebugSession
             case CommandKind.StepInto:
                 if (CanExecute())
                 {
-                    _lastBreakpointHit = null;
-                    StepResult result = Step();
-                    if (result.Outcome == StepOutcome.Executed)
-                    {
-                        SetState(SessionState.Paused, PauseReason.Step);
-                    }
-
-                    Publish();
+                    StepOnce();
                 }
 
                 break;
@@ -412,15 +475,110 @@ public sealed class DebugSession : IDebugSession
                 }
 
                 break;
+        }
+    }
 
-            case CommandKind.Refresh:
-                if (_machine is not null && _state != SessionState.Running)
+    /// <summary>Loads a fresh machine (Reset), optionally replaying a recording into it.</summary>
+    private void Load(IReadOnlyList<InputRecord>? replay)
+    {
+        _machine = null;
+        _lastStep = null;
+        _history.Clear();
+        _historyView = [];
+        _temporaryBreakpoint = null;
+        _lastBreakpointHit = null;
+
+        _changedBytes.Clear();
+        Interlocked.Exchange(ref _instructionsExecuted, 0);
+        _machine = _loadMachine();
+        _programSegment = _machine.Cpu.State.CS;
+        _machine.Memory.TakeJournal();
+        _machine.Console.TakeOutput();
+        _waitResume = WaitResume.None;
+        lock (_inputLock)
+        {
+            _recorded.Clear();
+        }
+
+        _replay = replay is null ? null : new Queue<InputRecord>(replay);
+        SetState(SessionState.Paused, PauseReason.Loaded);
+        Publish();
+    }
+
+    /// <summary>
+    /// Handles queued input and refresh requests. During a run (<paramref name="running"/>) input is only delivered:
+    /// the run continues and its snapshots include any new window. Otherwise new input lets a waiting program
+    /// continue what it was doing, and a refresh republishes the snapshot.
+    /// </summary>
+    private void ProcessInline(bool running)
+    {
+        bool delivered = false;
+        bool refresh = false;
+        while (_inline.TryDequeue(out InlineRequest request))
+        {
+            Interlocked.Decrement(ref _inlineCount);
+            if (request.Kind == InlineKind.Refresh)
+            {
+                refresh = true;
+            }
+            else if (_machine is not null && _replay is null)
+            {
+                ulong at = (ulong)Interlocked.Read(ref _instructionsExecuted);
+                foreach (byte value in request.Bytes!)
                 {
-                    Publish(); // new memory windows while paused; a run includes them in its next snapshot
+                    _machine.Console.EnqueueInput(value);
+                    lock (_inputLock)
+                    {
+                        _recorded.Add(new InputRecord(at, value));
+                    }
                 }
 
-                break;
+                delivered = true;
+            }
         }
+
+        if (running || _machine is null)
+        {
+            return;
+        }
+
+        if (delivered && _state == SessionState.WaitingForInput && _waitResume != WaitResume.None)
+        {
+            WaitResume resume = _waitResume;
+            _waitResume = WaitResume.None;
+            if (resume == WaitResume.Run)
+            {
+                RunUntilStopped();
+            }
+            else
+            {
+                StepOnce();
+            }
+
+            return;
+        }
+
+        if (refresh)
+        {
+            Publish(); // new memory windows while paused
+        }
+    }
+
+    /// <summary>Executes one instruction and publishes (Step Into, and Step Over of anything but CALL/INT).</summary>
+    private void StepOnce()
+    {
+        _lastBreakpointHit = null;
+        StepResult result = Step();
+        if (result.Outcome == StepOutcome.Executed)
+        {
+            SetState(SessionState.Paused, PauseReason.Step);
+        }
+        else if (result.Outcome == StepOutcome.WaitingForInput)
+        {
+            _waitResume = WaitResume.Step;
+        }
+
+        Publish();
     }
 
     /// <summary>Execution can continue from Paused and from WaitingForInput (the INT re-executes).</summary>
@@ -449,14 +607,7 @@ public sealed class DebugSession : IDebugSession
         }
         else
         {
-            _lastBreakpointHit = null;
-            StepResult result = Step();
-            if (result.Outcome == StepOutcome.Executed)
-            {
-                SetState(SessionState.Paused, PauseReason.Step);
-            }
-
-            Publish();
+            StepOnce();
         }
     }
 
@@ -490,6 +641,11 @@ public sealed class DebugSession : IDebugSession
 
         while (true)
         {
+            if (Volatile.Read(ref _inlineCount) > 0)
+            {
+                ProcessInline(running: true); // input and refreshes don't stop a run
+            }
+
             if (Volatile.Read(ref _pendingCommands) > 0)
             {
                 _temporaryBreakpoint = null;
@@ -537,7 +693,15 @@ public sealed class DebugSession : IDebugSession
             StepResult result = Step();
             if (result.Outcome != StepOutcome.Executed)
             {
-                _temporaryBreakpoint = null;
+                if (result.Outcome == StepOutcome.WaitingForInput)
+                {
+                    _waitResume = WaitResume.Run; // input continues the run (a Step Over keeps its target)
+                }
+                else
+                {
+                    _temporaryBreakpoint = null;
+                }
+
                 Publish();
                 return;
             }
@@ -559,6 +723,21 @@ public sealed class DebugSession : IDebugSession
     /// <summary>Executes one instruction and moves the state to Halted, Terminated or WaitingForInput when the step ends there.</summary>
     private StepResult Step()
     {
+        if (_replay is not null)
+        {
+            // Replay: deliver each recorded byte at the instruction count at which it originally arrived.
+            ulong now = (ulong)Interlocked.Read(ref _instructionsExecuted);
+            while (_replay.Count > 0 && _replay.Peek().AtInstruction <= now)
+            {
+                InputRecord record = _replay.Dequeue();
+                _machine!.Console.EnqueueInput(record.Value);
+                lock (_inputLock)
+                {
+                    _recorded.Add(record);
+                }
+            }
+        }
+
         CpuState before = _machine!.Cpu.State;
         _history.Record(_machine.Memory, before.CS, before.IP);
         StepResult result = _machine.Cpu.StepInstruction();
@@ -644,7 +823,7 @@ public sealed class DebugSession : IDebugSession
 
         lock (_snapshotLock)
         {
-            _published = new Published(snapshot, _pauseReason, _lastStep, _historyView);
+            _published = new Published(snapshot, _pauseReason, _lastStep, _historyView, (ulong)Interlocked.Read(ref _instructionsExecuted));
         }
 
         SnapshotPublished?.Invoke(this, snapshot);
@@ -659,7 +838,9 @@ public sealed class DebugSession : IDebugSession
     }
 
     /// <summary>What readers see: the latest snapshot with the pause reason and step result it was published with.</summary>
-    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep, IReadOnlyList<HistoryEntry> History);
+    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep, IReadOnlyList<HistoryEntry> History, ulong Instructions);
 
-    private readonly record struct Command(CommandKind Kind);
+    private readonly record struct Command(CommandKind Kind, IReadOnlyList<InputRecord>? Recording = null);
+
+    private readonly record struct InlineRequest(InlineKind Kind, byte[]? Bytes);
 }

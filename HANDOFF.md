@@ -8,7 +8,7 @@
 | Written | 2026-10-29 14:06 +0500 by Claude Code (Opus 5.5), after completing TASK-051 |
 | Current task | **None in progress. M1, M2 complete; M3 in progress (TASK-050..051 Done). Next eligible: `TASK-052` breakpoints/Step Over, `TASK-053` input/Ctrl-C/replay; M4 `TASK-061` themes** |
 | Last completed | TASK-051 Snapshots (Done 2026-10-29 14:06 +0500) |
-| Git state | HEAD `86f8ba0` + uncommitted TASK-051 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `8bfc75f` (TASK-051 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 13:58 +0500).
@@ -43,7 +43,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-051. Files:
+1. Done: TASK-051 committed. Files were:
    - `src/AssemblyStudio.Core/{MachineSnapshot.cs, IDisassembler.cs, IDebugSession.cs}`
    - `src/AssemblyStudio.Engine.I8086/Disassembly/IcedDisassembler.cs`
    - `src/AssemblyStudio.Debugging/{DebugSession.cs, Snapshots/*}`

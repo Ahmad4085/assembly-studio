@@ -11,6 +11,21 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Last phase | Testing (`/assembly-test`): report `docs/07-testing/test-report-2026-10-30-1.md`, 1387/1388 (1 failure: DEF-006, timing under load) |
+| Recommended next action | **User decides:** fix DEF-006/DEF-009 (a new approved task), `/assembly-qa` once the user wants a QA verdict on what exists, or continue after the user actions (AC-059, TASK-100, TASK-006) |
+| Parallel user actions | AC-059, TASK-006, TASK-100, DEF-003 decision, first version number, Learn reading-width proposal |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 20:42 +0500 |
+| Procedure | `docs/sdlc/procedures/assembly-test.md` |
+| Scope | All `Done` tasks (M0..M7 so far); default scope |
+| Outputs | `docs/07-testing/test-plan.md`, `docs/07-testing/test-report-2026-10-30-1.md`, defects, traceability "Test cases"/"Test status" |
+| Note | Production code changes are out of scope (they go through `/assembly-implement`) |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
 | Milestone 7 progress | TASK-101 Done. TASK-102 needs TASK-100 (user license decision); TASK-103 needs TASK-006 (VMs); TASK-104/105 need M5 |
@@ -238,6 +253,14 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: Testing phase 2026-10-30-1 (2026-10-30 20:42 – 21:12 +0500, Claude Code (Opus 5.5))
+- `docs/07-testing/test-plan.md` v0.1: inventory TC-001..TC-072 (one per test class, 10 levels), environment, entry/exit, limitations (wall-clock tests, 6 placeholder tests, 16 ACs not run with reasons).
+- Gap filling (tests only): TC-034 `AcceptanceStepTests` (AC-024/AC-026 session part), FR-001 real-process test in TC-051.
+- Official run (TRX + xUnit XML in `artifacts/test-results/2026-10-30-1`): **1388 total, 1387 passed, 1 failed** (TC-040 flood test, 10.12 s vs 10 s: DEF-006 recurrence), 0 skipped.
+- Coverage: engine 99.6%, runtime 93.5% (NFR-021 met); the run is incomplete because two wall-clock tests fail under instrumentation (new DEF-009).
+- Traceability v2.4 and acceptance criteria v2.1: "Test cases"/"Test status" filled: 47 ACs pass, 1 fails (AC-045), 16 not run.
+- Records fix: the backlog summary rows of TASK-042 and TASK-052 said Approved although both are Done (detail sections, commits `71d32fe`, `f9b826e`).
 
 ## Completed: TASK-101 Self-contained publish and Inno Setup installer (Done 2026-10-30 20:40 +0500, Claude Code (Opus 5.5))
 - `build/fetch-innosetup.ps1` (user-approved): pinned Inno Setup 7.1.0 x64 from GitHub releases, SHA-256 verified against the digest GitHub publishes, silent per-user install into `tools/innosetup` (git-ignored, no admin, no icons or tasks), idempotent. 7.1.1 (2 days old) was not chosen.

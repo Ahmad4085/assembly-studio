@@ -1612,3 +1612,34 @@
   - The first-launch startup time, for TASK-086.
   - Still open: BLK-002, DEF-003, DEF-006, DEF-001, DEF-002. User: TASK-100, TASK-006.
 - **Next step:** user actions (AC-059, TASK-100, TASK-006); meanwhile `/assembly-test`.
+
+### 2026-10-30 20:42 – 21:12 +0500 · Claude Code (Opus 5.5) · Testing phase (`/assembly-test`, report 2026-10-30-1)
+- **Summary:** Ran `/assembly-test` (user request; default scope: everything implemented).
+  - Gate in: 40 tasks Done; SDK 10.0.403, NASM 3.02 present.
+  - Inventory: one TC per test class, built by script from the test sources and the executed xUnit XML results (TC-001..TC-072, 10 levels). It matched all 1,385, then 1,388, results exactly.
+  - Gap analysis against traceability and acceptance criteria. Added tests for implemented behavior only:
+    - `AcceptanceStepTests` (AC-024/AC-026 session part).
+    - An FR-001 real-process test.
+    - No production code changed.
+  - Wrote `test-plan.md` v0.1 and `test-report-2026-10-30-1.md`.
+  - Filled the "Test cases"/"Test status" columns of traceability (v2.4) and acceptance criteria (v2.1).
+  - My first scripts mis-parsed two things (statuses written "Done (date…)", and IDs inside method names); fixed before use.
+  - I first linked NFR-021 to `ProjectFileRuleTests`. Reading the class showed it checks references, not warnings, so the link was removed; NFR-021's evidence is the build plus the coverage report.
+  - **Records fixes:**
+    - The backlog summary rows of TASK-042/TASK-052 said Approved; their detail sections and commits show Done.
+    - My HANDOFF script replaced the "Failed tests and known issues" section (dropping DEF-001/002/003, BLK-002); I restored it.
+    - I collected durable working notes in HANDOFF's constraints section, since "Changes since the previous handoff" is replaced each time.
+- **Files changed:** `docs/07-testing/{test-plan.md (new), test-report-2026-10-30-1.md (new), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `docs/05-planning/backlog.md`, `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs (new)`, `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Run 1 (20:43–20:47, commit `9153920`, TRX + xUnit XML): 1385/1385.
+  - Coverage (`build/coverage.ps1 -NoBuild`, 20:48–20:55): engine 99.6%, runtime 93.5%, total 93.3%. **Incomplete**: `EnginePerformanceTests.Free_run_throughput_satisfies_nfr003_target` (18.6 s) and the flood test (18.7 s) failed under instrumentation → new **DEF-009**.
+  - New tests: AcceptanceStepTests 2/2 (after fixing an `int`/`ushort?` comparison); OpenFromCommandLineProcessTests 2/2.
+  - **Official run 2026-10-30-1** (20:58–21:02): **1388 total, 1387 passed, 1 failed, 0 skipped**.
+    - The failure: `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly`, 10.12 s against 10 s. DEF-006 recurrence, not retried.
+    - A user-started Assembly Studio instance (20:45, publish folder) was running at the time; I left it alone.
+  - Acceptance criteria: 47 pass, 1 fails (AC-045), 16 not run (reasons in the plan §6).
+- **Git state after:** uncommitted testing-phase changes on top of `9153920` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - Open: DEF-006 (failed test, open), DEF-009, DEF-001, DEF-002, DEF-003 (decision), BLK-002.
+  - Six placeholder `SkeletonTests` (removal needs user approval).
+- **Next step:** user decisions: a test-only fix task for DEF-006/DEF-009; `/assembly-qa`; the user actions AC-059, TASK-100, TASK-006.

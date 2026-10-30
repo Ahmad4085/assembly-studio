@@ -49,6 +49,28 @@ public sealed class OpenFromCommandLineProcessTests : IDisposable
             .FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "Untitled"))); // no extra empty document
     }
 
+    [Fact]
+    public void FR_001_without_a_file_the_app_starts_with_an_editable_untitled_document()
+    {
+        var start = new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")) { UseShellExecute = false };
+        foreach (string argument in new[] { "--settings", Path.Combine(_folder, "settings.json"), "--recovery", Path.Combine(_folder, "recovery"), "--log", Path.Combine(_folder, "logs") })
+        {
+            start.ArgumentList.Add(argument);
+        }
+
+        _process = Process.Start(start)!;
+        AutomationElement editor = Poll(() =>
+            AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, _process.Id))?
+                .FindFirst(TreeScope.Descendants, new AndCondition(
+                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit),
+                    new PropertyCondition(AutomationElement.NameProperty, "Untitled"))));
+        var value = (ValuePattern)editor.GetCurrentPattern(ValuePattern.Pattern);
+
+        Assert.False(value.Current.IsReadOnly);
+        value.SetValue("mov ax, 1");
+        Assert.Equal("mov ax, 1", value.Current.Value);
+    }
+
     private static AutomationElement Poll(Func<AutomationElement?> find)
     {
         var stopwatch = Stopwatch.StartNew();

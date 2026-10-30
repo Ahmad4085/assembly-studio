@@ -5,26 +5,27 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 20:40 +0500 by Claude Code (Opus 5.5), after completing TASK-101 |
-| Current task | **None in progress. Every remaining implementation task waits for a user action: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070)** |
-| Last completed | TASK-101 Self-contained publish and Inno Setup installer (Done 2026-10-30 20:40 +0500) |
-| Git state | HEAD `3b6a373` (TASK-101 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 21:12 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-10-30-1) |
+| Current task | **None in progress.** Testing phase done (report 2026-10-30-1). Remaining implementation waits for user actions: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070) |
+| Last completed | Testing phase, `docs/07-testing/test-report-2026-10-30-1.md` (2026-10-30 21:12 +0500) |
+| Git state | HEAD `9153920` + uncommitted testing-phase changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:33 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1385/1385 passed**, two consecutive runs (2026-10-30 20:36 and 20:38 +0500).
-- `build/installer/build-installer.ps1` → installer built; `build/installer/test-installer.ps1` → 21/21 (2026-10-30 20:31 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:58 +0500).
+- Test run 2026-10-30-1 (20:58–21:02): **1388 total, 1387 passed, 1 failed** (TC-040 flood test, DEF-006, timing under load).
+- Coverage (20:48–20:55): engine 99.6%, runtime 93.5%; incomplete because of DEF-009.
 
 ## Changes since the previous handoff
-- **TASK-101 Installer** (Claude Code, uncommitted):
-  - `build/fetch-innosetup.ps1`, `build/installer/{AssemblyStudio.iss, build-installer.ps1, test-installer.ps1}`, `docs/06-implementation/task-101-verification.md`.
-  - App: command-line files open at startup (`StartupOptions.Files`).
-  - **The AppId in the .iss must never change** (upgrades).
-  - Run ISCC from PowerShell, not Git Bash (it rewrites `/Q` and `/D`).
-  - Notices/release notes are packaged automatically once they exist at the repo root.
-  - TASK-103 can reuse `test-installer.ps1` on the VMs (add the offline/network-disabled condition there).
+- **Testing phase 2026-10-30-1** (Claude Code, uncommitted):
+  - `docs/07-testing/test-plan.md` (new), `docs/07-testing/test-report-2026-10-30-1.md` (new), `docs/07-testing/defects.md` (DEF-006 updated, DEF-009 new).
+  - Traceability v2.4 and acceptance criteria v2.1 test columns.
+  - Backlog summary rows TASK-042/052 → Done.
+  - New tests: `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs`; an FR-001 test in `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`.
+  - **TC numbering:** one TC per test class, in the plan's inventory; new classes get the next free number.
 
 ## Failed tests and known issues
+- `AssemblyStudio.Debugging.Tests.Robustness.HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (TC-040): **failed** in test run 2026-10-30-1 (10.12 s, limit 10 s). DEF-006, Open. Passes alone (1.6–1.8 s). Stays failed until a re-run after a fix proves otherwise.
+- `DEF-009`: wall-clock tests fail under coverage instrumentation; the coverage run is reported incomplete. Open.
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
 - `DEF-002`: one full solution run stalled in the engine tests (2026-10-29 10:36). Not reproduced since.
 - `DEF-003`: `ComLoader` accepts at most 65,278 bytes while FR-031 and the build allow 65,280. **Needs a user decision.**
@@ -42,14 +43,23 @@
   5. `new Machine(cpu, memory, console, router, dos)`, then `ComLoader.Load(machine, image)`
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
+- **Durable working notes (TASK-060 to the testing phase):**
+  - Tests that launch the real app must pass temporary `--settings`, `--recovery` and `--log` paths, and belong to the non-parallel `AppProcessTests` collection.
+  - The WPF test thread sets `App.ComposeOnStartup = false` and sets `ShutdownMode` after `InitializeComponent` (DEF-007).
+  - Strings: edit `Shell/Strings.resx`, then run `build/generate-strings.ps1`.
+  - Content: files under `src/AssemblyStudio.Content/Content/` plus `catalog.json` entries (samples need `expectedOutput`, and `input` when they read the keyboard; tutorials need `sample`). Text is stored with LF.
+  - The instruction reference and the "Unsupported instructions" help page are generated: edit `ReferenceData/instructions.json`, run `ReferenceTests`/`HelpTests` with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1`, rebuild, run the tests again.
+  - The help consistency tests (TC-029, TC-043, TC-056) fail when DOS functions, NASM arguments, build codes, limits, start state or menu shortcuts change: update the help with them.
+  - Installer: the AppId in `build/installer/AssemblyStudio.iss` must never change. Run ISCC from PowerShell (Git Bash rewrites `/Q` and `/D`). `test-installer.ps1` always uninstalls what it installed.
+  - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
+
 ## Exact next action
-1. Done: TASK-101 committed. Files were:
-   - `build/fetch-innosetup.ps1`, `build/installer/*`, `docs/06-implementation/task-101-verification.md`
-   - `src/AssemblyStudio.App/{App.xaml.cs, Shell/StartupOptions.cs}`
-   - `tests/AssemblyStudio.App.Tests/{StartupAndScalingTests.cs, Documents/OpenFromCommandLineProcessTests.cs}`
-   - `docs/05-planning/backlog.md`, shared memory files
-2. User actions now gate all remaining implementation: AC-059 check (BLK-002 → TASK-061 → TASK-064.. and M5), TASK-100 license decision (→ TASK-102), TASK-006 VMs (→ TASK-103, TASK-070).
-3. Agent meanwhile: `/assembly-test` (test phase report for M1–M7 so far).
+1. When the user asks: commit the testing phase. Files:
+   - `docs/07-testing/{test-plan.md, test-report-2026-10-30-1.md, defects.md}`
+   - `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `docs/05-planning/backlog.md`
+   - `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs`, `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`
+   - shared memory files
+2. User decisions: a task to fix DEF-006 and DEF-009 (test-only fixes); `/assembly-qa` for a QA verdict on the current scope; the user actions AC-059, TASK-100, TASK-006.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

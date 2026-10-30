@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 20:40 +0500 by Claude Code (Opus 5.5) (TASK-101 done) |
+| Last updated | 2026-10-30 21:12 +0500 by Claude Code (Opus 5.5) (testing phase report 2026-10-30-1) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-061 blocked on BLK-002); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. No implementation task is eligible without a user action: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070). Agent: `/assembly-test` |
+| Active task | None in progress. Latest test report: `docs/07-testing/test-report-2026-10-30-1.md` (1387/1388; failing: TC-040 flood test, DEF-006). Remaining implementation waits for user actions: AC-059 (TASK-061), TASK-100, TASK-006 |
 
-| Next recommended action | **User: AC-059 check, TASK-100 license decision, TASK-006 VMs.** Agent: `/assembly-test` for M1–M7 so far |
+| Next recommended action | **User:** AC-059 check, TASK-100 license decision, TASK-006 VMs; decide on fixing DEF-006/DEF-009 (needs an approved task) and on `/assembly-qa` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Testing phase (report 2026-10-30-1) | 2026-10-30 21:12 +0500 | Test plan v0.1 (TC-001..TC-072); 2 gap-fill test classes/cases; full run with TRX/xUnit XML: 1388 total, 1387 passed, **1 failed (DEF-006)**; coverage engine 99.6% / runtime 93.5% (run incomplete, DEF-009); traceability v2.4 and AC v2.1 test statuses |
 | TASK-101 Self-contained publish and Inno Setup installer | 2026-10-30 20:40 +0500 | Pinned Inno Setup 7.1.0 (SHA-256 verified, per-user); per-user offline installer 45.2 MB; installed 148.6 MB; silent install 15–17 s; install/upgrade/uninstall test 21/21 on the dev machine; command-line file opening for the .asm association. `docs/06-implementation/task-101-verification.md`. Full solution 1385/1385 (twice) |
 | TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts | 2026-10-30 20:05 +0500 | 7 help pages (one generated from the opcode table); AC-051 consistency tests against the engine, runtime (all 256 INT 21h functions), loader, NASM command line, build codes and app shortcuts. Release build 0w/0e; full solution 1383/1383 (twice) |
 | TASK-092 Tutorials and reference | 2026-10-30 16:48 +0500 | 5 tutorials linked to samples, 4 concept pages, 7 instruction pages generated from hand-written data + the engine opcode table; flag statements checked against the engine from random states (AC-037), every supported opcode documented, AC-036 over all built-in pages. Found and fixed DEF-008 (engine undefined-flag mask). Release build 0w/0e; full solution 1315/1315 (twice) |
@@ -109,13 +110,13 @@ None. Research documents revalidated against requirements v2.0.
 | Item | Status |
 |---|---|
 | Product build (2026-10-30 20:33 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 20:38 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1385/1385 passed** in two consecutive runs (2m 57s, 2m 51s) |
+| Product tests (2026-10-30 21:02 +0500) | Test report 2026-10-30-1: `dotnet test --solution AssemblyStudio.slnx -c Release` → **1387/1388 passed, 1 failed**: `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (10.12 s vs 10 s, DEF-006, Open). Previous full runs 1385/1385 at 20:36 and 20:38 |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | DEF-001: `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` fails in non-interactive/background runner (`docs/07-testing/defects.md`) |
+| Failed tests / open defects | **Failed in test run 2026-10-30-1:** `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (DEF-006). Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-006, DEF-009 (`docs/07-testing/defects.md`) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

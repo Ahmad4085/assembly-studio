@@ -8,7 +8,7 @@
 | Written | 2026-10-30 21:34 +0500 by Claude Code (Opus 5.5), after WVR-001 and TASK-087 |
 | Current task | **None in progress. Next (user-approved): `TASK-064` editor (AvalonEdit), then toward TASK-080, one task at a time with a commit after each** |
 | Last completed | TASK-087 Test reliability (Done 2026-10-30 21:34 +0500) |
-| Git state | HEAD `26c0a12` + uncommitted WVR-001/TASK-087 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `ea02833` (WVR-001 and TASK-087 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 21:20 +0500).
@@ -53,7 +53,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit WVR-001 + TASK-087. Files:
+1. Done: WVR-001 and TASK-087 committed. Files were:
    - `PROJECT_STATE.md` (waiver, approval, blocker), `docs/05-planning/backlog.md` (TASK-061 Done, TASK-087)
    - `tests/AssemblyStudio.Debugging.Tests/Robustness/{FloodPerformanceTests.cs, HostileProgramTests.cs}`
    - tagged test files: `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs`, `tests/AssemblyStudio.App.Tests/StartupTimeTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs}`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`

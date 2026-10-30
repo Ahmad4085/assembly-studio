@@ -8,7 +8,7 @@
 | Written | 2026-10-30 11:27 +0500 by Claude Code (Opus 5.5), after TASK-061 (automated part done; blocked on BLK-002) |
 | Current task | **None in progress. M1–M3 complete; M4: TASK-060 Done, TASK-061 Blocked (BLK-002: user AC-059 check). Next eligible: `TASK-062` document service** |
 | Last completed | TASK-054 (Done 2026-10-29 16:47 +0500). TASK-061 automated work done 2026-10-30 11:27 +0500, status Blocked |
-| Git state | HEAD `4e0d335` + uncommitted TASK-061 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `94b7e18` (TASK-061 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 11:20 +0500).
@@ -42,7 +42,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-061. Files:
+1. Done: TASK-061 committed. Files were:
    - `src/AssemblyStudio.App/{App.xaml, App.xaml.cs, Themes/*, Shell/ThemeManager.cs}`
    - `tests/AssemblyStudio.App.Tests/ThemeTokenTests.cs`
    - `docs/06-implementation/task-061-verification.md`, `docs/05-planning/backlog.md`, shared memory files

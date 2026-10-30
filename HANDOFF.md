@@ -8,7 +8,7 @@
 | Written | 2026-10-30 16:48 +0500 by Claude Code (Opus 5.5), after completing TASK-092 |
 | Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090, 091, 092 Done. Eligible: `TASK-093` help, `TASK-101` installer** |
 | Last completed | TASK-092 Tutorials and reference (Done 2026-10-30 16:48 +0500) |
-| Git state | HEAD `c44294e` + uncommitted TASK-092 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `82c493a` (TASK-092 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 16:28 +0500).
@@ -43,7 +43,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-092. Files:
+1. Done: TASK-092 committed. Files were:
    - `src/AssemblyStudio.Content/{ContentCatalog.cs, ReferenceData/instructions.json, Content/catalog.json, Content/Tutorials/*, Content/Reference/*}`
    - `src/AssemblyStudio.Engine.I8086/{Cpu8086.Arithmetic.cs, Cpu8086.Logic.cs}`
    - `src/AssemblyStudio.App/{Learn/LearnViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.resx, Shell/Strings.cs}`

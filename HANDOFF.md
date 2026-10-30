@@ -8,7 +8,7 @@
 | Written | 2026-10-30 20:40 +0500 by Claude Code (Opus 5.5), after completing TASK-101 |
 | Current task | **None in progress. Every remaining implementation task waits for a user action: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070)** |
 | Last completed | TASK-101 Self-contained publish and Inno Setup installer (Done 2026-10-30 20:40 +0500) |
-| Git state | HEAD `a342771` + uncommitted TASK-101 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `3b6a373` (TASK-101 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:33 +0500).
@@ -43,7 +43,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-101. Files:
+1. Done: TASK-101 committed. Files were:
    - `build/fetch-innosetup.ps1`, `build/installer/*`, `docs/06-implementation/task-101-verification.md`
    - `src/AssemblyStudio.App/{App.xaml.cs, Shell/StartupOptions.cs}`
    - `tests/AssemblyStudio.App.Tests/{StartupAndScalingTests.cs, Documents/OpenFromCommandLineProcessTests.cs}`

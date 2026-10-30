@@ -8,7 +8,7 @@
 | Written | 2026-10-30 20:05 +0500 by Claude Code (Opus 5.5), after completing TASK-093 |
 | Current task | **None in progress. M4: TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: all tasks Done. Eligible: `TASK-101` installer** |
 | Last completed | TASK-093 Help (Done 2026-10-30 20:05 +0500) |
-| Git state | HEAD `65cc2ed` + uncommitted TASK-093 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `aabcfea` (TASK-093 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 19:58 +0500).
@@ -41,7 +41,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-093. Files:
+1. Done: TASK-093 committed. Files were:
    - `src/AssemblyStudio.Content/Content/{catalog.json, Help/*}`
    - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`
    - `tests/AssemblyStudio.ProgramTests/HelpTests.cs`

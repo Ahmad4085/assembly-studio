@@ -6,10 +6,30 @@
 
 ## Active Task
 
-None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check).
+None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); TASK-064 depends on it.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, TASK-062, TASK-063 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061 |
+| Recommended next action | User: AC-059 check (unblocks TASK-061 → TASK-064). Meanwhile eligible: `TASK-067` (settings service and dialog), `TASK-068` (About/diagnostics, logging) |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 11:56 +0500 |
+| Milestone | M4 (App shell and editor) |
+| Goal | Autosave unsaved documents at most every 60 s and offer recovery after an unexpected exit |
+| Scope (in) | Recovery folder, autosave timer, recovery prompt (UI-021) |
+| Out of scope | Versioned history |
+| Requirements | NFR-011; UI-021; AC-050; architecture §5 (`%LOCALAPPDATA%\AssemblyStudio
+ecovery\`) |
+| Expected files | `src/AssemblyStudio.App/Documents/Recovery/`, startup wiring, tests |
+| Note | Chosen by the user instead of TASK-064, which waits for TASK-061 (Blocked, BLK-002) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, TASK-062 Done; TASK-061 Blocked (BLK-002) |
@@ -91,6 +111,27 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-063 Crash recovery (Done 2026-10-30 12:17 +0500, Claude Code (Opus 5.5))
+- The user chose TASK-063 because TASK-064 depends on the Blocked TASK-061.
+- `src/AssemblyStudio.App/Documents/Recovery/`:
+  - `RecoveryStore`: `%LOCALAPPDATA%\AssemblyStudio\recovery\<session>\`, one autosave JSON per unsaved document (atomic). The session lock file is held open while running; a folder whose lock can be taken belongs to a dead instance and is offered. A clean exit deletes its folder; another running instance is never offered.
+  - `AutosaveService`: every 30 s, writes changed unsaved documents and removes saved or closed ones (NFR-011 allows 60 s).
+- `App` startup: create the store; if abandoned documents exist, the UI-021 prompt (Restore / Discard) shows once the window has rendered. Restore opens them unsaved with their file, encoding and line endings; Discard opens an empty document; both delete the abandoned folders.
+  - The autosave runs on a DispatcherTimer; the store is disposed on Exit. Smoke mode skips the prompt.
+  - New startup options: `--recovery <folder>`, `--autosave-seconds <n>`.
+- Other changes: `DocumentViewModel.Id` and an `isDirty` constructor parameter; `WorkspaceViewModel.Restore`; `IDialogService.AskRestore` (WPF: MessageDialog); 6 strings.
+- Tests:
+  - `RecoveryTests` (7): changed-only autosave, cleanup on save/close, recovery with encoding/EOL, clean exit, live instance not offered, empty/corrupt sessions, numbering.
+  - **`CrashRecoveryProcessTests` (AC-050):** starts the real app, types through UI Automation, waits for the autosave, **kills the process**, restarts it, the prompt appears, Restore brings the text back. Passed 4 times.
+  - The two app-launching tests now run in the non-parallel `AppProcessTests` collection: startup measured 20.8 s next to the kill test, versus 1.5 s alone.
+- Release build 0 warnings / 0 errors; App 110/110; full solution 1124/1124 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 11:56 / 12:17 +0500 |
 
 ## Completed: TASK-062 Document service and file workflow (Done 2026-10-30 11:51 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.App/Documents/`:

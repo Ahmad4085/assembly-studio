@@ -20,14 +20,19 @@ public sealed partial class DocumentViewModel : ObservableObject
     /// <param name="encoding">The file's encoding (new files: UTF-8 without BOM).</param>
     /// <param name="lineEnding">The file's line ending (new files: CR LF).</param>
     /// <param name="untitledNumber">1 for "Untitled", n for "Untitled n".</param>
-    public DocumentViewModel(string text, string? filePath, DocumentEncoding encoding, LineEnding lineEnding, int untitledNumber = 1)
+    /// <param name="isDirty">Whether the text differs from the file (a document restored after a crash).</param>
+    public DocumentViewModel(string text, string? filePath, DocumentEncoding encoding, LineEnding lineEnding, int untitledNumber = 1, bool isDirty = false)
     {
         _text = text;
+        IsDirty = isDirty;
         FilePath = filePath;
         Encoding = encoding;
         LineEnding = lineEnding;
         _untitledNumber = untitledNumber;
     }
+
+    /// <summary>Identifies the document within this run (its autosave file, TASK-063).</summary>
+    public Guid Id { get; } = Guid.NewGuid();
 
     /// <summary>The document text, as edited.</summary>
     public string Text

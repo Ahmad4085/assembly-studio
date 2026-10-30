@@ -5,24 +5,23 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 11:51 +0500 by Claude Code (Opus 5.5), after completing TASK-062 |
-| Current task | **None in progress. M1–M3 complete; M4: TASK-060, TASK-062 Done, TASK-061 Blocked (BLK-002). Next eligible: `TASK-063` crash recovery, `TASK-064` editor integration** |
-| Last completed | TASK-062 Document service and file workflow (Done 2026-10-30 11:51 +0500) |
-| Git state | HEAD `c2e6f06` (TASK-062 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 12:17 +0500 by Claude Code (Opus 5.5), after completing TASK-063 |
+| Current task | **None in progress. M4: TASK-060, 062, 063 Done; TASK-061 Blocked (BLK-002), so TASK-064/065/066/069 wait. Eligible: `TASK-067` settings, `TASK-068` About/diagnostics/logging** |
+| Last completed | TASK-063 Crash recovery (Done 2026-10-30 12:17 +0500) |
+| Git state | HEAD `a54758d` + uncommitted TASK-063 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 11:43 +0500).
-- `dotnet test --project tests/AssemblyStudio.App.Tests -c Release` → **102/102 passed** (2026-10-30 11:44 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1116/1116 passed**, two consecutive runs (2026-10-30 11:47 and 11:50 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 12:08 +0500).
+- `dotnet test --project tests/AssemblyStudio.App.Tests -c Release --filter-class "*CrashRecoveryProcessTests*"` → passed (4 runs in total).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1124/1124 passed**, two consecutive runs (2026-10-30 12:12 and 12:16 +0500).
 
 ## Changes since the previous handoff
-- **TASK-062 Document service and file workflow** (Claude Code, uncommitted):
-  - `src/AssemblyStudio.App/Documents/*` (codec, atomic file, errors, dialogs, recent files, document and workspace view models). `ShellViewModel.Workspace` (optional constructor parameter; the default uses WPF dialogs and an in-memory recent list). App composes `JsonRecentFilesStore(settingsPath)` and opens an Untitled document at startup.
-  - `MainWindow.xaml`:
-    - The editor area is `DocumentTabs` (tab strip only, empty content template) + `DocumentEditors` (ItemsControl over Documents, a Grid panel, each item visible when `IsActive`, holding a TextBox `EditorText`).
-    - **TASK-064 should replace the TextBox in that item template with AvalonEdit**, keeping one editor instance per document (AC-006), and keep `MainWindow.ActiveEditor()` returning the active one for focus.
-  - Strings: edit `Shell/Strings.resx`, then run `powershell -ExecutionPolicy Bypass -File build/generate-strings.ps1`.
-  - `Shell/MessageDialog` (UI-019) and `Shell/VisibilityConverters.cs`.
+- **TASK-063 Crash recovery** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Documents/Recovery/{RecoveryStore.cs, AutosaveService.cs}`; startup wiring in `App.xaml.cs` (`StartRecovery`, `OfferRecovery`, DispatcherTimer).
+  - `StartupOptions` gained `--recovery` and `--autosave-seconds`. **Any test that launches the app must pass `--recovery <temp>`** so it never sees or deletes the user's real recovery folder.
+  - `IDialogService.AskRestore`: new fakes must implement it.
+  - App-launching tests belong to the `AppProcessTests` collection (`tests/AssemblyStudio.App.Tests/AppProcessTests.cs`).
+  - The settings service (TASK-067) could later make the autosave interval a setting; not required.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -43,13 +42,12 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-062 committed. Files were:
-   - `build/generate-strings.ps1`
-   - `src/AssemblyStudio.App/{App.xaml.cs, Documents/*, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/MessageDialog.xaml(.cs), Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs, Shell/VisibilityConverters.cs}`
-   - `tests/AssemblyStudio.App.Tests/Documents/*`
+1. When the user asks: commit TASK-063. Files:
+   - `src/AssemblyStudio.App/{App.xaml.cs, Documents/Recovery/*, Documents/DocumentViewModel.cs, Documents/WorkspaceViewModel.cs, Documents/IDialogService.cs, Documents/WpfDialogService.cs, Shell/StartupOptions.cs, Shell/Strings.resx, Shell/Strings.cs}`
+   - `tests/AssemblyStudio.App.Tests/{AppProcessTests.cs, StartupTimeTests.cs, Documents/RecoveryTests.cs, Documents/CrashRecoveryProcessTests.cs, Documents/WorkspaceViewModelTests.cs}`
    - `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-064` (AvalonEdit editor integration; ADR-0006) or `TASK-063` (crash recovery).
-3. User: AC-059 check (BLK-002), TASK-006 test VMs, DEF-003 decision.
+2. User: AC-059 check → TASK-061 Done → `/assembly-implement TASK-064`. Meanwhile `/assembly-implement TASK-067` or `TASK-068`.
+3. User: TASK-006 test VMs, DEF-003 decision.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

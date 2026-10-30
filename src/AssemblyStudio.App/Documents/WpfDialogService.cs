@@ -45,6 +45,17 @@ public sealed class WpfDialogService : IDialogService
     }
 
     /// <inheritdoc />
+    public bool AskRestore(IReadOnlyList<Recovery.RecoveredDocument> documents)
+    {
+        ArgumentNullException.ThrowIfNull(documents);
+        CompositeFormat line = CompositeFormat.Parse(Strings.RecoveryEntry);
+        string list = string.Join(Environment.NewLine, documents.Select(d =>
+            string.Format(CultureInfo.CurrentCulture, line, d.FilePath ?? d.Title, d.SavedAt.LocalDateTime)));
+        return MessageDialog.Show(Owner, Strings.RecoveryTitle, Strings.RecoveryText + Environment.NewLine + Environment.NewLine + list,
+            Strings.RecoveryNext, [Strings.DialogRestore, Strings.DialogDiscard], defaultButton: 0, cancelButton: 0) == 0;
+    }
+
+    /// <inheritdoc />
     public void ShowError(string title, string reason, string nextStep) =>
         MessageDialog.Show(Owner, title, reason, nextStep, [Strings.DialogOk], defaultButton: 0, cancelButton: 0);
 

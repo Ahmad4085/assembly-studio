@@ -72,6 +72,15 @@ public sealed partial class WorkspaceViewModel : ObservableObject
     [RelayCommand]
     private void NewProgram() => NewFromTemplate();
 
+    /// <summary>Opens a document recovered after a crash (TASK-063): its unsaved text, as an unsaved document of its
+    /// file (or a new untitled one), with the file's encoding and line endings.</summary>
+    public DocumentViewModel Restore(Recovery.RecoveredDocument recovered)
+    {
+        ArgumentNullException.ThrowIfNull(recovered);
+        return Add(new DocumentViewModel(recovered.Text, recovered.FilePath, recovered.Encoding, recovered.LineEnding,
+            recovered.FilePath is null ? ++_untitledCount : 1, isDirty: true));
+    }
+
     /// <summary>Shows the Open dialog and opens the chosen files.</summary>
     [RelayCommand]
     public void Open() => OpenFiles(_dialogs.ShowOpenFiles());

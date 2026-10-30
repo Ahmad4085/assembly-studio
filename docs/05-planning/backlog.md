@@ -69,7 +69,7 @@
 | TASK-060 | WPF shell and layout | M4 | TASK-001 | M | FR-091, FR-092, NFR-026, NFR-005 | Done |
 | TASK-061 | Themes, tokens and contrast test | M4 | TASK-060 | M | NFR-022, FR-094, NFR-026 | Blocked |
 | TASK-062 | Document service and file workflow | M4 | TASK-060 | M | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-019, FR-020, NFR-029 | Done |
-| TASK-063 | Crash recovery | M4 | TASK-062 | L | NFR-011 | Approved |
+| TASK-063 | Crash recovery | M4 | TASK-062 | L | NFR-011 | Done |
 | TASK-064 | Editor integration (AvalonEdit) | M4 | TASK-061 | H | FR-011, FR-012, FR-013, FR-014, FR-022, NFR-001 | Approved |
 | TASK-065 | Find, replace and go to line | M4 | TASK-064 | L | FR-015, FR-016, FR-017 | Approved |
 | TASK-066 | Editor diagnostics and gutter | M4 | TASK-064, TASK-041 | M | FR-018, FR-052, FR-053 | Approved |
@@ -1166,7 +1166,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M4 |
 | Requirements | NFR-011 |
 | Decisions / design | UI-021 |

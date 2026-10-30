@@ -1400,3 +1400,32 @@
 - **Git state after:** uncommitted TASK-062 changes on top of `5ef8c38` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 and DEF-002 are still open.
 - **Next step:** `/assembly-implement TASK-064` (AvalonEdit) or `TASK-063`.
+
+### 2026-10-30 11:53 – 12:17 +0500 · Claude Code (Opus 5.5) · TASK-063 Crash recovery
+- **Summary:** The user ran `/assembly-implement TASK-064`.
+  - Eligibility failed: TASK-064 depends on TASK-061, which is Blocked (BLK-002). I stopped and asked.
+  - The user chose "Do TASK-063 now". The lock was free.
+  - **`RecoveryStore`:**
+    - Per-instance session folder under `%LOCALAPPDATA%\AssemblyStudio\recovery\`, holding a `session.lock` kept open with FileShare.None and one atomic JSON per unsaved document (id, path, title, text, encoding, EOL, time).
+    - `FindAbandoned` takes the lock of other folders to tell dead instances from live ones, deletes empty dead folders, and skips unreadable entries.
+    - `Dispose` (clean exit) deletes the folder. `Abandon` (tests) releases the lock and keeps the files.
+  - **`AutosaveService.Tick`:** every 30 s, writes unsaved documents whose text changed and removes entries of saved or closed documents. IO errors are retried next tick.
+  - **App startup:**
+    - The recovery prompt (UI-021, `IDialogService.AskRestore`, MessageDialog Restore/Discard, Esc = Restore, the safe choice) shows after the main window has rendered. That avoids a dialog becoming the application's main window.
+    - Restore opens documents unsaved (`WorkspaceViewModel.Restore`, with file path, encoding and EOL); Discard opens an empty document.
+    - Abandoned folders are deleted afterwards. A failure to create the store runs the app without autosave.
+- **Files changed:** `src/AssemblyStudio.App/App.xaml.cs`, `Documents/Recovery/{RecoveryStore.cs, AutosaveService.cs}` (new), `Documents/{DocumentViewModel, WorkspaceViewModel, IDialogService, WpfDialogService}.cs`, `Shell/{StartupOptions.cs, Strings.resx, Strings.cs}`, `tests/AssemblyStudio.App.Tests/{AppProcessTests.cs (new), StartupTimeTests.cs, Documents/RecoveryTests.cs (new), Documents/CrashRecoveryProcessTests.cs (new), Documents/WorkspaceViewModelTests.cs}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (12:08 +0500), after fixing CA1859.
+  - First App run: 108/110. Two test-side problems:
+    - A RecoveryStore created in a test was never disposed, and its lock blocked deleting the temp folder.
+    - UI Automation lists an owned dialog under its owner window, not under the desktop; the helper now searches both and reports the windows it saw.
+  - Then the recovery tests **8/8** and the AC-050 kill test passed in 3 further separate runs.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release`:
+    - 12:04 → 1124/1124.
+    - 12:07 → 1123/1124: the startup test measured **20,766 ms** while the kill test ran beside it. Alone: 1,565 / 1,495 / 1,548 ms, so not a regression.
+    - Fix: both app-launching tests moved to the non-parallel `AppProcessTests` collection.
+    - Then **1124/1124 at 12:12 and 12:16** (two consecutive runs). No AssemblyStudio.App.exe left running, and no temp folders left.
+- **Git state after:** uncommitted TASK-063 changes on top of `a54758d` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check) blocks TASK-061 and with it TASK-064/065/066/069. DEF-003 (decision). DEF-001 and DEF-002 are still open.
+- **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-067` or `TASK-068`.

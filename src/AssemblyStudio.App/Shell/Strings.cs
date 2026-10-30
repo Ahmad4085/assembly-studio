@@ -630,4 +630,22 @@ public static class Strings
 
     /// <summary>Start page</summary>
     public static string RegionWelcome => Get(nameof(RegionWelcome));
+
+    /// <summary>Restore unsaved work?</summary>
+    public static string RecoveryTitle => Get(nameof(RecoveryTitle));
+
+    /// <summary>Assembly Studio didn&apos;t close normally last time. Unsaved changes were found in:</summary>
+    public static string RecoveryText => Get(nameof(RecoveryText));
+
+    /// <summary>{0} (autosaved {1:g})</summary>
+    public static string RecoveryEntry => Get(nameof(RecoveryEntry));
+
+    /// <summary>Restore opens them as unsaved documents. Discard deletes the autosaved copies.</summary>
+    public static string RecoveryNext => Get(nameof(RecoveryNext));
+
+    /// <summary>_Restore</summary>
+    public static string DialogRestore => Get(nameof(DialogRestore));
+
+    /// <summary>_Discard</summary>
+    public static string DialogDiscard => Get(nameof(DialogDiscard));
 }

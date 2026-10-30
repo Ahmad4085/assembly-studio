@@ -222,4 +222,10 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="LineEndingMixed" xml:space="preserve"><value>Mixed line endings</value><comment>Status bar</comment></data>
   <data name="RegionDocumentTabs" xml:space="preserve"><value>Open documents</value><comment>Automation name of the document tab strip</comment></data>
   <data name="RegionWelcome" xml:space="preserve"><value>Start page</value><comment>Automation name of the welcome page</comment></data>
+  <data name="RecoveryTitle" xml:space="preserve"><value>Restore unsaved work?</value><comment>Recovery prompt title (UI-021, NFR-011)</comment></data>
+  <data name="RecoveryText" xml:space="preserve"><value>Assembly Studio didn't close normally last time. Unsaved changes were found in:</value><comment>Recovery prompt text, followed by the list</comment></data>
+  <data name="RecoveryEntry" xml:space="preserve"><value>{0} (autosaved {1:g})</value><comment>One recovered document. {0} = path or title, {1} = autosave time</comment></data>
+  <data name="RecoveryNext" xml:space="preserve"><value>Restore opens them as unsaved documents. Discard deletes the autosaved copies.</value><comment>Recovery prompt next step</comment></data>
+  <data name="DialogRestore" xml:space="preserve"><value>_Restore</value><comment>Button</comment></data>
+  <data name="DialogDiscard" xml:space="preserve"><value>_Discard</value><comment>Button</comment></data>
 </root>

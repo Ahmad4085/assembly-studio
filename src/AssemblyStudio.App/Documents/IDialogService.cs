@@ -31,6 +31,10 @@ public interface IDialogService
     /// <summary>Shows an error: what happened (<paramref name="title"/>), the reason with the path, and the next step.</summary>
     void ShowError(string title, string reason, string nextStep);
 
+    /// <summary>After an unexpected exit, asks whether to restore <paramref name="documents"/> (UI-021). Returns
+    /// <see langword="true"/> for Restore, <see langword="false"/> for Discard.</summary>
+    bool AskRestore(IReadOnlyList<Recovery.RecoveredDocument> documents);
+
     /// <summary>Asks a yes/no question whose "yes" button reads <paramref name="confirmLabel"/>; the safe answer is no.</summary>
     bool Confirm(string title, string message, string confirmLabel, string cancelLabel);
 }

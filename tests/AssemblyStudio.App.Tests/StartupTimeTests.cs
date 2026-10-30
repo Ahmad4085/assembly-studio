@@ -11,6 +11,7 @@ namespace AssemblyStudio.App.Tests;
 /// The 3 s target applies to the reference machine; this test records the value and fails only on
 /// a gross regression (10 s) or a failed launch.
 /// </summary>
+[Collection(nameof(AppProcessTests))]
 public class StartupTimeTests
 {
     [Fact]
@@ -28,6 +29,8 @@ public class StartupTimeTests
             start.ArgumentList.Add(Path.Combine(dir, "settings.json"));
             start.ArgumentList.Add("--smoke-report");
             start.ArgumentList.Add(report);
+            start.ArgumentList.Add("--recovery");
+            start.ArgumentList.Add(Path.Combine(dir, "recovery")); // never touch the user's recovery folder
 
             using Process process = Process.Start(start)!;
             bool exited = process.WaitForExit(TimeSpan.FromSeconds(60));

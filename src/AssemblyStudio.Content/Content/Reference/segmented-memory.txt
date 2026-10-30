@@ -1,0 +1,31 @@
+Segmented memory
+
+The 8086 addresses 1 MB of memory (00000h to FFFFFh) with 20-bit addresses, but its registers have only 16 bits.
+So every address is written as two 16-bit parts: segment:offset.
+
+  physical address = segment * 16 + offset
+
+  Example: 0800h:0100h is 08000h + 0100h = 08100h.
+
+A segment register selects a 64 KB window that starts at segment * 16; the offset picks a byte inside it. Different
+segment:offset pairs can name the same byte: 0800h:0100h and 0810h:0000h are both 08100h.
+
+Which segment is used
+  Instructions             CS:IP
+  Most data                DS:offset, for example mov al, [bx] reads DS:BX
+  Addresses using BP       SS:offset (the stack)
+  The stack                SS:SP
+  String destination       ES:DI
+  A segment override changes the default for one operand: mov al, [es:bx] reads ES:BX.
+
+Effective addresses
+  The offset of a memory operand is built from up to three parts:
+    a base register (BX or BP), an index register (SI or DI) and a constant displacement.
+  Allowed forms: [disp], [bx], [bp + disp], [si], [di], [bx + si], [bx + di], [bp + si], [bp + di], each with an
+  optional displacement. Other registers can't be used in an address on the 8086: [ax] is an error.
+  The Addressing modes sample shows each form.
+
+.COM programs
+  DOS loads a .COM program at offset 100h of one segment and sets CS, DS, ES and SS all to that segment. The first
+  256 bytes (the Program Segment Prefix) hold information from DOS. Code, data and the stack share the same 64 KB:
+  the program starts at 100h and the stack starts at the top (SP = FFFEh) and grows down.

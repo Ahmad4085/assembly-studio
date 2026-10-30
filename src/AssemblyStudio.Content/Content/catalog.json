@@ -67,6 +67,123 @@
       "summary": "Immediate, register, direct, indirect, based, indexed and based indexed operands, and summing an array.",
       "file": "Samples/addressing-modes.asm",
       "expectedOutput": "Immediate      mov ax, 7              AX = 7\r\nRegister       mov ax, bx             AX = 7\r\nDirect         mov ax, [numbers]      AX = 10\r\nIndirect       mov ax, [bx]           AX = 10\r\nBased          mov ax, [bx + 4]       AX = 30\r\nIndexed        mov ax, [numbers + si] AX = 40\r\nBased indexed  mov ax, [bx + si + 6]  AX = 50\r\nSum of the five words:                AX = 150\r\n"
+    },
+    {
+      "id": "tutorial-registers",
+      "kind": "tutorial",
+      "title": "Registers",
+      "summary": "See how instructions load registers and how AH and AL make up AX.",
+      "file": "Tutorials/registers.txt",
+      "sample": "hello"
+    },
+    {
+      "id": "tutorial-flags",
+      "kind": "tutorial",
+      "title": "Flags",
+      "summary": "Watch ADD and SUB set the carry, zero, sign and overflow flags.",
+      "file": "Tutorials/flags.txt",
+      "sample": "arithmetic-flags"
+    },
+    {
+      "id": "tutorial-memory-addressing",
+      "kind": "tutorial",
+      "title": "Memory and addressing",
+      "summary": "Read memory in different ways and work out each address.",
+      "file": "Tutorials/memory-addressing.txt",
+      "sample": "addressing-modes"
+    },
+    {
+      "id": "tutorial-stack",
+      "kind": "tutorial",
+      "title": "The stack",
+      "summary": "Watch PUSH, POP, CALL and RET move SP, and pass arguments on the stack.",
+      "file": "Tutorials/stack.txt",
+      "sample": "stack-procedures"
+    },
+    {
+      "id": "tutorial-loops-branches",
+      "kind": "tutorial",
+      "title": "Loops and branches",
+      "summary": "Repeat code with LOOP and counters, and branch with CMP and conditional jumps.",
+      "file": "Tutorials/loops-branches.txt",
+      "sample": "loops"
+    },
+    {
+      "id": "reference-registers",
+      "kind": "reference",
+      "title": "Registers",
+      "summary": "The general, pointer, index and segment registers, IP and FLAGS.",
+      "file": "Reference/registers.txt"
+    },
+    {
+      "id": "reference-flags",
+      "kind": "reference",
+      "title": "Flags",
+      "summary": "What each flag means, signed versus unsigned results, and undefined flags.",
+      "file": "Reference/flags.txt"
+    },
+    {
+      "id": "reference-segmented-memory",
+      "kind": "reference",
+      "title": "Segmented memory",
+      "summary": "Segment:offset addresses, default segments, effective addresses and .COM programs.",
+      "file": "Reference/segmented-memory.txt"
+    },
+    {
+      "id": "reference-stack",
+      "kind": "reference",
+      "title": "The stack",
+      "summary": "PUSH and POP, procedures, saving registers and arguments on the stack.",
+      "file": "Reference/stack.txt"
+    },
+    {
+      "id": "instructions-data-transfer",
+      "kind": "reference",
+      "title": "Data transfer instructions",
+      "summary": "MOV, XCHG, PUSH, POP, the flag transfers, LEA, LDS, LES and XLAT.",
+      "file": "Reference/instructions-data-transfer.txt"
+    },
+    {
+      "id": "instructions-arithmetic",
+      "kind": "reference",
+      "title": "Arithmetic instructions",
+      "summary": "ADD, ADC, SUB, SBB, CMP, INC, DEC, NEG, MUL, IMUL, DIV, IDIV, conversions and decimal adjustment.",
+      "file": "Reference/instructions-arithmetic.txt"
+    },
+    {
+      "id": "instructions-logic",
+      "kind": "reference",
+      "title": "Logic instructions",
+      "summary": "AND, OR, XOR, NOT and TEST.",
+      "file": "Reference/instructions-logic.txt"
+    },
+    {
+      "id": "instructions-shift-rotate",
+      "kind": "reference",
+      "title": "Shifts and rotates",
+      "summary": "SHL, SHR, SAR, ROL, ROR, RCL and RCR.",
+      "file": "Reference/instructions-shift-rotate.txt"
+    },
+    {
+      "id": "instructions-control-transfer",
+      "kind": "reference",
+      "title": "Jumps, loops, calls and interrupts",
+      "summary": "JMP, the conditional jumps, JCXZ, the LOOP family, CALL, RET, INT and IRET.",
+      "file": "Reference/instructions-control-transfer.txt"
+    },
+    {
+      "id": "instructions-string",
+      "kind": "reference",
+      "title": "String instructions",
+      "summary": "MOVS, LODS, STOS, CMPS, SCAS and the REP prefixes.",
+      "file": "Reference/instructions-string.txt"
+    },
+    {
+      "id": "instructions-flag-processor",
+      "kind": "reference",
+      "title": "Flag and processor control",
+      "summary": "CLC, STC, CMC, CLD, STD, CLI, STI, NOP, HLT, WAIT, LOCK and segment overrides.",
+      "file": "Reference/instructions-flag-processor.txt"
     }
   ]
 }

@@ -1,0 +1,31 @@
+Tutorial: Registers
+
+Goal: see how instructions put values into registers, and how AH and AL make up AX.
+Sample: Hello, World (use "Open the sample" below; you get your own copy to change).
+
+1. Open the sample. Read the four instructions: they load DX with the address of the message, AH with the DOS
+   function number 09h, call DOS with INT 21h, then load AX with 4C00h and call DOS again to end the program.
+
+2. Press F11 (Step Into) once. The first instruction, mov dx, message, runs. In the Registers panel DX now holds the
+   message's offset; the value that changed is highlighted. IP moved on to the next instruction.
+
+3. Press F11 again. mov ah, 09h changes only the high byte of AX: AX shows 09xxh, where xx is whatever AL already
+   held. AH and AL are the two halves of AX.
+
+4. Press F11 to run INT 21h. DOS prints "Hello, World!" in the Console panel. DOS function 09h also returns with
+   AL = 24h (the '$' character), so AX now reads 0924h.
+
+5. Press F11 to run mov ax, 4C00h. Now AH = 4Ch (the "end program" function) and AL = 00h (the exit code), loaded in
+   one word instruction.
+
+6. Press F11 a last time. The program ends with exit code 0.
+
+Try it yourself
+  - Change the exit code: replace 4C00h with 4C05h and run it again (F5). The runtime messages report exit code 5.
+  - Load the halves separately: mov ah, 4Ch then mov al, 0 does the same as mov ax, 4C00h. Step through both and
+    compare AX.
+
+What to remember
+  - AX, BX, CX and DX each split into a high and a low byte (AH/AL, BH/BL, CH/CL, DH/DL).
+  - Writing one half leaves the other half unchanged.
+  - The reference page Registers describes every register.

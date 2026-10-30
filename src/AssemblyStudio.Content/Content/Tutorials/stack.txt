@@ -1,0 +1,32 @@
+Tutorial: The stack
+
+Goal: watch PUSH, POP, CALL and RET move SP, and pass arguments on the stack.
+Sample: The stack and procedures.
+
+1. Open the sample and run it with F5. It prints square(9) = 81, add_two(30, 12) = 42 and STACK reversed.
+
+2. Set a breakpoint (F9) on call square and press F5. In the Stack panel note SP (FFFEh at the start of a .COM
+   program, minus anything pushed since).
+
+3. Press F11 (Step Into). CALL pushed the return address: SP went down by 2, and the new top word is the offset of
+   the instruction after the CALL. IP is now at square.
+
+4. Step through square: push dx stores DX (SP down by 2), mul ax multiplies, pop dx restores DX (SP back up). Then
+   RET pops the return address into IP and you are back after the CALL with SP where it started.
+
+5. Continue to the add_two part. Step the two PUSH instructions and the CALL: the stack now holds 30, 12 and the
+   return address. In add_two, after mov bp, sp, [bp + 4] is 12 and [bp + 6] is 30. After the RET, add sp, 4 removes
+   the two arguments.
+
+6. Step the letter loop. Each push ax puts a letter on the stack (S, T, A, C, K); the pop loop takes them off in
+   reverse order: K, C, A, T, S.
+
+Try it yourself
+  - Remove the pop dx from square and run it: RET pops the saved DX instead of the return address and the program
+    goes wrong. Step it to see where it jumps.
+  - Use F10 (Step Over) on a CALL: the whole procedure runs in one step.
+
+What to remember
+  - The stack grows down; PUSH subtracts 2 from SP, POP adds 2.
+  - Every PUSH inside a procedure needs a POP before RET.
+  - The reference page The stack has the BP layout for arguments.

@@ -36,6 +36,7 @@ public sealed class ContentCatalogTests
         Assert.Equal((ContentKind.Sample, "Hello", "Prints a greeting.", "hello.asm", "Hello\r\n"),
             (hello.Kind, hello.Title, hello.Summary, hello.FileName, hello.ExpectedOutput));
         Assert.Equal(ContentKind.Tutorial, catalog.Items[1].Kind);
+        Assert.Equal("hello", catalog.Items[1].Sample);
         Assert.Null(catalog.Items[1].ExpectedOutput);
     }
 
@@ -62,6 +63,7 @@ public sealed class ContentCatalogTests
     [InlineData("missing-file", "'Reference/gone.md' is not embedded")]
     [InlineData("sample-without-output", "expected output")]
     [InlineData("input-on-tutorial", "only samples have input")]
+    [InlineData("tutorial-without-sample", "links to a sample")]
     [InlineData("bad-kind", "not valid")]
     [InlineData("bad-json", "not valid")]
     [InlineData("no-such-catalog", "is not embedded")]

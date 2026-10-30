@@ -1,0 +1,78 @@
+Jumps, loops, calls and interrupts
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+JMP - Jump
+  Continues execution at the target: near (same segment) or far (new CS:IP), direct or through a register or memory.
+  Example: jmp done
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: E9h JMP rel16; EAh JMP ptr16:16; EBh JMP rel8; FFh /4 (GRP5 rm16); FFh /5 (GRP5 rm16)
+
+Jcc - Conditional jumps
+  Jumps to a target within -128 to +127 bytes when the condition holds, otherwise continues with the next instruction.
+  Example: jne again
+  Flags changed: none
+  All other flags keep their values.
+  Unsigned comparisons: JB/JC/JNAE (CF=1), JAE/JNB/JNC (CF=0), JBE/JNA (CF=1 or ZF=1), JA/JNBE (CF=0 and ZF=0). Signed comparisons: JL/JNGE (SF<>OF), JGE/JNL (SF=OF), JLE/JNG (ZF=1 or SF<>OF), JG/JNLE (ZF=0 and SF=OF). Single flags: JE/JZ (ZF=1), JNE/JNZ (ZF=0), JS (SF=1), JNS (SF=0), JO (OF=1), JNO (OF=0), JP/JPE (PF=1), JNP/JPO (PF=0).
+  Opcodes: 70h JO rel8; 71h JNO rel8; 72h JB rel8; 73h JNB rel8; 74h JZ rel8; 75h JNZ rel8; 76h JBE rel8; 77h JA rel8; 78h JS rel8; 79h JNS rel8; 7Ah JP rel8; 7Bh JNP rel8; 7Ch JL rel8; 7Dh JGE rel8; 7Eh JLE rel8; 7Fh JG rel8
+
+JCXZ - Jump if CX is zero
+  Jumps when CX = 0 (short target).
+  Example: jcxz skip
+  Flags changed: none
+  All other flags keep their values.
+  Often placed before a LOOP so a count of 0 skips the loop.
+  Opcodes: E3h JCXZ rel8
+
+LOOP - Loop
+  CX = CX - 1; jumps when CX isn't 0 (short target).
+  Example: loop again
+  Flags changed: none
+  All other flags keep their values.
+  Decrementing CX here doesn't change the flags, unlike DEC.
+  Opcodes: E2h LOOP rel8
+
+LOOPE - Loop while equal (also LOOPZ)
+  CX = CX - 1; jumps when CX isn't 0 and ZF = 1.
+  Example: loope again
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: E1h LOOPE rel8
+
+LOOPNE - Loop while not equal (also LOOPNZ)
+  CX = CX - 1; jumps when CX isn't 0 and ZF = 0.
+  Example: loopne again
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: E0h LOOPNE rel8
+
+CALL - Call a procedure
+  Pushes the return address (IP, and CS for a far call) and jumps to the procedure.
+  Example: call print
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: E8h CALL rel16; 9Ah CALL ptr16:16; FFh /2 (GRP5 rm16); FFh /3 (GRP5 rm16)
+
+RET - Return from a procedure
+  Pops IP (and CS for RETF). RET n also adds n to SP, removing n bytes of arguments.
+  Example: ret
+  Flags changed: none
+  All other flags keep their values.
+  Use RETF to return from a far call.
+  Opcodes: C2h RET near imm16; C3h RET near; CAh RET far imm16; CBh RET far
+
+INT - Call an interrupt
+  Pushes FLAGS, CS and IP, clears IF and TF, and jumps through the interrupt vector table.
+  Example: int 21h
+  Flags changed: IF TF
+  All other flags keep their values.
+  INT 21h calls DOS services and INT 20h ends the program; the help pages list the supported services. INTO calls interrupt 4 only when OF = 1.
+  Opcodes: CCh INT 3; CDh INT imm8; CEh INTO
+
+IRET - Return from an interrupt
+  Pops IP, CS and FLAGS.
+  Example: iret
+  Flags changed: OF DF IF TF SF ZF AF PF CF
+  Every flag takes the value of its bit in the popped word.
+  Opcodes: CFh IRET

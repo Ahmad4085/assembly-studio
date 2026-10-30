@@ -1,0 +1,62 @@
+Shifts and rotates
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+SHL - Shift left (also SAL)
+  Shifts the bits left; the top bit goes to CF and a 0 comes in at the bottom. Each shift multiplies by 2.
+  Example: shl ax, 1
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  Shift by 1 or by CL. The flags above are for a shift by 1. A shift by CL = 0 changes no flags; for counts above 1, OF is undefined.
+  Opcodes: D0h /4 (GRP2 rm8, 1); D1h /4 (GRP2 rm16, 1); D2h /4 (GRP2 rm8, CL); D3h /4 (GRP2 rm16, CL)
+
+SHR - Shift right (unsigned)
+  Shifts the bits right; the bottom bit goes to CF and a 0 comes in at the top. Each shift divides an unsigned number by 2.
+  Example: shr ax, 1
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  For a shift by 1, OF is the original top bit. Counts as for SHL.
+  Opcodes: D0h /5 (GRP2 rm8, 1); D1h /5 (GRP2 rm16, 1); D2h /5 (GRP2 rm8, CL); D3h /5 (GRP2 rm16, CL)
+
+SAR - Shift right (signed)
+  Shifts the bits right, copying the sign bit in at the top. Each shift divides a signed number by 2, rounding down.
+  Example: sar ax, 1
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  For a shift by 1, OF is cleared. Counts as for SHL.
+  Opcodes: D0h /7 (GRP2 rm8, 1); D1h /7 (GRP2 rm16, 1); D2h /7 (GRP2 rm8, CL); D3h /7 (GRP2 rm16, CL)
+
+ROL - Rotate left
+  Rotates the bits left; the top bit moves to the bottom and is also copied to CF.
+  Example: rol al, 1
+  Flags changed: OF CF
+  All other flags keep their values.
+  Rotates by 1 or by CL. For a rotate by 1, OF is set when the top bit changed. A rotate by CL = 0 changes no flags; for counts above 1, OF is undefined.
+  Opcodes: D0h /0 (GRP2 rm8, 1); D1h /0 (GRP2 rm16, 1); D2h /0 (GRP2 rm8, CL); D3h /0 (GRP2 rm16, CL)
+
+ROR - Rotate right
+  Rotates the bits right; the bottom bit moves to the top and is also copied to CF.
+  Example: ror al, 1
+  Flags changed: OF CF
+  All other flags keep their values.
+  Counts and OF as for ROL.
+  Opcodes: D0h /1 (GRP2 rm8, 1); D1h /1 (GRP2 rm16, 1); D2h /1 (GRP2 rm8, CL); D3h /1 (GRP2 rm16, CL)
+
+RCL - Rotate left through carry
+  Rotates left through CF: the top bit goes to CF and the old CF comes in at the bottom.
+  Example: rcl dx, 1
+  Flags changed: OF CF
+  All other flags keep their values.
+  Counts and OF as for ROL.
+  Opcodes: D0h /2 (GRP2 rm8, 1); D1h /2 (GRP2 rm16, 1); D2h /2 (GRP2 rm8, CL); D3h /2 (GRP2 rm16, CL)
+
+RCR - Rotate right through carry
+  Rotates right through CF: the bottom bit goes to CF and the old CF comes in at the top.
+  Example: rcr dx, 1
+  Flags changed: OF CF
+  All other flags keep their values.
+  Counts and OF as for ROL.
+  Opcodes: D0h /3 (GRP2 rm8, 1); D1h /3 (GRP2 rm16, 1); D2h /3 (GRP2 rm8, CL); D3h /3 (GRP2 rm16, CL)

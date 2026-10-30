@@ -1,0 +1,34 @@
+Tutorial: Memory and addressing
+
+Goal: read data from memory in different ways and see the address each instruction uses.
+Sample: Addressing modes.
+
+1. Open the sample. At the end of the program, numbers dw 10, 20, 30, 40, 50 defines five words. Each word is two
+   bytes, so the words start at numbers + 0, + 2, + 4, + 6 and + 8.
+
+2. Run it with F5. The Console lists each addressing mode and the value it loaded into AX, ending with the sum 150.
+
+3. Set a breakpoint (F9) on mov ax, [numbers] and press F5. In the Memory panel, go to the address of numbers (DS
+   and the offset shown in the instruction strip) and find the bytes 0A 00 14 00 1E 00 ...: the word 10 is stored as
+   0Ah then 00h, low byte first.
+
+4. Press F11. AX = 000Ah: a direct address names the memory location in the instruction itself.
+
+5. Continue to mov ax, [bx] and step it. BX holds the offset of numbers, so the instruction reads the same word
+   through a register. Change BX and the same instruction reads somewhere else: that is how programs walk through
+   arrays.
+
+6. Step the based, indexed and based indexed forms. Before each one, work out the address: [bx + 4] is numbers + 4
+   (the third word, 30); [numbers + si] with SI = 6 is the fourth word (40); [bx + si + 6] with SI = 2 is numbers + 8
+   (the fifth word, 50).
+
+7. Watch the sum loop: add ax, [bx + si] with SI going 0, 2, 4, 6, 8 adds all five words.
+
+Try it yourself
+  - Add a sixth word 60 to numbers and change the loop count to 6. The sum becomes 210.
+  - Try mov ax, [ax]: NASM rejects it, because only BX, BP, SI and DI can be used in an address on the 8086.
+
+What to remember
+  - Words are stored low byte first.
+  - An address is base (BX or BP) + index (SI or DI) + displacement, in any combination.
+  - The reference page Segmented memory explains the segment part of every address.

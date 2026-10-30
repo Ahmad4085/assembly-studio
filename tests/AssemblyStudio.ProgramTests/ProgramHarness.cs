@@ -92,6 +92,9 @@ public static class ProgramHarness
 
     private static readonly Lazy<string> RepositoryRoot = new(FindRepositoryRoot);
 
+    /// <summary>The repository's root folder.</summary>
+    public static string Repository => RepositoryRoot.Value;
+
     /// <summary>Full path of a program fixture in <c>tests/AssemblyStudio.ProgramTests/Programs</c>.</summary>
     public static string Program(string fileName) =>
         Path.Combine(RepositoryRoot.Value, "tests", "AssemblyStudio.ProgramTests", "Programs", fileName);

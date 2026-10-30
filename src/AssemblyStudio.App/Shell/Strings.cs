@@ -888,4 +888,7 @@ public static class Strings
 
     /// <summary>Open a _sample</summary>
     public static string WelcomeSample => Get(nameof(WelcomeSample));
+
+    /// <summary>Open the sample: {0}</summary>
+    public static string LearnOpenTutorialSample => Get(nameof(LearnOpenTutorialSample));
 }

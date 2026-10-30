@@ -1,0 +1,46 @@
+Logic instructions
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+AND - Logical AND
+  Each result bit is 1 when both operand bits are 1.
+  Example: and al, 0Fh
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  OF and CF are always cleared. Use it to clear bits: and al, 0Fh keeps the low four bits.
+  Opcodes: 20h AND rm8, r8; 21h AND rm16, r16; 22h AND r8, rm8; 23h AND r16, rm16; 24h AND AL, imm8; 25h AND AX, imm16; 80h /4 (GRP1 rm8, imm8); 81h /4 (GRP1 rm16, imm16); 82h /4 (GRP1 rm8, imm8 (alias of 80)); 83h /4 (GRP1 rm16, imm8 (sign-ext))
+
+OR - Logical OR
+  Each result bit is 1 when either operand bit is 1.
+  Example: or al, 20h
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  OF and CF are always cleared. Use it to set bits: or al, 20h makes an ASCII letter lower case.
+  Opcodes: 08h OR rm8, r8; 09h OR rm16, r16; 0Ah OR r8, rm8; 0Bh OR r16, rm16; 0Ch OR AL, imm8; 0Dh OR AX, imm16; 80h /1 (GRP1 rm8, imm8); 81h /1 (GRP1 rm16, imm16); 82h /1 (GRP1 rm8, imm8 (alias of 80)); 83h /1 (GRP1 rm16, imm8 (sign-ext))
+
+XOR - Logical exclusive OR
+  Each result bit is 1 when the operand bits differ.
+  Example: xor ax, ax
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  OF and CF are always cleared. xor ax, ax is a common way to set AX to 0.
+  Opcodes: 30h XOR rm8, r8; 31h XOR rm16, r16; 32h XOR r8, rm8; 33h XOR r16, rm16; 34h XOR AL, imm8; 35h XOR AX, imm16; 80h /6 (GRP1 rm8, imm8); 81h /6 (GRP1 rm16, imm16); 82h /6 (GRP1 rm8, imm8 (alias of 80)); 83h /6 (GRP1 rm16, imm8 (sign-ext))
+
+NOT - Logical NOT
+  Inverts every bit (one's complement).
+  Example: not al
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: F6h /2 (GRP3 rm8); F7h /2 (GRP3 rm16)
+
+TEST - Test bits
+  ANDs the operands and sets the flags like AND, but keeps no result.
+  Example: test al, 1
+  Flags changed: OF SF ZF PF CF
+  Undefined afterwards: AF
+  All other flags keep their values.
+  test al, 1 then jz jumps when AL is even.
+  Opcodes: 84h TEST rm8, r8; 85h TEST rm16, r16; A8h TEST AL, imm8; A9h TEST AX, imm16; F6h /0 (GRP3 rm8); F7h /0 (GRP3 rm16)

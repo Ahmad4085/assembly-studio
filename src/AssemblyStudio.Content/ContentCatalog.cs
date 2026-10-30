@@ -30,8 +30,16 @@ public enum ContentKind
 /// <param name="ExpectedOutput">For samples: the documented console output, which the program-level tests check (AC-035).</param>
 /// <param name="Input">For samples that read the keyboard: the documented input, one entry each time the program waits
 /// (for example a line ending in a carriage return, then a single key). The expected output assumes this input.</param>
+/// <param name="Sample">For tutorials: the id of the sample the tutorial works through (FR-070).</param>
 public sealed record ContentItem(
-    string Id, ContentKind Kind, string Title, string Summary, string File, string? ExpectedOutput = null, IReadOnlyList<string>? Input = null)
+    string Id,
+    ContentKind Kind,
+    string Title,
+    string Summary,
+    string File,
+    string? ExpectedOutput = null,
+    IReadOnlyList<string>? Input = null,
+    string? Sample = null)
 {
     /// <summary>The content file's name, such as <c>hello.asm</c> (a sample copy's suggested Save As name).</summary>
     public string FileName => File[(File.LastIndexOf('/') + 1)..];
@@ -179,6 +187,13 @@ public sealed class EmbeddedContentCatalog : IContentCatalog
             if (item.Input is not null && item.Kind != ContentKind.Sample)
             {
                 throw new ContentCatalogException($"{where}: only samples have input.");
+            }
+
+            if (item.Kind == ContentKind.Tutorial
+                    ? !items.Any(other => other.Kind == ContentKind.Sample && other.Id == item.Sample)
+                    : item.Sample is not null)
+            {
+                throw new ContentCatalogException($"{where}: every tutorial, and only a tutorial, links to a sample of this catalog.");
             }
         }
 

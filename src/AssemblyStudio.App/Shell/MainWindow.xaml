@@ -267,6 +267,12 @@
                        Visibility="{Binding HasSelection, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
             <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItem.Title}" FontWeight="SemiBold" TextWrapping="Wrap" />
             <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItem.Summary}" TextWrapping="Wrap" Foreground="{DynamicResource Text.Secondary}" Margin="0,2,0,6" />
+            <Button x:Name="LearnOpenTutorialSample" DockPanel.Dock="Top" Command="{Binding OpenLinkedSampleCommand}"
+                    HorizontalAlignment="Left" Padding="12,4" Margin="0,0,0,6"
+                    AutomationProperties.Name="{Binding LinkedSampleLabel}"
+                    Visibility="{Binding LinkedSampleLabel, Converter={x:Static shell:NullToCollapsedConverter.Instance}}">
+              <TextBlock Text="{Binding LinkedSampleLabel}" TextWrapping="Wrap" />
+            </Button>
             <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsSampleSelected, Converter={StaticResource VisibleWhenTrue}}">
               <Button x:Name="LearnOpenCopy" Content="{x:Static shell:Strings.LearnOpenCopy}" Command="{Binding OpenSelectedCommand}"
                       HorizontalAlignment="Left" Padding="12,4" />

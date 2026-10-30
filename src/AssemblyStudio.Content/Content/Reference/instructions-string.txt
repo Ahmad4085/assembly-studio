@@ -1,0 +1,50 @@
+String instructions
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+MOVS - Move string (MOVSB, MOVSW)
+  Copies the byte or word at DS:SI to ES:DI, then steps SI and DI by 1 or 2 (backwards when DF = 1).
+  Example: rep movsb
+  Flags changed: none
+  All other flags keep their values.
+  With REP it copies CX elements.
+  Opcodes: A4h MOVSB; A5h MOVSW
+
+LODS - Load string (LODSB, LODSW)
+  Loads AL or AX from DS:SI, then steps SI.
+  Example: lodsb
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: ACh LODSB; ADh LODSW
+
+STOS - Store string (STOSB, STOSW)
+  Stores AL or AX at ES:DI, then steps DI.
+  Example: stosb
+  Flags changed: none
+  All other flags keep their values.
+  rep stosb fills CX bytes with AL.
+  Opcodes: AAh STOSB; ABh STOSW
+
+CMPS - Compare strings (CMPSB, CMPSW)
+  Compares the element at DS:SI with the one at ES:DI (flags as for CMP), then steps SI and DI.
+  Example: repe cmpsb
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  With REPE it stops at the first difference; with REPNE at the first match.
+  Opcodes: A6h CMPSB; A7h CMPSW
+
+SCAS - Scan string (SCASB, SCASW)
+  Compares AL or AX with the element at ES:DI (flags as for CMP), then steps DI.
+  Example: repne scasb
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  repne scasb finds the first byte equal to AL.
+  Opcodes: AEh SCASB; AFh SCASW
+
+REP - Repeat prefixes (REP, REPE/REPZ, REPNE/REPNZ)
+  Repeats the string instruction that follows while CX isn't 0, decrementing CX each time. REPE also stops when ZF = 0, REPNE when ZF = 1 (only CMPS and SCAS set ZF).
+  Example: rep stosb
+  Flags changed: none
+  All other flags keep their values.
+  The prefix itself changes no flags; a repeated CMPS or SCAS sets them as usual.
+  Opcodes: F2h REPNE / REPNZ; F3h REP / REPE / REPZ

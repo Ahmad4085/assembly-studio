@@ -1,6 +1,6 @@
 {
   "items": [
     { "id": "hello", "kind": "sample", "title": "Hello", "summary": "Prints a greeting.", "file": "Samples/hello.asm", "expectedOutput": "Hello\r\n" },
-    { "id": "registers", "kind": "tutorial", "title": "Registers", "summary": "What the registers hold.", "file": "Tutorials/registers.md" }
+    { "id": "registers", "kind": "tutorial", "title": "Registers", "summary": "What the registers hold.", "file": "Tutorials/registers.md", "sample": "hello" }
   ]
 }

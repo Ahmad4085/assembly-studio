@@ -1,0 +1,35 @@
+Tutorial: Flags
+
+Goal: watch ADD and SUB set the carry, zero, sign and overflow flags, and learn when each one matters.
+Sample: Arithmetic and flags.
+
+1. Open the sample and run it with F5. The Console shows four results, each followed by CF, ZF, SF and OF:
+       200 + 100 = 44   CF=1 ZF=0 SF=0 OF=0
+       5 - 5 = 0   CF=0 ZF=1 SF=0 OF=0
+       3 - 5 = 254   CF=1 ZF=0 SF=1 OF=0
+       127 + 1 = 128   CF=0 ZF=0 SF=1 OF=1
+   The program reads the flags itself with PUSHF and prints them.
+
+2. Now step through it to watch the Flags panel. Put a breakpoint (F9) on the line add al, 100 and press F5. The
+   program stops before the ADD.
+
+3. Press F11. AL becomes 2Ch (44): 300 doesn't fit in a byte, so the carry out of the top bit goes to CF and CF = 1.
+   As an unsigned number the result is wrong by 256, and CF tells you so.
+
+4. Continue to sub al, 5 after mov al, 5 and step it. The result is 0, so ZF = 1. This is what JE and JZ test.
+
+5. Step 3 - 5. A borrow is needed, so CF = 1, and the result 254 has its top bit set, so SF = 1: read as a signed
+   byte, 254 is -2, which is the right signed answer.
+
+6. Step 127 + 1. As unsigned numbers 127 + 1 = 128 is fine (CF = 0), but as signed bytes 127 + 1 should be 128,
+   which a signed byte can't hold (-128 to 127): OF = 1, and the result reads as -128 (SF = 1).
+
+Try it yourself
+  - Add the line inc al after one of the ADDs and step it: INC changes ZF, SF, OF and the others, but never CF.
+  - Change 127 + 1 to 100 + 1 and predict all four flags before you run it.
+
+What to remember
+  - CF is for unsigned numbers, OF for signed numbers; ADD and SUB set both.
+  - ZF = 1 means the result was 0; SF copies the top bit.
+  - The reference lists exactly which flags each instruction changes; the automated tests check it against the
+    engine.

@@ -1,0 +1,88 @@
+Flag and processor control
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+CLC - Clear carry
+  CF = 0.
+  Example: clc
+  Flags changed: CF
+  All other flags keep their values.
+  Opcodes: F8h CLC
+
+STC - Set carry
+  CF = 1.
+  Example: stc
+  Flags changed: CF
+  All other flags keep their values.
+  Opcodes: F9h STC
+
+CMC - Complement carry
+  CF = not CF.
+  Example: cmc
+  Flags changed: CF
+  All other flags keep their values.
+  Opcodes: F5h CMC
+
+CLD - Clear direction
+  DF = 0: string instructions step forward.
+  Example: cld
+  Flags changed: DF
+  All other flags keep their values.
+  Opcodes: FCh CLD
+
+STD - Set direction
+  DF = 1: string instructions step backward.
+  Example: std
+  Flags changed: DF
+  All other flags keep their values.
+  Opcodes: FDh STD
+
+CLI - Clear interrupt enable
+  IF = 0.
+  Example: cli
+  Flags changed: IF
+  All other flags keep their values.
+  Opcodes: FAh CLI
+
+STI - Set interrupt enable
+  IF = 1.
+  Example: sti
+  Flags changed: IF
+  All other flags keep their values.
+  Opcodes: FBh STI
+
+NOP - No operation
+  Does nothing (it is XCHG AX, AX).
+  Example: nop
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: 90h NOP
+
+HLT - Halt
+  Stops the processor. In Assembly Studio the program stops with a "halted" message.
+  Example: hlt
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: F4h HLT
+
+WAIT - Wait for the coprocessor
+  Without an 8087 coprocessor (as here) it does nothing.
+  Example: wait
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: 9Bh WAIT / FWAIT
+
+LOCK - Lock prefix
+  Locks the bus for the next instruction on multiprocessor systems. Assembly Studio accepts and ignores it.
+  Example: lock
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: F0h LOCK
+
+ES:, CS:, SS:, DS: - Segment override prefixes
+  Makes the next instruction's memory operand use the given segment instead of its default (DS, or SS for addresses using BP).
+  Example: mov al, [es:bx]
+  Flags changed: none
+  All other flags keep their values.
+  Written inside the brackets in NASM: mov al, [es:bx]. The destination of a string instruction is always ES:DI.
+  Opcodes: 26h ES:; 2Eh CS:; 36h SS:; 3Eh DS:

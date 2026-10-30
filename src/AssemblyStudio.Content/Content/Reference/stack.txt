@@ -1,0 +1,40 @@
+The stack
+
+The stack is an area of memory used last in, first out. SS:SP points at the word on top. The stack grows down: in a
+.COM program SP starts at FFFEh, and each PUSH moves it down by 2.
+
+  PUSH ax    SP = SP - 2, then the word AX is stored at SS:SP.
+  POP bx     BX = the word at SS:SP, then SP = SP + 2.
+
+Only words can be pushed and popped. Values come back in the opposite order: push ax, push bx, pop ax, pop bx swaps
+AX and BX.
+
+Procedures
+  CALL proc  pushes the address of the next instruction and jumps to proc.
+  RET        pops that address into IP, so execution continues after the CALL.
+  A procedure must leave the stack as it found it: every PUSH needs a POP before the RET, or RET jumps to the wrong
+  place.
+
+Saving registers
+  A procedure that changes registers its caller still needs saves them first:
+      push bx
+      ...           ; use BX
+      pop bx
+      ret
+
+Arguments on the stack
+  The caller pushes the arguments, then calls. The procedure copies SP to BP and reads them relative to BP:
+      push bp
+      mov bp, sp    ; [bp] = old BP, [bp + 2] = return address, [bp + 4] = last argument pushed
+      mov ax, [bp + 4]
+      pop bp
+      ret
+  Afterwards the caller removes the arguments with add sp, 2 * count (or the procedure ends with RET n).
+  The stack sample shows this with add_two(30, 12).
+
+Interrupts
+  INT pushes FLAGS, CS and IP; IRET pops them back.
+
+Watch out
+  POP into the wrong register, a missing POP before RET, or pushing more than the stack holds are common mistakes.
+  The Stack panel shows the words from SS:SP upward with SP marked.

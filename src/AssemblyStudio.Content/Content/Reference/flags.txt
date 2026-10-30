@@ -1,0 +1,32 @@
+Flags
+
+FLAGS is a 16-bit register whose bits record facts about the last result and control the processor. Arithmetic and
+logic instructions set the status flags; conditional jumps read them. Each instruction's reference entry lists the
+flags it changes, and those statements are checked against the engine.
+
+Status flags
+  CF  Carry       Set when an unsigned result didn't fit (a carry out of, or a borrow into, the top bit).
+                  200 + 100 in AL gives 44 with CF = 1. Shifts put the bit shifted out here.
+  ZF  Zero        Set when the result is 0. JE/JZ jump when ZF = 1.
+  SF  Sign        A copy of the result's top bit: 1 means negative when the value is read as signed.
+  OF  Overflow    Set when a signed result didn't fit: 127 + 1 in AL gives -128 with OF = 1.
+  PF  Parity      Set when the low byte of the result has an even number of 1 bits.
+  AF  Auxiliary   Set on a carry out of bit 3; used by the decimal adjust instructions (DAA, AAA, ...).
+
+Control flags
+  DF  Direction   0: string instructions step forward (CLD); 1: backward (STD).
+  IF  Interrupt   1: the processor accepts hardware interrupts (STI); 0: it doesn't (CLI).
+  TF  Trap        1: the processor raises a single-step interrupt after every instruction (used by debuggers).
+
+Signed or unsigned?
+  The processor doesn't know whether a value is signed. ADD and SUB set both CF (for unsigned numbers) and OF (for
+  signed numbers); you choose which to test. JB/JA compare unsigned values (CF, ZF); JL/JG compare signed values
+  (SF, OF, ZF).
+
+Undefined flags
+  Some instructions leave flags undefined: their value afterwards means nothing (for example AF after AND, or SF and
+  ZF after MUL). Assembly Studio shows such flags as undefined instead of showing a value. Don't test them.
+
+Changing flags directly
+  CLC, STC and CMC change CF; CLD and STD change DF; CLI and STI change IF. PUSHF and POPF save and restore all the
+  flags; LAHF and SAHF copy the low byte to and from AH.

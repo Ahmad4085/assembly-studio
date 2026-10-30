@@ -1537,3 +1537,30 @@
 - **Git state after:** uncommitted TASK-091 changes on top of `ca3d160` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user).
 - **Next step:** `/assembly-implement TASK-092` or `TASK-093`.
+
+### 2026-10-30 16:11 – 16:48 +0500 · Claude Code (Opus 5.5) · TASK-092 Tutorials and reference
+- **Summary:** Ran `/assembly-implement TASK-092` (user request). Dependencies TASK-090 and TASK-020 are Done; the lock was free.
+  - **Instruction reference:**
+    - Hand-written data in `ReferenceData/instructions.json`: 63 entries with operation, flags changed/undefined, notes, example, opcodes and a probe instruction.
+    - 7 category pages are generated from the data plus the engine's `OpcodeTable` by `ReferenceTests` (ProgramTests references both; Content may reference only Core, ADR-0002) and committed. The test fails when they're stale.
+  - **Consistency test (AC-037):** each probe runs from 600 random states (edge values, random flags and memory). Documented changed flags must change, documented undefined flags must equal the engine's reported mask, no other flag may change. Every supported opcode/prefix must be documented.
+  - **DEF-008:** the first run failed for 7 instructions.
+    - Cause: the engine left AF untouched after AND/OR/XOR/TEST/SHL/SHR/SAR, and OF after counts above 1, but didn't report them undefined (ADR-0003 §3, FR-048). Its own comment called AF undefined.
+    - Asked the user; the user chose "Fix it in this task (Recommended)". The engine now reports the masks (values unchanged).
+  - **Learning content:**
+    - 4 concept pages and 5 tutorials, each linked to a sample (new validated `ContentItem.Sample`).
+    - Learn sidebar "Open the sample: <title>" button.
+    - Reviewed the text for accuracy: removed an IN/OUT mention (unsupported) and corrected the TF description.
+- **Files changed:** `src/AssemblyStudio.Content/{ContentCatalog.cs, ReferenceData/instructions.json (new), Content/catalog.json, Content/Tutorials/*.txt (5 new), Content/Reference/*.txt (11 new)}`, `src/AssemblyStudio.Engine.I8086/{Cpu8086.Arithmetic.cs, Cpu8086.Logic.cs}`, `src/AssemblyStudio.App/{Learn/LearnViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.resx, Shell/Strings.cs}`, `tests/AssemblyStudio.ProgramTests/{ProgramHarness.cs, ReferenceTests.cs (new)}`, `tests/AssemblyStudio.Engine.I8086.Tests/UndefinedFlagMaskTests.cs (new)`, `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/valid/catalog.json, Fixtures/tutorial-without-sample/* (new)}`, `tests/AssemblyStudio.App.Tests/Learn/LearnTests.cs`, `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Consistency/coverage first run 66/73 (DEF-008); after the fix 73/73.
+  - Engine suite incl. the oracle **629/629**.
+  - Pages generated with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1` (the first check failed because the build predated the pages; after a rebuild, 80/80).
+  - Content 13/13, App 173/173.
+  - Renders reviewed: `learn-tutorial-flags.png`. The link label was clipped → made it wrap, with a UIA name; long text is cramped at 200 px → proposal raised, not changed.
+  - The user's open app (pid 21332) briefly locked the build; it was closed and I rebuilt cleanly: 0 warnings / 0 errors.
+  - Mutation: AF removed from ADD's data → 3 failures; restored → 80/80.
+  - Full solution **1315/1315** in two consecutive runs (16:31–16:34 and the following run; the command moved to the background after 10 minutes).
+- **Git state after:** uncommitted TASK-092 changes on top of `c44294e` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user). The Learn reading-width proposal (design decision). Tutorial steps describe M5 panels and must be walked through in QA.
+- **Next step:** `/assembly-implement TASK-093`.

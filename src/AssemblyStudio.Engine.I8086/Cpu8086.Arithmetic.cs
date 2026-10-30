@@ -22,6 +22,9 @@ public sealed partial class Cpu8086
         Add = 0, Or = 1, Adc = 2, Sbb = 3, And = 4, Sub = 5, Xor = 6, Cmp = 7,
     }
 
+    /// <summary>The flags an operation leaves undefined (ADR-0003 §3): AF after AND, OR and XOR (DEF-008).</summary>
+    private static FlagBit UndefinedAfter(ArithKind kind) => kind is ArithKind.And or ArithKind.Or or ArithKind.Xor ? FlagBit.AF : FlagBit.None;
+
     private static ushort SetFlag(ushort flags, FlagBit bit, bool value) =>
         value ? (ushort)(flags | (ushort)bit) : (ushort)(flags & ~(ushort)bit);
 
@@ -119,7 +122,7 @@ public sealed partial class Cpu8086
             }
         }
         _state = s;
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = UndefinedAfter(kind) };
     }
 
     // ---- ADD/ADC/SUB/SBB/CMP with immediate against AL/AX (arms 4/5 of the same families) ------------
@@ -145,7 +148,7 @@ public sealed partial class Cpu8086
             s = s with { Flags = flags };
         }
         _state = s;
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = UndefinedAfter((ArithKind)(op.Opcode >> 3)) };
     }
 
     // ---- Immediate groups: 80/82 (rm8, imm8; 82 is the undocumented alias of 80),
@@ -183,7 +186,7 @@ public sealed partial class Cpu8086
             }
         }
         _state = s;
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = UndefinedAfter(kind) };
     }
 
     // ---- INC/DEC r16 (40-4F) --------------------------------------------------------------------------

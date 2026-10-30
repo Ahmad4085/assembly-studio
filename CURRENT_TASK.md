@@ -13,6 +13,24 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Milestone 6 progress | TASK-090, 091, 092 Done. Eligible: `TASK-093` (help) |
+| Recommended next action | `/assembly-implement TASK-093`. **User: AC-059 check**; decide on the Learn reading-width proposal (see TASK-092 notes) |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 16:11 +0500 |
+| Milestone | M6 (Learning content) |
+| Goal | Write at least 5 tutorials and the concept/instruction reference, with a consistency test against engine behavior |
+| Scope (in) | Tutorials: registers, flags, memory and addressing, stack, loops and branches; reference generated from the opcode table + hand-written explanations; consistency test of flags-affected statements vs engine tests |
+| Requirements | FR-070, FR-071, FR-072; UI-015; AC-036, AC-037 |
+| Expected files | `src/AssemblyStudio.Content/`, tests |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
 | Milestone 6 progress | TASK-090, TASK-091 Done. Eligible: `TASK-092` (tutorials and reference), `TASK-093` (help) |
 | Recommended next action | `/assembly-implement TASK-092` or `TASK-093`. **User: AC-059 check** for the editor chain and M5 |
 | Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision |
@@ -183,6 +201,30 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-092 Tutorials and reference (Done 2026-10-30 16:48 +0500, Claude Code (Opus 5.5))
+- **Tutorials** (`Content/Tutorials/*.txt`), each linked to a sample (new validated `ContentItem.Sample`):
+  - Registers (hello), Flags (arithmetic-flags), Memory and addressing (addressing-modes), The stack (stack-procedures), Loops and branches (loops).
+  - Guided steps use the approved shortcuts and panels (F5, F9, F10, F11, Registers/Flags/Memory/Stack); those panels arrive in M5, so the steps must be walked through again in QA.
+- **Concept reference** (`Content/Reference/{registers, flags, segmented-memory, stack}.txt`).
+- **Instruction reference:**
+  - `src/AssemblyStudio.Content/ReferenceData/instructions.json` holds the hand-written data (63 entries: operation, flags changed/undefined, notes, example, opcodes, probe).
+  - The 7 pages `Content/Reference/instructions-*.txt` are **generated** from it plus the engine's `OpcodeTable` by `tests/AssemblyStudio.ProgramTests/ReferenceTests.cs`; the test fails when they're stale. Regenerate with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1`.
+  - Content can't reference the engine (ADR-0002), hence generate-and-commit.
+- **Consistency test (AC-037):** each probe instruction runs from 600 random states on the real engine. Documented changed flags must change, documented undefined flags must equal the engine's mask, nothing else may change. Every supported opcode/prefix must be documented.
+- **DEF-008 found and fixed** (user decision): the engine didn't report AF (logic, shifts) or OF (counts above 1) as undefined. `UndefinedFlagMaskTests` added; oracle suite still 629/629.
+- Learn sidebar: tutorial "Open the sample: <title>" button (wrapping, UIA name) → opens the copy (AC-036).
+- Tests:
+  - ReferenceTests 80 (incl. 63 probes), UndefinedFlagMaskTests 19, Learn +2 (AC-036 over all built-in tutorials/reference pages; tutorial render `learn-tutorial-flags.png`), Content +1 fixture.
+  - Mutation: removing AF from ADD's data failed 3 tests; restored.
+- Release build 0 warnings / 0 errors; full solution 1315/1315 in two consecutive runs (16:34, then the second run).
+- **Proposal for the user (design change, not made):** at the default 200 px Learn width, tutorials and reference pages are cramped (narrow wrapped column; aligned tables wrap). Option: open a tutorial or reference page as a read-only tab in the editor area, or widen the sidebar while Learn text is shown. Needs a UI-015 design decision.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 16:11 / 16:48 +0500 |
 
 ## Completed: TASK-091 Sample programs with automated verification (Done 2026-10-30 16:09 +0500, Claude Code (Opus 5.5))
 - 8 samples in `src/AssemblyStudio.Content/Content/Samples/` (the catalog's content folder; the backlog said `Samples/`), listed in `Content/catalog.json` with summary and documented expected output:

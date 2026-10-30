@@ -1,0 +1,166 @@
+Arithmetic instructions
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+ADD - Add
+  destination = destination + source.
+  Example: add al, 5
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  CF reports an unsigned carry out of the top bit; OF reports a signed result that doesn't fit.
+  Opcodes: 00h ADD rm8, r8; 01h ADD rm16, r16; 02h ADD r8, rm8; 03h ADD r16, rm16; 04h ADD AL, imm8; 05h ADD AX, imm16; 80h /0 (GRP1 rm8, imm8); 81h /0 (GRP1 rm16, imm16); 82h /0 (GRP1 rm8, imm8 (alias of 80)); 83h /0 (GRP1 rm16, imm8 (sign-ext))
+
+ADC - Add with carry
+  destination = destination + source + CF.
+  Example: adc dx, 0
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  Adds numbers wider than 16 bits: ADD the low words, then ADC the high words.
+  Opcodes: 10h ADC rm8, r8; 11h ADC rm16, r16; 12h ADC r8, rm8; 13h ADC r16, rm16; 14h ADC AL, imm8; 15h ADC AX, imm16; 80h /2 (GRP1 rm8, imm8); 81h /2 (GRP1 rm16, imm16); 82h /2 (GRP1 rm8, imm8 (alias of 80)); 83h /2 (GRP1 rm16, imm8 (sign-ext))
+
+SUB - Subtract
+  destination = destination - source.
+  Example: sub cx, 1
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  CF is set when a borrow is needed (the unsigned source is larger).
+  Opcodes: 28h SUB rm8, r8; 29h SUB rm16, r16; 2Ah SUB r8, rm8; 2Bh SUB r16, rm16; 2Ch SUB AL, imm8; 2Dh SUB AX, imm16; 80h /5 (GRP1 rm8, imm8); 81h /5 (GRP1 rm16, imm16); 82h /5 (GRP1 rm8, imm8 (alias of 80)); 83h /5 (GRP1 rm16, imm8 (sign-ext))
+
+SBB - Subtract with borrow
+  destination = destination - source - CF.
+  Example: sbb dx, 0
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  Subtracts numbers wider than 16 bits, like ADC adds them.
+  Opcodes: 18h SBB rm8, r8; 19h SBB rm16, r16; 1Ah SBB r8, rm8; 1Bh SBB r16, rm16; 1Ch SBB AL, imm8; 1Dh SBB AX, imm16; 80h /3 (GRP1 rm8, imm8); 81h /3 (GRP1 rm16, imm16); 82h /3 (GRP1 rm8, imm8 (alias of 80)); 83h /3 (GRP1 rm16, imm8 (sign-ext))
+
+CMP - Compare
+  Computes destination - source and sets the flags like SUB, but keeps neither result.
+  Example: cmp al, 'a'
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  Usually followed by a conditional jump.
+  Opcodes: 38h CMP rm8, r8; 39h CMP rm16, r16; 3Ah CMP r8, rm8; 3Bh CMP r16, rm16; 3Ch CMP AL, imm8; 3Dh CMP AX, imm16; 80h /7 (GRP1 rm8, imm8); 81h /7 (GRP1 rm16, imm16); 82h /7 (GRP1 rm8, imm8 (alias of 80)); 83h /7 (GRP1 rm16, imm8 (sign-ext))
+
+INC - Increment
+  destination = destination + 1.
+  Example: inc si
+  Flags changed: OF SF ZF AF PF
+  All other flags keep their values.
+  Unlike ADD, INC leaves CF unchanged.
+  Opcodes: 40h INC AX; 41h INC CX; 42h INC DX; 43h INC BX; 44h INC SP; 45h INC BP; 46h INC SI; 47h INC DI; FEh /0 (GRP4 rm8); FFh /0 (GRP5 rm16)
+
+DEC - Decrement
+  destination = destination - 1.
+  Example: dec cx
+  Flags changed: OF SF ZF AF PF
+  All other flags keep their values.
+  Unlike SUB, DEC leaves CF unchanged. DEC followed by JNZ makes a counting loop.
+  Opcodes: 48h DEC AX; 49h DEC CX; 4Ah DEC DX; 4Bh DEC BX; 4Ch DEC SP; 4Dh DEC BP; 4Eh DEC SI; 4Fh DEC DI; FEh /1 (GRP4 rm8); FFh /1 (GRP5 rm16)
+
+NEG - Negate
+  destination = 0 - destination (two's complement).
+  Example: neg ax
+  Flags changed: OF SF ZF AF PF CF
+  All other flags keep their values.
+  CF is set unless the operand was 0.
+  Opcodes: F6h /3 (GRP3 rm8); F7h /3 (GRP3 rm16)
+
+MUL - Unsigned multiply
+  Byte: AX = AL * source. Word: DX:AX = AX * source.
+  Example: mul bl
+  Flags changed: OF CF
+  Undefined afterwards: SF ZF AF PF
+  All other flags keep their values.
+  OF and CF are set when the upper half of the result (AH or DX) isn't 0.
+  Opcodes: F6h /4 (GRP3 rm8); F7h /4 (GRP3 rm16)
+
+IMUL - Signed multiply
+  Like MUL, for signed numbers.
+  Example: imul cx
+  Flags changed: OF CF
+  Undefined afterwards: SF ZF AF PF
+  All other flags keep their values.
+  OF and CF are set when the upper half isn't just the sign extension of the lower half. The 8086 has only the one-operand form.
+  Opcodes: F6h /5 (GRP3 rm8); F7h /5 (GRP3 rm16)
+
+DIV - Unsigned divide
+  Byte: AL = AX / source, AH = remainder. Word: AX = DX:AX / source, DX = remainder.
+  Example: div bx
+  Flags changed: none
+  Undefined afterwards: OF SF ZF AF PF CF
+  All other flags keep their values.
+  Dividing by 0, or a quotient too big for AL or AX, raises a divide error (interrupt 0), which stops the program with a runtime error.
+  Opcodes: F6h /6 (GRP3 rm8); F7h /6 (GRP3 rm16)
+
+IDIV - Signed divide
+  Like DIV, for signed numbers; the remainder has the sign of the dividend.
+  Example: idiv bx
+  Flags changed: none
+  Undefined afterwards: OF SF ZF AF PF CF
+  All other flags keep their values.
+  Divide errors as for DIV. Use CBW or CWD first to sign-extend the dividend.
+  Opcodes: F6h /7 (GRP3 rm8); F7h /7 (GRP3 rm16)
+
+CBW - Convert byte to word
+  AH = 00h if AL is positive, FFh if negative (sign extension of AL into AX).
+  Example: cbw
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: 98h CBW
+
+CWD - Convert word to double word
+  DX = 0000h if AX is positive, FFFFh if negative (sign extension of AX into DX:AX).
+  Example: cwd
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: 99h CWD
+
+DAA - Decimal adjust after addition
+  Corrects AL after adding two packed BCD bytes (two decimal digits per byte).
+  Example: daa
+  Flags changed: SF ZF AF PF CF
+  Undefined afterwards: OF
+  All other flags keep their values.
+  Opcodes: 27h DAA
+
+DAS - Decimal adjust after subtraction
+  Corrects AL after subtracting two packed BCD bytes.
+  Example: das
+  Flags changed: SF ZF AF PF CF
+  Undefined afterwards: OF
+  All other flags keep their values.
+  Opcodes: 2Fh DAS
+
+AAA - ASCII adjust after addition
+  Corrects AL after adding two unpacked BCD digits; a carry goes into AH.
+  Example: aaa
+  Flags changed: AF CF
+  Undefined afterwards: OF SF ZF PF
+  All other flags keep their values.
+  Opcodes: 37h AAA
+
+AAS - ASCII adjust after subtraction
+  Corrects AL after subtracting two unpacked BCD digits; a borrow comes from AH.
+  Example: aas
+  Flags changed: AF CF
+  Undefined afterwards: OF SF ZF PF
+  All other flags keep their values.
+  Opcodes: 3Fh AAS
+
+AAM - ASCII adjust after multiplication
+  AH = AL / 10, AL = AL mod 10 (splits a number below 100 into two digits).
+  Example: aam
+  Flags changed: SF ZF PF
+  Undefined afterwards: OF AF CF
+  All other flags keep their values.
+  The divisor is the byte after the opcode (10 when written as plain AAM). A divisor of 0 raises a divide error.
+  Opcodes: D4h AAM imm8
+
+AAD - ASCII adjust before division
+  AL = AH * 10 + AL, AH = 0 (joins two digits into one number).
+  Example: aad
+  Flags changed: SF ZF PF
+  Undefined afterwards: OF AF CF
+  All other flags keep their values.
+  Opcodes: D5h AAD imm8

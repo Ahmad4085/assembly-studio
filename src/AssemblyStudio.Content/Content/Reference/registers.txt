@@ -1,0 +1,36 @@
+Registers
+
+The 8086 has fourteen 16-bit registers. A register holds a value inside the processor, so using it is much faster
+than using memory.
+
+General-purpose registers
+  AX  Accumulator. Many instructions use it by default: MUL, DIV and the string instructions LODS, STOS and SCAS;
+      DOS function numbers go in AH.
+  BX  Base. The only general register (with BP, SI and DI) that can hold an address: mov al, [bx].
+  CX  Count. LOOP, the REP prefixes and shifts by CL count with it.
+  DX  Data. Holds the high word of 32-bit results (MUL, DIV, CWD) and addresses for DOS, such as DS:DX for text.
+
+  Each of these splits into two 8-bit halves: AH (high byte) and AL (low byte) form AX; BH/BL form BX; CH/CL form
+  CX; DH/DL form DX. Changing AL changes AX: if AX = 1234h, then mov al, 0FFh makes AX = 12FFh.
+
+Pointer and index registers
+  SP  Stack pointer: the offset of the top of the stack (with SS). PUSH, POP, CALL and RET move it.
+  BP  Base pointer: addresses data on the stack, such as a procedure's arguments ([bp + 4]).
+  SI  Source index: the source address of string instructions (DS:SI), and an index in addresses.
+  DI  Destination index: the destination of string instructions (ES:DI), and an index in addresses.
+
+Segment registers
+  CS  Code segment: where the instructions are (with IP).
+  DS  Data segment: the default segment for data.
+  SS  Stack segment: where the stack is (with SP and BP).
+  ES  Extra segment: the destination of string instructions.
+  In a .COM program all four start with the same value, so code, data and stack share one 64 KB segment.
+
+Instruction pointer and flags
+  IP     The offset of the next instruction in CS. Jumps, calls and returns change it; you can't move a value into
+         it directly.
+  FLAGS  Status bits set by instructions (see Flags).
+
+Sizes
+  A byte holds 0 to 255 (or -128 to 127 signed); a word holds 0 to 65535 (or -32768 to 32767). Both operands of an
+  instruction must have the same size: mov al, bx is an error.

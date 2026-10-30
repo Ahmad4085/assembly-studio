@@ -1,0 +1,33 @@
+Tutorial: Loops and branches
+
+Goal: repeat code with LOOP and with a counter, and choose between paths with CMP and conditional jumps.
+Sample: Loops (and afterwards Conditional jumps).
+
+1. Open the Loops sample and run it with F5. It counts 1 to 10 with LOOP, prints the sum 55, then counts down from 5
+   with DEC and JNZ.
+
+2. Set a breakpoint (F9) on loop next_number and press F5. Watch CX in the Registers panel: it starts at 10. Press
+   F11: LOOP subtracts 1 from CX (9) and jumps back to next_number because CX isn't 0.
+
+3. Press F5 to continue to the breakpoint again a few times and watch CX count down. When CX reaches 0, LOOP doesn't
+   jump and execution falls through to the code after the loop.
+
+4. Now the second loop: dec bx sets ZF when BX becomes 0, and jnz down jumps back while ZF = 0. Step the last pass
+   and watch ZF turn to 1 in the Flags panel; then JNZ doesn't jump.
+
+5. Open the Conditional jumps sample. compare uses cmp ax, bx followed by jb, je and a fall-through: exactly one path
+   runs. Step a comparison and watch which jump is taken.
+
+6. The last line compares FFFFh with 1. JA (unsigned) jumps because 65535 > 1; JL (signed) also jumps because -1 < 1.
+   The same flags, read two ways.
+
+Try it yourself
+  - Make the first loop count to 20. What is the sum? (210)
+  - In the Loops sample, set CX to 0 before LOOP's first pass: LOOP decrements it to FFFFh and runs 65536 times.
+    JCXZ before a loop avoids that.
+
+What to remember
+  - LOOP decrements CX and jumps while CX isn't 0; it doesn't change the flags.
+  - CMP sets the flags like SUB but keeps no result; the jump after it decides.
+  - JB/JA for unsigned numbers, JL/JG for signed numbers; the reference page Jumps, loops, calls and interrupts lists
+    them all.

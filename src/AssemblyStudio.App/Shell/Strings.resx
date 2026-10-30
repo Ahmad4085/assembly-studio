@@ -308,4 +308,5 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="LearnTextName" xml:space="preserve"><value>Learn text</value><comment>UIA name of the Learn text view</comment></data>
   <data name="DocSampleCopy" xml:space="preserve"><value>{0} (copy)</value><comment>Tab title of an untitled sample copy. {0} = sample file name</comment></data>
   <data name="WelcomeSample" xml:space="preserve"><value>Open a _sample</value><comment>Welcome page button (UI-020)</comment></data>
+  <data name="LearnOpenTutorialSample" xml:space="preserve"><value>Open the sample: {0}</value><comment>Tutorial link button (FR-070). {0} = sample title</comment></data>
 </root>

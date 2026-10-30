@@ -1,0 +1,95 @@
+Data transfer instructions
+Generated from the instruction reference data and the engine's opcode table. Each flag statement is checked against the engine by the automated tests.
+Flags: OF overflow, DF direction, IF interrupt enable, TF trap, SF sign, ZF zero, AF auxiliary carry, PF parity, CF carry.
+
+MOV - Move
+  Copies the source to the destination: destination = source.
+  Example: mov ax, 1234h
+  Flags changed: none
+  All other flags keep their values.
+  There is no memory-to-memory form, and no form that loads a constant straight into a segment register: go through a general register.
+  Opcodes: 88h MOV rm8, r8; 89h MOV rm16, r16; 8Ah MOV r8, rm8; 8Bh MOV r16, rm16; 8Ch MOV rm16, Sreg; 8Eh MOV Sreg, rm16; A0h MOV AL, [moffs8]; A1h MOV AX, [moffs16]; A2h MOV [moffs8], AL; A3h MOV [moffs16], AX; B0h MOV AL, imm8; B1h MOV CL, imm8; B2h MOV DL, imm8; B3h MOV BL, imm8; B4h MOV AH, imm8; B5h MOV CH, imm8; B6h MOV DH, imm8; B7h MOV BH, imm8; B8h MOV AX, imm16; B9h MOV CX, imm16; BAh MOV DX, imm16; BBh MOV BX, imm16; BCh MOV SP, imm16; BDh MOV BP, imm16; BEh MOV SI, imm16; BFh MOV DI, imm16; C6h /0 (MOV rm8, imm8); C7h /0 (MOV rm16, imm16)
+
+XCHG - Exchange
+  Swaps the two operands.
+  Example: xchg ax, bx
+  Flags changed: none
+  All other flags keep their values.
+  XCHG AX, AX is the same byte as NOP (90h).
+  Opcodes: 86h XCHG rm8, r8; 87h XCHG rm16, r16; 91h XCHG AX, CX; 92h XCHG AX, DX; 93h XCHG AX, BX; 94h XCHG AX, SP; 95h XCHG AX, BP; 96h XCHG AX, SI; 97h XCHG AX, DI
+
+PUSH - Push a word onto the stack
+  SP = SP - 2, then the word is stored at SS:SP.
+  Example: push ax
+  Flags changed: none
+  All other flags keep their values.
+  Only words can be pushed. PUSH SP stores the value SP has after the decrement (8086 behavior).
+  Opcodes: 06h PUSH ES; 0Eh PUSH CS; 16h PUSH SS; 1Eh PUSH DS; 50h PUSH AX; 51h PUSH CX; 52h PUSH DX; 53h PUSH BX; 54h PUSH SP; 55h PUSH BP; 56h PUSH SI; 57h PUSH DI; FFh /6 (GRP5 rm16)
+
+POP - Pop a word from the stack
+  The word at SS:SP is copied to the destination, then SP = SP + 2.
+  Example: pop bx
+  Flags changed: none
+  All other flags keep their values.
+  POP CS (0Fh) is not supported.
+  Opcodes: 07h POP ES; 17h POP SS; 1Fh POP DS; 58h POP AX; 59h POP CX; 5Ah POP DX; 5Bh POP BX; 5Ch POP SP; 5Dh POP BP; 5Eh POP SI; 5Fh POP DI; 8Fh /0 (POP rm16)
+
+PUSHF - Push the flags
+  Pushes the FLAGS register.
+  Example: pushf
+  Flags changed: none
+  All other flags keep their values.
+  Together with POP this is how a program reads all the flags (as in the arithmetic-flags sample).
+  Opcodes: 9Ch PUSHF
+
+POPF - Pop the flags
+  Pops a word into the FLAGS register.
+  Example: popf
+  Flags changed: OF DF IF TF SF ZF AF PF CF
+  Every flag takes the value of its bit in the popped word.
+  Opcodes: 9Dh POPF
+
+LAHF - Load AH from the flags
+  AH = the low byte of FLAGS (SF, ZF, AF, PF and CF).
+  Example: lahf
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: 9Fh LAHF
+
+SAHF - Store AH into the flags
+  The low byte of FLAGS = AH.
+  Example: sahf
+  Flags changed: SF ZF AF PF CF
+  All other flags keep their values.
+  OF is in the high byte, so SAHF can't change it.
+  Opcodes: 9Eh SAHF
+
+LEA - Load effective address
+  Puts the offset of the memory operand in a register, without reading memory.
+  Example: lea si, [bx + 4]
+  Flags changed: none
+  All other flags keep their values.
+  Handy for adding registers and constants: lea ax, [bx + si + 4] computes BX + SI + 4.
+  Opcodes: 8Dh LEA r16, m
+
+LDS - Load pointer using DS
+  Reads a far pointer from memory: the register gets the offset (first word), DS the segment (second word).
+  Example: lds si, [pointer]
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: C5h LDS r16, m16:16
+
+LES - Load pointer using ES
+  Like LDS, but loads ES.
+  Example: les di, [pointer]
+  Flags changed: none
+  All other flags keep their values.
+  Opcodes: C4h LES r16, m16:16
+
+XLAT - Translate with a table
+  AL = the byte at DS:[BX + AL].
+  Example: xlatb
+  Flags changed: none
+  All other flags keep their values.
+  BX points at a table of up to 256 bytes; AL is the index.
+  Opcodes: D7h XLATB

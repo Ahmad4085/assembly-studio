@@ -104,9 +104,19 @@ public sealed partial class LearnViewModel : ObservableObject
 
     /// <summary>The selected entry, or <see langword="null"/> when a section heading (or nothing) is selected.</summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasSelection), nameof(IsSampleSelected), nameof(SelectedText))]
-    [NotifyCanExecuteChangedFor(nameof(OpenSelectedCommand))]
+    [NotifyPropertyChangedFor(nameof(HasSelection), nameof(IsSampleSelected), nameof(SelectedText), nameof(LinkedSample), nameof(LinkedSampleLabel))]
+    [NotifyCanExecuteChangedFor(nameof(OpenSelectedCommand), nameof(OpenLinkedSampleCommand))]
     public partial LearnItemViewModel? SelectedItem { get; set; }
+
+    /// <summary>The sample the selected tutorial works through (FR-070), or <see langword="null"/>.</summary>
+    public ContentItem? LinkedSample => SelectedItem?.Item is { Kind: ContentKind.Tutorial, Sample: { } id }
+        ? _catalog.Items.FirstOrDefault(i => i.Kind == ContentKind.Sample && i.Id == id)
+        : null;
+
+    /// <summary>The label of the tutorial's sample link ("Open the sample: Hello, World").</summary>
+    public string? LinkedSampleLabel => LinkedSample is { } sample
+        ? string.Format(System.Globalization.CultureInfo.CurrentCulture, System.Text.CompositeFormat.Parse(Strings.LearnOpenTutorialSample), sample.Title)
+        : null;
 
     /// <summary>Whether an entry is selected.</summary>
     public bool HasSelection => SelectedItem is not null;
@@ -149,6 +159,18 @@ public sealed partial class LearnViewModel : ObservableObject
             OpenSample(sample.Item);
         }
     }
+
+    /// <summary>AC-036: opens the selected tutorial's sample as an untitled copy.</summary>
+    [RelayCommand(CanExecute = nameof(HasLinkedSample))]
+    private void OpenLinkedSample()
+    {
+        if (LinkedSample is { } sample)
+        {
+            OpenSample(sample);
+        }
+    }
+
+    private bool HasLinkedSample() => LinkedSample is not null;
 
     /// <summary>FR-069: a new untitled document holding the sample's text, named after the sample; the original stays
     /// untouched and Save asks where to save the copy.</summary>

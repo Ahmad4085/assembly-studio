@@ -10,8 +10,10 @@ namespace AssemblyStudio.Engine.I8086;
 /// discarded), NOT (F6/F7 arm 2 — no flags), and the shifts/rotates D0-D3 with 8086 count
 /// semantics: the count is not masked (masking arrived with the 186), a count of 0 changes
 /// nothing at all, and OF is defined only for count 1 (left untouched otherwise — the oracle masks
-/// exclude it). Rotates touch only CF (and OF for count 1); AF is undefined for every logic and
-/// shift instruction and is left untouched. Arm 6 of D0-D3 is the undocumented 8086 SETMO,
+/// exclude it). Rotates touch only CF (and OF for count 1); AF is undefined for the logic
+/// instructions and the shifts (not the rotates) and is left untouched. Both undefined cases are
+/// reported in the step's undefined-flag mask (ADR-0003 §3; DEF-008, found by the TASK-092
+/// reference consistency test). Arm 6 of D0-D3 is the undocumented 8086 SETMO,
 /// implemented as the oracle records it: the operand becomes all ones (0xFF/0xFFFF), no-op at
 /// count 0; the official metadata reports its flags undefined, but our values match the real
 /// chip's raw behavior (SF=1, ZF=0, PF=1, CF=OF=AF=0).
@@ -34,7 +36,7 @@ public sealed partial class Cpu8086
         ushort left = wide ? ReadRm16(s, m) : ReadRm8(s, m);
         ushort right = wide ? GetReg16(s, m.Reg) : GetReg8(s, m.Reg);
         _state = s with { Flags = TestFlags(s, wide, left, right) };
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = FlagBit.AF };
     }
 
     // ---- TEST AL/AX, imm (A8/A9) ---------------------------------------------------------------------
@@ -47,7 +49,7 @@ public sealed partial class Cpu8086
         ushort left = wide ? s.AX : (ushort)(s.AX & 0xFF);
         ushort right = wide ? Fetch16(ref cursor) : Fetch8(ref cursor);
         _state = s with { Flags = TestFlags(s, wide, left, right) };
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = FlagBit.AF };
     }
 
     /// <summary>TEST r/m,imm core: ModR/M already decoded (arm 0; the undocumented /1 alias is not
@@ -58,7 +60,7 @@ public sealed partial class Cpu8086
         var s = _state;
         ushort left = wide ? ReadRm16(s, m) : ReadRm8(s, m);
         _state = s with { Flags = TestFlags(s, wide, left, right) };
-        return Executed(cursor);
+        return Executed(cursor) with { UndefinedFlags = FlagBit.AF };
     }
 
     // ---- NOT (F6/F7 arm 2): no flags ----------------------------------------------------------------
@@ -243,6 +245,9 @@ public sealed partial class Cpu8086
             WriteRm8(ref s, m, (byte)result);
         }
         _state = s with { Flags = outFlags };
-        return Executed(cursor);
+
+        // ADR-0003 §3 (DEF-008): AF is undefined after SHL/SHR/SAR, and OF after any shift or rotate by more than 1.
+        FlagBit undefined = (m.Reg >= 4 ? FlagBit.AF : FlagBit.None) | (count > 1 ? FlagBit.OF : FlagBit.None);
+        return Executed(cursor) with { UndefinedFlags = undefined };
     }
 }

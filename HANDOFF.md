@@ -5,20 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 16:09 +0500 by Claude Code (Opus 5.5), after completing TASK-091 |
-| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090, 091 Done. Eligible: `TASK-092`, `TASK-093`, `TASK-101`** |
-| Last completed | TASK-091 Sample programs with automated verification (Done 2026-10-30 16:09 +0500) |
-| Git state | HEAD `bfb3873` (TASK-091 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 16:48 +0500 by Claude Code (Opus 5.5), after completing TASK-092 |
+| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090, 091, 092 Done. Eligible: `TASK-093` help, `TASK-101` installer** |
+| Last completed | TASK-092 Tutorials and reference (Done 2026-10-30 16:48 +0500) |
+| Git state | HEAD `c44294e` + uncommitted TASK-092 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 16:00 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1214/1214 passed**, two consecutive runs (2026-10-30 16:05 and 16:08 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 16:28 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1315/1315 passed**, two consecutive runs (2026-10-30, finished 16:34 and after).
+- Engine suite including the SingleStepTests oracle: 629/629 after the DEF-008 fix.
 
 ## Changes since the previous handoff
-- **TASK-091 Sample programs** (Claude Code, uncommitted):
-  - 8 samples in `src/AssemblyStudio.Content/Content/Samples/*.asm` plus their `catalog.json` entries. `ContentItem.Input` holds the documented keyboard input.
-  - `tests/AssemblyStudio.ProgramTests/SampleTests.cs` runs every catalog sample. **Adding a sample = add the .asm + a catalog entry with `expectedOutput` (and `input` if it reads the keyboard); the test picks it up.**
-  - Reminder: DOS 09h returns AL = 24h; save AX around print calls.
+- **TASK-092 Tutorials and reference** (Claude Code, uncommitted):
+  - Content: `Tutorials/*.txt` (5), `Reference/*.txt` (4 concept + 7 generated instruction pages), catalog entries, `ContentItem.Sample` (tutorial → sample link, validated).
+  - Data: `src/AssemblyStudio.Content/ReferenceData/instructions.json` (not embedded).
+  - **To change the instruction reference:** edit `instructions.json`, then run `ReferenceTests` with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1`, rebuild (so the pages are embedded), and run the tests again.
+  - **DEF-008 engine change** in `Cpu8086.Arithmetic.cs` and `Cpu8086.Logic.cs`: reports AF/OF undefined. The Flags panel (TASK-081) should show `UndefinedFlags` as undefined.
+  - Learn: tutorial sample-link button (`LearnViewModel.LinkedSample`, `OpenLinkedSampleCommand`).
+  - Open proposal: a wider reading view for Learn text (UI-015 design decision).
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -39,14 +43,17 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-091 committed. Files were:
-   - `src/AssemblyStudio.Content/{ContentCatalog.cs, Content/catalog.json, Content/Samples/*}`
-   - `tests/AssemblyStudio.ProgramTests/{AssemblyStudio.ProgramTests.csproj, ProgramHarness.cs, SampleTests.cs}`
-   - `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/input-on-tutorial/*}`
+1. When the user asks: commit TASK-092. Files:
+   - `src/AssemblyStudio.Content/{ContentCatalog.cs, ReferenceData/instructions.json, Content/catalog.json, Content/Tutorials/*, Content/Reference/*}`
+   - `src/AssemblyStudio.Engine.I8086/{Cpu8086.Arithmetic.cs, Cpu8086.Logic.cs}`
+   - `src/AssemblyStudio.App/{Learn/LearnViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.resx, Shell/Strings.cs}`
+   - `tests/AssemblyStudio.ProgramTests/{ProgramHarness.cs, ReferenceTests.cs}`
+   - `tests/AssemblyStudio.Engine.I8086.Tests/UndefinedFlagMaskTests.cs`
+   - `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/valid/catalog.json, Fixtures/tutorial-without-sample/*}`
    - `tests/AssemblyStudio.App.Tests/Learn/LearnTests.cs`
-   - `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-092` (tutorials and reference) or `TASK-093` (help). User: AC-059 check → TASK-061 → TASK-064 and M5.
-3. User: TASK-006 test VMs, TASK-100 license decision, DEF-003 decision, the first version number.
+   - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files
+2. `/assembly-implement TASK-093` (help). User: AC-059 check → TASK-061 → TASK-064 and M5.
+3. User: TASK-006, TASK-100, DEF-003 decision, the first version number, the Learn reading-width proposal.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

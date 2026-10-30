@@ -248,6 +248,69 @@ public sealed class LearnTests : IDisposable
     }
 
     [Fact]
+    public void AC_036_every_tutorial_and_reference_page_displays_and_each_tutorial_opens_its_sample()
+    {
+        var workspace = new WorkspaceViewModel(new WorkspaceViewModelTests.FakeDialogs(), new MemoryRecentFilesStore());
+        var catalog = EmbeddedContentCatalog.BuiltIn(); // embedded: nothing is read from disk or the network
+        var learn = new LearnViewModel(catalog, workspace);
+        LearnItemViewModel[] tutorials = [.. learn.Sections.Single(s => s.Kind == ContentKind.Tutorial).Items];
+        LearnItemViewModel[] reference = [.. learn.Sections.Single(s => s.Kind == ContentKind.Reference).Items];
+
+        Assert.True(tutorials.Length >= 5, $"{tutorials.Length} tutorials (FR-070: at least 5)");
+        Assert.Subset(reference.Select(r => r.Title).ToHashSet(), new HashSet<string> { "Registers", "Flags", "Segmented memory", "The stack" });
+        foreach (LearnItemViewModel page in tutorials.Concat(reference))
+        {
+            learn.Select(page);
+            Assert.False(string.IsNullOrWhiteSpace(learn.SelectedText), page.Title);
+        }
+
+        foreach (LearnItemViewModel tutorial in tutorials)
+        {
+            learn.Select(tutorial);
+            ContentItem sample = Assert.IsType<ContentItem>(learn.LinkedSample);
+            Assert.Equal($"Open the sample: {sample.Title}", learn.LinkedSampleLabel);
+
+            learn.OpenLinkedSampleCommand.Execute(null);
+
+            Assert.Equal($"{sample.FileName} (copy)", workspace.ActiveDocument!.Title);
+            Assert.Equal(catalog.ReadText(sample), workspace.ActiveDocument.Text);
+        }
+
+        learn.Select(reference[0]);
+        Assert.False(learn.OpenLinkedSampleCommand.CanExecute(null)); // reference pages have no sample link
+    }
+
+    [Fact]
+    public void A_tutorial_shows_its_text_and_the_sample_link_in_the_sidebar()
+    {
+        StaTestThread.Run(() =>
+        {
+            var workspace = new WorkspaceViewModel(new WorkspaceViewModelTests.FakeDialogs(), new MemoryRecentFilesStore());
+            var learn = new LearnViewModel(EmbeddedContentCatalog.BuiltIn(), workspace);
+            var shell = new ShellViewModel(new ShellViewModelTests.MemoryLayoutStore(null), "test", workspace, learn: learn);
+            var window = new MainWindow(shell, persistLayout: false) { Width = 1400, Height = 900 };
+            try
+            {
+                window.Show();
+                shell.ShowLearnSectionCommand.Execute(ContentKind.Tutorial);
+                learn.Sections.Single(s => s.Kind == ContentKind.Tutorial).Items.Single(i => i.Item.Id == "tutorial-flags").IsSelected = true;
+                window.UpdateLayout();
+
+                var link = (Button)window.FindName("LearnOpenTutorialSample");
+                Assert.True(link.IsVisible);
+                Assert.Equal("Open the sample: Arithmetic and flags", ((TextBlock)link.Content).Text);
+                Assert.Equal("Open the sample: Arithmetic and flags", System.Windows.Automation.AutomationProperties.GetName(link));
+                Assert.StartsWith("Tutorial: Flags", ((TextBox)window.FindName("LearnText")).Text, StringComparison.Ordinal);
+                Render(window, "learn-tutorial-flags.png");
+            }
+            finally
+            {
+                window.Close();
+            }
+        });
+    }
+
+    [Fact]
     public void The_welcome_page_offers_open_a_sample()
     {
         StaTestThread.Run(() =>

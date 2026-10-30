@@ -13,6 +13,7 @@ namespace AssemblyStudio.Engine.I8086.Tests;
 /// throughput measurement fail intermittently in full solution runs.
 /// </summary>
 [Collection(nameof(TimingSensitive))]
+[Trait("Category", "Performance")]
 public class EnginePerformanceTests
 {
     private static Cpu8086 CreateCpuWithLoop(byte[] loop, out FakeMemory memory)

@@ -5,31 +5,29 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 21:12 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-10-30-1) |
-| Current task | **None in progress.** Testing phase done (report 2026-10-30-1). Remaining implementation waits for user actions: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070) |
-| Last completed | Testing phase, `docs/07-testing/test-report-2026-10-30-1.md` (2026-10-30 21:12 +0500) |
-| Git state | HEAD `c18ffc5` (testing phase committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 21:34 +0500 by Claude Code (Opus 5.5), after WVR-001 and TASK-087 |
+| Current task | **None in progress. Next (user-approved): `TASK-064` editor (AvalonEdit), then toward TASK-080, one task at a time with a commit after each** |
+| Last completed | TASK-087 Test reliability (Done 2026-10-30 21:34 +0500) |
+| Git state | HEAD `26c0a12` + uncommitted WVR-001/TASK-087 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:58 +0500).
-- Test run 2026-10-30-1 (20:58–21:02): **1388 total, 1387 passed, 1 failed** (TC-040 flood test, DEF-006, timing under load).
-- Coverage (20:48–20:55): engine 99.6%, runtime 93.5%; incomplete because of DEF-009.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 21:20 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1382/1382 passed**, two consecutive runs (2026-10-30 21:30 and 21:33 +0500).
+- `build/coverage.ps1 -NoBuild` → complete (21:27): engine 99.6%, runtime 93.5%.
 
 ## Changes since the previous handoff
-- **Testing phase 2026-10-30-1** (Claude Code, uncommitted):
-  - `docs/07-testing/test-plan.md` (new), `docs/07-testing/test-report-2026-10-30-1.md` (new), `docs/07-testing/defects.md` (DEF-006 updated, DEF-009 new).
-  - Traceability v2.4 and acceptance criteria v2.1 test columns.
-  - Backlog summary rows TASK-042/052 → Done.
-  - New tests: `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs`; an FR-001 test in `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`.
-  - **TC numbering:** one TC per test class, in the plan's inventory; new classes get the next free number.
+- **WVR-001 and TASK-087** (Claude Code, uncommitted):
+  - WVR-001: AC-059 postponed to QA, TASK-061 Done under it.
+  - TASK-087: `FloodPerformanceTests` (CPU-time limit), `Category=Performance` trait + `build/coverage.ps1` filter, 6 SkeletonTests deleted.
+  - Test plan v0.2, defects DEF-006/009 Fixed (unverified).
 
 ## Failed tests and known issues
-- `AssemblyStudio.Debugging.Tests.Robustness.HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (TC-040): **failed** in test run 2026-10-30-1 (10.12 s, limit 10 s). DEF-006, Open. Passes alone (1.6–1.8 s). Stays failed until a re-run after a fix proves otherwise.
-- `DEF-009`: wall-clock tests fail under coverage instrumentation; the coverage run is reported incomplete. Open.
+- DEF-006 (flood test, failed in report 2026-10-30-1): fixed in TASK-087 (now `FloodPerformanceTests`, CPU-time limit); passed in two full runs (21:30, 21:33). **Fixed (unverified)** until `/assembly-test rerun DEF-006`.
+- DEF-009 (coverage incomplete): fixed in TASK-087 (performance trait excluded); coverage run complete at 21:27. **Fixed (unverified)**.
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
 - `DEF-002`: one full solution run stalled in the engine tests (2026-10-29 10:36). Not reproduced since.
 - `DEF-003`: `ComLoader` accepts at most 65,278 bytes while FR-031 and the build allow 65,280. **Needs a user decision.**
-- `BLK-002`: TASK-061 waits for the user's manual AC-059 display check.
+- `WVR-001`: the AC-059 manual display check is waived until QA (BLK-002 resolved by the waiver); it must still pass before release.
 
 ## Decisions and constraints to respect
 - ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016.
@@ -51,15 +49,17 @@
   - The instruction reference and the "Unsupported instructions" help page are generated: edit `ReferenceData/instructions.json`, run `ReferenceTests`/`HelpTests` with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1`, rebuild, run the tests again.
   - The help consistency tests (TC-029, TC-043, TC-056) fail when DOS functions, NASM arguments, build codes, limits, start state or menu shortcuts change: update the help with them.
   - Installer: the AppId in `build/installer/AssemblyStudio.iss` must never change. Run ISCC from PowerShell (Git Bash rewrites `/Q` and `/D`). `test-installer.ps1` always uninstalls what it installed.
+  - Performance tests carry `[Trait("Category", "Performance")]` and a non-parallel collection; the coverage script excludes the trait.
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: testing phase committed. Files were:
-   - `docs/07-testing/{test-plan.md, test-report-2026-10-30-1.md, defects.md}`
-   - `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `docs/05-planning/backlog.md`
-   - `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs`, `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`
-   - shared memory files
-2. User decisions: a task to fix DEF-006 and DEF-009 (test-only fixes); `/assembly-qa` for a QA verdict on the current scope; the user actions AC-059, TASK-100, TASK-006.
+1. When the user asks: commit WVR-001 + TASK-087. Files:
+   - `PROJECT_STATE.md` (waiver, approval, blocker), `docs/05-planning/backlog.md` (TASK-061 Done, TASK-087)
+   - `tests/AssemblyStudio.Debugging.Tests/Robustness/{FloodPerformanceTests.cs, HostileProgramTests.cs}`
+   - tagged test files: `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs`, `tests/AssemblyStudio.App.Tests/StartupTimeTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs}`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`
+   - the deleted `tests/*/SkeletonTests.cs` (6), `build/coverage.ps1`, `docs/07-testing/{test-plan.md, defects.md}`, shared memory files
+2. `/assembly-implement TASK-064` (user-approved path to Run/Debug).
+3. User: TASK-006, TASK-100, DEF-003 decision; AC-059 in QA (WVR-001).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

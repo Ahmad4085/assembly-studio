@@ -39,8 +39,10 @@ foreach ($project in $testProjects) {
     $name = [System.IO.Path]::GetFileNameWithoutExtension($project)
     $resultsDir = Join-Path $OutputDir $name
     Write-Host "Coverage: $name" -ForegroundColor Cyan
+    # Performance tests (trait Category=Performance) measure time, which instrumentation distorts (DEF-009); they run in
+    # the normal test runs instead.
     & dotnet test --project (Join-Path $RepoRoot $project) -c $Configuration --no-build `
-        --coverlet --coverlet-output-format cobertura --results-directory $resultsDir
+        --coverlet --coverlet-output-format cobertura --results-directory $resultsDir --filter-not-trait "Category=Performance"
     if ($LASTEXITCODE -ne 0) {
         $failures.Add("$name : dotnet test exit $LASTEXITCODE")
     }

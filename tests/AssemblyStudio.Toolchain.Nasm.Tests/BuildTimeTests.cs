@@ -11,6 +11,7 @@ namespace AssemblyStudio.Toolchain.Nasm.Tests;
 /// core, and one build measured 2.6 s there against 0.18–0.39 s alone (2026-10-29).
 /// </summary>
 [Collection(nameof(BuildTimeSensitive))]
+[Trait("Category", "Performance")]
 public sealed class BuildTimeTests
 {
     [Fact]

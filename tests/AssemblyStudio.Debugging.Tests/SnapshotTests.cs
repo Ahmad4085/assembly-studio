@@ -288,6 +288,7 @@ public sealed class SnapshotTests
 
     // ---- NFR-002: step latency (session part) ----
 
+    [Trait("Category", "Performance")]
     [Fact]
     public void Step_to_published_snapshot_takes_well_under_100_ms()
     {

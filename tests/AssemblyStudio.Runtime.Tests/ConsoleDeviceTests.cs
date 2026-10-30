@@ -390,6 +390,7 @@ public class ConsoleDeviceTests
 
     // ---- Output floods (TASK-054) ----------------------------------------------------------
 
+    [Trait("Category", "Performance")]
     [Fact]
     public void A_flood_larger_than_the_cap_keeps_writes_fast_and_the_delta_is_the_newest_output()
     {

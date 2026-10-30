@@ -1643,3 +1643,28 @@
   - Open: DEF-006 (failed test, open), DEF-009, DEF-001, DEF-002, DEF-003 (decision), BLK-002.
   - Six placeholder `SkeletonTests` (removal needs user approval).
 - **Next step:** user decisions: a test-only fix task for DEF-006/DEF-009; `/assembly-qa`; the user actions AC-059, TASK-100, TASK-006.
+
+### 2026-10-30 21:13 – 21:34 +0500 · Claude Code (Opus 5.5) · Waiver WVR-001 and TASK-087 Test reliability
+- **Summary:**
+  - The user asked how many tasks are done and why Run/Debug don't work. Answer:
+    - 40 of 62 tasks done; 22 remaining.
+    - The engine, DOS, NASM and debugger engine are built and tested; the Run/Debug UI is M5, which waited on TASK-061/AC-059.
+  - The user then wrote "start task 61 which is block and other you new add i approve it". I asked what that approves. The user chose:
+    - "Waive it for now (Recommended)";
+    - "Fix DEF-006 and DEF-009, Remove placeholder tests, Start the editor/Run path".
+  - Recorded **WVR-001**: AC-059 postponed to QA, must pass before release. TASK-061 Done under the waiver; BLK-002 resolved by it.
+  - Added **TASK-087**, approved, and implemented it:
+    - **DEF-006:** the flood test moved to `FloodPerformanceTests` (non-parallel) and its limit is now the process's CPU time, 10 s.
+    - **DEF-009:** `Category=Performance` trait on the performance tests (4 classes, 4 methods); `build/coverage.ps1` excludes it.
+    - **Placeholders:** the 6 `SkeletonTests` deleted with `git rm`.
+- **Files changed:** `PROJECT_STATE.md`, `docs/05-planning/backlog.md`, `tests/AssemblyStudio.Debugging.Tests/Robustness/{FloodPerformanceTests.cs (new), HostileProgramTests.cs}`, `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs`, `tests/AssemblyStudio.App.Tests/StartupTimeTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs}`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`, `tests/*/SkeletonTests.cs` (6 deleted), `build/coverage.ps1`, `docs/07-testing/{test-plan.md, defects.md}`, `CURRENT_TASK.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Release build **0 warnings, 0 errors** (21:20).
+  - `FloodPerformanceTests` alone: 2.19 s CPU, 1.86 s elapsed.
+  - `build/coverage.ps1 -NoBuild` (21:21–21:27): **complete, no failures**. Engine 99.6%, runtime 93.5%; App 80.4% (was 86.6% with the startup process test counted).
+  - Full solution **1382/1382 at 21:30 and 21:33** (two consecutive runs; 1388 − 6 placeholders).
+  - DEF-006 and DEF-009 are **Fixed (unverified)**; formal verification is `/assembly-test rerun`.
+  - Stopped one of my background wait loops that was watching the wrong output file.
+- **Git state after:** uncommitted changes on top of `26c0a12` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** AC-059 still due (WVR-001). Open: DEF-001, DEF-002, DEF-003 (decision). User: TASK-006, TASK-100.
+- **Next step:** `/assembly-implement TASK-064` (user-approved).

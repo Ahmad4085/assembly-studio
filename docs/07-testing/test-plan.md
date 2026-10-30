@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.1 |
+| Version | 0.2 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.4), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-10-30-1.md` |
@@ -53,7 +53,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-012 | `Engine.I8086.Tests.MulDivBcdTests` | Unit (CPU engine) | AC-031, TASK-015 | 21 |
 | TC-013 | `Engine.I8086.Tests.Oracle.SingleStepOracleHelperTests` | Unit (CPU engine) | — | 6 |
 | TC-014 | `Engine.I8086.Tests.SingleStepOracleTests` | Unit (CPU engine) | TASK-012, TASK-013, TASK-014, TASK-015, TASK-016, TASK-017, TASK-018 | 283 |
-| TC-015 | `Engine.I8086.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Unit (CPU engine) | — | 1 |
+| TC-015 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-016 | `Engine.I8086.Tests.StringInstructionTests` | Unit (CPU engine) | FR-036, NFR-017, TASK-017 | 16 |
 | TC-017 | `Engine.I8086.Tests.UndefinedFlagMaskTests` | Unit (CPU engine) | FR-048, TASK-092 | 18 |
 | TC-018 | `Runtime.Tests.ComLoaderTests` | Unit (runtime) | AC-021, FR-056 | 9 |
@@ -61,16 +61,16 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-020 | `Runtime.Tests.InterruptRouterTests` | Unit (runtime) | AC-029, AC-031, FR-038, FR-040, NFR-013 | 18 |
 | TC-021 | `Runtime.Tests.MachineTests` | Unit (runtime) | — | 5 |
 | TC-022 | `Runtime.Tests.RealModeMemoryTests` | Unit (runtime) | — | 24 |
-| TC-023 | `Runtime.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Unit (runtime) | — | 1 |
+| TC-023 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-024 | `Os.Dos.Tests.DosServicesTests` | Integration (DOS services on the engine) | AC-022, AC-023, AC-064, TASK-034, TASK-035, TASK-036 | 72 |
-| TC-025 | `Os.Dos.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Integration (DOS services on the engine) | — | 1 |
+| TC-025 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041 | 27 |
 | TC-027 | `Toolchain.Nasm.Tests.BuildTimeTests` | Integration (NASM toolchain) | AC-056, NFR-006, TASK-086 | 1 |
 | TC-028 | `Toolchain.Nasm.Tests.CpuDirectiveGuardTests` | Integration (NASM toolchain) | FR-027, TASK-042 | 16 |
 | TC-029 | `Toolchain.Nasm.Tests.HelpConsistencyTests` | Integration (NASM toolchain) | AC-051, FR-032, TASK-093 | 16 |
 | TC-030 | `Toolchain.Nasm.Tests.NasmAssemblerTests` | Integration (NASM toolchain) | AC-015, AC-016, AC-019, FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, TASK-040 | 29 |
 | TC-031 | `Toolchain.Nasm.Tests.NasmLocatorTests` | Integration (NASM toolchain) | — | 5 |
-| TC-032 | `Toolchain.Nasm.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Integration (NASM toolchain) | — | 1 |
+| TC-032 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-033 | `Toolchain.Nasm.Tests.SourceMapTests` | Integration (NASM toolchain) | TASK-042, TASK-043 | 45 |
 | TC-034 | `Debugging.Tests.AcceptanceStepTests` | Integration (debug session) | AC-024, AC-026, FR-049, FR-054, FR-055, FR-056, TASK-080, TASK-082 | 2 |
 | TC-035 | `Debugging.Tests.BreakpointStepOverTests` | Integration (debug session) | AC-032, AC-033, FR-050, FR-052, TASK-052 | 12 |
@@ -78,8 +78,8 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-037 | `Debugging.Tests.InputAndReplayTests` | Integration (debug session) | AC-047, FR-064, NFR-016, TASK-034, TASK-036, TASK-051, TASK-053 | 10 |
 | TC-038 | `Debugging.Tests.Robustness.FaultContainmentTests` | Integration (debug session) | NFR-010, TASK-054 | 4 |
 | TC-039 | `Debugging.Tests.Robustness.FuzzAndSoakTests` | Integration (debug session) | NFR-010, TASK-054 | 2 |
-| TC-040 | `Debugging.Tests.Robustness.HostileProgramTests` | Integration (debug session) | AC-045, FR-096, NFR-015, TASK-054 | 4 |
-| TC-041 | `Debugging.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Integration (debug session) | — | 1 |
+| TC-040 | `Debugging.Tests.Robustness.HostileProgramTests` | Integration (debug session) | AC-045, FR-096, NFR-015, TASK-054 | 3 |
+| TC-041 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-042 | `Debugging.Tests.SnapshotTests` | Integration (debug session) | AC-048, AC-049, FR-053, NFR-002, NFR-018, TASK-051 | 12 |
 | TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093 | 6 |
 | TC-044 | `ProgramTests.ProgramTests` | Program-level (assembler -> loader -> engine) | AC-017, AC-021, AC-022, AC-023, AC-029, AC-031, AC-047, AC-064, TASK-044 | 14 |
@@ -108,9 +108,10 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-067 | `Content.Tests.ContentCatalogTests` | Unit (content catalog) | FR-068, FR-069, TASK-090 | 13 |
 | TC-068 | `Core.Tests.CpuStateTests` | Unit (core) | — | 4 |
 | TC-069 | `Core.Tests.MachineSnapshotTests` | Unit (core) | — | 4 |
-| TC-070 | `Core.Tests.SkeletonTests` (placeholder: checks only that the project loads; not evidence) | Unit (core) | — | 1 |
+| TC-070 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-071 | `ArchitectureTests.ArchitectureRuleTests` | Architecture rules | AC-057, NFR-019, NFR-020 | 23 |
 | TC-072 | `ArchitectureTests.ProjectFileRuleTests` | Architecture rules | AC-057, NFR-019 | 16 |
+| TC-073 | `Debugging.Tests.Robustness.FloodPerformanceTests` | Integration (debug session), performance | AC-045, FR-096, NFR-015, TASK-054, TASK-087 | 1 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -129,12 +130,9 @@ Entry: Release build with 0 warnings and 0 errors. Exit: every test for implemen
 has a defect; no unexplained failure.
 
 ## 6. Known limitations
-- **Wall-clock tests** (not deterministic by nature): TC-008 engine performance, TC-027 build time, TC-065 startup time and
-  the flood test in TC-040 compare elapsed time with limits and can fail under load (DEF-004 fixed for the toolchain, DEF-006
-  open for the flood test) or under coverage instrumentation (DEF-009). They are kept as performance guards and reported as
-  such.
-- **Placeholder tests:** TC-015, TC-023, TC-025, TC-032, TC-041 and TC-070 (`SkeletonTests`) only check that their project
-  loads. They count in the runner's totals but are not evidence for any requirement. Removing them needs user approval.
+- **Performance tests** (not deterministic by nature) carry the trait `Category=Performance`: TC-008 engine performance,
+  TC-027 build time, TC-065 startup time, TC-073 flood (CPU time, DEF-006), and single methods in TC-019, TC-036 and TC-042.
+  They run in non-parallel collections within their assembly and are left out of the instrumented coverage run (DEF-009).
 - **Not run (not built):** AC-009, AC-010, AC-011, AC-046 (editor, TASK-064/065), AC-052 (number format, TASK-081), AC-043
   (keyboard-only workflow, needs M5), AC-060 (localizable strings, TASK-104), AC-061 (supply chain, TASK-102).
 - **Not run (needs the user or clean machines):** AC-059 (display scaling, BLK-002), AC-044 (Narrator, TASK-069), AC-001 and
@@ -144,3 +142,4 @@ has a defect; no unexplained failure.
 
 ## Changelog
 - 2026-10-30 v0.1: Initial plan (testing phase, Claude Code (Opus 5.5)): inventory TC-001..TC-072 from the executed suite.
+- 2026-10-30 v0.2: TASK-087: TC-015, TC-023, TC-025, TC-032, TC-041, TC-070 retired (placeholders deleted); TC-073 `FloodPerformanceTests` (moved from TC-040); performance trait and coverage exclusion.

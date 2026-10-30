@@ -199,6 +199,7 @@ public sealed class DebugSessionTests
 
     // ---- AC-030: runaway program ----
 
+    [Trait("Category", "Performance")]
     [Fact]
     public void AC_030_commands_return_at_once_while_an_endless_loop_runs()
     {
@@ -216,6 +217,7 @@ public sealed class DebugSessionTests
         WaitFor(session, s => IsPaused(s, PauseReason.UserPause));
     }
 
+    [Trait("Category", "Performance")]
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

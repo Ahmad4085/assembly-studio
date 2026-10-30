@@ -67,7 +67,7 @@
 | TASK-053 | Input routing, Ctrl-C delivery and replay | M3 | TASK-050, TASK-036 | L | FR-064, NFR-016 | Done |
 | TASK-054 | Fault containment, fuzz and soak | M3 | TASK-050 | M | NFR-010, FR-096, NFR-013, NFR-015 | Done |
 | TASK-060 | WPF shell and layout | M4 | TASK-001 | M | FR-091, FR-092, NFR-026, NFR-005 | Done |
-| TASK-061 | Themes, tokens and contrast test | M4 | TASK-060 | M | NFR-022, FR-094, NFR-026 | Blocked |
+| TASK-061 | Themes, tokens and contrast test | M4 | TASK-060 | M | NFR-022, FR-094, NFR-026 | Done |
 | TASK-062 | Document service and file workflow | M4 | TASK-060 | M | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-019, FR-020, NFR-029 | Done |
 | TASK-063 | Crash recovery | M4 | TASK-062 | L | NFR-011 | Done |
 | TASK-064 | Editor integration (AvalonEdit) | M4 | TASK-061 | H | FR-011, FR-012, FR-013, FR-014, FR-022, NFR-001 | Approved |
@@ -84,6 +84,7 @@
 | TASK-084 | Console panel | M5 | TASK-053, TASK-061 | M | FR-063, FR-064, FR-096 | Approved |
 | TASK-085 | Announcements, keyboard-only flow and UI smoke tests | M5 | TASK-080, TASK-081, TASK-082, TASK-083, TASK-084, TASK-069 | M | FR-091, FR-092, FR-093, NFR-022 | Approved |
 | TASK-086 | End-to-end performance check | M5 | TASK-085 | L | NFR-002, NFR-004, NFR-005, NFR-007, NFR-001, NFR-006 | Approved |
+| TASK-087 | Test reliability: wall-clock tests and placeholder tests | M5 | — | L | NFR-002, NFR-003, NFR-021 | Done |
 | TASK-090 | Content catalog and Learn sidebar | M6 | TASK-062 | M | FR-069, FR-071, NFR-023 | Done |
 | TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Done |
 | TASK-092 | Tutorials and reference | M6 | TASK-090, TASK-020 | M | FR-070, FR-071, FR-072 | Done |
@@ -1108,7 +1109,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Blocked (BLK-002: user manual AC-059 check; all automated work done) |
+| Status | Done (2026-10-30 21:17 +0500, waiver WVR-001: the AC-059 manual check is postponed to QA) |
 | Milestone | M4 |
 | Requirements | NFR-022, FR-094, NFR-026 |
 | Decisions / design | UI-001, design tokens v1.0 |
@@ -1582,6 +1583,34 @@
 **Test requirements:**
 - AC-030 (UI part)
 - AC-056 complete
+
+**Definition of Done:** standard (§4).
+
+### TASK-087 Test reliability: wall-clock tests and placeholder tests
+
+| Field | Value |
+|---|---|
+| Status | Done (2026-10-30 21:34 +0500, Claude Code (Opus 5.5)); added 2026-10-30 21:17 +0500 by the user's approval |
+| Milestone | M5 |
+| Requirements | NFR-002, NFR-003, NFR-021 (test infrastructure; DEF-006, DEF-009) |
+| Decisions / design | ADR-0008 |
+| Depends on | — |
+| Risk | L |
+
+**Goal:** Make the wall-clock performance tests reliable and make the coverage run complete, and remove the placeholder tests.
+
+**Scope (in):**
+- Wall-clock tests run outside the parallel full-suite load (non-parallel collection) and are excluded from the instrumented coverage run (a trait the coverage script filters out)
+- Delete the six placeholder `SkeletonTests` (user-approved 2026-10-30)
+
+**Out of scope:**
+- Changing performance limits or product code
+
+**Expected files / projects touched:** `tests/*`, `build/coverage.ps1`
+
+**Test requirements:**
+- DEF-006 and DEF-009 re-verified: full suite twice, coverage run complete
+- Test plan inventory updated (TC numbers of removed classes retired)
 
 **Definition of Done:** standard (§4).
 

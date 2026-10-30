@@ -12,6 +12,7 @@ namespace AssemblyStudio.App.Tests;
 /// a gross regression (10 s) or a failed launch.
 /// </summary>
 [Collection(nameof(AppProcessTests))]
+[Trait("Category", "Performance")]
 public class StartupTimeTests
 {
     [Fact]

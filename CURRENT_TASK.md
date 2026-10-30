@@ -6,10 +6,26 @@
 
 ## Active Task
 
-None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); the editor tasks and M5 depend on it.
+None in progress. Next (user-approved 2026-10-30 21:17): `TASK-064` editor integration (AvalonEdit), then toward `TASK-080`, one task at a time.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done |
+| Milestone 4 progress | TASK-060, 061 (waiver WVR-001), 062, 063, 067, 068 Done; eligible: TASK-064; then TASK-065, 066, 069; TASK-070 needs TASK-006 |
+| Recommended next action | `/assembly-implement TASK-064` |
+| Parallel user actions | AC-059 (waived to QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, first version number, Learn reading-width proposal |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 21:19 +0500 |
+| Milestone | M5 |
+| Goal | Reliable wall-clock tests, a complete coverage run (DEF-006, DEF-009), placeholder tests removed |
+| Approval | User, 2026-10-30 21:17 +0500 (also WVR-001: TASK-061 Done under waiver) |
+| Next after this | TASK-064 (editor), then toward TASK-080, one task at a time |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Last phase | Testing (`/assembly-test`): report `docs/07-testing/test-report-2026-10-30-1.md`, 1387/1388 (1 failure: DEF-006, timing under load) |
 | Recommended next action | **User decides:** fix DEF-006/DEF-009 (a new approved task), `/assembly-qa` once the user wants a QA verdict on what exists, or continue after the user actions (AC-059, TASK-100, TASK-006) |
@@ -253,6 +269,19 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-087 Test reliability: wall-clock tests and placeholder tests (Done 2026-10-30 21:34 +0500, Claude Code (Opus 5.5))
+- Also recorded at 21:17: user waiver **WVR-001** (AC-059 postponed to QA) → TASK-061 Done under the waiver, BLK-002 resolved by it; TASK-087 added and approved.
+- DEF-006: flood test moved to `Robustness/FloodPerformanceTests` (non-parallel `RobustnessSequential`), limit on process CPU time (10 s); alone 2.19 s CPU.
+- DEF-009: `[Trait("Category", "Performance")]` on EnginePerformanceTests, BuildTimeTests, StartupTimeTests, FloodPerformanceTests and 4 timing methods (DebugSessionTests ×2, ConsoleDeviceTests, SnapshotTests); `build/coverage.ps1` passes `--filter-not-trait "Category=Performance"` → coverage run complete (engine 99.6%, runtime 93.5%).
+- Deleted the 6 placeholder `SkeletonTests` (user-approved); test plan v0.2 retires their TCs, adds TC-073.
+- Release build 0 warnings / 0 errors; full solution 1382/1382 twice (21:30, 21:33). DEF-006/009 Fixed (unverified) until `/assembly-test rerun`.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 21:19 / 21:34 +0500 |
 
 ## Completed: Testing phase 2026-10-30-1 (2026-10-30 20:42 – 21:12 +0500, Claude Code (Opus 5.5))
 - `docs/07-testing/test-plan.md` v0.1: inventory TC-001..TC-072 (one per test class, 10 levels), environment, entry/exit, limitations (wall-clock tests, 6 placeholder tests, 16 ACs not run with reasons).

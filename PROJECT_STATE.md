@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 21:12 +0500 by Claude Code (Opus 5.5) (testing phase report 2026-10-30-1) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-061 blocked on BLK-002); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-30 21:34 +0500 by Claude Code (Opus 5.5) (WVR-001, TASK-087 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-061 Done under waiver WVR-001; TASK-064 next); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Latest test report: `docs/07-testing/test-report-2026-10-30-1.md` (1387/1388; failing: TC-040 flood test, DEF-006). Remaining implementation waits for user actions: AC-059 (TASK-061), TASK-100, TASK-006 |
+| Active task | None in progress. Next (user-approved): `TASK-064` editor, then toward `TASK-080` |
 
-| Next recommended action | **User:** AC-059 check, TASK-100 license decision, TASK-006 VMs; decide on fixing DEF-006/DEF-009 (needs an approved task) and on `/assembly-qa` |
+| Next recommended action | `/assembly-implement TASK-064`. User: TASK-100, TASK-006, DEF-003 decision; AC-059 still due in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-087 Test reliability | 2026-10-30 21:34 +0500 | Flood test on CPU time in its own non-parallel class (DEF-006); performance trait excluded from coverage, coverage run complete (DEF-009); 6 placeholder tests deleted. Full solution 1382/1382 (twice) |
 | Testing phase (report 2026-10-30-1) | 2026-10-30 21:12 +0500 | Test plan v0.1 (TC-001..TC-072); 2 gap-fill test classes/cases; full run with TRX/xUnit XML: 1388 total, 1387 passed, **1 failed (DEF-006)**; coverage engine 99.6% / runtime 93.5% (run incomplete, DEF-009); traceability v2.4 and AC v2.1 test statuses |
 | TASK-101 Self-contained publish and Inno Setup installer | 2026-10-30 20:40 +0500 | Pinned Inno Setup 7.1.0 (SHA-256 verified, per-user); per-user offline installer 45.2 MB; installed 148.6 MB; silent install 15–17 s; install/upgrade/uninstall test 21/21 on the dev machine; command-line file opening for the .asm association. `docs/06-implementation/task-101-verification.md`. Full solution 1385/1385 (twice) |
 | TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts | 2026-10-30 20:05 +0500 | 7 help pages (one generated from the opcode table); AC-051 consistency tests against the engine, runtime (all 256 INT 21h functions), loader, NASM command line, build codes and app shortcuts. Release build 0w/0e; full solution 1383/1383 (twice) |
@@ -92,6 +93,7 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-10-30 21:17 +0500 | **Waiver WVR-001** (AC-059 for TASK-061) and **new task TASK-087** (test reliability: DEF-006, DEF-009, placeholder tests) | — | User | answered "Waive it for now (Recommended)" and approved "Fix DEF-006 and DEF-009, Remove placeholder tests, Start the editor/Run path" (2026-10-30 21:17 +0500, after "start task 61 which is block and other you new add i approve it") |
 | 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate |
 | 2026-10-26 17:11 +0500 | **Requirements gate (phase 1)**: requirements set `docs/01-requirements/` + D-010 | 1.0 | User | "approve requirements v0.1 and D-010". PROPOSED → APPROVED. 12 NEEDS_RESEARCH items approved as goals. PROPOSED-basis targets remain unvalidated |
 | 2026-10-26 17:59 +0500 | **Research gate (phase 2)**: `docs/02-research/` set + decisions D-011, D-012, D-013 | 1.0 | User | "approve research v0.1; D1=A; D2=add 00h; D3=approve POC-001,002 and install the SDK". Recommendations are input to ADRs, not decisions |
@@ -101,7 +103,9 @@ See `DECISIONS.md`.
 | 2026-10-26 18:18 +0500 | **Requirements set v2.0** (D-011, D-012 applied; new AC-064) | 2.0 | User | "approve requirements v2.0". FR-039, FR-041, NFR-025 → APPROVED |
 
 ## Waivers
-None.
+| ID | Scope | Reason | Date | Condition / status |
+|---|---|---|---|---|
+| WVR-001 | AC-059 manual display-scaling check (100/125/150/200 %, mixed-DPI monitors), the last open item of TASK-061 | The user postponed the manual check to QA so the editor (TASK-064) and the M5 debugger UI can proceed | 2026-10-30 21:17 +0500 | **Open.** AC-059 must still be run and pass in QA (`/assembly-qa`) and before release; until then AC-059 stays NOT RUN and TASK-061 is Done under this waiver |
 
 ## Outdated documents
 None. Research documents revalidated against requirements v2.0.
@@ -110,18 +114,18 @@ None. Research documents revalidated against requirements v2.0.
 | Item | Status |
 |---|---|
 | Product build (2026-10-30 20:33 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 21:02 +0500) | Test report 2026-10-30-1: `dotnet test --solution AssemblyStudio.slnx -c Release` → **1387/1388 passed, 1 failed**: `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (10.12 s vs 10 s, DEF-006, Open). Previous full runs 1385/1385 at 20:36 and 20:38 |
+| Product tests (2026-10-30 21:33 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1382/1382 passed** in two consecutive runs (after TASK-087). Last test-phase report 2026-10-30-1: 1387/1388 (DEF-006, now Fixed (unverified)) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | **Failed in test run 2026-10-30-1:** `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` (DEF-006). Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-006, DEF-009 (`docs/07-testing/defects.md`) |
+| Failed tests / open defects | Test report 2026-10-30-1 had 1 failure (flood test, DEF-006); after TASK-087 it passes (now `FloodPerformanceTests`, 1382/1382 twice). DEF-006 and DEF-009 Fixed (unverified, awaiting `/assembly-test rerun`). Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |
 |---|---|---|---|
-| BLK-002 | **Open 2026-10-30 11:27 +0500**: AC-059 (display scaling 100/125/150/200 %, two monitors with different DPI) is a manual check on real displays | TASK-061 Done | The user runs the checklist in `docs/06-implementation/task-061-verification.md` and reports the results |
+| ~~BLK-002~~ | **Resolved by waiver WVR-001 2026-10-30 21:17 +0500** (check postponed to QA, not passed). Was: AC-059 (display scaling 100/125/150/200 %, two monitors with different DPI) is a manual check on real displays | TASK-061 Done | The user runs the checklist in `docs/06-implementation/task-061-verification.md` and reports the results |
 | ~~BLK-001~~ | **Resolved 2026-10-26 18:05 +0500**: .NET SDK 10.0.403 installed via WinGet (authorized D-013). `dotnet --list-sdks` → 10.0.403. A WPF template built with 0 warnings and 0 errors | — | — |
 
 ## Open high-impact questions

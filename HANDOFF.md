@@ -8,7 +8,7 @@
 | Written | 2026-10-30 11:51 +0500 by Claude Code (Opus 5.5), after completing TASK-062 |
 | Current task | **None in progress. M1–M3 complete; M4: TASK-060, TASK-062 Done, TASK-061 Blocked (BLK-002). Next eligible: `TASK-063` crash recovery, `TASK-064` editor integration** |
 | Last completed | TASK-062 Document service and file workflow (Done 2026-10-30 11:51 +0500) |
-| Git state | HEAD `5ef8c38` + uncommitted TASK-062 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `c2e6f06` (TASK-062 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 11:43 +0500).
@@ -43,7 +43,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-062. Files:
+1. Done: TASK-062 committed. Files were:
    - `build/generate-strings.ps1`
    - `src/AssemblyStudio.App/{App.xaml.cs, Documents/*, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/MessageDialog.xaml(.cs), Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs, Shell/VisibilityConverters.cs}`
    - `tests/AssemblyStudio.App.Tests/Documents/*`

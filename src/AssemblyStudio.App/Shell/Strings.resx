@@ -228,4 +228,53 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="RecoveryNext" xml:space="preserve"><value>Restore opens them as unsaved documents. Discard deletes the autosaved copies.</value><comment>Recovery prompt next step</comment></data>
   <data name="DialogRestore" xml:space="preserve"><value>_Restore</value><comment>Button</comment></data>
   <data name="DialogDiscard" xml:space="preserve"><value>_Discard</value><comment>Button</comment></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>Settings</value><comment>Settings dialog title (UI-017)</comment></data>
+  <data name="SettingsSectionAssembler" xml:space="preserve"><value>Assembler</value><comment>Settings section</comment></data>
+  <data name="SettingsSectionEditor" xml:space="preserve"><value>Editor</value><comment>Settings section</comment></data>
+  <data name="SettingsSectionExecution" xml:space="preserve"><value>Execution</value><comment>Settings section</comment></data>
+  <data name="SettingsSectionReset" xml:space="preserve"><value>Reset</value><comment>Settings section</comment></data>
+  <data name="SettingsAssemblerPath" xml:space="preserve"><value>_NASM path:</value><comment>Label; access key</comment></data>
+  <data name="SettingsAssemblerPathName" xml:space="preserve"><value>NASM path</value><comment>UIA name of the assembler path field</comment></data>
+  <data name="SettingsAssemblerHint" xml:space="preserve"><value>Leave empty to use the NASM that comes with Assembly Studio.</value><comment>Hint under the assembler path</comment></data>
+  <data name="SettingsBrowse" xml:space="preserve"><value>_Browse…</value><comment>Button</comment></data>
+  <data name="SettingsCheck" xml:space="preserve"><value>C_heck</value><comment>Button: run the entered assembler and show its version</comment></data>
+  <data name="SettingsOriginBundled" xml:space="preserve"><value>Bundled</value><comment>Assembler origin</comment></data>
+  <data name="SettingsOriginConfigured" xml:space="preserve"><value>Configured</value><comment>Assembler origin</comment></data>
+  <data name="SettingsAssemblerFound" xml:space="preserve"><value>{0}: {1} (NASM {2})</value><comment>{0} = origin, {1} = path, {2} = version</comment></data>
+  <data name="SettingsAssemblerUnusable" xml:space="preserve"><value>{0}: {1}</value><comment>{0} = origin, {1} = the problem</comment></data>
+  <data name="SettingsVersionUnknown" xml:space="preserve"><value>version unknown</value><comment>Assembler version could not be read</comment></data>
+  <data name="SettingsErrAssembler" xml:space="preserve"><value>This assembler can't be used. Choose nasm.exe, version 3.02 or later.</value><comment>Fallback assembler problem</comment></data>
+  <data name="SettingsFont" xml:space="preserve"><value>_Font:</value><comment>Label</comment></data>
+  <data name="SettingsFontName" xml:space="preserve"><value>Editor font</value><comment>UIA name</comment></data>
+  <data name="SettingsFontSize" xml:space="preserve"><value>_Size:</value><comment>Label</comment></data>
+  <data name="SettingsFontSizeName" xml:space="preserve"><value>Editor font size</value><comment>UIA name</comment></data>
+  <data name="SettingsTabWidth" xml:space="preserve"><value>_Tab width:</value><comment>Label</comment></data>
+  <data name="SettingsTabWidthName" xml:space="preserve"><value>Tab width</value><comment>UIA name</comment></data>
+  <data name="SettingsUseSpaces" xml:space="preserve"><value>Indent with _spaces</value><comment>Check box</comment></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>T_heme:</value><comment>Label</comment></data>
+  <data name="SettingsThemeName" xml:space="preserve"><value>Theme</value><comment>UIA name</comment></data>
+  <data name="SettingsThemeSystem" xml:space="preserve"><value>Use Windows setting</value><comment>Theme choice</comment></data>
+  <data name="SettingsThemeDark" xml:space="preserve"><value>Dark</value><comment>Theme choice</comment></data>
+  <data name="SettingsThemeLight" xml:space="preserve"><value>Light</value><comment>Theme choice</comment></data>
+  <data name="SettingsBudget" xml:space="preserve"><value>_Instruction budget:</value><comment>Label (FR-042)</comment></data>
+  <data name="SettingsBudgetName" xml:space="preserve"><value>Instruction budget per run</value><comment>UIA name</comment></data>
+  <data name="SettingsNumberFormat" xml:space="preserve"><value>_Numbers:</value><comment>Label: default number format</comment></data>
+  <data name="SettingsNumberFormatName" xml:space="preserve"><value>Default number format</value><comment>UIA name</comment></data>
+  <data name="SettingsFormatHex" xml:space="preserve"><value>Hexadecimal</value><comment>Number format</comment></data>
+  <data name="SettingsFormatUnsigned" xml:space="preserve"><value>Unsigned decimal</value><comment>Number format</comment></data>
+  <data name="SettingsFormatSigned" xml:space="preserve"><value>Signed decimal</value><comment>Number format</comment></data>
+  <data name="SettingsFormatBinary" xml:space="preserve"><value>Binary</value><comment>Number format</comment></data>
+  <data name="SettingsErrFont" xml:space="preserve"><value>Enter a font name.</value><comment>Validation</comment></data>
+  <data name="SettingsErrFontSize" xml:space="preserve"><value>The font size must be a number from {0} to {1}.</value><comment>Validation</comment></data>
+  <data name="SettingsErrTabWidth" xml:space="preserve"><value>The tab width must be a whole number from {0} to {1}.</value><comment>Validation</comment></data>
+  <data name="SettingsErrBudget" xml:space="preserve"><value>The instruction budget must be a whole number from {0:N0} to {1:N0}.</value><comment>Validation</comment></data>
+  <data name="SettingsResetLayout" xml:space="preserve"><value>Reset _layout</value><comment>Button</comment></data>
+  <data name="SettingsResetAll" xml:space="preserve"><value>Reset _all settings…</value><comment>Button (FR-082)</comment></data>
+  <data name="SettingsResetTitle" xml:space="preserve"><value>Reset all settings?</value><comment>Confirmation title</comment></data>
+  <data name="SettingsResetText" xml:space="preserve"><value>All settings return to their defaults, including the assembler path. Open files and recent files are kept.</value><comment>Confirmation text</comment></data>
+  <data name="SettingsResetConfirm" xml:space="preserve"><value>_Reset</value><comment>Confirmation button</comment></data>
+  <data name="SettingsInvalidTitle" xml:space="preserve"><value>Settings were reset</value><comment>Corrupt settings notice title (FR-081)</comment></data>
+  <data name="SettingsInvalidText" xml:space="preserve"><value>The settings file couldn't be read, so Assembly Studio started with default settings. The unreadable file was kept as {0}.</value><comment>{0} = backup path</comment></data>
+  <data name="SettingsInvalidNext" xml:space="preserve"><value>Change any settings you need in File ▸ Settings.</value><comment>Next step</comment></data>
+  <data name="ExecutableFilter" xml:space="preserve"><value>Programs (*.exe)|*.exe</value><comment>Browse for nasm.exe</comment></data>
 </root>

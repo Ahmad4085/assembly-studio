@@ -74,14 +74,19 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <param name="appVersion">Version shown in the status bar while no document is open.</param>
     /// <param name="workspace">The open documents and file workflow (TASK-062); by default one with the WPF dialogs
     /// and an in-memory recent-files list.</param>
-    public ShellViewModel(ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null)
+    /// <param name="openSettings">Opens the Settings dialog (TASK-067); the command is disabled without it.</param>
+    public ShellViewModel(ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null, Action? openSettings = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         _store = store;
+        OpenSettingsCommand = new RelayCommand(() => openSettings?.Invoke(), () => openSettings is not null);
         Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
         Apply(store.Load());
     }
+
+    /// <summary>File ▸ Settings (Ctrl+,).</summary>
+    public IRelayCommand OpenSettingsCommand { get; }
 
     /// <summary>Raised after a Go to command made a panel visible; the view moves focus to it.</summary>
     public event EventHandler<ShellPanel>? PanelActivated;

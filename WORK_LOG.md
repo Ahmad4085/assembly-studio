@@ -1429,3 +1429,31 @@
 - **Git state after:** uncommitted TASK-063 changes on top of `a54758d` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check) blocks TASK-061 and with it TASK-064/065/066/069. DEF-003 (decision). DEF-001 and DEF-002 are still open.
 - **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-067` or `TASK-068`.
+
+### 2026-10-30 12:24 – 12:57 +0500 · Claude Code (Opus 5.5) · TASK-067 Settings service and dialog
+- **Summary:** Ran `/assembly-implement TASK-067` (user request). Dependencies TASK-060 and TASK-040 are Done; the lock was free.
+  - **Settings model and storage** (`App/Settings`):
+    - `AppSettings` record with defaults and `Sanitized`.
+    - `JsonSettingsService` keeps the `"settings"` object in settings.json, written atomically; layout and recent files are kept; older files are merged with the defaults.
+    - On an invalid file it starts with defaults and renames the file to `settings.invalid-<timestamp>.json` before any other store reads it (ADR-0007 §4, FR-081). `InvalidFileBackup` drives the notice.
+  - **Settings dialog** (UI-017, `SettingsViewModel`, `SettingsWindow`):
+    - The assembler path is validated by `NasmAssembler.ValidateConfiguredPath` and by running `nasm -v` through `Check()`. An unusable path is not saved, and the dialog shows the path check's own reason, without the build-time "Correct it in Settings" advice.
+    - The assembler in use is shown with origin and version (AC-015).
+    - Editor and execution values are validated with messages; Reset layout; Reset all with confirmation.
+  - **App wiring:** the theme preference and editor font (new `Font.Editor` / `FontSize.Editor` tokens, scaled by the text size) follow the settings. File ▸ Settings and Ctrl+, are enabled. The FR-081 notice shows after the window renders.
+  - **Bundled NASM:** `tools/nasm/{nasm.exe, LICENSE}` is copied next to the app (conditional on the fetched tool) as `tools\nasm\`, where the composition root looks for it (FR-079).
+  - **Deferred, stated in the code and records:** tab width and spaces are applied by the editor control (TASK-064); budget and number format are consumed by TASK-080/081.
+- **Files changed:** `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, Settings/AppSettings.cs (new), Settings/SettingsService.cs (new), Settings/SettingsViewModel.cs (new), Settings/SettingsWindow.xaml(.cs) (new), Settings/EditorAppearance.cs (new), Documents/IDialogService.cs, Documents/WpfDialogService.cs, Shell/MainWindow.xaml, Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs, Themes/Shared.xaml}`, `tests/AssemblyStudio.App.Tests/{Settings/SettingsTests.cs, Settings/SettingsUiTests.cs, Settings/SettingsProcessTests.cs (new), Documents/WorkspaceViewModelTests.cs}`, `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Release build **0 warnings, 0 errors** (12:39 +0500), after fixing analyzer errors in the new tests (xUnit1031, CA1822, CA1861) and a compile error (CS0103).
+  - App tests 137/137 on the first run. After the UI and process tests were added: Settings classes 30/30, the process test 2/2.
+  - Renders reviewed: `artifacts/ui/settings.png` and `settings-invalid-path.png`. The first render cropped the dialog margin (a render-helper issue, fixed), and the error text told the user to "Correct it in Settings" inside Settings (fixed, and asserted).
+  - Mutation check: removing the backup rename and the assembler gate made **10 tests fail**. Restored, and the build is clean again.
+  - Full solution `dotnet test --solution AssemblyStudio.slnx -c Release`:
+    - 12:43 → 1155/1155.
+    - 12:47 → **1154/1155**: `MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout` failed. This is DEF-001 (Open, a submenu doesn't stay open in an inactive window); the code is untouched by this task. Recorded the recurrence in `defects.md`.
+    - App project 141/141 three times in a row.
+    - Full solution **1155/1155 at 12:53 and 12:56** (two consecutive runs). No AssemblyStudio.App.exe left running.
+- **Git state after:** uncommitted TASK-067 changes on top of `39796a9` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 (recurred, Open). DEF-002 is still open.
+- **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-068`.

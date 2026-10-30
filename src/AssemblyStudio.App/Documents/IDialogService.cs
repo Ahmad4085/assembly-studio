@@ -25,6 +25,10 @@ public interface IDialogService
     /// <summary>Shows the Save As dialog; returns the chosen path, or <see langword="null"/> when cancelled.</summary>
     string? ShowSaveFile(string suggestedName, string? initialFolder);
 
+    /// <summary>Shows an Open dialog for a program (the assembler in Settings); returns the chosen path or
+    /// <see langword="null"/>.</summary>
+    string? ShowOpenExecutable(string? current);
+
     /// <summary>Asks whether to save <paramref name="documentTitle"/> before closing it.</summary>
     SaveChoice AskSaveChanges(string documentTitle);
 

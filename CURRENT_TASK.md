@@ -12,6 +12,23 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 |---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, 062, 063, 067 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Recommended next action | User: AC-059 check (unblocks TASK-061 → TASK-064). Meanwhile eligible: `TASK-068` (About/diagnostics, release notes, notices, logging) |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 12:24 +0500 |
+| Milestone | M4 (App shell and editor) |
+| Goal | Persist settings safely and provide the Settings dialog (UI-017) |
+| Scope (in) | JSON settings with corrupt-file recovery + notice; assembler path validation; editor and execution preferences; theme; reset all; zero-config defaults with bundled NASM |
+| Requirements | FR-075, FR-077..FR-082, NFR-009; ADR-0007 §4; UI-017, UI-019; AC-039, AC-053, AC-054 (UI part), AC-015 (UI part) |
+| Expected files | `src/AssemblyStudio.App/Settings/`, startup wiring, tests |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, TASK-062, TASK-063 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061 |
 | Recommended next action | User: AC-059 check (unblocks TASK-061 → TASK-064). Meanwhile eligible: `TASK-067` (settings service and dialog), `TASK-068` (About/diagnostics, logging) |
 | Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), DEF-003 decision |
@@ -111,6 +128,29 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-067 Settings service and dialog (Done 2026-10-30 12:57 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Settings/`:
+  - `AppSettings`: assembler path (empty = bundled), font family/size, tab width, spaces, theme, instruction budget, number format; defaults (FR-079); `Sanitized` for hand-edited values.
+  - `JsonSettingsService`: the `"settings"` object of settings.json, readable camelCase, atomic write, other sections kept, older files merged with defaults. An invalid file (not JSON, not an object, unreadable `settings`) is renamed to `settings.invalid-<timestamp>.json` before the layout and recent-files stores read it, and `InvalidFileBackup` drives the FR-081 notice.
+  - `SettingsViewModel` + `SettingsWindow` (UI-017): assembler path with Browse and Check. Path validated by `NasmAssembler.ValidateConfiguredPath` and by running `nasm -v`; unusable paths are not saved (AC-015). Shows the assembler in use with origin and version. Editor and execution values validated with messages; Reset layout; Reset all with confirmation (FR-082).
+  - `EditorAppearance`: `Font.Editor` / `FontSize.Editor` tokens (× Windows text scale).
+- App:
+  - Settings are loaded first; the theme preference and editor font come from settings and follow changes; File ▸ Settings and Ctrl+, open the dialog; the corrupt-settings notice shows after the window renders.
+  - `tools\nasm\nasm.exe` + LICENSE are copied next to the app from `tools/nasm` when present (FR-079 zero configuration; the installer bundling stays with the release task).
+- Not applied yet: tab width / spaces (the editor control arrives in TASK-064); instruction budget and number format are stored for TASK-080 / TASK-081 (the session-level budget, AC-054, is already tested in `DebugSessionTests`).
+- Tests (31 new):
+  - `SettingsTests` (25): persistence across restarts with other sections kept, 5 corrupt-file forms backed up, out-of-range values, default path, **defaults build the .COM template with the bundled NASM**, AC-015 invalid paths / fake exe / real copy via Browse, dialog save, 7 invalid values, Cancel, Reset all, Reset layout.
+  - `SettingsUiTests` (3): dialog render and invalid-path error, labels with access keys and UIA names, Ctrl+, and the editor font.
+  - `SettingsProcessTests` (1): the real app started with a corrupted file shows the notice and keeps the backup.
+- Mutation check: disabling the backup rename or the assembler check made 10 tests fail; restored.
+- Release build 0 warnings / 0 errors; full solution 1155/1155 in two consecutive runs (one earlier run hit DEF-001, see defects).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 12:24 / 12:57 +0500 |
 
 ## Completed: TASK-063 Crash recovery (Done 2026-10-30 12:17 +0500, Claude Code (Opus 5.5))
 - The user chose TASK-063 because TASK-064 depends on the Blocked TASK-061.

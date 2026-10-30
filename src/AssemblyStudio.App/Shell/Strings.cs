@@ -648,4 +648,151 @@ public static class Strings
 
     /// <summary>_Discard</summary>
     public static string DialogDiscard => Get(nameof(DialogDiscard));
+
+    /// <summary>Settings</summary>
+    public static string SettingsTitle => Get(nameof(SettingsTitle));
+
+    /// <summary>Assembler</summary>
+    public static string SettingsSectionAssembler => Get(nameof(SettingsSectionAssembler));
+
+    /// <summary>Editor</summary>
+    public static string SettingsSectionEditor => Get(nameof(SettingsSectionEditor));
+
+    /// <summary>Execution</summary>
+    public static string SettingsSectionExecution => Get(nameof(SettingsSectionExecution));
+
+    /// <summary>Reset</summary>
+    public static string SettingsSectionReset => Get(nameof(SettingsSectionReset));
+
+    /// <summary>_NASM path:</summary>
+    public static string SettingsAssemblerPath => Get(nameof(SettingsAssemblerPath));
+
+    /// <summary>NASM path</summary>
+    public static string SettingsAssemblerPathName => Get(nameof(SettingsAssemblerPathName));
+
+    /// <summary>Leave empty to use the NASM that comes with Assembly Studio.</summary>
+    public static string SettingsAssemblerHint => Get(nameof(SettingsAssemblerHint));
+
+    /// <summary>_Browse…</summary>
+    public static string SettingsBrowse => Get(nameof(SettingsBrowse));
+
+    /// <summary>C_heck</summary>
+    public static string SettingsCheck => Get(nameof(SettingsCheck));
+
+    /// <summary>Bundled</summary>
+    public static string SettingsOriginBundled => Get(nameof(SettingsOriginBundled));
+
+    /// <summary>Configured</summary>
+    public static string SettingsOriginConfigured => Get(nameof(SettingsOriginConfigured));
+
+    /// <summary>{0}: {1} (NASM {2})</summary>
+    public static string SettingsAssemblerFound => Get(nameof(SettingsAssemblerFound));
+
+    /// <summary>{0}: {1}</summary>
+    public static string SettingsAssemblerUnusable => Get(nameof(SettingsAssemblerUnusable));
+
+    /// <summary>version unknown</summary>
+    public static string SettingsVersionUnknown => Get(nameof(SettingsVersionUnknown));
+
+    /// <summary>This assembler can&apos;t be used. Choose nasm.exe, version 3.02 or later.</summary>
+    public static string SettingsErrAssembler => Get(nameof(SettingsErrAssembler));
+
+    /// <summary>_Font:</summary>
+    public static string SettingsFont => Get(nameof(SettingsFont));
+
+    /// <summary>Editor font</summary>
+    public static string SettingsFontName => Get(nameof(SettingsFontName));
+
+    /// <summary>_Size:</summary>
+    public static string SettingsFontSize => Get(nameof(SettingsFontSize));
+
+    /// <summary>Editor font size</summary>
+    public static string SettingsFontSizeName => Get(nameof(SettingsFontSizeName));
+
+    /// <summary>_Tab width:</summary>
+    public static string SettingsTabWidth => Get(nameof(SettingsTabWidth));
+
+    /// <summary>Tab width</summary>
+    public static string SettingsTabWidthName => Get(nameof(SettingsTabWidthName));
+
+    /// <summary>Indent with _spaces</summary>
+    public static string SettingsUseSpaces => Get(nameof(SettingsUseSpaces));
+
+    /// <summary>T_heme:</summary>
+    public static string SettingsTheme => Get(nameof(SettingsTheme));
+
+    /// <summary>Theme</summary>
+    public static string SettingsThemeName => Get(nameof(SettingsThemeName));
+
+    /// <summary>Use Windows setting</summary>
+    public static string SettingsThemeSystem => Get(nameof(SettingsThemeSystem));
+
+    /// <summary>Dark</summary>
+    public static string SettingsThemeDark => Get(nameof(SettingsThemeDark));
+
+    /// <summary>Light</summary>
+    public static string SettingsThemeLight => Get(nameof(SettingsThemeLight));
+
+    /// <summary>_Instruction budget:</summary>
+    public static string SettingsBudget => Get(nameof(SettingsBudget));
+
+    /// <summary>Instruction budget per run</summary>
+    public static string SettingsBudgetName => Get(nameof(SettingsBudgetName));
+
+    /// <summary>_Numbers:</summary>
+    public static string SettingsNumberFormat => Get(nameof(SettingsNumberFormat));
+
+    /// <summary>Default number format</summary>
+    public static string SettingsNumberFormatName => Get(nameof(SettingsNumberFormatName));
+
+    /// <summary>Hexadecimal</summary>
+    public static string SettingsFormatHex => Get(nameof(SettingsFormatHex));
+
+    /// <summary>Unsigned decimal</summary>
+    public static string SettingsFormatUnsigned => Get(nameof(SettingsFormatUnsigned));
+
+    /// <summary>Signed decimal</summary>
+    public static string SettingsFormatSigned => Get(nameof(SettingsFormatSigned));
+
+    /// <summary>Binary</summary>
+    public static string SettingsFormatBinary => Get(nameof(SettingsFormatBinary));
+
+    /// <summary>Enter a font name.</summary>
+    public static string SettingsErrFont => Get(nameof(SettingsErrFont));
+
+    /// <summary>The font size must be a number from {0} to {1}.</summary>
+    public static string SettingsErrFontSize => Get(nameof(SettingsErrFontSize));
+
+    /// <summary>The tab width must be a whole number from {0} to {1}.</summary>
+    public static string SettingsErrTabWidth => Get(nameof(SettingsErrTabWidth));
+
+    /// <summary>The instruction budget must be a whole number from {0:N0} to {1:N0}.</summary>
+    public static string SettingsErrBudget => Get(nameof(SettingsErrBudget));
+
+    /// <summary>Reset _layout</summary>
+    public static string SettingsResetLayout => Get(nameof(SettingsResetLayout));
+
+    /// <summary>Reset _all settings…</summary>
+    public static string SettingsResetAll => Get(nameof(SettingsResetAll));
+
+    /// <summary>Reset all settings?</summary>
+    public static string SettingsResetTitle => Get(nameof(SettingsResetTitle));
+
+    /// <summary>All settings return to their defaults, including the assembler path. Open files and recent files are kept.</summary>
+    public static string SettingsResetText => Get(nameof(SettingsResetText));
+
+    /// <summary>_Reset</summary>
+    public static string SettingsResetConfirm => Get(nameof(SettingsResetConfirm));
+
+    /// <summary>Settings were reset</summary>
+    public static string SettingsInvalidTitle => Get(nameof(SettingsInvalidTitle));
+
+    /// <summary>The settings file couldn&apos;t be read, so Assembly Studio started with default settings. The unreadable file was kept as {0}.</summary>
+    public static string SettingsInvalidText => Get(nameof(SettingsInvalidText));
+
+    /// <summary>Change any settings you need in File ▸ Settings.</summary>
+    public static string SettingsInvalidNext => Get(nameof(SettingsInvalidNext));
+
+    /// <summary>Programs (*.exe)|*.exe</summary>
+    public static string ExecutableFilter => Get(nameof(ExecutableFilter));
 }

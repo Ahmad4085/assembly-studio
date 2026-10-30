@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Windows;
 using AssemblyStudio.App.Shell;
@@ -16,6 +17,18 @@ public sealed class WpfDialogService : IDialogService
     {
         var dialog = new OpenFileDialog { Filter = Strings.FileFilter, Multiselect = true, CheckFileExists = false };
         return dialog.ShowDialog(Owner) == true ? dialog.FileNames : [];
+    }
+
+    /// <inheritdoc />
+    public string? ShowOpenExecutable(string? current)
+    {
+        var dialog = new OpenFileDialog { Filter = Strings.ExecutableFilter, FileName = "nasm.exe" };
+        if (current is not null && Path.GetDirectoryName(current) is { Length: > 0 } folder && Directory.Exists(folder))
+        {
+            dialog.InitialDirectory = folder;
+        }
+
+        return dialog.ShowDialog(Owner) == true ? dialog.FileName : null;
     }
 
     /// <inheritdoc />

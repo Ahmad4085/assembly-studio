@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 12:17 +0500 by Claude Code (Opus 5.5) (TASK-063 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, 062, 063 done; TASK-061 blocked on BLK-002); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-30 12:57 +0500 by Claude Code (Opus 5.5) (TASK-067 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, 062, 063, 067 done; TASK-061 blocked on BLK-002); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Eligible now: `TASK-067` settings, `TASK-068` About/diagnostics/logging. TASK-064 waits for TASK-061 (user AC-059 check). User: `TASK-006`, DEF-003 decision |
+| Active task | None in progress. Eligible now: `TASK-068` About/diagnostics/logging. TASK-064 waits for TASK-061 (user AC-059 check). User: `TASK-006`, DEF-003 decision |
 
-| Next recommended action | User: AC-059 check (unblocks the editor chain). Agent: `/assembly-implement TASK-067` or `TASK-068` |
+| Next recommended action | User: AC-059 check (unblocks the editor chain). Agent: `/assembly-implement TASK-068` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-067 Settings service and dialog | 2026-10-30 12:57 +0500 | `App/Settings`: JSON settings with corrupt-file backup + notice, Settings dialog (assembler path validated by running it, editor/execution preferences, theme, reset layout, reset all), editor font tokens, bundled NASM copied next to the app. 31 new tests incl. AC-015, AC-039 (in-process and real app), AC-053, AC-054 UI part; mutation-checked. Release build 0w/0e; full solution 1155/1155 (twice) |
 | TASK-063 Crash recovery | 2026-10-30 12:17 +0500 | `App/Documents/Recovery`: per-session locked recovery folder, 30 s autosave of changed unsaved documents, UI-021 Restore/Discard prompt after an unexpected exit, restore with file/encoding/EOL. AC-050 end to end (real app killed and restarted, driven through UI Automation, 4 passes) + 7 in-process tests. Release build 0w/0e; full solution 1124/1124 (twice) |
 | TASK-062 Document service and file workflow | 2026-10-30 11:51 +0500 | `App/Documents`: codec (UTF-8/BOM/ANSI, CRLF/LF/mixed preserved), atomic save, file error messages, workspace (new/template/open/drag-drop/recent/save/save as/close prompts), WPF dialogs + themed MessageDialog, welcome page, banners, status bar. 42 new tests incl. AC-002…AC-008, AC-012 (fault-injected save, deny-ACL read, locked, read-only). Release build 0w/0e; App 102/102; full solution 1116/1116 (twice) |
 | TASK-061 Themes, tokens and contrast test (**Blocked**, BLK-002) | 2026-10-30 11:27 +0500 (automated part) | Dark/Light/HighContrast dictionaries (32 tokens each) + Shared.xaml; `ThemeManager` (HC wins, follows app mode, live switching). Contrast 190/190 pairs (rebuilt superset of the 166; original list not in repo); values equal the token table; HC mapping per §3. 15 new tests; App 60/60; full solution 1074/1074 (twice). AC-059 manual display check pending the user |
@@ -101,8 +102,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-30 12:08 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 12:16 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1124/1124 passed** in two consecutive runs (3m 23s, 3m 43s) |
+| Product build (2026-10-30 12:39 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-30 12:56 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1155/1155 passed** in two consecutive runs (3m 59s, 3m 28s). Earlier at 12:47: 1154/1155, DEF-001 recurred (Open) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

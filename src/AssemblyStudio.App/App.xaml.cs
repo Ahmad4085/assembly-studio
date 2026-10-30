@@ -2,11 +2,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Documents.Recovery;
+using AssemblyStudio.App.Settings;
 using AssemblyStudio.App.Shell;
+using AssemblyStudio.Core;
+using AssemblyStudio.Toolchain.Nasm;
 
 namespace AssemblyStudio.App;
 
@@ -21,13 +25,28 @@ public partial class App : Application
     {
         base.OnStartup(e);
         StartupOptions options = StartupOptions.Parse(e.Args);
-        var themes = new ThemeManager(Resources); // the Settings override arrives with TASK-067
+        string settingsPath = options.SettingsPath ?? JsonLayoutStore.DefaultPath;
+
+        // Settings first: an unreadable settings file is set aside before the layout and recent-files stores read it (FR-081).
+        var settings = new JsonSettingsService(settingsPath);
+        var themes = new ThemeManager(Resources, settings.Current.Theme);
         themes.Apply();
         themes.Watch();
         Exit += (_, _) => themes.Dispose();
-        TextScale.Apply(Resources, TextScale.ReadFactor());
+        double textScale = TextScale.ReadFactor();
+        TextScale.Apply(Resources, textScale);
+        EditorAppearance.Apply(Resources, settings.Current, textScale);
+        settings.Changed += (_, _) =>
+        {
+            themes.Preference = settings.Current.Theme;
+            EditorAppearance.Apply(Resources, settings.Current, textScale);
+        };
 
-        string settingsPath = options.SettingsPath ?? JsonLayoutStore.DefaultPath;
+        // FR-079: the bundled NASM next to the application unless Settings names another one.
+        string bundledNasm = Path.Combine(AppContext.BaseDirectory, "tools", "nasm", "nasm.exe");
+        AssemblerInfo CheckAssembler(string? configured) =>
+            new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = configured }).Check();
+
         var store = new JsonLayoutStore(settingsPath);
         var dialogs = new WpfDialogService();
         var workspace = new WorkspaceViewModel(dialogs, new JsonRecentFilesStore(settingsPath));
@@ -54,9 +73,19 @@ public partial class App : Application
             workspace.New(); // FR-001: start with an editable document
         }
 
-        var viewModel = new ShellViewModel(store, AppVersion(), workspace);
-        var window = new MainWindow(viewModel, persistLayout: !smoke);
+        MainWindow? window = null;
+        ShellViewModel viewModel = null!;
+        viewModel = new ShellViewModel(store, AppVersion(), workspace, () =>
+            new SettingsWindow(new SettingsViewModel(settings, dialogs, CheckAssembler, () => viewModel.ResetLayoutCommand.Execute(null),
+                [.. System.Windows.Media.Fonts.SystemFontFamilies.Select(f => f.Source).Order(StringComparer.CurrentCultureIgnoreCase)]))
+                .ShowModal(window));
+        window = new MainWindow(viewModel, persistLayout: !smoke);
         MainWindow = window;
+        if (settings.InvalidFileBackup is { } backup && !smoke)
+        {
+            window.ContentRendered += (_, _) => dialogs.ShowError(Strings.SettingsInvalidTitle,
+                string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.SettingsInvalidText), backup), Strings.SettingsInvalidNext);
+        }
         if (abandoned.Count > 0)
         {
             window.ContentRendered += (_, _) => OfferRecovery(dialogs, workspace, abandoned);

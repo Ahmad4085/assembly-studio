@@ -1,0 +1,142 @@
+<Window x:Class="AssemblyStudio.App.Settings.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:settings="clr-namespace:AssemblyStudio.App.Settings"
+        Title="{x:Static shell:Strings.SettingsTitle}"
+        Width="620"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Surface.Raised}"
+        Foreground="{DynamicResource Text.Primary}"
+        FontFamily="{DynamicResource Font.UI}"
+        FontSize="{DynamicResource FontSize.UI}"
+        UseLayoutRounding="True"
+        AutomationProperties.Name="{x:Static shell:Strings.SettingsTitle}">
+  <!-- UI-017 Settings: assembler (validated by running it), editor, execution, layout reset and reset all. -->
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <Style x:Key="SectionHeading" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="{DynamicResource FontSize.Title}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Margin" Value="0,12,0,6" />
+    </Style>
+    <Style x:Key="FieldLabel" TargetType="Label">
+      <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+      <Setter Property="Padding" Value="0,0,12,0" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="ErrorText" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource Status.Error}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+    <Style TargetType="Button">
+      <Setter Property="MinWidth" Value="88" />
+      <Setter Property="Padding" Value="10,3" />
+    </Style>
+  </Window.Resources>
+
+  <DockPanel Margin="16">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+      <Button x:Name="OkButton" Content="{x:Static shell:Strings.DialogOk}" IsDefault="True" Command="{Binding OkCommand}" />
+      <Button Content="{x:Static shell:Strings.DialogCancel}" IsCancel="True" Margin="8,0,0,0" Command="{Binding CancelCommand}" />
+    </StackPanel>
+
+    <StackPanel>
+      <!-- Assembler (FR-023, FR-075, AC-015) -->
+      <TextBlock Text="{x:Static shell:Strings.SettingsSectionAssembler}" Style="{StaticResource SectionHeading}" Margin="0,0,0,6" />
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Content="{x:Static shell:Strings.SettingsAssemblerPath}" Target="{Binding ElementName=AssemblerPathBox}" Style="{StaticResource FieldLabel}" />
+        <TextBox x:Name="AssemblerPathBox" Grid.Column="1" Text="{Binding AssemblerPath, UpdateSourceTrigger=PropertyChanged}"
+                 AutomationProperties.Name="{x:Static shell:Strings.SettingsAssemblerPathName}" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="8,0,0,0">
+          <Button Content="{x:Static shell:Strings.SettingsBrowse}" Command="{Binding BrowseCommand}" />
+          <Button Content="{x:Static shell:Strings.SettingsCheck}" Command="{Binding CheckPathCommand}" Margin="8,0,0,0" />
+        </StackPanel>
+      </Grid>
+      <TextBlock Text="{x:Static shell:Strings.SettingsAssemblerHint}" Foreground="{DynamicResource Text.Secondary}" TextWrapping="Wrap" Margin="0,4,0,0" />
+      <TextBlock x:Name="AssemblerSummaryText" Text="{Binding AssemblerSummary}" TextWrapping="Wrap" Margin="0,4,0,0"
+                 AutomationProperties.LiveSetting="Polite" />
+      <TextBlock x:Name="AssemblerErrorText" Text="{Binding AssemblerError}" Style="{StaticResource ErrorText}"
+                 Visibility="{Binding HasAssemblerError, Converter={StaticResource BoolToVisibility}}" AutomationProperties.LiveSetting="Assertive" />
+
+      <!-- Editor (FR-077) -->
+      <TextBlock Text="{x:Static shell:Strings.SettingsSectionEditor}" Style="{StaticResource SectionHeading}" />
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="90" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="{x:Static shell:Strings.SettingsFont}" Target="{Binding ElementName=FontBox}" Style="{StaticResource FieldLabel}" />
+        <ComboBox x:Name="FontBox" Grid.Column="1" IsEditable="True" ItemsSource="{Binding FontFamilies}"
+                  Text="{Binding FontFamily, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="{x:Static shell:Strings.SettingsFontName}" />
+        <Label Grid.Column="2" Content="{x:Static shell:Strings.SettingsFontSize}" Target="{Binding ElementName=FontSizeBox}" Style="{StaticResource FieldLabel}" Margin="12,0,0,0" />
+        <TextBox x:Name="FontSizeBox" Grid.Column="3" Text="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}"
+                 AutomationProperties.Name="{x:Static shell:Strings.SettingsFontSizeName}" />
+
+        <Label Grid.Row="1" Content="{x:Static shell:Strings.SettingsTheme}" Target="{Binding ElementName=ThemeBox}" Style="{StaticResource FieldLabel}" Margin="0,8,12,0" />
+        <ComboBox x:Name="ThemeBox" Grid.Row="1" Grid.Column="1" Margin="0,8,0,0" ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme}"
+                  AutomationProperties.Name="{x:Static shell:Strings.SettingsThemeName}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Converter={x:Static settings:SettingsLabels.Instance}}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Label Grid.Row="1" Grid.Column="2" Content="{x:Static shell:Strings.SettingsTabWidth}" Target="{Binding ElementName=TabWidthBox}" Style="{StaticResource FieldLabel}" Margin="12,8,12,0" />
+        <TextBox x:Name="TabWidthBox" Grid.Row="1" Grid.Column="3" Margin="0,8,0,0" Text="{Binding TabWidth, UpdateSourceTrigger=PropertyChanged}"
+                 AutomationProperties.Name="{x:Static shell:Strings.SettingsTabWidthName}" />
+
+        <CheckBox x:Name="UseSpacesBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,8,0,0" Foreground="{DynamicResource Text.Primary}"
+                  Content="{x:Static shell:Strings.SettingsUseSpaces}" IsChecked="{Binding UseSpaces}" />
+      </Grid>
+
+      <!-- Execution (FR-078) -->
+      <TextBlock Text="{x:Static shell:Strings.SettingsSectionExecution}" Style="{StaticResource SectionHeading}" />
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="{x:Static shell:Strings.SettingsBudget}" Target="{Binding ElementName=BudgetBox}" Style="{StaticResource FieldLabel}" />
+        <TextBox x:Name="BudgetBox" Grid.Column="1" Text="{Binding InstructionBudget, UpdateSourceTrigger=PropertyChanged}"
+                 AutomationProperties.Name="{x:Static shell:Strings.SettingsBudgetName}" />
+        <Label Grid.Column="2" Content="{x:Static shell:Strings.SettingsNumberFormat}" Target="{Binding ElementName=NumberFormatBox}" Style="{StaticResource FieldLabel}" Margin="12,0,12,0" />
+        <ComboBox x:Name="NumberFormatBox" Grid.Column="3" ItemsSource="{Binding NumberFormats}" SelectedItem="{Binding NumberFormat}"
+                  AutomationProperties.Name="{x:Static shell:Strings.SettingsNumberFormatName}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Converter={x:Static settings:SettingsLabels.Instance}}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </Grid>
+      <TextBlock x:Name="ValueErrorText" Text="{Binding ValueError}" Style="{StaticResource ErrorText}"
+                 Visibility="{Binding HasValueError, Converter={StaticResource BoolToVisibility}}" AutomationProperties.LiveSetting="Assertive" />
+
+      <!-- Reset (FR-082) -->
+      <TextBlock Text="{x:Static shell:Strings.SettingsSectionReset}" Style="{StaticResource SectionHeading}" />
+      <StackPanel Orientation="Horizontal">
+        <Button Content="{x:Static shell:Strings.SettingsResetLayout}" Command="{Binding ResetLayoutCommand}" />
+        <Button x:Name="ResetAllButton" Content="{x:Static shell:Strings.SettingsResetAll}" Command="{Binding ResetAllCommand}" Margin="8,0,0,0" />
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

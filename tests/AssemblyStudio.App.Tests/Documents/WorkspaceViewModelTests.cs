@@ -423,6 +423,10 @@ public sealed class WorkspaceViewModelTests : IDisposable
 
         public void ShowError(string title, string reason, string nextStep) => Errors.Add((title, reason, nextStep));
 
+        public Queue<string?> ExecutableAnswers { get; } = new();
+
+        public string? ShowOpenExecutable(string? current) => ExecutableAnswers.Dequeue();
+
         public Queue<bool> RestoreAnswers { get; } = new();
 
         public List<IReadOnlyList<AssemblyStudio.App.Documents.Recovery.RecoveredDocument>> RestoreOffers { get; } = [];

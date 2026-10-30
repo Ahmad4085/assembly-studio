@@ -28,6 +28,7 @@
     <CommandBinding Command="{x:Static shell:MainWindow.PreviousPaneCommand}" Executed="OnPreviousPane" />
   </Window.CommandBindings>
   <Window.InputBindings>
+    <KeyBinding Key="OemComma" Modifiers="Ctrl" Command="{Binding OpenSettingsCommand}" />
     <KeyBinding Key="F6" Command="{x:Static shell:MainWindow.NextPaneCommand}" />
     <KeyBinding Key="F6" Modifiers="Shift" Command="{x:Static shell:MainWindow.PreviousPaneCommand}" />
     <KeyBinding Key="R" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Registers}" />
@@ -75,7 +76,7 @@
           </MenuItem.ItemContainerStyle>
         </MenuItem>
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdSettings}" InputGestureText="{x:Static shell:Strings.KeySettings}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSettings}" InputGestureText="{x:Static shell:Strings.KeySettings}" Command="{Binding OpenSettingsCommand}" />
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdExit}" InputGestureText="{x:Static shell:Strings.KeyExit}" Click="OnExit" />
       </MenuItem>
@@ -317,7 +318,7 @@
                     <TextBox x:Name="EditorText" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                              AcceptsReturn="True" AcceptsTab="True" TextWrapping="NoWrap"
                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                             FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}"
+                             FontFamily="{DynamicResource Font.Editor}" FontSize="{DynamicResource FontSize.Editor}"
                              Background="{DynamicResource Surface.Editor}" Foreground="{DynamicResource Syntax.Text}"
                              CaretBrush="{DynamicResource Text.Primary}" SelectionBrush="{DynamicResource Editor.Selection}"
                              BorderThickness="0" Padding="4,2" AutomationProperties.Name="{Binding Title}" />

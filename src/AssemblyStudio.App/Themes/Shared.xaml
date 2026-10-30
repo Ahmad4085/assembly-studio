@@ -14,6 +14,9 @@
   <sys:Double x:Key="FontSize.UI.Small">12</sys:Double>
   <sys:Double x:Key="FontSize.Title">15</sys:Double>
   <sys:Double x:Key="FontSize.Code">14</sys:Double>
+  <!-- Editor font: the user's Settings choice (FR-077), applied by the App; these are the defaults. -->
+  <FontFamily x:Key="Font.Editor">Cascadia Mono, Consolas</FontFamily>
+  <sys:Double x:Key="FontSize.Editor">14</sys:Double>
   <FontWeight x:Key="FontWeight.Changed">SemiBold</FontWeight>
 
   <!-- Spacing and sizes -->

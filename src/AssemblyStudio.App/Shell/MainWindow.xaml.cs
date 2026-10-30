@@ -145,7 +145,7 @@ public partial class MainWindow : Window
         {
             ShellRegion.Machine => RegistersPanel,
             ShellRegion.Bottom => SelectedBottomTab(),
-            ShellRegion.Learn => LearnPanel,
+            ShellRegion.Learn => LearnTree,
             _ => EditorFocusTarget(),
         };
         MoveFocus(target);
@@ -164,7 +164,7 @@ public partial class MainWindow : Window
         {
             ShellPanel.Registers => RegistersPanel,
             ShellPanel.Flags => FlagsPanel,
-            ShellPanel.Learn => LearnPanel,
+            ShellPanel.Learn => LearnTree,
             ShellPanel.Memory when _viewModel.IsMemoryStackDocked => MemoryPanel,
             ShellPanel.Stack when _viewModel.IsMemoryStackDocked => StackView,
             _ => SelectedBottomTab(),
@@ -180,6 +180,9 @@ public partial class MainWindow : Window
         FocusManager.SetFocusedElement(this, target);
         target.Focus();
     }
+
+    /// <summary>The tree's selection (a section heading or an entry) goes to the Learn view model.</summary>
+    private void OnLearnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e) => _viewModel.Learn.Select(e.NewValue);
 
     private UIElement SelectedBottomTab() => BottomTabs.SelectedItem as TabItem ?? (UIElement)BottomTabs;
 

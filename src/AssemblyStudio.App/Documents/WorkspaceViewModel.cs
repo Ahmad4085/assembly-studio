@@ -68,6 +68,15 @@ public sealed partial class WorkspaceViewModel : ObservableObject
     /// <summary>Creates an untitled document from the .COM template (FR-002).</summary>
     public DocumentViewModel NewFromTemplate() => Add(new DocumentViewModel(Strings.TemplateCom, null, DocumentEncoding.Utf8, LineEnding.CrLf, ++_untitledCount));
 
+    /// <summary>Opens <paramref name="text"/> as an untitled copy named after <paramref name="originalName"/> (a sample,
+    /// FR-069): not yet saved anywhere, so Save asks for a location; CR LF line endings like a new program.</summary>
+    public DocumentViewModel OpenCopy(string text, string originalName)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalName);
+        return Add(new DocumentViewModel(text, null, DocumentEncoding.Utf8, LineEnding.CrLf, copyOf: originalName));
+    }
+
     [RelayCommand]
     private void NewFile() => New();
 
@@ -174,7 +183,7 @@ public sealed partial class WorkspaceViewModel : ObservableObject
     public bool SaveDocumentAs(DocumentViewModel document)
     {
         ArgumentNullException.ThrowIfNull(document);
-        string suggested = document.FilePath is null ? document.Title + ".asm" : Path.GetFileName(document.FilePath);
+        string suggested = document.SuggestedFileName;
         string? path = _dialogs.ShowSaveFile(suggested, document.FilePath is null ? null : Path.GetDirectoryName(document.FilePath));
         return path is not null && WriteTo(document, path);
     }

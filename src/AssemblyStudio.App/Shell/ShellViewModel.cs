@@ -76,17 +76,27 @@ public sealed partial class ShellViewModel : ObservableObject
     /// and an in-memory recent-files list.</param>
     /// <param name="openSettings">Opens the Settings dialog (TASK-067); the command is disabled without it.</param>
     /// <param name="openAbout">Opens the About window on a page (TASK-068); the commands are disabled without it.</param>
+    /// <param name="learn">The Learn sidebar (TASK-090); by default one over the built-in content catalog.</param>
     public ShellViewModel(
-        ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null, Action? openSettings = null, Action<About.AboutPage>? openAbout = null)
+        ILayoutStore store,
+        string appVersion,
+        WorkspaceViewModel? workspace = null,
+        Action? openSettings = null,
+        Action<About.AboutPage>? openAbout = null,
+        Learn.LearnViewModel? learn = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         _store = store;
         OpenSettingsCommand = new RelayCommand(() => openSettings?.Invoke(), () => openSettings is not null);
         OpenAboutCommand = new RelayCommand<About.AboutPage>(page => openAbout?.Invoke(page), _ => openAbout is not null);
         Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
+        Learn = learn ?? new Learn.LearnViewModel(Content.EmbeddedContentCatalog.BuiltIn(), Workspace);
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
         Apply(store.Load());
     }
+
+    /// <summary>The Learn sidebar (UI-015).</summary>
+    public Learn.LearnViewModel Learn { get; }
 
     /// <summary>File ▸ Settings (Ctrl+,).</summary>
     public IRelayCommand OpenSettingsCommand { get; }
@@ -246,6 +256,15 @@ public sealed partial class ShellViewModel : ObservableObject
         {
             PanelActivated?.Invoke(this, panel);
         }
+    }
+
+    /// <summary>Learn ▸ Samples / Tutorials / Reference and the welcome page's "Open a sample": shows the Learn sidebar
+    /// with that section selected and moves focus there.</summary>
+    [RelayCommand]
+    private void ShowLearnSection(Content.ContentKind kind)
+    {
+        Learn.ShowSection(kind);
+        GoTo(ShellPanel.Learn);
     }
 
     [RelayCommand]

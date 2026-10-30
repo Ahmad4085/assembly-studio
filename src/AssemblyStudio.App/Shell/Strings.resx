@@ -292,4 +292,20 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="CmdReleaseNotes" xml:space="preserve"><value>_Release Notes</value><comment>Help menu</comment></data>
   <data name="CmdNotices" xml:space="preserve"><value>Third-Party _Notices</value><comment>Help menu</comment></data>
   <data name="DialogClose" xml:space="preserve"><value>Close</value><comment>Button</comment></data>
+  <data name="LearnSamples" xml:space="preserve"><value>Samples</value><comment>Learn section</comment></data>
+  <data name="LearnTutorials" xml:space="preserve"><value>Tutorials</value><comment>Learn section</comment></data>
+  <data name="LearnReference" xml:space="preserve"><value>Reference</value><comment>Learn section</comment></data>
+  <data name="LearnHelp" xml:space="preserve"><value>Help</value><comment>Learn section</comment></data>
+  <data name="LearnNoSamples" xml:space="preserve"><value>No samples are installed yet.</value><comment>Empty Samples section</comment></data>
+  <data name="LearnNoTutorials" xml:space="preserve"><value>No tutorials are installed yet.</value><comment>Empty Tutorials section</comment></data>
+  <data name="LearnNoReference" xml:space="preserve"><value>No reference pages are installed yet.</value><comment>Empty Reference section</comment></data>
+  <data name="LearnNoHelp" xml:space="preserve"><value>No help pages are installed yet.</value><comment>Empty Help section</comment></data>
+  <data name="LearnTreeName" xml:space="preserve"><value>Learn contents</value><comment>UIA name of the Learn tree</comment></data>
+  <data name="LearnSelectHint" xml:space="preserve"><value>Select an item to see it here. Enter opens a sample.</value><comment>Learn details while nothing is selected</comment></data>
+  <data name="LearnOpenCopy" xml:space="preserve"><value>_Open a copy</value><comment>Button: open a sample as an untitled copy (FR-069)</comment></data>
+  <data name="LearnOpenCopyHint" xml:space="preserve"><value>Opens an untitled copy in the editor. The built-in sample isn't changed.</value><comment>Under the Open a copy button</comment></data>
+  <data name="LearnExplanation" xml:space="preserve"><value>Explanation, not program state</value><comment>Caption above tutorial/reference text (FR-072)</comment></data>
+  <data name="LearnTextName" xml:space="preserve"><value>Learn text</value><comment>UIA name of the Learn text view</comment></data>
+  <data name="DocSampleCopy" xml:space="preserve"><value>{0} (copy)</value><comment>Tab title of an untitled sample copy. {0} = sample file name</comment></data>
+  <data name="WelcomeSample" xml:space="preserve"><value>Open a _sample</value><comment>Welcome page button (UI-020)</comment></data>
 </root>

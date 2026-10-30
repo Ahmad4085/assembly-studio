@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:learn="clr-namespace:AssemblyStudio.App.Learn"
+        xmlns:content="clr-namespace:AssemblyStudio.Content;assembly=AssemblyStudio.Content"
         xmlns:about="clr-namespace:AssemblyStudio.App.About"
         xmlns:docs="clr-namespace:AssemblyStudio.App.Documents"
         mc:Ignorable="d"
@@ -152,9 +154,9 @@
         <MenuItem Header="{x:Static shell:Strings.CmdToggleBreakpoint}" InputGestureText="{x:Static shell:Strings.KeyToggleBreakpoint}" IsEnabled="False" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuLearn}">
-        <MenuItem Header="{x:Static shell:Strings.CmdSamples}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdTutorials}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdReference}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSamples}" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Sample}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdTutorials}" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Tutorial}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReference}" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Reference}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuHelp}">
         <MenuItem Header="{x:Static shell:Strings.CmdHelp}" InputGestureText="{x:Static shell:Strings.KeyHelp}" IsEnabled="False" />
@@ -215,7 +217,71 @@
       <!-- UI-015 Learn sidebar -->
       <GroupBox x:Name="LearnPanel" Grid.Column="0" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderLearn}"
                 AutomationProperties.Name="{x:Static shell:Strings.RegionLearn}">
-        <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyLearn}" />
+        <Grid DataContext="{Binding Learn}">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="80" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <TreeView x:Name="LearnTree" ItemsSource="{Binding Sections}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Background="Transparent" Foreground="{DynamicResource Text.Primary}"
+                    AutomationProperties.Name="{x:Static shell:Strings.LearnTreeName}" SelectedItemChanged="OnLearnSelectionChanged">
+            <TreeView.InputBindings>
+              <KeyBinding Key="Enter" Command="{Binding OpenSelectedCommand}" />
+            </TreeView.InputBindings>
+            <TreeView.Resources>
+              <HierarchicalDataTemplate DataType="{x:Type learn:LearnSectionViewModel}" ItemsSource="{Binding Items}">
+                <StackPanel>
+                  <TextBlock Text="{Binding Header}" FontWeight="SemiBold" />
+                  <TextBlock Text="{Binding EmptyText}" Foreground="{DynamicResource Text.Secondary}" FontStyle="Italic"
+                             Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+                </StackPanel>
+              </HierarchicalDataTemplate>
+              <DataTemplate DataType="{x:Type learn:LearnItemViewModel}">
+                <TextBlock Text="{Binding Title}" ToolTip="{Binding Summary}" />
+              </DataTemplate>
+            </TreeView.Resources>
+            <TreeView.ItemContainerStyle>
+              <Style TargetType="TreeViewItem">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding Header}" />
+                <Setter Property="ItemContainerStyle">
+                  <Setter.Value>
+                    <Style TargetType="TreeViewItem">
+                      <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                      <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+                      <Setter Property="AutomationProperties.Name" Value="{Binding Title}" />
+                      <Setter Property="AutomationProperties.HelpText" Value="{Binding Summary}" />
+                    </Style>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </TreeView.ItemContainerStyle>
+          </TreeView>
+          <Border Grid.Row="1" Height="1" Background="{DynamicResource Border.Subtle}" Margin="0,4" />
+          <!-- Details of the selected entry -->
+          <DockPanel x:Name="LearnDetails" Grid.Row="2" Margin="4,0,4,4">
+            <TextBlock DockPanel.Dock="Top" Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.LearnSelectHint}"
+                       Visibility="{Binding HasSelection, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItem.Title}" FontWeight="SemiBold" TextWrapping="Wrap" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding SelectedItem.Summary}" TextWrapping="Wrap" Foreground="{DynamicResource Text.Secondary}" Margin="0,2,0,6" />
+            <StackPanel DockPanel.Dock="Top" Visibility="{Binding IsSampleSelected, Converter={StaticResource VisibleWhenTrue}}">
+              <Button x:Name="LearnOpenCopy" Content="{x:Static shell:Strings.LearnOpenCopy}" Command="{Binding OpenSelectedCommand}"
+                      HorizontalAlignment="Left" Padding="12,4" />
+              <TextBlock Text="{x:Static shell:Strings.LearnOpenCopyHint}" TextWrapping="Wrap" Foreground="{DynamicResource Text.Secondary}" Margin="0,4,0,0" />
+            </StackPanel>
+            <TextBlock DockPanel.Dock="Top" Text="{x:Static shell:Strings.LearnExplanation}" Foreground="{DynamicResource Text.Secondary}"
+                       FontStyle="Italic" Margin="0,0,0,2"
+                       Visibility="{Binding SelectedText, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+            <TextBox x:Name="LearnText" Text="{Binding SelectedText, Mode=OneWay}" IsReadOnly="True" IsReadOnlyCaretVisible="True"
+                     TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="4"
+                     Background="{DynamicResource Surface.Raised}" Foreground="{DynamicResource Text.Primary}"
+                     Visibility="{Binding SelectedText, Converter={x:Static shell:NullToCollapsedConverter.Instance}}"
+                     AutomationProperties.Name="{x:Static shell:Strings.LearnTextName}" />
+          </DockPanel>
+        </Grid>
       </GroupBox>
       <GridSplitter x:Name="LearnSplitter" Grid.Column="1" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
                     ResizeDirection="Columns" AutomationProperties.Name="{x:Static shell:Strings.SplitterLearn}" />
@@ -242,6 +308,9 @@
                 <Button x:Name="WelcomeNew" Content="{x:Static shell:Strings.WelcomeNew}" Command="{Binding NewFileCommand}" Margin="4" Padding="12,4" />
                 <Button x:Name="WelcomeNewProgram" Content="{x:Static shell:Strings.WelcomeNewTemplate}" Command="{Binding NewProgramCommand}" Margin="4" Padding="12,4" />
                 <Button x:Name="WelcomeOpen" Content="{x:Static shell:Strings.WelcomeOpen}" Command="{Binding OpenCommand}" Margin="4" Padding="12,4" />
+                <Button x:Name="WelcomeSample" Content="{x:Static shell:Strings.WelcomeSample}" Margin="4" Padding="12,4"
+                        Command="{Binding DataContext.ShowLearnSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{x:Static content:ContentKind.Sample}" />
               </WrapPanel>
               <TextBlock Text="{x:Static shell:Strings.WelcomeRecent}" FontWeight="SemiBold" Foreground="{DynamicResource Text.Secondary}" Margin="4,20,4,4" />
               <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.WelcomeNoRecent}"

@@ -1,0 +1,3 @@
+{ "items": [
+  { "id": "a", "kind": "sample", "title": "A", "summary": "s", "file": "Samples/a.asm", "expectedOutput": "" },
+  { "id": "a", "kind": "sample", "title": "A again", "summary": "s", "file": "Samples/a.asm", "expectedOutput": "" } ] }

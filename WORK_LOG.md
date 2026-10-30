@@ -1492,3 +1492,27 @@
   - The version shows 1.0.0 (build default; no version decided yet).
   - The backlog's TASK-068 "Notice content (TASK-091)" should read TASK-102 (left unedited, reported).
 - **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-090` or `TASK-101`.
+
+### 2026-10-30 14:07 – 14:26 +0500 · Claude Code (Opus 5.5) · TASK-090 Content catalog and Learn sidebar
+- **Summary:** Ran `/assembly-implement TASK-090` (user request). Dependency TASK-062 is Done; the lock was free.
+  - **Catalog** (`AssemblyStudio.Content`):
+    - `IContentCatalog` with `ContentItem` / `ContentKind`. Per the architecture table (C09: interface `IContentCatalog`, project Content), it lives in the Content project, which references only Core.
+    - `EmbeddedContentCatalog` reads `catalog.json` plus files from embedded resources (`Content/**` → `content/...`) and validates the catalog on load.
+    - The shipped catalog is empty: authoring belongs to TASK-091/092/093, and this task's scope excludes it.
+  - **Learn sidebar** (App/Learn, UI-015):
+    - TreeView sections with empty states, keyboard navigation (arrows, Enter) and a details area. Text is shown read-only and labelled "Explanation, not program state" (FR-072).
+    - Samples open as untitled copies via `WorkspaceViewModel.OpenCopy`, titled "<name> (copy)"; Save suggests the sample's file name (FR-069).
+    - Learn menu items, the welcome page's "Open a sample" (UI-020), and F6 / Ctrl+Alt+L focus the tree. App falls back to an empty catalog, with a log entry, if the built-in one is broken.
+  - The repository stores text as LF, so fixtures and future content are LF; sample copies open as CR LF documents.
+  - Replaced the placeholder `SkeletonTests.cs` in the content tests with real tests.
+- **Files changed:** `src/AssemblyStudio.Content/{AssemblyStudio.Content.csproj, ContentCatalog.cs (new), Content/catalog.json (new)}`, `src/AssemblyStudio.App/{App.xaml.cs, Learn/LearnViewModel.cs (new), Documents/DocumentViewModel.cs, Documents/WorkspaceViewModel.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs}`, `tests/AssemblyStudio.Content.Tests/{AssemblyStudio.Content.Tests.csproj, ContentCatalogTests.cs (new), Fixtures/** (new), SkeletonTests.cs (deleted)}`, `tests/AssemblyStudio.App.Tests/Learn/LearnTests.cs (new)`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Content build: first failed (an MSBuild property function in `LogicalName`, then a C# escape, then CA1859); fixed.
+  - Content tests **10/10**. App **170/170**.
+  - Renders reviewed: `artifacts/ui/learn-sample-selected.png`, `learn-tutorial-selected.png`. The tree's unneeded horizontal scrollbar was then disabled and the rows evened.
+  - Mutation: opening a sample as a file instead of an untitled copy made **4 Learn tests fail**. Restored.
+  - Release build **0 warnings, 0 errors** (14:17 +0500).
+  - Full solution **1193/1193 at 14:21 and 14:25** (two consecutive runs). The architecture tests pass with the new Content dependency, and nothing was written to the user's real folders.
+- **Git state after:** uncommitted TASK-090 changes on top of `7e92774` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user).
+- **Next step:** `/assembly-implement TASK-091` (samples).

@@ -5,22 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 13:54 +0500 by Claude Code (Opus 5.5), after completing TASK-068 |
-| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so TASK-064/065/066/069 wait; TASK-070 also needs TASK-006. Eligible: `TASK-090` content catalog, `TASK-101` installer** |
-| Last completed | TASK-068 About/Diagnostics, release notes, notices, logging (Done 2026-10-30 13:54 +0500) |
-| Git state | HEAD `0129682` (TASK-068 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 14:26 +0500 by Claude Code (Opus 5.5), after completing TASK-090 |
+| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090 Done. Eligible: `TASK-091` samples, `TASK-092`, `TASK-093`, `TASK-101`** |
+| Last completed | TASK-090 Content catalog and Learn sidebar (Done 2026-10-30 14:26 +0500) |
+| Git state | HEAD `7e92774` + uncommitted TASK-090 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 13:46 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1175/1175 passed**, two consecutive runs (2026-10-30 13:50 and 13:53 +0500), with no files written to the user's real log or recovery folders. A run at 13:38 had 1174/1175: DEF-006 (Open).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 14:17 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1193/1193 passed**, two consecutive runs (2026-10-30 14:21 and 14:25 +0500).
 
 ## Changes since the previous handoff
-- **TASK-068 About/Diagnostics, release notes, notices, logging** (Claude Code, uncommitted):
-  - `src/AssemblyStudio.App/Logging/FileLog.cs` (`ILog`, `NullLog`, `FileLog`) and `src/AssemblyStudio.App/About/{AboutViewModel.cs, AboutWindow.xaml(.cs)}`.
-  - `WorkspaceViewModel`, `AutosaveService` and `MainWindow` take an optional `ILog`. `ShellViewModel` has an `openAbout` parameter. New option `--log`.
-  - **Every app-launching test must pass `--settings`, `--recovery` and `--log` temp paths.**
-  - **DEF-007:** `App.ComposeOnStartup` is false in the WPF test thread, so `OnStartup` does nothing there. Any new composition must live in `OnStartup` after that check. The test thread sets `ShutdownMode` after `InitializeComponent`.
-  - DEF-006 (Open): the flood test's 10 s limit fails under full-suite load. Fixing it needs a task.
+- **TASK-090 Content catalog and Learn sidebar** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.Content/{ContentCatalog.cs, Content/catalog.json, AssemblyStudio.Content.csproj}`, `src/AssemblyStudio.App/Learn/LearnViewModel.cs`, and the Learn panel in `Shell/MainWindow.xaml`.
+  - **For TASK-091/092/093 (content authors):**
+    - Put files under `src/AssemblyStudio.Content/Content/` (for example `Samples/hello.asm`) and add an item to `Content/catalog.json`: `{ "id", "kind": "sample|tutorial|reference|help", "title", "summary", "file", "expectedOutput" (samples only) }`.
+    - Files are stored with LF (`.gitattributes`); a sample copy opens as a CR LF document.
+    - `ContentCatalogTests.The_built_in_catalog_loads_and_every_item_is_readable` validates the shipped catalog.
+    - TASK-091 should run each sample through the program-level harness and compare with `expectedOutput` (AC-035).
+  - `ShellViewModel` takes `learn:`; its default is built from the built-in catalog.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -41,12 +43,14 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-068 committed. Files were:
-   - `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, About/*, Logging/*, Documents/WorkspaceViewModel.cs, Documents/Recovery/AutosaveService.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/StartupOptions.cs, Shell/Strings.resx, Shell/Strings.cs}`
-   - `tests/AssemblyStudio.App.Tests/{About/*, Logging/*, StaTestThread.cs, StartupTimeTests.cs, Documents/CrashRecoveryProcessTests.cs, Settings/SettingsProcessTests.cs}`
-   - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files
-2. User: AC-059 check → TASK-061 Done → `/assembly-implement TASK-064` (then M5). Meanwhile `/assembly-implement TASK-090` or `TASK-101`.
-3. User: TASK-006 test VMs, TASK-100 license decision, DEF-003 decision, the version number for the first release.
+1. When the user asks: commit TASK-090. Files:
+   - `src/AssemblyStudio.Content/{AssemblyStudio.Content.csproj, ContentCatalog.cs, Content/catalog.json}`
+   - `src/AssemblyStudio.App/{App.xaml.cs, Learn/*, Documents/DocumentViewModel.cs, Documents/WorkspaceViewModel.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs}`
+   - `tests/AssemblyStudio.Content.Tests/{AssemblyStudio.Content.Tests.csproj, ContentCatalogTests.cs, Fixtures/**}` and the deletion of `SkeletonTests.cs`
+   - `tests/AssemblyStudio.App.Tests/Learn/*`
+   - `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-091` (samples). User: AC-059 check → TASK-061 → TASK-064 and M5.
+3. User: TASK-006 test VMs, TASK-100 license decision, DEF-003 decision, the first version number.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

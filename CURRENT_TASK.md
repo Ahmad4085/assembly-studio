@@ -6,10 +6,29 @@
 
 ## Active Task
 
-None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); the editor tasks depend on it.
+None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); the editor tasks and M5 depend on it.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Milestone 6 progress | TASK-090 Done. Eligible: `TASK-091` (samples), `TASK-093` (help); `TASK-092` (tutorials/reference) also needs TASK-020 (Done) |
+| Recommended next action | `/assembly-implement TASK-091` (samples, fills the Learn sidebar). **User: AC-059 check** for the editor chain and M5 |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 14:07 +0500 |
+| Milestone | M6 (Learning content) |
+| Goal | Provide the content catalog and the Learn sidebar; samples open as untitled copies |
+| Scope (in) | `IContentCatalog` from embedded resources; sidebar UI with keyboard navigation |
+| Out of scope | Content authoring (TASK-091 samples, TASK-092 tutorials and reference) |
+| Requirements | FR-069, FR-071, NFR-023; UI-015, UI-020; AC-035 (open-as-copy part) |
+| Expected files | `src/AssemblyStudio.Content/`, `src/AssemblyStudio.App/Learn/`, tests |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
@@ -146,6 +165,29 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-090 Content catalog and Learn sidebar (Done 2026-10-30 14:26 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.Content/ContentCatalog.cs`:
+  - `ContentKind` (Sample/Tutorial/Reference/Help), `ContentItem` (id, kind, title, summary, file, expected output for samples), `IContentCatalog`, `EmptyContentCatalog`, `ContentCatalogException`.
+  - `EmbeddedContentCatalog` reads `content/catalog.json` and files from embedded resources. It validates unique ids, kinds, titles and summaries, that every file is embedded, and that samples (only) document expected output.
+  - `Content/catalog.json` ships **empty**: content is authored by TASK-091 (samples), TASK-092 (tutorials, reference) and TASK-093 (help). The csproj embeds `Content/**`.
+- `src/AssemblyStudio.App/Learn/LearnViewModel.cs` (UI-015):
+  - Sections Samples/Tutorials/Reference/Help with empty-state text.
+  - Selection details; tutorial/reference/help text in a read-only view captioned "Explanation, not program state" (FR-072).
+  - "Open a copy" / Enter on a sample → `WorkspaceViewModel.OpenCopy`.
+- Documents: an untitled copy titled "hello.asm (copy)"; Save is Save As suggesting "hello.asm"; the built-in original can't change (FR-069). `DocumentViewModel.CopyOf` / `SuggestedFileName`.
+- Shell: Learn sidebar is a TreeView (arrow keys, Enter) with a details area. F6 and Ctrl+Alt+L focus the tree. Learn ▸ Samples/Tutorials/Reference and the welcome page's new "Open a sample" select the section. App loads the built-in catalog and logs + falls back to empty if it is broken.
+- Tests:
+  - Content: `ContentCatalogTests` (10) with embedded fixture catalogs (valid + 5 malformed) and the built-in catalog. The placeholder `SkeletonTests` was removed.
+  - App: `LearnTests` (9), including AC-035 open-as-copy (title, untitled, Save As suggestion, original unchanged, two independent copies), menu/welcome commands, and the real window (render `learn-sample-selected.png`, `learn-tutorial-selected.png`).
+  - Mutation: opening the sample as a file made 4 tests fail; restored.
+- Release build 0 warnings / 0 errors; full solution 1193/1193 in two consecutive runs (14:21, 14:25).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 14:07 / 14:26 +0500 |
 
 ## Completed: TASK-068 About/Diagnostics, release notes, notices, logging (Done 2026-10-30 13:54 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.App/Logging/FileLog.cs`:

@@ -8,9 +8,11 @@ using System.Windows.Threading;
 using AssemblyStudio.App.About;
 using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Documents.Recovery;
+using AssemblyStudio.App.Learn;
 using AssemblyStudio.App.Logging;
 using AssemblyStudio.App.Settings;
 using AssemblyStudio.App.Shell;
+using AssemblyStudio.Content;
 using AssemblyStudio.Core;
 using AssemblyStudio.Toolchain.Nasm;
 
@@ -114,7 +116,8 @@ public partial class App : Application
             openAbout: page => new AboutWindow(new AboutViewModel(aboutSources, CheckAssembler(settings.Current.AssemblerPath), Clipboard.SetText, page))
             {
                 Owner = window,
-            }.ShowDialog());
+            }.ShowDialog(),
+            learn: new LearnViewModel(LoadContent(log), workspace));
         window = new MainWindow(viewModel, persistLayout: !smoke, log);
         MainWindow = window;
         if (settings.InvalidFileBackup is { } backup && !smoke)
@@ -159,6 +162,21 @@ public partial class App : Application
         }
 
         RecoveryStore.DeleteSessions(abandoned);
+    }
+
+    /// <summary>The built-in content (UI-015). A broken catalog is a build defect that the content tests catch; if one
+    /// ships anyway, the application runs with an empty Learn sidebar and logs why.</summary>
+    private static IContentCatalog LoadContent(FileLog log)
+    {
+        try
+        {
+            return EmbeddedContentCatalog.BuiltIn();
+        }
+        catch (ContentCatalogException ex)
+        {
+            log.Write(LogLevel.Error, "The built-in content could not be loaded.", ex);
+            return EmptyContentCatalog.Instance;
+        }
     }
 
     /// <summary>The recovery store, or <see langword="null"/> when the folder can't be used (the app runs without

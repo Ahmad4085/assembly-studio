@@ -21,9 +21,13 @@ public sealed partial class DocumentViewModel : ObservableObject
     /// <param name="lineEnding">The file's line ending (new files: CR LF).</param>
     /// <param name="untitledNumber">1 for "Untitled", n for "Untitled n".</param>
     /// <param name="isDirty">Whether the text differs from the file (a document restored after a crash).</param>
-    public DocumentViewModel(string text, string? filePath, DocumentEncoding encoding, LineEnding lineEnding, int untitledNumber = 1, bool isDirty = false)
+    /// <param name="copyOf">For an untitled copy of built-in content (a sample, FR-069): the original's file name, used for
+    /// the title and as the suggested Save As name.</param>
+    public DocumentViewModel(
+        string text, string? filePath, DocumentEncoding encoding, LineEnding lineEnding, int untitledNumber = 1, bool isDirty = false, string? copyOf = null)
     {
         _text = text;
+        CopyOf = copyOf;
         IsDirty = isDirty;
         FilePath = filePath;
         Encoding = encoding;
@@ -78,9 +82,17 @@ public sealed partial class DocumentViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IsActive { get; set; }
 
-    /// <summary>The tab title: the file name, or "Untitled" / "Untitled n".</summary>
+    /// <summary>For an untitled copy of a sample: the sample's file name (FR-069); otherwise <see langword="null"/>.</summary>
+    public string? CopyOf { get; }
+
+    /// <summary>The name Save As suggests: the file name, the sample's name, or the title plus ".asm".</summary>
+    public string SuggestedFileName => FilePath is not null ? Path.GetFileName(FilePath) : CopyOf ?? Title + ".asm";
+
+    /// <summary>The tab title: the file name, "hello.asm (copy)" for a sample copy, or "Untitled" / "Untitled n".</summary>
     public string Title => FilePath is not null
         ? Path.GetFileName(FilePath)
+        : CopyOf is not null
+        ? string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.DocSampleCopy), CopyOf)
         : _untitledNumber == 1 ? Strings.DocUntitled : string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.DocUntitledNumbered), _untitledNumber);
 
     /// <summary>The tab title with the unsaved marker.</summary>

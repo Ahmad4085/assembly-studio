@@ -3,4 +3,15 @@
   <ItemGroup>
     <ProjectReference Include="..\AssemblyStudio.Core\AssemblyStudio.Core.csproj" />
   </ItemGroup>
+
+  <!-- Everything under Content/ is embedded as content/<relative path> (EmbeddedContentCatalog reads the folder separators as '/'): catalog.json lists
+       the items (EmbeddedContentCatalog). Samples (TASK-091), tutorials and reference (TASK-092) and help (TASK-093) are
+       added there. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Content\**\*" LogicalName="content/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="AssemblyStudio.Content.Tests" />
+  </ItemGroup>
 </Project>

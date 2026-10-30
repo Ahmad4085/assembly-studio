@@ -840,4 +840,52 @@ public static class Strings
 
     /// <summary>Close</summary>
     public static string DialogClose => Get(nameof(DialogClose));
+
+    /// <summary>Samples</summary>
+    public static string LearnSamples => Get(nameof(LearnSamples));
+
+    /// <summary>Tutorials</summary>
+    public static string LearnTutorials => Get(nameof(LearnTutorials));
+
+    /// <summary>Reference</summary>
+    public static string LearnReference => Get(nameof(LearnReference));
+
+    /// <summary>Help</summary>
+    public static string LearnHelp => Get(nameof(LearnHelp));
+
+    /// <summary>No samples are installed yet.</summary>
+    public static string LearnNoSamples => Get(nameof(LearnNoSamples));
+
+    /// <summary>No tutorials are installed yet.</summary>
+    public static string LearnNoTutorials => Get(nameof(LearnNoTutorials));
+
+    /// <summary>No reference pages are installed yet.</summary>
+    public static string LearnNoReference => Get(nameof(LearnNoReference));
+
+    /// <summary>No help pages are installed yet.</summary>
+    public static string LearnNoHelp => Get(nameof(LearnNoHelp));
+
+    /// <summary>Learn contents</summary>
+    public static string LearnTreeName => Get(nameof(LearnTreeName));
+
+    /// <summary>Select an item to see it here. Enter opens a sample.</summary>
+    public static string LearnSelectHint => Get(nameof(LearnSelectHint));
+
+    /// <summary>_Open a copy</summary>
+    public static string LearnOpenCopy => Get(nameof(LearnOpenCopy));
+
+    /// <summary>Opens an untitled copy in the editor. The built-in sample isn&apos;t changed.</summary>
+    public static string LearnOpenCopyHint => Get(nameof(LearnOpenCopyHint));
+
+    /// <summary>Explanation, not program state</summary>
+    public static string LearnExplanation => Get(nameof(LearnExplanation));
+
+    /// <summary>Learn text</summary>
+    public static string LearnTextName => Get(nameof(LearnTextName));
+
+    /// <summary>{0} (copy)</summary>
+    public static string DocSampleCopy => Get(nameof(DocSampleCopy));
+
+    /// <summary>Open a _sample</summary>
+    public static string WelcomeSample => Get(nameof(WelcomeSample));
 }

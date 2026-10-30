@@ -5,4 +5,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
   </ItemGroup>
+
+  <!-- Test catalogs: Fixtures/<name>/... embedded as fixtures/<name>/... (EmbeddedContentCatalog root "fixtures/<name>/"). -->
+  <ItemGroup>
+    <EmbeddedResource Include="Fixtures\**\*" LogicalName="fixtures/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
 </Project>

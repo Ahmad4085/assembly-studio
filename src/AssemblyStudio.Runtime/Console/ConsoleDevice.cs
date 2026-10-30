@@ -24,7 +24,9 @@ public sealed class ConsoleDevice : IConsoleDevice
     private static readonly Encoding Cp437Encoding = InitializeEncoding();
 
     private readonly byte[] _buffer;
-    private readonly List<byte> _deltaBuffer = [];
+    // Bytes written since the last TakeOutput: the delta is always the newest part of the ring buffer, so a
+    // counter (capped at the capacity) is enough. Each write stays O(1) even during a flood (FR-096, NFR-015).
+    private int _deltaCount;
     private readonly Queue<byte> _inputQueue = [];
     private readonly List<InputEvent> _recordedInputs = [];
     private readonly Queue<InputEvent> _replayQueue = [];
@@ -174,12 +176,10 @@ public sealed class ConsoleDevice : IConsoleDevice
             TotalBytesTrimmed++;
         }
 
-        // 3. Snapshot delta buffer
-        _deltaBuffer.Add(value);
-        if (_deltaBuffer.Count > _buffer.Length)
+        // 3. Snapshot delta: bounded by the buffer, so during a flood it holds the newest output
+        if (_deltaCount < _buffer.Length)
         {
-            // Bounded delta buffer during extreme floods
-            _deltaBuffer.RemoveAt(0);
+            _deltaCount++;
         }
     }
 
@@ -219,14 +219,19 @@ public sealed class ConsoleDevice : IConsoleDevice
     /// <inheritdoc />
     public string TakeOutput()
     {
-        if (_deltaBuffer.Count == 0)
+        if (_deltaCount == 0)
         {
             return string.Empty;
         }
 
-        string deltaText = Cp437Encoding.GetString(_deltaBuffer.ToArray());
-        _deltaBuffer.Clear();
-        return deltaText;
+        // The newest _deltaCount bytes of the ring, oldest first.
+        byte[] delta = new byte[_deltaCount];
+        int start = (_head + _count - _deltaCount) % _buffer.Length;
+        int firstChunk = Math.Min(_deltaCount, _buffer.Length - start);
+        Array.Copy(_buffer, start, delta, 0, firstChunk);
+        Array.Copy(_buffer, 0, delta, firstChunk, _deltaCount - firstChunk);
+        _deltaCount = 0;
+        return Cp437Encoding.GetString(delta);
     }
 
     /// <summary>
@@ -372,7 +377,7 @@ public sealed class ConsoleDevice : IConsoleDevice
     {
         _head = 0;
         _count = 0;
-        _deltaBuffer.Clear();
+        _deltaCount = 0;
         _inputQueue.Clear();
         _replayQueue.Clear();
         Column = 0;

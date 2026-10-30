@@ -53,6 +53,10 @@ public interface IDebugSession : IDisposable
     /// termination's path and exit code are read from here.</summary>
     StepResult? LastStep { get; }
 
+    /// <summary>When <see cref="State"/> is <see cref="SessionState.Error"/>: what failed (exception type and message),
+    /// else <see langword="null"/>. The session stays usable; Reset clears it (NFR-010).</summary>
+    string? LastFault { get; }
+
     /// <summary>The latest published snapshot, or <see langword="null"/> before the first one.</summary>
     MachineSnapshot? LatestSnapshot { get; }
 

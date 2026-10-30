@@ -387,4 +387,39 @@ public class ConsoleDeviceTests
         Assert.Equal((byte)'x', peeked);
         Assert.Equal(1, console.PendingInputCount);
     }
+
+    // ---- Output floods (TASK-054) ----------------------------------------------------------
+
+    [Fact]
+    public void A_flood_larger_than_the_cap_keeps_writes_fast_and_the_delta_is_the_newest_output()
+    {
+        var console = new ConsoleDevice(maxCapacity: 1024);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < 4_000_000; i++)
+        {
+            console.WriteOutput((byte)('a' + (i % 26)));
+        }
+
+        stopwatch.Stop();
+
+        string delta = console.TakeOutput();
+        Assert.Equal(1024, delta.Length);
+        Assert.Equal(console.GetAllText(), delta);                 // the newest 1,024 bytes
+        Assert.Equal((char)('a' + (3_999_999 % 26)), delta[^1]);
+        Assert.Equal(string.Empty, console.TakeOutput());
+        Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(5), $"4,000,000 writes took {stopwatch.Elapsed}.");
+    }
+
+    [Fact]
+    public void The_delta_after_a_wrap_is_the_output_since_the_last_take()
+    {
+        var console = new ConsoleDevice(maxCapacity: 8);
+        console.WriteString("123456");
+        Assert.Equal("123456", console.TakeOutput());
+
+        console.WriteString("ABCDE"); // wraps the ring
+
+        Assert.Equal("ABCDE", console.TakeOutput());
+        Assert.Equal("56ABCDE", console.GetAllText()[1..]);
+    }
 }

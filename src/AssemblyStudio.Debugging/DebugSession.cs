@@ -71,6 +71,8 @@ public sealed class DebugSession : IDebugSession
     private readonly Lock _inputLock = new();
     private Queue<InputRecord>? _replay;
     private WaitResume _waitResume;
+    private readonly Action<Exception>? _faultLog;
+    private string? _fault;
 
     private IMachine? _machine;
     private int _pendingCommands;
@@ -79,7 +81,7 @@ public sealed class DebugSession : IDebugSession
     private long _instructionsExecuted;
     private long _budget = (long)DefaultInstructionBudget;
     private StepResult? _lastStep;
-    private Published _published = new(null, PauseReason.None, null, [], 0);
+    private Published _published = new(null, PauseReason.None, null, [], 0, null);
     private bool _disposed;
 
     /// <summary>Creates the session and loads the program: the state becomes <see cref="SessionState.Paused"/>
@@ -88,13 +90,16 @@ public sealed class DebugSession : IDebugSession
     /// entry CS is taken as the program segment the source map refers to.</param>
     /// <param name="disassembler">Decodes the current instruction and the history (FR-053, FR-058).</param>
     /// <param name="sourceMap">The build's source map, or <see langword="null"/> when there is none (FR-053).</param>
-    public DebugSession(Func<IMachine> loadMachine, IDisassembler disassembler, ISourceMap? sourceMap = null)
+    /// <param name="faultLog">Receives every contained fault (engine, loader or snapshot-subscriber exception) for the
+    /// local log (NFR-010). Called on the worker thread; its own exceptions are ignored.</param>
+    public DebugSession(Func<IMachine> loadMachine, IDisassembler disassembler, ISourceMap? sourceMap = null, Action<Exception>? faultLog = null)
     {
         ArgumentNullException.ThrowIfNull(loadMachine);
         ArgumentNullException.ThrowIfNull(disassembler);
         _loadMachine = loadMachine;
         _disassembler = disassembler;
         _sourceMap = sourceMap;
+        _faultLog = faultLog;
         _worker = new Thread(WorkerLoop) { IsBackground = true, Name = "Assembly Studio debug session" };
         _worker.Start();
         Post(CommandKind.Reset);
@@ -159,6 +164,9 @@ public sealed class DebugSession : IDebugSession
 
     /// <inheritdoc />
     public IReadOnlyList<HistoryEntry> History => ReadPublished().History;
+
+    /// <inheritdoc />
+    public string? LastFault => ReadPublished().Fault;
 
     /// <inheritdoc />
     public int WatchMemory(ushort segment, ushort offset, int length)
@@ -409,11 +417,10 @@ public sealed class DebugSession : IDebugSession
                     Execute(command);
                 }
 #pragma warning disable CA1031 // An engine or loader fault becomes a session error; the IDE stays usable (NFR-010).
-                catch (Exception)
+                catch (Exception ex)
 #pragma warning restore CA1031
                 {
-                    SetState(SessionState.Error, PauseReason.None);
-                    Publish();
+                    ContainFault(ex);
                 }
             }
         }
@@ -478,11 +485,49 @@ public sealed class DebugSession : IDebugSession
         }
     }
 
+    /// <summary>
+    /// Turns an exception from the engine, the loader or the machine into the Error state (NFR-010). Nothing here may
+    /// throw: an unhandled exception on the worker thread would end the process. If the snapshot can't be built from
+    /// the faulty machine, the machine is dropped and an Error snapshot without it is published.
+    /// </summary>
+    private void ContainFault(Exception fault)
+    {
+        _fault = $"{fault.GetType().Name}: {fault.Message}";
+        Log(fault);
+        SetState(SessionState.Error, PauseReason.None);
+        try
+        {
+            Publish();
+        }
+#pragma warning disable CA1031 // see the summary: the worker must survive
+        catch (Exception publishFault)
+#pragma warning restore CA1031
+        {
+            Log(publishFault);
+            _machine = null;
+            Publish();
+        }
+    }
+
+    private void Log(Exception fault)
+    {
+        try
+        {
+            _faultLog?.Invoke(fault);
+        }
+#pragma warning disable CA1031 // a failing log must not take the session down
+        catch (Exception)
+#pragma warning restore CA1031
+        {
+        }
+    }
+
     /// <summary>Loads a fresh machine (Reset), optionally replaying a recording into it.</summary>
     private void Load(IReadOnlyList<InputRecord>? replay)
     {
         _machine = null;
         _lastStep = null;
+        _fault = null;
         _history.Clear();
         _historyView = [];
         _temporaryBreakpoint = null;
@@ -823,10 +868,27 @@ public sealed class DebugSession : IDebugSession
 
         lock (_snapshotLock)
         {
-            _published = new Published(snapshot, _pauseReason, _lastStep, _historyView, (ulong)Interlocked.Read(ref _instructionsExecuted));
+            _published = new Published(snapshot, _pauseReason, _lastStep, _historyView, (ulong)Interlocked.Read(ref _instructionsExecuted), _fault);
         }
 
-        SnapshotPublished?.Invoke(this, snapshot);
+        // Each subscriber is called on its own: one that throws (a UI bug) is logged and the others still get the
+        // snapshot; the session state doesn't change (NFR-010).
+        if (SnapshotPublished is { } handlers)
+        {
+            foreach (EventHandler<MachineSnapshot> handler in handlers.GetInvocationList().Cast<EventHandler<MachineSnapshot>>())
+            {
+                try
+                {
+                    handler(this, snapshot);
+                }
+#pragma warning disable CA1031 // a subscriber's exception must not reach the worker loop
+                catch (Exception ex)
+#pragma warning restore CA1031
+                {
+                    Log(ex);
+                }
+            }
+        }
     }
 
     private Published ReadPublished()
@@ -838,7 +900,7 @@ public sealed class DebugSession : IDebugSession
     }
 
     /// <summary>What readers see: the latest snapshot with the pause reason and step result it was published with.</summary>
-    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep, IReadOnlyList<HistoryEntry> History, ulong Instructions);
+    private sealed record Published(MachineSnapshot? Snapshot, PauseReason Reason, StepResult? LastStep, IReadOnlyList<HistoryEntry> History, ulong Instructions, string? Fault);
 
     private readonly record struct Command(CommandKind Kind, IReadOnlyList<InputRecord>? Recording = null);
 

@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 15:43 +0500 by Claude Code (Opus 5.5) (TASK-053 done) |
-| Current phase | **6 Implementation**: M1 and M2 complete; M3 in progress (TASK-050..053 done); M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
-| Current milestone | M3 Debug session (headless), in progress: TASK-050..053 done; TASK-054 left |
-| Active task | None in progress. Next eligible: `TASK-054` fault containment, fuzz and soak (last M3 task); `TASK-061` themes (M4). User: `TASK-006`, DEF-003 decision |
+| Last updated | 2026-10-29 16:47 +0500 by Claude Code (Opus 5.5) (TASK-054 done, M3 complete) |
+| Current phase | **6 Implementation**: M1, M2 and M3 complete; M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
+| Current milestone | M3 Debug session (headless) **complete** (TASK-050..054). Next: M4 App shell and editor (TASK-061..070) |
+| Active task | None in progress. Next eligible: M4 `TASK-061` themes, `TASK-062` document service (and others whose dependencies are done). User: `TASK-006`, DEF-003 decision |
 
-| Next recommended action | `/assembly-implement TASK-054`. User: TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-test` (verify M1–M3), then M4 tasks. User: TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-054 Fault containment, fuzz and soak (M3 complete) | 2026-10-29 16:47 +0500 | `DebugSession`: faults → Error + `LastFault` + `faultLog`; subscriber exceptions isolated; error snapshot can't throw. DEF-005 (flood hang in `ConsoleDevice` delta) found by the soak and fixed. 10 robustness tests (containment, AC-045 flood, long-string flood, IVT wipe, self-modifying code, fuzz 600, soak). **30-min soak: 396,642 programs, 1,586,560 commands, 0 faults, memory 1.1 → 2.2 MiB, threads stable.** Release build 0w/0e; full solution 1055/1055 (twice) |
 | TASK-053 Input routing, Ctrl-C delivery and replay | 2026-10-29 15:43 +0500 | Core `IConsoleDevice.EnqueueInput`, `InputRecord`, `IDebugSession.SendInput/SendCtrlC/RecordedInput/Replay`. `DebugSession`: inline request queue (input, Ctrl-C, refresh) handled during a run without stopping (fixes WatchMemory pausing a run); waiting run/step continues on input; recording with instruction counts; replay delivers at the same counts. `InstructionsExecuted` published with the snapshot (fixes a TASK-052 test flake). 11 new tests incl. AC-047 session level, Ctrl-C in 01h/07h. Release build 0w/0e; full solution 1043/1043 (twice) |
 | TASK-052 Breakpoints and Step Over | 2026-10-29 15:00 +0500 | Core `Breakpoint(Location, IsBound, Offset, IsEnabled)` and `PauseReason.Breakpoint`; `IDebugSession` breakpoint APIs (`Breakpoints`, `ToggleBreakpoint`, `SetBreakpoint`, `RemoveBreakpoint`, `RebindBreakpoints`, `StepOver`); `DebugSession`: fast O(1) active breakpoint lookup array (`bool[65536]`), continuation past hit breakpoints, `StepOver` with temporary breakpoint after CALL/INT instructions, stopping early on user breakpoints, errors, user pause, budget exhaustion or termination, non-CALL/INT single-step fallback; 12 new unit and integration tests in `BreakpointStepOverTests.cs` (Debugging suite 40/40); Release build 0w/0e; 1032/1033 solution tests passed (DEF-001 pre-existing) |
 | TASK-051 Snapshots (ADR-0007 v1.1) | 2026-10-29 14:06 +0500 | Core `HistoryEntry` (HistoryDelta now a list), `IDisassembler.Decode`, `IDebugSession.History/WatchMemory/UnwatchMemory`. `Debugging/Snapshots`: history ring 1,000, current instruction + source line, ≤ 4 × 4 KiB windows, 16-word stack; ≤ 30/s running snapshots (27.7/s measured) without current instruction. 13 new tests incl. snapshot = machine, AC-048, AC-049; step → snapshot 0.24 ms median, 0.33 ms p95. Release build 0w/0e; full solution 1021/1021 (twice) |
@@ -97,8 +98,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 15:34 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 15:42 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1043/1043 passed** in two consecutive runs (3m 23s, 3m 12s); Debugging 50/50 in 5 consecutive runs |
+| Product build (2026-10-29 16:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-29 16:47 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1055/1055 passed** in two consecutive runs (3m 21s, 3m 15s). 30-minute soak passed (16:10–16:40) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

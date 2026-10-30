@@ -11,6 +11,23 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Completed Milestones | **M1** (engine), **M2** (runtime, DOS, toolchain), **M3** (debug session, headless) |
+| Recommended next action | `/assembly-test` (milestone verification M1–M3), then M4: `/assembly-implement TASK-061` (themes) or `TASK-062` (document service) |
+| Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-29 15:44 +0500 |
+| Milestone | M3 (Debug session, headless) |
+| Goal | Prove that hostile or faulty programs can't crash or hang the host |
+| Scope (in) | Engine exception → session error state + local log; fuzz: random images under budget; 30-minute soak; output flood |
+| Out of scope | UI |
+| Requirements | NFR-010, FR-096, NFR-013, NFR-015; ADR-0004; AC-045 (session level) |
+| Expected files | `src/AssemblyStudio.Debugging/DebugSession.cs` (containment), Core `IDebugSession.LastFault`, `tests/AssemblyStudio.Debugging.Tests/Robustness/` |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestones | M1 (engine), M2 (runtime, DOS, toolchain) |
 | Milestone 3 progress | M3: Debug session (TASK-050..053 Done; 4/5) |
 | Recommended next action | `/assembly-implement TASK-054` (fault containment, fuzz and soak; last M3 task) |
@@ -37,6 +54,29 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-054 Fault containment, fuzz and soak (Done 2026-10-29 16:47 +0500, Claude Code (Opus 5.5)), M3 complete
+- `DebugSession` containment (NFR-010):
+  - Engine, loader and machine exceptions → Error with `LastFault` ("Type: message", cleared by Reset) and an optional `faultLog` callback for the local log.
+  - If the error snapshot can't be built from the faulty machine, it's published without the machine.
+  - Each snapshot subscriber is called on its own; an exception is logged without changing state.
+  - A throwing log is ignored.
+  - Before, a throwing subscriber or a failing error snapshot would have thrown on the worker thread and ended the process.
+- **DEF-005 found by the 30-minute soak and fixed:** an output flood of long strings hung a run. `ConsoleDevice` trimmed its 1 MiB snapshot delta with `List.RemoveAt(0)`. The delta is now a capped counter over the ring buffer; mutation-checked.
+- Tests in `tests/AssemblyStudio.Debugging.Tests/Robustness/` (10):
+  - Fault containment ×4.
+  - Hostile programs ×4: AC-045 output flood (cap held, oldest trimmed, Stop 3 ms); long-string flood regression; IVT wiped (garbage vector taken, clean halt); self-modifying code.
+  - Fuzz: 600 random images with random input; fixed seed.
+  - Soak: duration from `ASSEMBLY_STUDIO_SOAK_MINUTES`, 0.25 min in the suite.
+  - Plus 2 `ConsoleDeviceTests`.
+- **30-minute soak (16:10–16:40):** 396,642 programs, 1,586,560 random commands, 0 faults, 0 hangs; managed memory 1.1 → 2.2 MiB; threads 18 → 18.
+- Release build 0 warnings / 0 errors; full solution 1055/1055 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-29 15:44 / 16:47 +0500 |
 
 ## Completed: TASK-053 Input routing, Ctrl-C delivery and replay (Done 2026-10-29 15:43 +0500, Claude Code (Opus 5.5))
 - Core:

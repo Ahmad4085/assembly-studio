@@ -1,0 +1,29 @@
+<!--
+  Design tokens shared by every theme (docs/04-design/design-tokens.md v1.0 sections 4 and 5): typography, spacing and
+  sizes. The colors live in Dark.xaml, Light.xaml and HighContrast.xaml, one of which ThemeManager merges after this one.
+  Font sizes are scaled at startup by the Windows text scale factor (TextScale, NFR-026).
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+  <!-- Typography -->
+  <FontFamily x:Key="Font.UI">Segoe UI</FontFamily>
+  <FontFamily x:Key="Font.Code">Cascadia Mono, Consolas</FontFamily>
+  <FontFamily x:Key="Font.Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+  <sys:Double x:Key="FontSize.UI">13</sys:Double>
+  <sys:Double x:Key="FontSize.UI.Small">12</sys:Double>
+  <sys:Double x:Key="FontSize.Title">15</sys:Double>
+  <sys:Double x:Key="FontSize.Code">14</sys:Double>
+  <FontWeight x:Key="FontWeight.Changed">SemiBold</FontWeight>
+
+  <!-- Spacing and sizes -->
+  <Thickness x:Key="Space.Pad.Panel">8,4,8,4</Thickness>
+  <Thickness x:Key="Space.Pad.Button">8,4,8,4</Thickness>
+  <sys:Double x:Key="Size.RowHeight">22</sys:Double>
+  <sys:Double x:Key="Size.PanelHeader">28</sys:Double>
+  <sys:Double x:Key="Size.CommandBar">36</sys:Double>
+  <sys:Double x:Key="Size.Gutter.Breakpoint">16</sys:Double>
+  <sys:Double x:Key="Size.Splitter">4</sys:Double>
+  <CornerRadius x:Key="Radius.Small">2</CornerRadius>
+  <CornerRadius x:Key="Radius.Medium">4</CornerRadius>
+</ResourceDictionary>

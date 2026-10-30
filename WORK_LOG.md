@@ -1346,3 +1346,26 @@
 - **Git state after:** uncommitted TASK-054 changes on top of `7f69739` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-003 (decision). DEF-001 and DEF-002 are still open. DEF-005 is fixed.
 - **Next step:** `/assembly-test` for M1–M3, then M4.
+
+### 2026-10-30 11:12 – 11:27 +0500 · Claude Code (Opus 5.5) · TASK-061 Themes, tokens and contrast test (Blocked on BLK-002)
+- **Summary:** Ran `/assembly-implement TASK-061` (user request). The lock was free; TASK-054 was committed.
+  - **Themes:**
+    - `Themes/Shared.xaml` holds typography, spacing and sizes, moved from `Dark.xaml`.
+    - `Dark.xaml` and `Light.xaml` are generated from the approved token table (32 color + syntax tokens). The 8 syntax tokens were missing from TASK-060's Dark.
+    - `HighContrast.xaml` maps every token to a `SystemColors` key via DynamicResource, per §3. Where §3 is silent: CurrentLine = Window; ExecutionLine background = Window, with the editor drawing the Highlight outline so text stays readable.
+  - **`ThemeManager`:** high contrast wins; the preference System/Dark/Light, where System follows `AppsUseLightTheme`. `Apply` replaces the theme dictionary; `Watch` re-applies on `SystemParameters.HighContrast` and `SystemEvents.UserPreferenceChanged`. Wired in `App.OnStartup`, disposed on Exit.
+  - **Contrast pairs:**
+    - The SDLC-007 script with the 166-pair list is not in the repo (design tokens §2 says so), so the exact list can't be reproduced.
+    - The test builds 95 pairs per theme from the §2 description, a superset; a pre-check with the token table showed all 190 pass.
+    - The formula reproduces the documented measurements (Light `Status.Success`/Window 4.85, `Border.Strong`/Window 3.47; Dark `Accent.Primary`/Raised 5.28).
+  - **AC-059** (display scaling 100–200 %, two monitors) is a manual check on real displays. It's recorded as **BLK-002** with a checklist for the user, and the task is **Blocked**: its DoD isn't met without it.
+- **Files changed:** `src/AssemblyStudio.App/App.xaml`, `App.xaml.cs`, `Themes/{Shared.xaml (new), Dark.xaml, Light.xaml (new), HighContrast.xaml (new)}`, `Shell/ThemeManager.cs` (new), `tests/AssemblyStudio.App.Tests/ThemeTokenTests.cs` (new), `docs/06-implementation/task-061-verification.md` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md` (BLK-002), `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (11:20 +0500), after fixing CA1001, CS1503, CA1859 and CA1861.
+  - `dotnet test --project tests/AssemblyStudio.App.Tests -c Release` → **60/60 passed** (11:21 +0500).
+    - Contrast: **Dark 95/95, Light 95/95**. Lowest: Dark `Border.Strong` on `Editor.ExecutionLine` 3.12:1; Light `Status.Success` on `Surface.Window` 4.85:1.
+    - Rendered `artifacts/ui/shell-empty-light.png` and `shell-empty-highcontrast.png`, both reviewed (readable, separators visible).
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **1074/1074 passed** at 11:22 and 11:25 (two consecutive runs).
+- **Git state after:** uncommitted TASK-061 changes on top of `4e0d335` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 and DEF-002 are still open.
+- **Next step:** `/assembly-implement TASK-062`. User: the AC-059 checklist.

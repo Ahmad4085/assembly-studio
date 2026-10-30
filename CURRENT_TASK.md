@@ -6,10 +6,28 @@
 
 ## Active Task
 
-None in progress.
+None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); its automated work is complete.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060 Done; TASK-061 Blocked (BLK-002, user check) |
+| Recommended next action | `/assembly-implement TASK-062` (document service and file workflow) |
+| Parallel user actions | AC-059 manual check (`docs/06-implementation/task-061-verification.md`), `TASK-006` (clean test VMs), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 11:12 +0500 |
+| Milestone | M4 (App shell and editor) |
+| Goal | Dark, Light and HighContrast dictionaries from the approved tokens, with an automated contrast test |
+| Scope (in) | All token keys per theme; HC via SystemColors; follow Windows app mode, override in settings; automated WCAG contrast test; text scaling check at 200 % |
+| Out of scope | Panel styling details |
+| Requirements | NFR-022, FR-094, NFR-026; UI-001; design tokens v1.0; AC-059 (manual) |
+| Expected files | `src/AssemblyStudio.App/Themes/`, theme selection in the shell, `tests/AssemblyStudio.App.Tests/` |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1** (engine), **M2** (runtime, DOS, toolchain), **M3** (debug session, headless) |
 | Recommended next action | `/assembly-test` (milestone verification M1–M3), then M4: `/assembly-implement TASK-061` (themes) or `TASK-062` (document service) |
@@ -54,6 +72,29 @@ None in progress.
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Blocked: TASK-061 Themes, tokens and contrast test (2026-10-30 11:27 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Themes/`:
+  - `Shared.xaml`: typography, spacing and sizes.
+  - `Dark.xaml`, `Light.xaml`: all 32 color and syntax tokens; syntax added, it was missing from TASK-060's Dark.
+  - `HighContrast.xaml`: every token → `SystemColors`, per §3.
+  - `App.xaml` merges Shared, theme and styles.
+- `Shell/ThemeManager.cs`: high contrast wins; preference System/Dark/Light, where System follows the Windows app mode. It replaces the theme dictionary live on Windows changes. The Settings override persistence is TASK-067.
+- Tests: `ThemeTokenTests` (15):
+  - Keys per theme; values equal the token table.
+  - **Contrast 190/190 (95 per theme)**, the formula reproducing the documented 4.85 / 3.47 / 5.28.
+  - High-contrast mapping, theme resolution, and live switching of an open window.
+  - Renders `artifacts/ui/shell-empty-light.png` and `shell-empty-highcontrast.png`.
+- **Not 166 pairs:** the SDLC-007 script with the exact 166-pair list was never committed. The test uses 190 pairs rebuilt from the description, a superset.
+- Text scaling at 200 % is still covered by the TASK-060 render test.
+- **Blocked:** AC-059 needs a manual check on real displays (100/125/150/200 %, two monitors) by the user (BLK-002). The checklist is in `docs/06-implementation/task-061-verification.md`.
+- Release build 0 warnings / 0 errors; App 60/60; full solution 1074/1074 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Blocked (BLK-002) |
+| Owner | Claude Code (Opus 5.5) |
+| Started / blocked | 2026-10-30 11:12 / 11:27 +0500 |
 
 ## Completed: TASK-054 Fault containment, fuzz and soak (Done 2026-10-29 16:47 +0500, Claude Code (Opus 5.5)), M3 complete
 - `DebugSession` containment (NFR-010):

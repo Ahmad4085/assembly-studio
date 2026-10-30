@@ -18,6 +18,10 @@ public partial class App : Application
     {
         base.OnStartup(e);
         StartupOptions options = StartupOptions.Parse(e.Args);
+        var themes = new ThemeManager(Resources); // the Settings override arrives with TASK-067
+        themes.Apply();
+        themes.Watch();
+        Exit += (_, _) => themes.Dispose();
         TextScale.Apply(Resources, TextScale.ReadFactor());
 
         var store = new JsonLayoutStore(options.SettingsPath ?? JsonLayoutStore.DefaultPath);

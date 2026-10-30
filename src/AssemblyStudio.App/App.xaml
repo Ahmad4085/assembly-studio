@@ -5,6 +5,8 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Themes/Shared.xaml" />
+        <!-- The theme (Dark, Light or HighContrast); ThemeManager replaces this entry at startup and on Windows changes. -->
         <ResourceDictionary Source="Themes/Dark.xaml" />
         <ResourceDictionary Source="Shell/ShellStyles.xaml" />
       </ResourceDictionary.MergedDictionaries>

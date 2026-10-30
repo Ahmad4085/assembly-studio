@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-29 16:47 +0500 by Claude Code (Opus 5.5) (TASK-054 done, M3 complete) |
-| Current phase | **6 Implementation**: M1, M2 and M3 complete; M0 nearly complete (TASK-006 pending); M4 started (TASK-060 done) |
-| Current milestone | M3 Debug session (headless) **complete** (TASK-050..054). Next: M4 App shell and editor (TASK-061..070) |
-| Active task | None in progress. Next eligible: M4 `TASK-061` themes, `TASK-062` document service (and others whose dependencies are done). User: `TASK-006`, DEF-003 decision |
+| Last updated | 2026-10-30 11:27 +0500 by Claude Code (Opus 5.5) (TASK-061 automated work done; blocked on BLK-002) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060 done, TASK-061 blocked on the user check BLK-002); M0 nearly complete (TASK-006 pending) |
+| Current milestone | M4 App shell and editor, in progress |
+| Active task | None in progress. Next eligible: `TASK-062` document service. User: AC-059 manual check (BLK-002), `TASK-006`, DEF-003 decision |
 
-| Next recommended action | `/assembly-test` (verify M1–M3), then M4 tasks. User: TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-implement TASK-062`. User: AC-059 check, TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-061 Themes, tokens and contrast test (**Blocked**, BLK-002) | 2026-10-30 11:27 +0500 (automated part) | Dark/Light/HighContrast dictionaries (32 tokens each) + Shared.xaml; `ThemeManager` (HC wins, follows app mode, live switching). Contrast 190/190 pairs (rebuilt superset of the 166; original list not in repo); values equal the token table; HC mapping per §3. 15 new tests; App 60/60; full solution 1074/1074 (twice). AC-059 manual display check pending the user |
 | TASK-054 Fault containment, fuzz and soak (M3 complete) | 2026-10-29 16:47 +0500 | `DebugSession`: faults → Error + `LastFault` + `faultLog`; subscriber exceptions isolated; error snapshot can't throw. DEF-005 (flood hang in `ConsoleDevice` delta) found by the soak and fixed. 10 robustness tests (containment, AC-045 flood, long-string flood, IVT wipe, self-modifying code, fuzz 600, soak). **30-min soak: 396,642 programs, 1,586,560 commands, 0 faults, memory 1.1 → 2.2 MiB, threads stable.** Release build 0w/0e; full solution 1055/1055 (twice) |
 | TASK-053 Input routing, Ctrl-C delivery and replay | 2026-10-29 15:43 +0500 | Core `IConsoleDevice.EnqueueInput`, `InputRecord`, `IDebugSession.SendInput/SendCtrlC/RecordedInput/Replay`. `DebugSession`: inline request queue (input, Ctrl-C, refresh) handled during a run without stopping (fixes WatchMemory pausing a run); waiting run/step continues on input; recording with instruction counts; replay delivers at the same counts. `InstructionsExecuted` published with the snapshot (fixes a TASK-052 test flake). 11 new tests incl. AC-047 session level, Ctrl-C in 01h/07h. Release build 0w/0e; full solution 1043/1043 (twice) |
 | TASK-052 Breakpoints and Step Over | 2026-10-29 15:00 +0500 | Core `Breakpoint(Location, IsBound, Offset, IsEnabled)` and `PauseReason.Breakpoint`; `IDebugSession` breakpoint APIs (`Breakpoints`, `ToggleBreakpoint`, `SetBreakpoint`, `RemoveBreakpoint`, `RebindBreakpoints`, `StepOver`); `DebugSession`: fast O(1) active breakpoint lookup array (`bool[65536]`), continuation past hit breakpoints, `StepOver` with temporary breakpoint after CALL/INT instructions, stopping early on user breakpoints, errors, user pause, budget exhaustion or termination, non-CALL/INT single-step fallback; 12 new unit and integration tests in `BreakpointStepOverTests.cs` (Debugging suite 40/40); Release build 0w/0e; 1032/1033 solution tests passed (DEF-001 pre-existing) |
@@ -98,8 +99,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-29 16:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-29 16:47 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1055/1055 passed** in two consecutive runs (3m 21s, 3m 15s). 30-minute soak passed (16:10–16:40) |
+| Product build (2026-10-30 11:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-30 11:25 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1074/1074 passed** in two consecutive runs (3m 11s, 3m 00s) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
@@ -110,6 +111,7 @@ None. Research documents revalidated against requirements v2.0.
 ## Blockers
 | ID | Blocker | Blocks | Resolution |
 |---|---|---|---|
+| BLK-002 | **Open 2026-10-30 11:27 +0500**: AC-059 (display scaling 100/125/150/200 %, two monitors with different DPI) is a manual check on real displays | TASK-061 Done | The user runs the checklist in `docs/06-implementation/task-061-verification.md` and reports the results |
 | ~~BLK-001~~ | **Resolved 2026-10-26 18:05 +0500**: .NET SDK 10.0.403 installed via WinGet (authorized D-013). `dotnet --list-sdks` → 10.0.403. A WPF template built with 0 warnings and 0 errors | — | — |
 
 ## Open high-impact questions

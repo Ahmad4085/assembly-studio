@@ -1,0 +1,46 @@
+<!--
+  Design tokens, high-contrast theme (docs/04-design/design-tokens.md v1.0 section 3). Used whenever Windows high contrast
+  is on: every color token maps to a Windows system color, so the user's high-contrast palette applies, and follows
+  live palette changes (DynamicResource). Meaning is carried by shape, glyph and weight, never by hue: syntax
+  highlighting is off (one text color), and status, breakpoint, arrow and changed values all use WindowText.
+  Editor.CurrentLine has no distinct color in high contrast (window background), and Text.OnAccent pairs with
+  Accent.Primary as HighlightText; both are choices this file makes where section 3 is silent.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Color tokens -->
+  <SolidColorBrush x:Key="Surface.Window" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Surface.Panel" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Surface.Raised" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Surface.Editor" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Surface.Gutter" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Editor.CurrentLine" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Editor.ExecutionLine" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" /> <!-- the editor draws a 1 px Highlight outline -->
+  <SolidColorBrush x:Key="Editor.Selection" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+  <SolidColorBrush x:Key="Border.Subtle" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Border.Strong" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Text.Primary" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Text.Secondary" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Text.Muted" Color="{DynamicResource {x:Static SystemColors.GrayTextColorKey}}" />
+  <SolidColorBrush x:Key="Text.Disabled" Color="{DynamicResource {x:Static SystemColors.GrayTextColorKey}}" />
+  <SolidColorBrush x:Key="Text.OnAccent" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
+  <SolidColorBrush x:Key="Accent.Primary" Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}" />
+  <SolidColorBrush x:Key="Focus.Ring" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Accent.ExecutionArrow" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Accent.Breakpoint" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Status.Error" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Status.Warning" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Status.Info" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Status.Success" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Value.Changed" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+
+  <!-- Syntax tokens: one text color in high contrast -->
+  <SolidColorBrush x:Key="Syntax.Mnemonic" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Register" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Directive" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Number" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.String" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Comment" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Label" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+  <SolidColorBrush x:Key="Syntax.Text" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+</ResourceDictionary>

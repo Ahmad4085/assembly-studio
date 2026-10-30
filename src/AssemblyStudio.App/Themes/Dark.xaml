@@ -1,11 +1,11 @@
 <!--
-  Design tokens, dark theme (docs/04-design/design-tokens.md v1.0, sections 1, 4 and 5).
-  Views reference these keys only, never literal values (ui-spec section 9). The light and
-  high-contrast dictionaries, theme switching and the contrast test arrive with TASK-061.
+  Design tokens, dark theme: the color and syntax tokens of docs/04-design/design-tokens.md v1.0 sections 1 and 2.
+  Views reference these keys only, never literal values (ui-spec section 9). Shared.xaml holds the tokens that are
+  the same in every theme (typography, spacing, sizes). ThemeTokenTests checks these values against the token table
+  and the WCAG contrast pairs, so edit the table and this file together.
 -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <!-- Color tokens -->
   <SolidColorBrush x:Key="Surface.Window" Color="#1B1C1F" />
   <SolidColorBrush x:Key="Surface.Panel" Color="#232428" />
@@ -32,21 +32,13 @@
   <SolidColorBrush x:Key="Status.Success" Color="#5FB870" />
   <SolidColorBrush x:Key="Value.Changed" Color="#FFD866" />
 
-  <!-- Typography. Font sizes are scaled at startup by the Windows text scale factor (NFR-026). -->
-  <FontFamily x:Key="Font.UI">Segoe UI</FontFamily>
-  <FontFamily x:Key="Font.Code">Cascadia Mono, Consolas</FontFamily>
-  <FontFamily x:Key="Font.Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
-  <sys:Double x:Key="FontSize.UI">13</sys:Double>
-  <sys:Double x:Key="FontSize.UI.Small">12</sys:Double>
-  <sys:Double x:Key="FontSize.Title">15</sys:Double>
-  <sys:Double x:Key="FontSize.Code">14</sys:Double>
-
-  <!-- Spacing and sizes -->
-  <Thickness x:Key="Space.Pad.Panel">8,4,8,4</Thickness>
-  <Thickness x:Key="Space.Pad.Button">8,4,8,4</Thickness>
-  <sys:Double x:Key="Size.PanelHeader">28</sys:Double>
-  <sys:Double x:Key="Size.CommandBar">36</sys:Double>
-  <sys:Double x:Key="Size.Splitter">4</sys:Double>
-  <CornerRadius x:Key="Radius.Small">2</CornerRadius>
-  <CornerRadius x:Key="Radius.Medium">4</CornerRadius>
+  <!-- Syntax tokens (editor, NASM 8086) -->
+  <SolidColorBrush x:Key="Syntax.Mnemonic" Color="#82AAFF" />
+  <SolidColorBrush x:Key="Syntax.Register" Color="#F7A072" />
+  <SolidColorBrush x:Key="Syntax.Directive" Color="#D3A6F5" />
+  <SolidColorBrush x:Key="Syntax.Number" Color="#F2C76E" />
+  <SolidColorBrush x:Key="Syntax.String" Color="#B5E08A" />
+  <SolidColorBrush x:Key="Syntax.Comment" Color="#A3AAB4" />
+  <SolidColorBrush x:Key="Syntax.Label" Color="#7FDBCA" />
+  <SolidColorBrush x:Key="Syntax.Text" Color="#E8E9EB" />
 </ResourceDictionary>

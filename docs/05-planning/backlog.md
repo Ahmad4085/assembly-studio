@@ -85,7 +85,7 @@
 | TASK-085 | Announcements, keyboard-only flow and UI smoke tests | M5 | TASK-080, TASK-081, TASK-082, TASK-083, TASK-084, TASK-069 | M | FR-091, FR-092, FR-093, NFR-022 | Approved |
 | TASK-086 | End-to-end performance check | M5 | TASK-085 | L | NFR-002, NFR-004, NFR-005, NFR-007, NFR-001, NFR-006 | Approved |
 | TASK-090 | Content catalog and Learn sidebar | M6 | TASK-062 | M | FR-069, FR-071, NFR-023 | Done |
-| TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Approved |
+| TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Done |
 | TASK-092 | Tutorials and reference | M6 | TASK-090, TASK-020 | M | FR-070, FR-071, FR-072 | Approved |
 | TASK-093 | Help: scope, limitations, NASM vs MASM, shortcuts | M6 | TASK-090, TASK-018, TASK-043 | L | FR-032, FR-045, NFR-033 | Approved |
 | TASK-100 | Product license decision (user action) **(User action)** | M7 | — | M | NFR-030 | Approved |
@@ -1616,7 +1616,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M6 |
 | Requirements | FR-068 |
 | Decisions / design | UI-015, ADR-0008 |

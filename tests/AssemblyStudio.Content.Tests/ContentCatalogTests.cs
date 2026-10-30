@@ -16,6 +16,17 @@ public sealed class ContentCatalogTests
     }
 
     [Fact]
+    public void The_built_in_samples_are_listed_with_expected_output_and_the_keyboard_sample_with_its_input()
+    {
+        ContentItem[] samples = [.. EmbeddedContentCatalog.BuiltIn().Items.Where(i => i.Kind == ContentKind.Sample)];
+
+        Assert.True(samples.Length >= 8);
+        Assert.All(samples, s => Assert.StartsWith("Samples/", s.File, StringComparison.Ordinal));
+        Assert.Equal(["Ada\r", "y"], samples.Single(s => s.Id == "keyboard-input").Input);
+        Assert.All(samples.Where(s => s.Id != "keyboard-input"), s => Assert.Null(s.Input));
+    }
+
+    [Fact]
     public void A_catalog_lists_its_items_in_order_with_their_metadata()
     {
         EmbeddedContentCatalog catalog = Fixture("valid");
@@ -50,6 +61,7 @@ public sealed class ContentCatalogTests
     [InlineData("duplicate", "used twice")]
     [InlineData("missing-file", "'Reference/gone.md' is not embedded")]
     [InlineData("sample-without-output", "expected output")]
+    [InlineData("input-on-tutorial", "only samples have input")]
     [InlineData("bad-kind", "not valid")]
     [InlineData("bad-json", "not valid")]
     [InlineData("no-such-catalog", "is not embedded")]

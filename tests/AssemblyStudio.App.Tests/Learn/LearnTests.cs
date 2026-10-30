@@ -213,6 +213,41 @@ public sealed class LearnTests : IDisposable
     }
 
     [Fact]
+    public void The_built_in_samples_appear_in_the_sidebar_and_open_as_copies()
+    {
+        StaTestThread.Run(() =>
+        {
+            var workspace = new WorkspaceViewModel(new WorkspaceViewModelTests.FakeDialogs(), new MemoryRecentFilesStore());
+            var learn = new LearnViewModel(EmbeddedContentCatalog.BuiltIn(), workspace);
+            var shell = new ShellViewModel(new ShellViewModelTests.MemoryLayoutStore(null), "test", workspace, learn: learn);
+            var window = new MainWindow(shell, persistLayout: false) { Width = 1400, Height = 900 };
+            try
+            {
+                window.Show();
+                shell.ShowLearnSectionCommand.Execute(ContentKind.Sample);
+                LearnItemViewModel hello = learn.Sections[0].Items.Single(i => i.Item.Id == "hello");
+                hello.IsSelected = true;
+                learn.OpenSelectedCommand.Execute(null);
+                window.UpdateLayout();
+
+                Assert.True(learn.Sections[0].Items.Count >= 8);
+                Assert.Equal("hello.asm (copy)", workspace.ActiveDocument!.Title);
+                Assert.StartsWith("; Hello, World", window.ActiveEditor()!.Text, StringComparison.Ordinal);
+                Render(window, "learn-built-in-samples.png");
+            }
+            finally
+            {
+                foreach (DocumentViewModel document in workspace.Documents)
+                {
+                    document.MarkSaved(document.FilePath ?? "x.asm");
+                }
+
+                window.Close();
+            }
+        });
+    }
+
+    [Fact]
     public void The_welcome_page_offers_open_a_sample()
     {
         StaTestThread.Run(() =>

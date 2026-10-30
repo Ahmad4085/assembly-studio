@@ -97,16 +97,22 @@ public static class ProgramHarness
         Path.Combine(RepositoryRoot.Value, "tests", "AssemblyStudio.ProgramTests", "Programs", fileName);
 
     /// <summary>Builds <paramref name="sourcePath"/>; fails the test with the build output when the build fails.</summary>
-    public static async Task<BuildResult> BuildAsync(string sourcePath)
+    public static Task<BuildResult> BuildAsync(string sourcePath) => BuildAsync(new BuildRequest(sourcePath, null), Path.GetFileName(sourcePath));
+
+    /// <summary>Builds unsaved source <paramref name="text"/> (a sample copy, as the editor would); fails the test when the
+    /// build fails.</summary>
+    public static Task<BuildResult> BuildTextAsync(string name, string text) => BuildAsync(new BuildRequest(null, text), name);
+
+    private static async Task<BuildResult> BuildAsync(BuildRequest request, string name)
     {
         var assembler = new NasmAssembler(new NasmOptions
         {
             BundledPath = Path.Combine(RepositoryRoot.Value, "tools", "nasm", "nasm.exe"),
             TempRoot = Path.Combine(Path.GetTempPath(), "asmstudio-programtests"),
         });
-        BuildResult build = await assembler.BuildAsync(new BuildRequest(sourcePath, null), TestContext.Current.CancellationToken);
+        BuildResult build = await assembler.BuildAsync(request, TestContext.Current.CancellationToken);
         Assert.True(build.Outcome == BuildOutcome.Succeeded,
-            $"{Path.GetFileName(sourcePath)} did not build: {build.Outcome}\n{string.Join("\n", build.Diagnostics.Select(d => $"{d.Code} line {d.Line}: {d.What}"))}\n{build.Output}");
+            $"{name} did not build: {build.Outcome}\n{string.Join("\n", build.Diagnostics.Select(d => $"{d.Code} line {d.Line}: {d.What}"))}\n{build.Output}");
         return build;
     }
 

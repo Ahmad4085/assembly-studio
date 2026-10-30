@@ -1,3 +1,72 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "hello",
+      "kind": "sample",
+      "title": "Hello, World",
+      "summary": "Prints a message with DOS function 09h and exits with function 4Ch.",
+      "file": "Samples/hello.asm",
+      "expectedOutput": "Hello, World!\r\n"
+    },
+    {
+      "id": "arithmetic-flags",
+      "kind": "sample",
+      "title": "Arithmetic and flags",
+      "summary": "ADD and SUB on 8-bit values, with the carry, zero, sign and overflow flags they set.",
+      "file": "Samples/arithmetic-flags.asm",
+      "expectedOutput": "200 + 100 = 44   CF=1 ZF=0 SF=0 OF=0\r\n5 - 5 = 0   CF=0 ZF=1 SF=0 OF=0\r\n3 - 5 = 254   CF=1 ZF=0 SF=1 OF=0\r\n127 + 1 = 128   CF=0 ZF=0 SF=1 OF=1\r\n"
+    },
+    {
+      "id": "loops",
+      "kind": "sample",
+      "title": "Loops",
+      "summary": "Counts with LOOP and with DEC and JNZ, and adds up 1 to 10.",
+      "file": "Samples/loops.asm",
+      "expectedOutput": "Counting with LOOP: 1 2 3 4 5 6 7 8 9 10 \r\nSum of 1 to 10: 55\r\nCounting down with DEC and JNZ: 5 4 3 2 1 \r\n"
+    },
+    {
+      "id": "conditional-jumps",
+      "kind": "sample",
+      "title": "Conditional jumps",
+      "summary": "CMP with JB, JE and JA, and why the same bits compare differently signed (JL) and unsigned (JA).",
+      "file": "Samples/conditional-jumps.asm",
+      "expectedOutput": "3 is less than 7\r\n7 is equal to 7\r\n9 is greater than 2\r\nFFFFh compared with 1: unsigned it is above (JA jumps), signed it is less (JL jumps)\r\n"
+    },
+    {
+      "id": "stack-procedures",
+      "kind": "sample",
+      "title": "The stack and procedures",
+      "summary": "CALL and RET, arguments in registers and on the stack, and PUSH/POP reversing a word.",
+      "file": "Samples/stack-procedures.asm",
+      "expectedOutput": "square(9) = 81\r\nadd_two(30, 12) = 42\r\nSTACK popped in reverse: KCATS\r\n"
+    },
+    {
+      "id": "strings",
+      "kind": "sample",
+      "title": "String instructions",
+      "summary": "Copies, converts, scans and compares text with MOVSB, LODSB, STOSB, SCASB and CMPSB.",
+      "file": "Samples/strings.asm",
+      "expectedOutput": "Copied: hello, string instructions\r\nUpper case: HELLO, STRING INSTRUCTIONS\r\nLength found with SCASB: 26\r\nABC and ABD: first difference at position 3\r\n"
+    },
+    {
+      "id": "keyboard-input",
+      "kind": "sample",
+      "title": "Keyboard input",
+      "summary": "Reads a line with DOS function 0Ah and a single key with function 01h.",
+      "file": "Samples/keyboard-input.asm",
+      "expectedOutput": "What is your name? Ada\r\r\nHello, Ada!\r\nPress a key: y\r\nYou pressed: y\r\n",
+      "input": [
+        "Ada\r",
+        "y"
+      ]
+    },
+    {
+      "id": "addressing-modes",
+      "kind": "sample",
+      "title": "Addressing modes",
+      "summary": "Immediate, register, direct, indirect, based, indexed and based indexed operands, and summing an array.",
+      "file": "Samples/addressing-modes.asm",
+      "expectedOutput": "Immediate      mov ax, 7              AX = 7\r\nRegister       mov ax, bx             AX = 7\r\nDirect         mov ax, [numbers]      AX = 10\r\nIndirect       mov ax, [bx]           AX = 10\r\nBased          mov ax, [bx + 4]       AX = 30\r\nIndexed        mov ax, [numbers + si] AX = 40\r\nBased indexed  mov ax, [bx + si + 6]  AX = 50\r\nSum of the five words:                AX = 150\r\n"
+    }
+  ]
 }

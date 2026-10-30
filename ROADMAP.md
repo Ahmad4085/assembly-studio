@@ -45,5 +45,5 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 | M3 | Debug session (headless) | TASK-050–054 | **Done** (2026-10-29 16:47 +0500) |
 | M4 | App shell and editor | TASK-060–070 | **In progress** (TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked on BLK-002) |
 | M5 | Debugger UI and visualization | TASK-080–086 | Not started |
-| M6 | Learning content | TASK-090–093 | **In progress** (TASK-090 Done) |
+| M6 | Learning content | TASK-090–093 | **In progress** (TASK-090, TASK-091 Done) |
 | M7 | Packaging and release readiness | TASK-100–105 | Not started |

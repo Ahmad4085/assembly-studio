@@ -28,7 +28,10 @@ public enum ContentKind
 /// <param name="Summary">One sentence shown under the title.</param>
 /// <param name="File">The content file, relative to the content root (for example <c>Samples/hello.asm</c>).</param>
 /// <param name="ExpectedOutput">For samples: the documented console output, which the program-level tests check (AC-035).</param>
-public sealed record ContentItem(string Id, ContentKind Kind, string Title, string Summary, string File, string? ExpectedOutput = null)
+/// <param name="Input">For samples that read the keyboard: the documented input, one entry each time the program waits
+/// (for example a line ending in a carriage return, then a single key). The expected output assumes this input.</param>
+public sealed record ContentItem(
+    string Id, ContentKind Kind, string Title, string Summary, string File, string? ExpectedOutput = null, IReadOnlyList<string>? Input = null)
 {
     /// <summary>The content file's name, such as <c>hello.asm</c> (a sample copy's suggested Save As name).</summary>
     public string FileName => File[(File.LastIndexOf('/') + 1)..];
@@ -171,6 +174,11 @@ public sealed class EmbeddedContentCatalog : IContentCatalog
             if (item.Kind == ContentKind.Sample ? item.ExpectedOutput is null : item.ExpectedOutput is not null)
             {
                 throw new ContentCatalogException($"{where}: samples, and only samples, document their expected output.");
+            }
+
+            if (item.Input is not null && item.Kind != ContentKind.Sample)
+            {
+                throw new ContentCatalogException($"{where}: only samples have input.");
             }
         }
 

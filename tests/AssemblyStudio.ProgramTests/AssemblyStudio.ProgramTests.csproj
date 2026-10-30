@@ -9,5 +9,7 @@
     <ProjectReference Include="..\..\src\AssemblyStudio.Runtime\AssemblyStudio.Runtime.csproj" />
     <ProjectReference Include="..\..\src\AssemblyStudio.Os.Dos\AssemblyStudio.Os.Dos.csproj" />
     <ProjectReference Include="..\..\src\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
+    <!-- The built-in samples (TASK-091, AC-035) -->
+    <ProjectReference Include="..\..\src\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
   </ItemGroup>
 </Project>

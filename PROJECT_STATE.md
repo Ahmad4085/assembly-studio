@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 14:26 +0500 by Claude Code (Opus 5.5) (TASK-090 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, 062, 063, 067, 068 done; TASK-061 blocked on BLK-002); M6 started (TASK-090 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-30 16:09 +0500 by Claude Code (Opus 5.5) (TASK-091 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, 062, 063, 067, 068 done; TASK-061 blocked on BLK-002); M6 in progress (TASK-090, 091 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Eligible: `TASK-091` samples, `TASK-092` tutorials/reference, `TASK-093` help, `TASK-101` installer. M4 editor tasks and M5 wait for TASK-061 (user AC-059 check). User: `TASK-006`, `TASK-100`, DEF-003 decision |
+| Active task | None in progress. Eligible: `TASK-092` tutorials/reference, `TASK-093` help, `TASK-101` installer. M4 editor tasks and M5 wait for TASK-061 (user AC-059 check). User: `TASK-006`, `TASK-100`, DEF-003 decision |
 
-| Next recommended action | Agent: `/assembly-implement TASK-091`. **User: AC-059 check** (unblocks TASK-061 → TASK-064 and M5); `TASK-100` license decision |
+| Next recommended action | Agent: `/assembly-implement TASK-092` or `TASK-093`. **User: AC-059 check** (unblocks TASK-061 → TASK-064 and M5); `TASK-100` license decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-091 Sample programs with automated verification | 2026-10-30 16:09 +0500 | 8 samples (hello, arithmetic/flags, loops, conditional jumps, stack/procedures, strings, keyboard input, addressing modes) in the content catalog with documented output and input; `SampleTests` builds and runs each from the catalog on the real engine and compares the output (AC-035), 18 cases. Release build 0w/0e; full solution 1214/1214 (twice) |
 | TASK-090 Content catalog and Learn sidebar | 2026-10-30 14:26 +0500 | `Content`: validated embedded catalog (`IContentCatalog`, ships empty until TASK-091–093); `App/Learn`: keyboard tree sidebar with details, explanation text marked as not program state, samples open as untitled copies (FR-069), Learn menu and welcome "Open a sample". 19 new tests incl. AC-035 open-as-copy; mutation-checked. Release build 0w/0e; full solution 1193/1193 (twice) |
 | TASK-068 About/Diagnostics, release notes, notices, logging | 2026-10-30 13:54 +0500 | `App/Logging` rolling local log (≤ 10 MB, no network) wired to startup, unhandled exceptions and file/recovery/settings failures; `App/About` copyable diagnostics, release notes and notices from installed files, Help menu. 20 new tests incl. AC-038, AC-063 (also in the real app). DEF-007 (tests ran a hidden app instance on the user's folders) found and fixed; DEF-006 opened. Release build 0w/0e; full solution 1175/1175 (twice) |
 | TASK-067 Settings service and dialog | 2026-10-30 12:57 +0500 | `App/Settings`: JSON settings with corrupt-file backup + notice, Settings dialog (assembler path validated by running it, editor/execution preferences, theme, reset layout, reset all), editor font tokens, bundled NASM copied next to the app. 31 new tests incl. AC-015, AC-039 (in-process and real app), AC-053, AC-054 UI part; mutation-checked. Release build 0w/0e; full solution 1155/1155 (twice) |
@@ -104,8 +105,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-30 14:17 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 14:25 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1193/1193 passed** in two consecutive runs (4m 06s, 3m 52s) |
+| Product build (2026-10-30 16:00 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-30 16:08 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1214/1214 passed** in two consecutive runs (2m 52s, 2m 37s) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

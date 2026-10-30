@@ -13,6 +13,24 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Milestone 6 progress | TASK-090, TASK-091 Done. Eligible: `TASK-092` (tutorials and reference), `TASK-093` (help) |
+| Recommended next action | `/assembly-implement TASK-092` or `TASK-093`. **User: AC-059 check** for the editor chain and M5 |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 15:06 +0500 |
+| Milestone | M6 (Learning content) |
+| Goal | Write at least 8 samples with documented expected output, each verified by the program-level harness |
+| Scope (in) | Hello, arithmetic and flags, loops, conditional jumps, stack and procedures, strings, keyboard input, addressing modes |
+| Requirements | FR-068; UI-015; ADR-0008; AC-035 (all samples pass) |
+| Expected files | `src/AssemblyStudio.Content/Samples/` (catalog content folder `Content/Samples/`), tests |
+
+---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
 | Milestone 6 progress | TASK-090 Done. Eligible: `TASK-091` (samples), `TASK-093` (help); `TASK-092` (tutorials/reference) also needs TASK-020 (Done) |
 | Recommended next action | `/assembly-implement TASK-091` (samples, fills the Learn sidebar). **User: AC-059 check** for the editor chain and M5 |
 | Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision |
@@ -165,6 +183,28 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-091 Sample programs with automated verification (Done 2026-10-30 16:09 +0500, Claude Code (Opus 5.5))
+- 8 samples in `src/AssemblyStudio.Content/Content/Samples/` (the catalog's content folder; the backlog said `Samples/`), listed in `Content/catalog.json` with summary and documented expected output:
+  - hello, arithmetic-flags (CF/ZF/SF/OF after ADD/SUB, read with PUSHF), loops (LOOP, DEC/JNZ, a sum), conditional-jumps (JB/JE/JA, signed JL vs unsigned JA).
+  - stack-procedures (register and stack arguments with BP, LIFO reversal), strings (REP MOVSB, LODSB/STOSB, REPNE SCASB, REPE CMPSB).
+  - keyboard-input (0Ah line, 01h key; documented input `Ada⏎`, `y`), addressing-modes (immediate to based-indexed, an array sum).
+  - Each is self-contained (its own print routines) and commented for beginners.
+- `ContentItem.Input` (samples only, validated): the documented input a sample's expected output assumes.
+- `tests/AssemblyStudio.ProgramTests/SampleTests.cs` (AC-035):
+  - For every catalog sample: build the catalog text with the bundled NASM (no warnings), run it headless on the real engine/runtime/DOS with its input, and compare the output with `expectedOutput` and the exit with 4Ch/0.
+  - Also: at least 8 samples cover the 8 required topics, each starts with "; <title>", and the keyboard sample waits without input.
+  - Harness gained `BuildTextAsync`.
+- Expected outputs were written by hand from x86/DOS semantics before running. The first run found **two bugs in the samples**, not the engine (AX overwritten by a print call; DOS 09h returns AL = 24h, as real DOS does); fixed in the samples.
+- Content tests +2 (built-in samples, input on a non-sample rejected). App: render of the real sidebar with the samples (`learn-built-in-samples.png`).
+- Release build 0 warnings / 0 errors; full solution 1214/1214 in two consecutive runs (16:05, 16:08).
+- Note: long sample titles are clipped at the default sidebar width (the item's automation name and tooltip carry the full text); a candidate polish for TASK-069 or later.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 15:06 / 16:09 +0500 (session interrupted once) |
 
 ## Completed: TASK-090 Content catalog and Learn sidebar (Done 2026-10-30 14:26 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.Content/ContentCatalog.cs`:

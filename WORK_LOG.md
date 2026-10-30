@@ -1516,3 +1516,24 @@
 - **Git state after:** uncommitted TASK-090 changes on top of `7e92774` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user).
 - **Next step:** `/assembly-implement TASK-091` (samples).
+
+### 2026-10-30 15:06 – 16:09 +0500 · Claude Code (Opus 5.5) · TASK-091 Sample programs with automated verification
+- **Summary:** Ran `/assembly-implement TASK-091` (user request). Dependencies TASK-044 and TASK-090 are Done; the lock was free.
+  - Wrote 8 beginner samples (hello, arithmetic-flags, loops, conditional-jumps, stack-procedures, strings, keyboard-input, addressing-modes) under the catalog's content folder `Content/Samples/` (the backlog named `Samples/`).
+  - Registered them in `catalog.json` with summaries, expected output written by hand from the x86/DOS semantics, and, for keyboard-input, the documented input (new validated `ContentItem.Input`, samples only).
+  - `SampleTests` (AC-035) builds each catalog sample's text with the bundled NASM (`ProgramHarness.BuildTextAsync`, as the editor builds an unsaved copy), runs it on the real engine/runtime/DOS, and compares output and exit.
+  - A bash heredoc parse error meant no files were written on the first attempt; the samples were then written with the Write tool.
+  - The session was interrupted once during a test run (no partial state: all files were intact). A raw CR byte that a script had put into a C# string literal was replaced with `\r`.
+- **Files changed:** `src/AssemblyStudio.Content/{ContentCatalog.cs, Content/catalog.json, Content/Samples/*.asm (8 new)}`, `tests/AssemblyStudio.ProgramTests/{AssemblyStudio.ProgramTests.csproj, ProgramHarness.cs, SampleTests.cs (new)}`, `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/input-on-tutorial/* (new)}`, `tests/AssemblyStudio.App.Tests/Learn/LearnTests.cs`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Sample tests, first run **16/18**. Both failures were sample bugs:
+    - addressing-modes printed AX after a print call had set it to 0924h (DOS 09h returns AL = 24h, like real DOS).
+    - strings printed a label between computing a value in AX and printing it.
+  - Fixed the samples, not the expectations. Then **18/18**: every hand-written expectation, including all flag values, matched.
+  - Release build **0 warnings, 0 errors** (16:00). Content 12/12, App 171/171, ProgramTests 32/32.
+  - Reviewed render `artifacts/ui/learn-built-in-samples.png`: long titles are clipped at the default sidebar width (noted as polish).
+  - Full solution **1214/1214 at 16:05 and 16:08** (two consecutive runs).
+  - The only file in the user's real log folder is one "started" line from 14:34 (outside any test run of mine, the user's own app start), left as is. The test runs wrote nothing there.
+- **Git state after:** uncommitted TASK-091 changes on top of `ca3d160` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user).
+- **Next step:** `/assembly-implement TASK-092` or `TASK-093`.

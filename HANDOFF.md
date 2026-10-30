@@ -8,7 +8,7 @@
 | Written | 2026-10-30 13:54 +0500 by Claude Code (Opus 5.5), after completing TASK-068 |
 | Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so TASK-064/065/066/069 wait; TASK-070 also needs TASK-006. Eligible: `TASK-090` content catalog, `TASK-101` installer** |
 | Last completed | TASK-068 About/Diagnostics, release notes, notices, logging (Done 2026-10-30 13:54 +0500) |
-| Git state | HEAD `c2af6fc` + uncommitted TASK-068 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `0129682` (TASK-068 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 13:46 +0500).
@@ -41,7 +41,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-068. Files:
+1. Done: TASK-068 committed. Files were:
    - `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, About/*, Logging/*, Documents/WorkspaceViewModel.cs, Documents/Recovery/AutosaveService.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/StartupOptions.cs, Shell/Strings.resx, Shell/Strings.cs}`
    - `tests/AssemblyStudio.App.Tests/{About/*, Logging/*, StaTestThread.cs, StartupTimeTests.cs, Documents/CrashRecoveryProcessTests.cs, Settings/SettingsProcessTests.cs}`
    - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files

@@ -34,7 +34,8 @@ public sealed class SettingsProcessTests : IDisposable
         string settings = Path.Combine(_folder, "settings.json");
         File.WriteAllText(settings, "{ \"settings\": { \"fontSize\": ");
         var start = new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")) { UseShellExecute = false };
-        foreach (string argument in new[] { "--settings", settings, "--recovery", Path.Combine(_folder, "recovery") })
+        string logs = Path.Combine(_folder, "logs");
+        foreach (string argument in new[] { "--settings", settings, "--recovery", Path.Combine(_folder, "recovery"), "--log", logs })
         {
             start.ArgumentList.Add(argument);
         }
@@ -50,6 +51,11 @@ public sealed class SettingsProcessTests : IDisposable
         Assert.Equal("{ \"settings\": { \"fontSize\": ", File.ReadAllText(backup));
         Assert.NotNull(notice.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty,
             $"The settings file couldn't be read, so Assembly Studio started with default settings. The unreadable file was kept as {backup}.")));
+
+        // AC-063: the start and the problem are in the local log.
+        string log = File.ReadAllText(Assert.Single(Directory.GetFiles(logs, "assemblystudio-*.log")));
+        Assert.Contains(" INFO Assembly Studio ", log, StringComparison.Ordinal);
+        Assert.Contains($" WARNING The settings file could not be read; defaults are used. Backup: {backup}", log, StringComparison.Ordinal);
     }
 
     private static AutomationElement Poll(Func<AutomationElement?> find)

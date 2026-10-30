@@ -1,0 +1,61 @@
+<Window x:Class="AssemblyStudio.App.About.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:about="clr-namespace:AssemblyStudio.App.About"
+        Title="{x:Static shell:Strings.AboutTitle}"
+        Width="720"
+        Height="520"
+        MinWidth="480"
+        MinHeight="360"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Surface.Raised}"
+        Foreground="{DynamicResource Text.Primary}"
+        FontFamily="{DynamicResource Font.UI}"
+        FontSize="{DynamicResource FontSize.UI}"
+        UseLayoutRounding="True"
+        AutomationProperties.Name="{x:Static shell:Strings.AboutTitle}">
+  <!-- UI-018 About / Diagnostics: versions as copyable text, release notes and notices from the installed files. -->
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <about:AboutPageConverter x:Key="PageIndex" />
+    <Style x:Key="ReadOnlyText" TargetType="TextBox">
+      <Setter Property="IsReadOnly" Value="True" />
+      <Setter Property="IsReadOnlyCaretVisible" Value="True" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+      <Setter Property="FontFamily" Value="{DynamicResource Font.Code}" />
+      <Setter Property="Background" Value="{DynamicResource Surface.Editor}" />
+      <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="8" />
+    </Style>
+  </Window.Resources>
+
+  <DockPanel Margin="16">
+    <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+      <Button DockPanel.Dock="Right" Content="{x:Static shell:Strings.DialogClose}" IsCancel="True" IsDefault="True" MinWidth="88" Padding="10,3" Click="OnClose" />
+      <StackPanel Orientation="Horizontal" Visibility="{Binding IsDiagnosticsPage, Converter={StaticResource BoolToVisibility}}">
+        <Button x:Name="CopyButton" Content="{x:Static shell:Strings.AboutCopy}" Command="{Binding CopyDiagnosticsCommand}" MinWidth="88" Padding="10,3" />
+        <TextBlock Text="{x:Static shell:Strings.AboutCopied}" Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Text.Secondary}"
+                   Visibility="{Binding Copied, Converter={StaticResource BoolToVisibility}}" AutomationProperties.LiveSetting="Polite" />
+      </StackPanel>
+    </DockPanel>
+
+    <TabControl x:Name="Pages" SelectedIndex="{Binding SelectedPage, Converter={StaticResource PageIndex}}">
+      <TabItem Header="{x:Static shell:Strings.AboutTabDiagnostics}">
+        <TextBox x:Name="DiagnosticsText" Text="{Binding Diagnostics, Mode=OneTime}" Style="{StaticResource ReadOnlyText}"
+                 AutomationProperties.Name="{x:Static shell:Strings.AboutTabDiagnosticsName}" />
+      </TabItem>
+      <TabItem Header="{x:Static shell:Strings.AboutTabReleaseNotes}">
+        <TextBox x:Name="ReleaseNotesText" Text="{Binding ReleaseNotes, Mode=OneTime}" Style="{StaticResource ReadOnlyText}"
+                 AutomationProperties.Name="{x:Static shell:Strings.AboutTabReleaseNotesName}" />
+      </TabItem>
+      <TabItem Header="{x:Static shell:Strings.AboutTabNotices}">
+        <TextBox x:Name="NoticesText" Text="{Binding Notices, Mode=OneTime}" Style="{StaticResource ReadOnlyText}" TextWrapping="NoWrap"
+                 HorizontalScrollBarVisibility="Auto" AutomationProperties.Name="{x:Static shell:Strings.AboutTabNoticesName}" />
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>

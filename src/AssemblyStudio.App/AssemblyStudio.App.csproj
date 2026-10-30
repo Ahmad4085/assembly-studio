@@ -29,6 +29,15 @@
           Link="tools\nasm\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 
+  <!-- FR-087, FR-090: the release notes and third-party notices (written by the release procedure and TASK-102) are
+       installed next to the application, where About reads them. -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\RELEASE-NOTES.md" Condition="Exists('$(MSBuildThisFileDirectory)..\..\RELEASE-NOTES.md')"
+          Link="RELEASE-NOTES.md" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\THIRD-PARTY-NOTICES.txt" Condition="Exists('$(MSBuildThisFileDirectory)..\..\THIRD-PARTY-NOTICES.txt')"
+          Link="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="AssemblyStudio.App.Tests" />
   </ItemGroup>

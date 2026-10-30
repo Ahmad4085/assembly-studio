@@ -1457,3 +1457,38 @@
 - **Git state after:** uncommitted TASK-067 changes on top of `39796a9` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 (recurred, Open). DEF-002 is still open.
 - **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-068`.
+
+### 2026-10-30 13:16 – 13:54 +0500 · Claude Code (Opus 5.5) · TASK-068 About/Diagnostics, release notes, notices, logging
+- **Summary:** Ran `/assembly-implement TASK-068` (user request). Dependency TASK-060 is Done; the lock was free.
+  - **Logging** (`App/Logging/FileLog.cs`):
+    - Rolling local log in `%LOCALAPPDATA%\AssemblyStudio\logs`: 2 MB per file, oldest files deleted to keep the total at 10 MB or less (NFR-012). Each entry is appended and flushed. Writing never throws, and nothing is sent anywhere.
+    - Wired into App startup (start line, UI-thread/AppDomain/unobserved-task exceptions, invalid settings, unusable recovery folder), autosave, workspace open/save errors and the recent list, and the window layout save.
+  - **About** (`App/About`, UI-018), from Help ▸ Release Notes / Third-Party Notices / About:
+    - Copyable diagnostics: app, assembler, engine, DOS services, .NET, OS, settings and log paths.
+    - Release notes (`RELEASE-NOTES.md`) and notices (`THIRD-PARTY-NOTICES.txt`, plus each bundled tool's LICENSE) are read from the app folder. A missing file is reported with its path, never replaced by placeholder text.
+    - The App project copies both files from the repository root when they exist; neither exists yet.
+  - New startup option `--log`; the three app-launching tests pass temp `--log` folders.
+  - During the session the user had the app open (started 13:09), which locked the build output. I asked; the user closed it.
+- **Files changed:** `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, About/AboutViewModel.cs (new), About/AboutWindow.xaml(.cs) (new), Logging/FileLog.cs (new), Documents/WorkspaceViewModel.cs, Documents/Recovery/AutosaveService.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/StartupOptions.cs, Shell/Strings.resx, Shell/Strings.cs}`, `tests/AssemblyStudio.App.Tests/{About/AboutTests.cs (new), Logging/LoggingTests.cs (new), StaTestThread.cs, StartupTimeTests.cs, Documents/CrashRecoveryProcessTests.cs, Settings/SettingsProcessTests.cs}`, `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Release build **0 warnings, 0 errors** (13:46 +0500), after fixing CA1859 and CA2201 (the latter suppressed in one test, with the reason).
+  - App 161/161. Renders reviewed: `artifacts/ui/about-diagnostics.png`, `about-release-notes.png`. Copy was then limited to the diagnostics page.
+  - Mutation: disabling the log size trim failed the cap test. Restored.
+  - Full solution:
+    - 13:35 → 1175/1175.
+    - 13:38 → **1174/1175**: `HostileProgramTests.A_flood_of_long_strings_reaches_the_budget_quickly` took 11.57 s against a 10 s limit; alone it takes 1.58–1.83 s. Opened as **DEF-006** (Open, not fixed here: TASK-054 test code).
+  - **DEF-007 found:**
+    - Nine one-line "started" logs appeared in the user's real `%LOCALAPPDATA%\AssemblyStudio\logs` during test runs.
+    - Cause: WPF raises Startup for the test thread's `new App()`, so `OnStartup` composed a hidden app instance with the user's settings, recovery and log folders. This has been so since TASK-060; recovery-folder use since TASK-063.
+    - Checked the user's settings.json: their own data only, not damaged.
+    - Fix: `App.ComposeOnStartup` (false in the test thread).
+    - That exposed a masked second bug: App.xaml's `ShutdownMode=OnMainWindowClose` overrode the test thread's setting, so the first closed test window shut the app down. With the fix, 14 UI tests failed until `ShutdownMode` was set after `InitializeComponent`. Confirmed by experiment (startup re-enabled → tests pass).
+    - Removed the test-created files: 9 logs and 1 empty recovery session folder, verified as test-only before removal.
+  - After the fixes: App **161/161**; full solution **1175/1175 at 13:50 and 13:53** (two consecutive runs). The user's real log folder was not created and the recovery folder stayed empty. No AssemblyStudio.App.exe left running.
+- **Git state after:** uncommitted TASK-068 changes on top of `c2af6fc` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - BLK-002 (user AC-059 check) blocks the rest of M4 and all of M5.
+  - Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002.
+  - The version shows 1.0.0 (build default; no version decided yet).
+  - The backlog's TASK-068 "Notice content (TASK-091)" should read TASK-102 (left unedited, reported).
+- **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-090` or `TASK-101`.

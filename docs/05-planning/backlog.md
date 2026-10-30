@@ -74,7 +74,7 @@
 | TASK-065 | Find, replace and go to line | M4 | TASK-064 | L | FR-015, FR-016, FR-017 | Approved |
 | TASK-066 | Editor diagnostics and gutter | M4 | TASK-064, TASK-041 | M | FR-018, FR-052, FR-053 | Approved |
 | TASK-067 | Settings service and dialog | M4 | TASK-060, TASK-040 | M | FR-075, FR-077, FR-078, FR-079, FR-080, FR-081, FR-082, NFR-009 | Done |
-| TASK-068 | About/Diagnostics, release notes, notices, logging | M4 | TASK-060 | L | FR-076, FR-087, FR-090, NFR-012 | Approved |
+| TASK-068 | About/Diagnostics, release notes, notices, logging | M4 | TASK-060 | L | FR-076, FR-087, FR-090, NFR-012 | Done |
 | TASK-069 | Editor accessibility verification | M4 | TASK-064 | H | FR-093, NFR-022 | Approved |
 | TASK-070 | Fonts and icons on Windows 10 LTSC | M4 | TASK-061, TASK-006 | L | NFR-025 | Approved |
 | TASK-080 | Build/run commands, command bar and status | M5 | TASK-050, TASK-066, TASK-067, TASK-042 | M | FR-028, FR-035, FR-049, FR-050, FR-051, FR-067, FR-091 | Approved |
@@ -1307,7 +1307,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M4 |
 | Requirements | FR-076, FR-087, FR-090, NFR-012 |
 | Decisions / design | UI-018, ADR-0007 |

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:about="clr-namespace:AssemblyStudio.App.About"
         xmlns:docs="clr-namespace:AssemblyStudio.App.Documents"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
@@ -157,7 +158,10 @@
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuHelp}">
         <MenuItem Header="{x:Static shell:Strings.CmdHelp}" InputGestureText="{x:Static shell:Strings.KeyHelp}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdAbout}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReleaseNotes}" Command="{Binding OpenAboutCommand}" CommandParameter="{x:Static about:AboutPage.ReleaseNotes}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdNotices}" Command="{Binding OpenAboutCommand}" CommandParameter="{x:Static about:AboutPage.Notices}" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdAbout}" Command="{Binding OpenAboutCommand}" CommandParameter="{x:Static about:AboutPage.Diagnostics}" />
       </MenuItem>
     </Menu>
 

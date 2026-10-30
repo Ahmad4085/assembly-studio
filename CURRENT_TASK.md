@@ -6,10 +6,28 @@
 
 ## Active Task
 
-None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); TASK-064 depends on it.
+None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); the editor tasks depend on it.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Recommended next action | **User: AC-059 check** (the remaining M4 tasks and all of M5 depend on TASK-061). Eligible now: `TASK-090` (content catalog and Learn sidebar), `TASK-101` (self-contained publish and installer); user: `TASK-100` (product license decision) |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 13:16 +0500 |
+| Milestone | M4 (App shell and editor) |
+| Goal | Show versions, release notes and third-party notices, and add the local rolling log |
+| Scope (in) | Copyable diagnostics text; release notes and notices views from installed files; rolling log <= 10 MB, no upload |
+| Out of scope | Notice content (TASK-091) |
+| Requirements | FR-076, FR-087, FR-090, NFR-012; UI-018; ADR-0007 §5; AC-038, AC-063 |
+| Expected files | `src/AssemblyStudio.App/About/`, `src/AssemblyStudio.App/Logging/`, tests |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, 062, 063, 067 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
@@ -128,6 +146,34 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-068 About/Diagnostics, release notes, notices, logging (Done 2026-10-30 13:54 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Logging/FileLog.cs`:
+  - `ILog`, `NullLog`, `FileLog`: `%LOCALAPPDATA%\AssemblyStudio\logs\assemblystudio-<timestamp>-<pid>-<n>.log`; each entry is appended and flushed.
+  - Files hold at most 2 MB; the oldest are deleted to keep the total at 10 MB or less (NFR-012). Oversized entries are truncated; writing never throws.
+  - Local only (no networking references in any application assembly, tested).
+- Logged:
+  - Startup.
+  - Unhandled exceptions (UI thread, AppDomain, unobserved tasks).
+  - Invalid settings file, recovery folder unusable, autosave failure, open/save errors, recent list and layout save failures (the four places marked "logging arrives with TASK-068").
+- `src/AssemblyStudio.App/About/` (UI-018), Help ▸ Release Notes / Third-Party Notices / About:
+  - Diagnostics text: app, assembler (version, origin, path, or why unusable), engine and DOS-services assemblies and versions, .NET, OS, settings and log paths. "Copy diagnostics" handles a busy clipboard.
+  - Release notes from `RELEASE-NOTES.md` and notices from `THIRD-PARTY-NOTICES.txt` next to the app, plus each bundled tool's LICENSE (NASM's is installed now). A missing file is shown as "This file isn't installed: <path>", never invented.
+  - The App project copies `RELEASE-NOTES.md` and `THIRD-PARTY-NOTICES.txt` from the repository root when they exist; neither exists yet (release procedure / TASK-102).
+- New startup option `--log <folder>`; app-launching tests use temporary folders.
+- **DEF-007 found and fixed:** the WPF test thread's `new App()` ran the real startup (hidden app instance using the user's folders). Added `App.ComposeOnStartup`; set the test `ShutdownMode` after `InitializeComponent`; removed the test-created files from the user's folders.
+- **DEF-006 opened:** the flood regression test passed its 10 s limit once under full-suite load.
+- Tests (20 new): `LoggingTests` (10), `AboutTests` (10, including the window and Help menu); `SettingsProcessTests` now also checks the real app's log (AC-063). Mutation: disabling the size trim failed the cap test.
+- Release build 0 warnings / 0 errors; App 161/161; full solution 1175/1175 in two consecutive runs (13:50, 13:53).
+- Observations for the user:
+  - The app reports version 1.0.0, the build default; no version has been set yet (release procedure).
+  - The backlog's "Notice content (TASK-091)" points to the samples task; the notices task is TASK-102.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 13:16 / 13:54 +0500 |
 
 ## Completed: TASK-067 Settings service and dialog (Done 2026-10-30 12:57 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.App/Settings/`:

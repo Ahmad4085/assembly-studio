@@ -31,6 +31,8 @@ public class StartupTimeTests
             start.ArgumentList.Add(report);
             start.ArgumentList.Add("--recovery");
             start.ArgumentList.Add(Path.Combine(dir, "recovery")); // never touch the user's recovery folder
+            start.ArgumentList.Add("--log");
+            start.ArgumentList.Add(Path.Combine(dir, "logs")); // nor the user's log folder
 
             using Process process = Process.Start(start)!;
             bool exited = process.WaitForExit(TimeSpan.FromSeconds(60));

@@ -75,11 +75,14 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <param name="workspace">The open documents and file workflow (TASK-062); by default one with the WPF dialogs
     /// and an in-memory recent-files list.</param>
     /// <param name="openSettings">Opens the Settings dialog (TASK-067); the command is disabled without it.</param>
-    public ShellViewModel(ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null, Action? openSettings = null)
+    /// <param name="openAbout">Opens the About window on a page (TASK-068); the commands are disabled without it.</param>
+    public ShellViewModel(
+        ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null, Action? openSettings = null, Action<About.AboutPage>? openAbout = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         _store = store;
         OpenSettingsCommand = new RelayCommand(() => openSettings?.Invoke(), () => openSettings is not null);
+        OpenAboutCommand = new RelayCommand<About.AboutPage>(page => openAbout?.Invoke(page), _ => openAbout is not null);
         Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
         Apply(store.Load());
@@ -87,6 +90,9 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>File ▸ Settings (Ctrl+,).</summary>
     public IRelayCommand OpenSettingsCommand { get; }
+
+    /// <summary>Help ▸ About / Release Notes / Third-Party Notices; the parameter is the page.</summary>
+    public IRelayCommand<About.AboutPage> OpenAboutCommand { get; }
 
     /// <summary>Raised after a Go to command made a panel visible; the view moves focus to it.</summary>
     public event EventHandler<ShellPanel>? PanelActivated;

@@ -5,8 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using AssemblyStudio.App.About;
 using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Documents.Recovery;
+using AssemblyStudio.App.Logging;
 using AssemblyStudio.App.Settings;
 using AssemblyStudio.App.Shell;
 using AssemblyStudio.Core;
@@ -20,15 +22,40 @@ namespace AssemblyStudio.App;
 /// </summary>
 public partial class App : Application
 {
+    /// <summary>
+    /// Whether <see cref="OnStartup"/> composes and shows the application. WPF raises Startup for every
+    /// <see cref="Application"/> once its dispatcher runs, including the one the WPF tests create for the theme
+    /// resources; they turn this off so that no hidden instance uses the user's settings, recovery and log folders.
+    /// </summary>
+    internal static bool ComposeOnStartup { get; set; } = true;
+
     /// <inheritdoc />
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        if (!ComposeOnStartup)
+        {
+            return;
+        }
+
         StartupOptions options = StartupOptions.Parse(e.Args);
         string settingsPath = options.SettingsPath ?? JsonLayoutStore.DefaultPath;
 
+        // NFR-012: the local diagnostics log, first, so that every later failure can be written to it.
+        string logFolder = options.LogFolder ?? FileLog.DefaultFolder;
+        var log = new FileLog(logFolder);
+        log.Write(LogLevel.Info, $"Assembly Studio {AboutViewModel.AppVersion} started.");
+        DispatcherUnhandledException += (_, args) => log.Write(LogLevel.Error, "Unhandled exception on the UI thread.", args.Exception);
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+            log.Write(LogLevel.Error, "Unhandled exception.", args.ExceptionObject as Exception);
+        TaskScheduler.UnobservedTaskException += (_, args) => log.Write(LogLevel.Error, "Unobserved task exception.", args.Exception);
+
         // Settings first: an unreadable settings file is set aside before the layout and recent-files stores read it (FR-081).
         var settings = new JsonSettingsService(settingsPath);
+        if (settings.InvalidFileBackup is { } invalid)
+        {
+            log.Write(LogLevel.Warning, $"The settings file could not be read; defaults are used. Backup: {invalid}");
+        }
         var themes = new ThemeManager(Resources, settings.Current.Theme);
         themes.Apply();
         themes.Watch();
@@ -49,15 +76,15 @@ public partial class App : Application
 
         var store = new JsonLayoutStore(settingsPath);
         var dialogs = new WpfDialogService();
-        var workspace = new WorkspaceViewModel(dialogs, new JsonRecentFilesStore(settingsPath));
+        var workspace = new WorkspaceViewModel(dialogs, new JsonRecentFilesStore(settingsPath), log);
         bool smoke = options.SmokeReportPath is not null;
 
         // NFR-011: autosave unsaved documents; after an unexpected exit, offer what the previous instance autosaved.
-        RecoveryStore? recovery = StartRecovery(options.RecoveryPath ?? RecoveryStore.DefaultRoot);
+        RecoveryStore? recovery = StartRecovery(options.RecoveryPath ?? RecoveryStore.DefaultRoot, log);
         IReadOnlyList<RecoveredDocument> abandoned = recovery is null || smoke ? [] : recovery.FindAbandoned();
         if (recovery is not null)
         {
-            var autosave = new AutosaveService(workspace, recovery);
+            var autosave = new AutosaveService(workspace, recovery, log);
             var timer = new DispatcherTimer { Interval = options.AutosaveInterval ?? AutosaveService.DefaultInterval };
             timer.Tick += (_, _) => autosave.Tick();
             timer.Start();
@@ -75,11 +102,20 @@ public partial class App : Application
 
         MainWindow? window = null;
         ShellViewModel viewModel = null!;
-        viewModel = new ShellViewModel(store, AppVersion(), workspace, () =>
-            new SettingsWindow(new SettingsViewModel(settings, dialogs, CheckAssembler, () => viewModel.ResetLayoutCommand.Execute(null),
-                [.. System.Windows.Media.Fonts.SystemFontFamilies.Select(f => f.Source).Order(StringComparer.CurrentCultureIgnoreCase)]))
-                .ShowModal(window));
-        window = new MainWindow(viewModel, persistLayout: !smoke);
+        var aboutSources = new AboutSources(AppContext.BaseDirectory, Path.GetFullPath(settingsPath), Path.GetFullPath(logFolder));
+        viewModel = new ShellViewModel(
+            store,
+            AboutViewModel.AppVersion,
+            workspace,
+            openSettings: () =>
+                new SettingsWindow(new SettingsViewModel(settings, dialogs, CheckAssembler, () => viewModel.ResetLayoutCommand.Execute(null),
+                    [.. System.Windows.Media.Fonts.SystemFontFamilies.Select(f => f.Source).Order(StringComparer.CurrentCultureIgnoreCase)]))
+                    .ShowModal(window),
+            openAbout: page => new AboutWindow(new AboutViewModel(aboutSources, CheckAssembler(settings.Current.AssemblerPath), Clipboard.SetText, page))
+            {
+                Owner = window,
+            }.ShowDialog());
+        window = new MainWindow(viewModel, persistLayout: !smoke, log);
         MainWindow = window;
         if (settings.InvalidFileBackup is { } backup && !smoke)
         {
@@ -126,8 +162,8 @@ public partial class App : Application
     }
 
     /// <summary>The recovery store, or <see langword="null"/> when the folder can't be used (the app runs without
-    /// autosave rather than not at all; logging arrives with TASK-068).</summary>
-    private static RecoveryStore? StartRecovery(string root)
+    /// autosave rather than not at all, and the reason is logged).</summary>
+    private static RecoveryStore? StartRecovery(string root, FileLog log)
     {
         try
         {
@@ -135,11 +171,8 @@ public partial class App : Application
         }
         catch (Exception ex) when (FileErrors.IsFileError(ex))
         {
+            log.Write(LogLevel.Warning, $"Crash recovery is off: the recovery folder {root} can't be used.", ex);
             return null;
         }
     }
-
-    private static string AppVersion() =>
-        typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0]
-        ?? "0.0.0";
 }

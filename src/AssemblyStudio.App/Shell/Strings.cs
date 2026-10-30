@@ -795,4 +795,49 @@ public static class Strings
 
     /// <summary>Programs (*.exe)|*.exe</summary>
     public static string ExecutableFilter => Get(nameof(ExecutableFilter));
+
+    /// <summary>About Assembly Studio</summary>
+    public static string AboutTitle => Get(nameof(AboutTitle));
+
+    /// <summary>_Diagnostics</summary>
+    public static string AboutTabDiagnostics => Get(nameof(AboutTabDiagnostics));
+
+    /// <summary>Version and diagnostics information</summary>
+    public static string AboutTabDiagnosticsName => Get(nameof(AboutTabDiagnosticsName));
+
+    /// <summary>_Release notes</summary>
+    public static string AboutTabReleaseNotes => Get(nameof(AboutTabReleaseNotes));
+
+    /// <summary>Release notes</summary>
+    public static string AboutTabReleaseNotesName => Get(nameof(AboutTabReleaseNotesName));
+
+    /// <summary>Third-party _notices</summary>
+    public static string AboutTabNotices => Get(nameof(AboutTabNotices));
+
+    /// <summary>Third-party notices and license texts</summary>
+    public static string AboutTabNoticesName => Get(nameof(AboutTabNoticesName));
+
+    /// <summary>_Copy diagnostics</summary>
+    public static string AboutCopy => Get(nameof(AboutCopy));
+
+    /// <summary>Copied to the clipboard.</summary>
+    public static string AboutCopied => Get(nameof(AboutCopied));
+
+    /// <summary>This file isn&apos;t installed: {0}</summary>
+    public static string AboutFileMissing => Get(nameof(AboutFileMissing));
+
+    /// <summary>This file couldn&apos;t be read: {0} ({1})</summary>
+    public static string AboutFileUnreadable => Get(nameof(AboutFileUnreadable));
+
+    /// <summary>{0}: {1}</summary>
+    public static string AboutLicenseOf => Get(nameof(AboutLicenseOf));
+
+    /// <summary>_Release Notes</summary>
+    public static string CmdReleaseNotes => Get(nameof(CmdReleaseNotes));
+
+    /// <summary>Third-Party _Notices</summary>
+    public static string CmdNotices => Get(nameof(CmdNotices));
+
+    /// <summary>Close</summary>
+    public static string DialogClose => Get(nameof(DialogClose));
 }

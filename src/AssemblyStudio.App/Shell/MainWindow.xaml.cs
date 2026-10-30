@@ -22,15 +22,17 @@ public partial class MainWindow : Window
     public static readonly RoutedUICommand PreviousPaneCommand = new(Strings.CmdPreviousPane, nameof(PreviousPaneCommand), typeof(MainWindow));
 
     private readonly ShellViewModel _viewModel;
+    private readonly Logging.ILog _log;
     private readonly bool _persistLayout;
 
     /// <summary>Creates the window over its view model.</summary>
     /// <param name="viewModel">Shell state.</param>
     /// <param name="persistLayout">Save the layout when the window closes.</param>
-    public MainWindow(ShellViewModel viewModel, bool persistLayout = true)
+    public MainWindow(ShellViewModel viewModel, bool persistLayout = true, Logging.ILog? log = null)
     {
         ArgumentNullException.ThrowIfNull(viewModel);
         _viewModel = viewModel;
+        _log = log ?? Logging.NullLog.Instance;
         _persistLayout = persistLayout;
         DataContext = viewModel;
         InitializeComponent();
@@ -295,7 +297,8 @@ public partial class MainWindow : Window
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Losing the layout must never block closing. Logging arrives with TASK-068.
+            // Losing the layout must never block closing.
+            _log.Write(Logging.LogLevel.Warning, "The window layout could not be saved.", ex);
         }
     }
 }

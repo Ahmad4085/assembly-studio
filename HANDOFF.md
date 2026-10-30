@@ -5,23 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 12:57 +0500 by Claude Code (Opus 5.5), after completing TASK-067 |
-| Current task | **None in progress. M4: TASK-060, 062, 063, 067 Done; TASK-061 Blocked (BLK-002), so TASK-064/065/066/069 wait. Eligible: `TASK-068` About/diagnostics/logging** |
-| Last completed | TASK-067 Settings service and dialog (Done 2026-10-30 12:57 +0500) |
-| Git state | HEAD `c71502b` (TASK-067 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 13:54 +0500 by Claude Code (Opus 5.5), after completing TASK-068 |
+| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so TASK-064/065/066/069 wait; TASK-070 also needs TASK-006. Eligible: `TASK-090` content catalog, `TASK-101` installer** |
+| Last completed | TASK-068 About/Diagnostics, release notes, notices, logging (Done 2026-10-30 13:54 +0500) |
+| Git state | HEAD `c2af6fc` + uncommitted TASK-068 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 12:39 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1155/1155 passed**, two consecutive runs (2026-10-30 12:53 and 12:56 +0500). A run at 12:47 had 1154/1155: DEF-001 (the View-menu smoke test, Open) recurred.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 13:46 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1175/1175 passed**, two consecutive runs (2026-10-30 13:50 and 13:53 +0500), with no files written to the user's real log or recovery folders. A run at 13:38 had 1174/1175: DEF-006 (Open).
 
 ## Changes since the previous handoff
-- **TASK-067 Settings service and dialog** (Claude Code, uncommitted):
-  - `src/AssemblyStudio.App/Settings/{AppSettings, SettingsService (ISettingsService, JsonSettingsService), SettingsViewModel, SettingsWindow.xaml(.cs) (+ SettingsLabels), EditorAppearance}.cs`.
-  - App composition: settings service first, then theme, editor font, the bundled NASM path (`AppContext.BaseDirectory\tools\nasm\nasm.exe`), `ShellViewModel(..., openSettings)`.
-  - **For TASK-064:** the editor must use `{DynamicResource Font.Editor}` / `FontSize.Editor` and read `ISettingsService.Current.TabWidth` / `UseSpaces` (and follow `Changed`).
-  - **For TASK-080/081:** use `InstructionBudget` and `NumberFormat` from `ISettingsService`, and build with `NasmOptions { BundledPath, ConfiguredPath = settings.AssemblerPath }`.
-  - `IDialogService.ShowOpenExecutable` was added; fakes must implement it.
-  - The App project copies `tools/nasm/{nasm.exe, LICENSE}` to the output when present.
+- **TASK-068 About/Diagnostics, release notes, notices, logging** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Logging/FileLog.cs` (`ILog`, `NullLog`, `FileLog`) and `src/AssemblyStudio.App/About/{AboutViewModel.cs, AboutWindow.xaml(.cs)}`.
+  - `WorkspaceViewModel`, `AutosaveService` and `MainWindow` take an optional `ILog`. `ShellViewModel` has an `openAbout` parameter. New option `--log`.
+  - **Every app-launching test must pass `--settings`, `--recovery` and `--log` temp paths.**
+  - **DEF-007:** `App.ComposeOnStartup` is false in the WPF test thread, so `OnStartup` does nothing there. Any new composition must live in `OnStartup` after that check. The test thread sets `ShutdownMode` after `InitializeComponent`.
+  - DEF-006 (Open): the flood test's 10 s limit fails under full-suite load. Fixing it needs a task.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -42,12 +41,12 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-067 committed. Files were:
-   - `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, Settings/*, Documents/IDialogService.cs, Documents/WpfDialogService.cs, Shell/MainWindow.xaml, Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs, Themes/Shared.xaml}`
-   - `tests/AssemblyStudio.App.Tests/{Settings/*, Documents/WorkspaceViewModelTests.cs}`
+1. When the user asks: commit TASK-068. Files:
+   - `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, About/*, Logging/*, Documents/WorkspaceViewModel.cs, Documents/Recovery/AutosaveService.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/StartupOptions.cs, Shell/Strings.resx, Shell/Strings.cs}`
+   - `tests/AssemblyStudio.App.Tests/{About/*, Logging/*, StaTestThread.cs, StartupTimeTests.cs, Documents/CrashRecoveryProcessTests.cs, Settings/SettingsProcessTests.cs}`
    - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files
-2. User: AC-059 check → TASK-061 Done → `/assembly-implement TASK-064`. Meanwhile `/assembly-implement TASK-068`.
-3. User: TASK-006 test VMs, DEF-003 decision.
+2. User: AC-059 check → TASK-061 Done → `/assembly-implement TASK-064` (then M5). Meanwhile `/assembly-implement TASK-090` or `TASK-101`.
+3. User: TASK-006 test VMs, TASK-100 license decision, DEF-003 decision, the version number for the first release.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

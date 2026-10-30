@@ -19,14 +19,16 @@ public sealed partial class WorkspaceViewModel : ObservableObject
     public const int RecentFilesCapacity = 10;
 
     private readonly IDialogService _dialogs;
+    private readonly Logging.ILog _log;
     private readonly IRecentFilesStore _recentStore;
     private int _untitledCount;
 
     /// <summary>Creates the workspace.</summary>
-    public WorkspaceViewModel(IDialogService dialogs, IRecentFilesStore recentStore)
+    public WorkspaceViewModel(IDialogService dialogs, IRecentFilesStore recentStore, Logging.ILog? log = null)
     {
         ArgumentNullException.ThrowIfNull(dialogs);
         ArgumentNullException.ThrowIfNull(recentStore);
+        _log = log ?? Logging.NullLog.Instance;
         _dialogs = dialogs;
         _recentStore = recentStore;
         foreach (string file in recentStore.Load().Take(RecentFilesCapacity))
@@ -105,6 +107,7 @@ public sealed partial class WorkspaceViewModel : ObservableObject
         }
         catch (Exception ex) when (FileErrors.IsFileError(ex))
         {
+            _log.Write(Logging.LogLevel.Warning, $"Open failed: {path}", ex);
             _dialogs.ShowError(Strings.OpenFailedTitle, FileErrors.Describe(ex, path), Strings.OpenFailedNext);
             return null;
         }
@@ -122,6 +125,7 @@ public sealed partial class WorkspaceViewModel : ObservableObject
         }
         catch (Exception ex) when (FileErrors.IsFileError(ex))
         {
+            _log.Write(Logging.LogLevel.Warning, $"Open failed: {fullPath}", ex);
             _dialogs.ShowError(Strings.OpenFailedTitle, FileErrors.Describe(ex, fullPath), Strings.OpenFailedNext);
             return null;
         }
@@ -247,6 +251,7 @@ public sealed partial class WorkspaceViewModel : ObservableObject
         }
         catch (Exception ex) when (FileErrors.IsFileError(ex))
         {
+            _log.Write(Logging.LogLevel.Warning, $"Save failed: {path}", ex);
             _dialogs.ShowError(Strings.SaveFailedTitle, FileErrors.Describe(ex, path), Strings.SaveFailedKept);
             return false;
         }
@@ -306,7 +311,8 @@ public sealed partial class WorkspaceViewModel : ObservableObject
         }
         catch (Exception ex) when (FileErrors.IsFileError(ex))
         {
-            // The list stays in memory; losing it must not interrupt editing. Logging arrives with TASK-068.
+            // The list stays in memory; losing it must not interrupt editing.
+            _log.Write(Logging.LogLevel.Warning, "The recent files list could not be saved.", ex);
         }
     }
 }

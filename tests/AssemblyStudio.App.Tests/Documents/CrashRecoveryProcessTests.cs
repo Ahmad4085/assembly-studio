@@ -38,7 +38,7 @@ public sealed class CrashRecoveryProcessTests : IDisposable
     private Process Launch()
     {
         var start = new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")) { UseShellExecute = false };
-        foreach (string argument in new[] { "--settings", Path.Combine(_folder, "settings.json"), "--recovery", RecoveryFolder, "--autosave-seconds", "1" })
+        foreach (string argument in new[] { "--settings", Path.Combine(_folder, "settings.json"), "--recovery", RecoveryFolder, "--autosave-seconds", "1", "--log", Path.Combine(_folder, "logs") })
         {
             start.ArgumentList.Add(argument);
         }

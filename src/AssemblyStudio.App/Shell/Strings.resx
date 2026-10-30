@@ -277,4 +277,19 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="SettingsInvalidText" xml:space="preserve"><value>The settings file couldn't be read, so Assembly Studio started with default settings. The unreadable file was kept as {0}.</value><comment>{0} = backup path</comment></data>
   <data name="SettingsInvalidNext" xml:space="preserve"><value>Change any settings you need in File ▸ Settings.</value><comment>Next step</comment></data>
   <data name="ExecutableFilter" xml:space="preserve"><value>Programs (*.exe)|*.exe</value><comment>Browse for nasm.exe</comment></data>
+  <data name="AboutTitle" xml:space="preserve"><value>About Assembly Studio</value><comment>About window title (UI-018)</comment></data>
+  <data name="AboutTabDiagnostics" xml:space="preserve"><value>_Diagnostics</value><comment>Tab</comment></data>
+  <data name="AboutTabDiagnosticsName" xml:space="preserve"><value>Version and diagnostics information</value><comment>UIA name</comment></data>
+  <data name="AboutTabReleaseNotes" xml:space="preserve"><value>_Release notes</value><comment>Tab</comment></data>
+  <data name="AboutTabReleaseNotesName" xml:space="preserve"><value>Release notes</value><comment>UIA name</comment></data>
+  <data name="AboutTabNotices" xml:space="preserve"><value>Third-party _notices</value><comment>Tab</comment></data>
+  <data name="AboutTabNoticesName" xml:space="preserve"><value>Third-party notices and license texts</value><comment>UIA name</comment></data>
+  <data name="AboutCopy" xml:space="preserve"><value>_Copy diagnostics</value><comment>Button</comment></data>
+  <data name="AboutCopied" xml:space="preserve"><value>Copied to the clipboard.</value><comment>Confirmation after Copy</comment></data>
+  <data name="AboutFileMissing" xml:space="preserve"><value>This file isn't installed: {0}</value><comment>{0} = path. Shown instead of release notes or notices</comment></data>
+  <data name="AboutFileUnreadable" xml:space="preserve"><value>This file couldn't be read: {0} ({1})</value><comment>{0} = path, {1} = reason</comment></data>
+  <data name="AboutLicenseOf" xml:space="preserve"><value>{0}: {1}</value><comment>Heading of a bundled tool's license. {0} = tool folder, {1} = path</comment></data>
+  <data name="CmdReleaseNotes" xml:space="preserve"><value>_Release Notes</value><comment>Help menu</comment></data>
+  <data name="CmdNotices" xml:space="preserve"><value>Third-Party _Notices</value><comment>Help menu</comment></data>
+  <data name="DialogClose" xml:space="preserve"><value>Close</value><comment>Button</comment></data>
 </root>

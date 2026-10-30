@@ -8,7 +8,7 @@
 | Written | 2026-10-29 16:47 +0500 by Claude Code (Opus 5.5), after completing TASK-054 (M3 complete) |
 | Current task | **None in progress. M1, M2, M3 complete. Next: `/assembly-test` for M1–M3, then M4 (`TASK-061` themes, `TASK-062` document service, …)** |
 | Last completed | TASK-054 Fault containment, fuzz and soak (Done 2026-10-29 16:47 +0500) |
-| Git state | HEAD `7f69739` + uncommitted TASK-054 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `d3accdf` (TASK-054 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-29 16:20 +0500).
@@ -43,7 +43,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-054. Files:
+1. Done: TASK-054 committed. Files were:
    - `src/AssemblyStudio.Core/IDebugSession.cs`, `src/AssemblyStudio.Debugging/DebugSession.cs`, `src/AssemblyStudio.Runtime/Console/ConsoleDevice.cs`
    - `tests/AssemblyStudio.Debugging.Tests/Robustness/*`, `tests/AssemblyStudio.Debugging.Tests/SnapshotTests.cs`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`
    - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files

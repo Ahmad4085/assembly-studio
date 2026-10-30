@@ -8,7 +8,7 @@
 | Written | 2026-10-30 21:12 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-10-30-1) |
 | Current task | **None in progress.** Testing phase done (report 2026-10-30-1). Remaining implementation waits for user actions: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070) |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-10-30-1.md` (2026-10-30 21:12 +0500) |
-| Git state | HEAD `9153920` + uncommitted testing-phase changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `c18ffc5` (testing phase committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:58 +0500).
@@ -54,7 +54,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit the testing phase. Files:
+1. Done: testing phase committed. Files were:
    - `docs/07-testing/{test-plan.md, test-report-2026-10-30-1.md, defects.md}`
    - `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `docs/05-planning/backlog.md`
    - `tests/AssemblyStudio.Debugging.Tests/AcceptanceStepTests.cs`, `tests/AssemblyStudio.App.Tests/Documents/OpenFromCommandLineProcessTests.cs`

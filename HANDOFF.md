@@ -8,7 +8,7 @@
 | Written | 2026-10-30 16:09 +0500 by Claude Code (Opus 5.5), after completing TASK-091 |
 | Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090, 091 Done. Eligible: `TASK-092`, `TASK-093`, `TASK-101`** |
 | Last completed | TASK-091 Sample programs with automated verification (Done 2026-10-30 16:09 +0500) |
-| Git state | HEAD `ca3d160` + uncommitted TASK-091 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `bfb3873` (TASK-091 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 16:00 +0500).
@@ -39,7 +39,7 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. When the user asks: commit TASK-091. Files:
+1. Done: TASK-091 committed. Files were:
    - `src/AssemblyStudio.Content/{ContentCatalog.cs, Content/catalog.json, Content/Samples/*}`
    - `tests/AssemblyStudio.ProgramTests/{AssemblyStudio.ProgramTests.csproj, ProgramHarness.cs, SampleTests.cs}`
    - `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/input-on-tutorial/*}`

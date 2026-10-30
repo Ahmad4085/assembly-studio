@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 20:05 +0500 by Claude Code (Opus 5.5) (TASK-093 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, 062, 063, 067, 068 done; TASK-061 blocked on BLK-002); M6 tasks all done (TASK-090..093); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-30 20:40 +0500 by Claude Code (Opus 5.5) (TASK-101 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-061 blocked on BLK-002); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Eligible: `TASK-101` installer. M4 editor tasks and M5 wait for TASK-061 (user AC-059 check). User: `TASK-006`, `TASK-100`, DEF-003 decision, Learn reading-width proposal |
+| Active task | None in progress. No implementation task is eligible without a user action: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070). Agent: `/assembly-test` |
 
-| Next recommended action | **User: AC-059 check** (unblocks TASK-061 → TASK-064 and M5). Agent: `/assembly-implement TASK-101` or `/assembly-test` |
+| Next recommended action | **User: AC-059 check, TASK-100 license decision, TASK-006 VMs.** Agent: `/assembly-test` for M1–M7 so far |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-101 Self-contained publish and Inno Setup installer | 2026-10-30 20:40 +0500 | Pinned Inno Setup 7.1.0 (SHA-256 verified, per-user); per-user offline installer 45.2 MB; installed 148.6 MB; silent install 15–17 s; install/upgrade/uninstall test 21/21 on the dev machine; command-line file opening for the .asm association. `docs/06-implementation/task-101-verification.md`. Full solution 1385/1385 (twice) |
 | TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts | 2026-10-30 20:05 +0500 | 7 help pages (one generated from the opcode table); AC-051 consistency tests against the engine, runtime (all 256 INT 21h functions), loader, NASM command line, build codes and app shortcuts. Release build 0w/0e; full solution 1383/1383 (twice) |
 | TASK-092 Tutorials and reference | 2026-10-30 16:48 +0500 | 5 tutorials linked to samples, 4 concept pages, 7 instruction pages generated from hand-written data + the engine opcode table; flag statements checked against the engine from random states (AC-037), every supported opcode documented, AC-036 over all built-in pages. Found and fixed DEF-008 (engine undefined-flag mask). Release build 0w/0e; full solution 1315/1315 (twice) |
 | TASK-091 Sample programs with automated verification | 2026-10-30 16:09 +0500 | 8 samples (hello, arithmetic/flags, loops, conditional jumps, stack/procedures, strings, keyboard input, addressing modes) in the content catalog with documented output and input; `SampleTests` builds and runs each from the catalog on the real engine and compares the output (AC-035), 18 cases. Release build 0w/0e; full solution 1214/1214 (twice) |
@@ -107,8 +108,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-30 19:58 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 20:05 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1383/1383 passed** in two consecutive runs |
+| Product build (2026-10-30 20:33 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-30 20:38 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1385/1385 passed** in two consecutive runs (2m 57s, 2m 51s) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

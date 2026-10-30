@@ -1586,3 +1586,29 @@
 - **Git state after:** uncommitted TASK-093 changes on top of `65cc2ed` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user). The Learn reading-width proposal.
 - **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-101` or `/assembly-test`.
+
+### 2026-10-30 20:08 – 20:40 +0500 · Claude Code (Opus 5.5) · TASK-101 Self-contained publish and Inno Setup installer
+- **Summary:** Ran `/assembly-implement TASK-101` (user request). Dependencies TASK-005 and TASK-068 are Done; the lock was free.
+  - **Inno Setup:** it wasn't installed. I asked; the user chose a per-project fetch script.
+    - `build/fetch-innosetup.ps1` pins Inno Setup 7.1.0 x64 (GitHub release `is-7_1_0`, released 2026-08-12), verifies the SHA-256 against the digest GitHub publishes, and installs silently for the current user into `tools/innosetup`.
+    - 7.1.1, published 2026-10-28, was not chosen as too new for a pinned tool.
+    - The first version check failed (ISCC has no file version, then Windows PowerShell 5.1 lacks `Encoding.Latin1`); fixed. The re-run is idempotent.
+  - **Installer:** wrote `build/installer/AssemblyStudio.iss` per ADR-0009, `build-installer.ps1` (publish → checks → ISCC → sizes) and `test-installer.ps1`.
+  - **App change:** the optional `.asm` association needs the app to open a file given on its command line, which it didn't (`StartupOptions` ignored non-options). Added `StartupOptions.Files` and opening at startup.
+  - **Test install** (asked; the user approved a test install on this PC):
+    - The first attempt stopped at the upgrade step: Git Bash had rewritten ISCC's `/Q` switch as a path, so the upgrade installer didn't exist.
+    - I uninstalled the leftover test installation and verified nothing remained: no install, entry, shortcut or folder.
+    - I added a `finally` cleanup to the script, compiled the upgrade installer from PowerShell, and re-ran.
+- **Files changed:** `build/fetch-innosetup.ps1` (new), `build/installer/{AssemblyStudio.iss, build-installer.ps1, test-installer.ps1}` (new), `docs/06-implementation/task-101-verification.md` (new), `src/AssemblyStudio.App/{App.xaml.cs, Shell/StartupOptions.cs}`, `tests/AssemblyStudio.App.Tests/{StartupAndScalingTests.cs, Documents/OpenFromCommandLineProcessTests.cs (new)}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - Startup/command-line tests 11/11, including the real app opening a file passed as an argument.
+  - `build-installer.ps1`: publish 418 files / 144.2 MB; installer 45.2 MB (SHA-256 `7cab770e...a041ab`); 3 min 23 s.
+  - `test-installer.ps1` **21/21**: silent install 15.3 s; installed 148.6 MB; files, shortcut, uninstall entry, association off by default; the installed app's smoke test and NASM 3.02 ran; upgrade 1.0.0 → 1.0.0-upgradetest with the association (28.7 s); uninstall removed everything; settings and a user file unchanged.
+  - **Observation:** the smoke test measured 5,802 / 6,141 ms for the first start of freshly installed files. Repeat starts of the published build took 1,718–1,951 ms (4 runs). Recorded for TASK-086 (NFR-005).
+  - Release build **0 warnings, 0 errors** (20:33). Full solution **1385/1385 at 20:36 and 20:38** (two consecutive runs).
+- **Git state after:** uncommitted TASK-101 changes on top of `a342771` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`. `tools/innosetup` and `artifacts/` are git-ignored.
+- **Unresolved issues:**
+  - Still unverified (ADR-0009): clean-VM offline install and the minimum OS, for TASK-103.
+  - The first-launch startup time, for TASK-086.
+  - Still open: BLK-002, DEF-003, DEF-006, DEF-001, DEF-002. User: TASK-100, TASK-006.
+- **Next step:** user actions (AC-059, TASK-100, TASK-006); meanwhile `/assembly-test`.

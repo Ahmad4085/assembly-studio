@@ -5,22 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 20:05 +0500 by Claude Code (Opus 5.5), after completing TASK-093 |
-| Current task | **None in progress. M4: TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: all tasks Done. Eligible: `TASK-101` installer** |
-| Last completed | TASK-093 Help (Done 2026-10-30 20:05 +0500) |
-| Git state | HEAD `aabcfea` (TASK-093 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 20:40 +0500 by Claude Code (Opus 5.5), after completing TASK-101 |
+| Current task | **None in progress. Every remaining implementation task waits for a user action: AC-059 (TASK-061 → editor, M5), TASK-100 (→ TASK-102), TASK-006 (→ TASK-103, TASK-070)** |
+| Last completed | TASK-101 Self-contained publish and Inno Setup installer (Done 2026-10-30 20:40 +0500) |
+| Git state | HEAD `a342771` + uncommitted TASK-101 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 19:58 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1383/1383 passed**, two consecutive runs (2026-10-30 20:02 and 20:05 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 20:33 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1385/1385 passed**, two consecutive runs (2026-10-30 20:36 and 20:38 +0500).
+- `build/installer/build-installer.ps1` → installer built; `build/installer/test-installer.ps1` → 21/21 (2026-10-30 20:31 +0500).
 
 ## Changes since the previous handoff
-- **TASK-093 Help** (Claude Code, uncommitted):
-  - `src/AssemblyStudio.Content/Content/Help/*.txt` (7), catalog entries.
-  - `NasmAssembler.Arguments` (internal, extracted).
-  - Tests: `ProgramTests/HelpTests.cs`, `Toolchain.Nasm.Tests/HelpConsistencyTests.cs` (+ Content reference), `App.Tests/Learn/HelpPagesTests.cs`.
-  - **When behavior changes, update the help:** these tests fail when the DOS functions, NASM arguments, build codes, limits, start state or menu shortcuts change.
-  - DEF-003 is described in the scope and differences pages; update them when it is resolved.
+- **TASK-101 Installer** (Claude Code, uncommitted):
+  - `build/fetch-innosetup.ps1`, `build/installer/{AssemblyStudio.iss, build-installer.ps1, test-installer.ps1}`, `docs/06-implementation/task-101-verification.md`.
+  - App: command-line files open at startup (`StartupOptions.Files`).
+  - **The AppId in the .iss must never change** (upgrades).
+  - Run ISCC from PowerShell, not Git Bash (it rewrites `/Q` and `/D`).
+  - Notices/release notes are packaged automatically once they exist at the repo root.
+  - TASK-103 can reuse `test-installer.ps1` on the VMs (add the offline/network-disabled condition there).
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -41,15 +43,13 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-093 committed. Files were:
-   - `src/AssemblyStudio.Content/Content/{catalog.json, Help/*}`
-   - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`
-   - `tests/AssemblyStudio.ProgramTests/HelpTests.cs`
-   - `tests/AssemblyStudio.Toolchain.Nasm.Tests/{AssemblyStudio.Toolchain.Nasm.Tests.csproj, HelpConsistencyTests.cs}`
-   - `tests/AssemblyStudio.App.Tests/Learn/HelpPagesTests.cs`
+1. When the user asks: commit TASK-101. Files:
+   - `build/fetch-innosetup.ps1`, `build/installer/*`, `docs/06-implementation/task-101-verification.md`
+   - `src/AssemblyStudio.App/{App.xaml.cs, Shell/StartupOptions.cs}`
+   - `tests/AssemblyStudio.App.Tests/{StartupAndScalingTests.cs, Documents/OpenFromCommandLineProcessTests.cs}`
    - `docs/05-planning/backlog.md`, shared memory files
-2. User: AC-059 check → TASK-061 → TASK-064 and M5. Agent meanwhile: `/assembly-implement TASK-101` or `/assembly-test`.
-3. User: TASK-006, TASK-100, DEF-003 decision, the first version number, the Learn reading-width proposal.
+2. User actions now gate all remaining implementation: AC-059 check (BLK-002 → TASK-061 → TASK-064.. and M5), TASK-100 license decision (→ TASK-102), TASK-006 VMs (→ TASK-103, TASK-070).
+3. Agent meanwhile: `/assembly-test` (test phase report for M1–M7 so far).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

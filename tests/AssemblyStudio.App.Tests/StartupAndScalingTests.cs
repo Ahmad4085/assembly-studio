@@ -12,13 +12,26 @@ public class StartupAndScalingTests
     {
         var options = StartupOptions.Parse(["--settings", @"C:\s.json", "--smoke-report", @"C:\r.txt"]);
 
-        Assert.Equal(new StartupOptions(@"C:\s.json", @"C:\r.txt"), options);
+        Assert.Equal((@"C:\s.json", @"C:\r.txt"), (options.SettingsPath, options.SmokeReportPath));
+        Assert.Empty(options.Files);
     }
 
     [Fact]
-    public void Ignores_unknown_arguments_and_a_trailing_flag_without_value()
+    public void Ignores_unknown_options_and_a_trailing_option_without_value()
     {
-        Assert.Equal(new StartupOptions(null, null), StartupOptions.Parse(["hello.asm", "--settings"]));
+        StartupOptions options = StartupOptions.Parse(["--unknown", "hello.asm", "--settings"]);
+
+        Assert.Null(options.SettingsPath);
+        Assert.Equal(["hello.asm"], options.Files);
+    }
+
+    [Fact]
+    public void FR_084_arguments_that_are_not_options_are_files_to_open_in_order()
+    {
+        StartupOptions options = StartupOptions.Parse([@"C:\work\a.asm", "--log", @"C:\logs", @"D:\my files\b.asm"]);
+
+        Assert.Equal([@"C:\work\a.asm", @"D:\my files\b.asm"], options.Files);
+        Assert.Equal(@"C:\logs", options.LogFolder);
     }
 
     [Theory]

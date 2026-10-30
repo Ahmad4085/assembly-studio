@@ -11,6 +11,26 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Milestone 7 progress | TASK-101 Done. TASK-102 needs TASK-100 (user license decision); TASK-103 needs TASK-006 (VMs); TASK-104/105 need M5 |
+| Recommended next action | **User: AC-059 check** (unblocks the editor and M5), `TASK-100` license decision, `TASK-006` VMs. Agent: `/assembly-test` |
+| Parallel user actions | AC-059, TASK-006, TASK-100, DEF-003 decision, first version number, Learn reading-width proposal |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 20:08 +0500 |
+| Milestone | M7 (Packaging and release readiness) |
+| Goal | Build the offline per-user installer and measure size and install time |
+| Scope (in) | `dotnet publish` self-contained win-x64 (no trim, no single-file); Inno Setup 7.x script (per-user, shortcuts, optional .asm association, bundled NASM/content/notices); upgrade keeps settings; uninstall keeps user files |
+| Out of scope | Code signing (deferred), auto-update (P3) |
+| Requirements | FR-083..FR-088, NFR-027, NFR-028; ADR-0009 |
+| Expected files | `build/installer/` |
+| Note | User approved (2026-10-30): a per-project fetch script for Inno Setup into `tools/innosetup` (no admin, git-ignored) |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done (TASK-090..093), milestone exit pending the M5-dependent tutorial walk-through |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
 | Recommended next action | **User: AC-059 check** (unblocks the editor and all of M5). Agent meanwhile: `TASK-101` (installer) or `/assembly-test` for M1–M6 so far |
@@ -218,6 +238,26 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-101 Self-contained publish and Inno Setup installer (Done 2026-10-30 20:40 +0500, Claude Code (Opus 5.5))
+- `build/fetch-innosetup.ps1` (user-approved): pinned Inno Setup 7.1.0 x64 from GitHub releases, SHA-256 verified against the digest GitHub publishes, silent per-user install into `tools/innosetup` (git-ignored, no admin, no icons or tasks), idempotent. 7.1.1 (2 days old) was not chosen.
+- `build/installer/AssemblyStudio.iss`:
+  - Per-user (`PrivilegesRequired=lowest`, `{autopf}`), fixed AppId for upgrades, `MinVersion=10.0.19044`, x64.
+  - Start-menu shortcut, optional desktop icon, optional `.asm` association (off by default, HKCU, removed on uninstall).
+  - Whole publish folder (including `tools\nasm` and LICENSE); never touches settings, logs, recovery or user files.
+- `build/installer/build-installer.ps1`: self-contained win-x64 publish (no trim, no single file) → checks → ISCC → size report.
+- `build/installer/test-installer.ps1`: install/upgrade/uninstall test (21 checks, always cleans up).
+- App: files given on the command line open at startup (needed by the association); `StartupOptions.Files`; tests incl. a real-process test.
+- Results (`docs/06-implementation/task-101-verification.md`): installer 45.2 MB; installed 148.6 MB (NFR-028 ≤ 300); silent install 15.3–16.6 s (NFR-027 ≤ 120 s, dev machine); 21/21 checks passed.
+- Observation: the first launch after install took 5.8–6.1 s; repeat launches 1.7–1.95 s (NFR-005 judged in TASK-086).
+- Clean-VM offline install and the minimum-OS check remain for TASK-103.
+- Release build 0 warnings / 0 errors; full solution 1385/1385 in two consecutive runs (20:36, 20:38).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 20:08 / 20:40 +0500 |
 
 ## Completed: TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts (Done 2026-10-30 20:05 +0500, Claude Code (Opus 5.5))
 - 7 help pages in `Content/Help/` (catalog kind help):

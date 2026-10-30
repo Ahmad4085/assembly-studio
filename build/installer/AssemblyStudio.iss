@@ -1,0 +1,73 @@
+; Assembly Studio installer (ADR-0009, TASK-101). Compiled by build/installer/build-installer.ps1 with Inno Setup 7.1.0
+; (build/fetch-innosetup.ps1). Per-user and fully offline: nothing is downloaded at install time (FR-086).
+;   PublishDir  the self-contained win-x64 publish folder (dotnet publish, no trimming, no single file)
+;   AppVersion  the application's version
+;   OutputDir   where the installer is written
+
+#ifndef PublishDir
+  #error PublishDir must be defined (/DPublishDir=...)
+#endif
+#ifndef AppVersion
+  #error AppVersion must be defined (/DAppVersion=...)
+#endif
+#ifndef OutputDir
+  #define OutputDir "."
+#endif
+
+[Setup]
+; The AppId identifies the product across versions: a newer installer replaces the older installation (FR-088). Never change it.
+AppId={{0C031CF2-3FBE-4413-AC58-C2AFFE9CD2CB}
+AppName=Assembly Studio
+AppVersion={#AppVersion}
+AppVerName=Assembly Studio {#AppVersion}
+; Per-user installation: no administrator rights; {autopf} is %LOCALAPPDATA%\Programs for a per-user install.
+PrivilegesRequired=lowest
+DefaultDirName={autopf}\Assembly Studio
+DisableProgramGroupPage=yes
+DisableDirPage=auto
+UsePreviousAppDir=yes
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
+; NFR-025: Windows 10 Enterprise LTSC 21H2 (build 19044) and Windows 11 24H2 are the supported versions.
+MinVersion=10.0.19044
+WizardStyle=modern
+Compression=lzma2/max
+SolidCompression=yes
+OutputDir={#OutputDir}
+OutputBaseFilename=AssemblyStudio-{#AppVersion}-setup
+UninstallDisplayName=Assembly Studio
+UninstallDisplayIcon={app}\AssemblyStudio.App.exe
+; The .asm association changes Explorer's file types; tell Explorer when it changes.
+ChangesAssociations=yes
+; Code signing is deferred (ADR-0009 §4, OQ-020): the installer is unsigned.
+
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
+
+[Tasks]
+Name: "desktopicon"; Description: "Create a &desktop shortcut"; Flags: unchecked
+; FR-084: the .asm association is optional and off by default.
+Name: "associateasm"; Description: "Open &.asm files with Assembly Studio"; Flags: unchecked
+
+[Files]
+; The whole publish folder: the application, the .NET runtime, the bundled NASM (tools\nasm, with its LICENSE), the
+; release notes and third-party notices when the build provides them. Samples, tutorials and help are embedded.
+Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{autoprograms}\Assembly Studio"; Filename: "{app}\AssemblyStudio.App.exe"
+Name: "{autodesktop}\Assembly Studio"; Filename: "{app}\AssemblyStudio.App.exe"; Tasks: desktopicon
+
+[Registry]
+; Per-user file association (HKA is HKCU for a per-user installation). Removed again on uninstall.
+Root: HKA; Subkey: "Software\Classes\.asm\OpenWithProgids"; ValueType: string; ValueName: "AssemblyStudio.asm"; ValueData: ""; Flags: uninsdeletevalue; Tasks: associateasm
+Root: HKA; Subkey: "Software\Classes\AssemblyStudio.asm"; ValueType: string; ValueName: ""; ValueData: "Assembly source file"; Flags: uninsdeletekey; Tasks: associateasm
+Root: HKA; Subkey: "Software\Classes\AssemblyStudio.asm\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\AssemblyStudio.App.exe,0"; Tasks: associateasm
+Root: HKA; Subkey: "Software\Classes\AssemblyStudio.asm\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\AssemblyStudio.App.exe"" ""%1"""; Tasks: associateasm
+
+[Run]
+Filename: "{app}\AssemblyStudio.App.exe"; Description: "Start Assembly Studio"; Flags: nowait postinstall skipifsilent
+
+; FR-085 / FR-088: settings (%APPDATA%\AssemblyStudio), crash-recovery files and logs (%LOCALAPPDATA%\AssemblyStudio) and the
+; user's own source files are never touched by install, upgrade or uninstall: the installer only writes {app}, the shortcuts
+; and the optional association, and uninstall removes only what it installed.

@@ -97,7 +97,14 @@ public partial class App : Application
             };
         }
 
-        if (abandoned.Count == 0)
+        // FR-084: files given on the command line (the .asm association, "Open with") open at startup; a file that
+        // can't be opened is reported like any other open failure.
+        foreach (string file in options.Files)
+        {
+            workspace.OpenFile(file);
+        }
+
+        if (abandoned.Count == 0 && workspace.Documents.Count == 0)
         {
             workspace.New(); // FR-001: start with an editable document
         }

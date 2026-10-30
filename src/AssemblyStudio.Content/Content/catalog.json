@@ -184,6 +184,55 @@
       "title": "Flag and processor control",
       "summary": "CLC, STC, CMC, CLD, STD, CLI, STI, NOP, HLT, WAIT, LOCK and segment overrides.",
       "file": "Reference/instructions-flag-processor.txt"
+    },
+    {
+      "id": "help-scope",
+      "kind": "help",
+      "title": "What Assembly Studio supports",
+      "summary": "The processor, program format, DOS services, input and output, and limits.",
+      "file": "Help/scope.txt"
+    },
+    {
+      "id": "help-dos-services",
+      "kind": "help",
+      "title": "DOS services",
+      "summary": "The INT 21h functions, INT 20h and Ctrl-C handling that programs can use.",
+      "file": "Help/dos-services.txt"
+    },
+    {
+      "id": "help-nasm",
+      "kind": "help",
+      "title": "Building with NASM",
+      "summary": "The assembler, the options Assembly Studio passes to it, and the build messages.",
+      "file": "Help/nasm.txt"
+    },
+    {
+      "id": "help-nasm-vs-masm",
+      "kind": "help",
+      "title": "NASM and MASM",
+      "summary": "How to translate MASM or TASM code from books and courses to NASM.",
+      "file": "Help/nasm-vs-masm.txt"
+    },
+    {
+      "id": "help-differences",
+      "kind": "help",
+      "title": "Differences from a real PC",
+      "summary": "Where the emulated processor and DOS behave differently from real hardware.",
+      "file": "Help/differences.txt"
+    },
+    {
+      "id": "help-unsupported-instructions",
+      "kind": "help",
+      "title": "Unsupported instructions",
+      "summary": "Every 8086 opcode that Assembly Studio doesn't run, and why.",
+      "file": "Help/unsupported-instructions.txt"
+    },
+    {
+      "id": "help-shortcuts",
+      "kind": "help",
+      "title": "Keyboard shortcuts",
+      "summary": "All keyboard shortcuts, by area.",
+      "file": "Help/shortcuts.txt"
     }
   ]
 }

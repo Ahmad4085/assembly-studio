@@ -1,0 +1,38 @@
+DOS services
+
+Programs ask DOS for services with INT 21h, putting the function number in AH. Assembly Studio provides the
+functions below, with the behavior of MS-DOS 3.3/4.0. Any other INT 21h function, and any other interrupt that the
+program hasn't installed a handler for, stops the program with "INT 21h function xxh is unsupported" (RTE021) or
+"INT xxh function yyh is unsupported" (RTE020).
+
+Supported functions
+  INT 21h AH=00h  Terminate the program (CS must be the program's segment). Exit code 0.
+  INT 21h AH=01h  Read a key and show it. AL = the character. Waits until a key is typed.
+  INT 21h AH=02h  Write the character in DL.
+  INT 21h AH=07h  Read a key without showing it and without checking for Ctrl-C. AL = the character.
+  INT 21h AH=08h  Read a key without showing it. AL = the character.
+  INT 21h AH=09h  Write the text at DS:DX up to the first '$'. Returns AL = 24h ('$').
+  INT 21h AH=0Ah  Read a line into the buffer at DS:DX: byte 0 = room for characters (including the final carriage
+                  return), byte 1 = characters typed (set by DOS), then the text and a carriage return. Backspace
+                  edits the line; Enter ends it.
+  INT 21h AH=4Ch  Terminate the program with exit code AL.
+  INT 20h         Terminate the program (CS must be the program's segment). Exit code 0.
+  INT 23h         Ctrl-C: with the default handler the program ends with reason "Ctrl-C".
+
+Output details
+  DOS keeps its own column: TAB moves to the next multiple of 8, carriage return (13) goes back to column 0, line
+  feed (10) moves down, backspace (8) moves back one column without erasing, and BEL (7) is shown as a visual bell.
+
+Keys
+  Extended keys (arrows, function keys) arrive as two characters: 00h, then the key's scan code.
+
+Ctrl-C and Ctrl-Break
+  While a program reads keys with 01h, 08h or 0Ah, or writes with 02h or 09h, a Ctrl-C prints ^C and calls INT 23h.
+  Function 07h never checks. Ctrl-S pauses output until the next key; Ctrl-P is ignored (there is no printer).
+  A program can install its own INT 23h handler: returning with IRET, or RETF with CF clear, repeats the interrupted
+  function; RETF with CF set ends the program.
+  In the Console, Ctrl+C sends Ctrl-C to the program; Ctrl+Break sends it from anywhere.
+
+Ending a program
+  Use INT 21h AH=4Ch (the usual way, with an exit code in AL), INT 21h AH=00h, INT 20h, or RET when the stack holds
+  the word 0000h pushed by the loader. The Runtime messages panel shows how the program ended and its exit code.

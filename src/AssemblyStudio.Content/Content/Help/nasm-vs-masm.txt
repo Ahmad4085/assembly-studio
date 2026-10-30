@@ -1,0 +1,41 @@
+NASM and MASM
+
+Many books and courses use MASM or TASM. Assembly Studio accepts NASM syntax only. When a build fails and the source
+looks like MASM (.model, .code, .data, .stack, .startup, .exit, .386 and similar, ASSUME, PROC/ENDP, SEGMENT/ENDS,
+or @data), the build adds message BLD007 pointing to the first such line. Some MASM lines are valid NASM by accident
+(NASM reads .code alone as a label and only warns), so check the warnings too.
+
+Translating MASM to NASM
+  MASM                                NASM
+  .model small / .code / .data        (leave out: a .COM program is one segment; write org 100h at the top)
+  .stack 100h                         (leave out: the stack is set up by DOS)
+  mov ax, @data / mov ds, ax          (leave out: DS already points at your data in a .COM program)
+  main proc ... main endp             main: ... (a plain label; RET still returns)
+  mov ax, var                         mov ax, [var]      (memory always needs square brackets)
+  mov ax, offset var                  mov ax, var        (a label alone is its address)
+  mov al, byte ptr [bx]               mov al, byte [bx]
+  mov word ptr [bx], 5                mov word [bx], 5
+  var dw ?                            var dw 0
+  buffer db 20 dup(0)                 buffer times 20 db 0
+  count equ 10                        count equ 10       (the same)
+  end main                            (leave out)
+  mov ax, es:[bx]                     mov ax, [es:bx]    (the segment override goes inside the brackets)
+  10h, 0Ah                            10h, 0Ah, or 0x10 (both work in NASM)
+
+Other differences
+  - NASM is case sensitive for labels: Loop and loop are different names. Instruction and register names are not.
+  - In MASM, var in an instruction means the value in memory; in NASM it means the address. This is the most common
+    mistake when moving code over: mov ax, var loads the address in NASM.
+  - NASM doesn't remember a variable's size: write byte or word when no register tells the size, as in
+    mov byte [count], 0 or inc word [total].
+  - Local labels: in NASM a label starting with a dot (.again) belongs to the last label without a dot, so several
+    procedures can each have their own .again.
+
+A complete .COM program in NASM
+  org 100h
+      mov dx, message
+      mov ah, 09h
+      int 21h
+      mov ax, 4C00h
+      int 21h
+  message db 'Hello', 13, 10, '$'

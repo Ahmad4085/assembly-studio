@@ -1,0 +1,40 @@
+Differences from a real PC
+
+Assembly Studio emulates an 8086 and part of DOS exactly enough for learning and for the supported programs. These
+are the known differences.
+
+Processor
+  - Undefined flags: some instructions leave flags undefined (for example AF after AND, or SF after MUL). A real
+    8086 still produces some value; Assembly Studio computes a fixed value and shows the flag as undefined. Programs
+    shouldn't depend on undefined flags.
+  - Timing: instructions take no particular time. There are no clock cycles, and loops can't be used for delays.
+  - Unsupported opcodes: port I/O (IN, OUT), 8087 coprocessor instructions (ESC), the 80186 and later additions,
+    and the undocumented aliases (such as POP CS and SALC) stop the program with "unsupported instruction". The help
+    page "Unsupported instructions" lists them.
+  - Some undocumented 8086 behaviors are reproduced as the real chip does them: PUSH SP pushes the decremented value,
+    MOV with segment register numbers 4 to 7 uses ES, CS, SS and DS, and the undocumented shift form SETMO (D0h-D3h
+    /6) sets the operand to all ones.
+  - LOCK is accepted and ignored (there is only one processor); WAIT does nothing (there is no 8087); HLT ends the
+    program with the message "halted".
+  - Processor exceptions: a divide error (INT 0), single step (INT 1), NMI (INT 2), INT 3 and INTO (INT 4) stop the
+    program with a runtime error (RTE001 to RTE005) unless the program has installed its own handler in the interrupt
+    vector table, which then runs as on a real 8086.
+  - There are no hardware interrupts: no timer, keyboard or other device interrupts arrive.
+
+DOS
+  - Only the services listed in "DOS services" exist. Calling another one stops the program with a message.
+  - At start, BX, CX, DX, SI, DI and BP are 0000h (real DOS leaves other values there).
+  - Ctrl-C, Ctrl-S and Ctrl-P are checked before each character a service reads or writes, rather than at DOS's own
+    intervals; the result is the same for the supported programs. Ctrl-P is ignored (no printer).
+  - Function 0Ah has no template editing keys (F1 to F5 of the DOS command line).
+  - Programs can't use files, disks, the clock or memory allocation, and can't start other programs.
+
+Input
+  - Typed keys reach the program only between instructions, never in the middle of one, so the same input always
+    gives the same result: a recorded run can be replayed exactly.
+
+Limits
+  - A run stops after the instruction budget (10,000,000 instructions by default; Settings, Execution) and can be
+    continued.
+  - Programs are .COM programs of at most 65,278 bytes (see "What Assembly Studio supports" about DEF-003).
+  - Console output is kept up to a limit; a program that prints without end is still stopped by the budget.

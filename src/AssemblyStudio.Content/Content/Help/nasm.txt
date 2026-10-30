@@ -1,0 +1,40 @@
+Building with NASM
+
+Assembly Studio uses NASM (the Netwide Assembler, version 3.02 or later) to turn your source into a .COM program.
+NASM is installed with Assembly Studio; Settings, Assembler can point to another nasm.exe, which is checked before
+it is used. Versions older than 3.02 work but produce a warning.
+
+What happens when you build
+  1. The source is checked for CPU directives: anything above "cpu 8086" is rejected (BLD009), because the
+     emulated processor is an 8086.
+  2. NASM is run, without a command shell, in a new temporary folder that is deleted afterwards:
+       nasm -f bin --before "cpu 8086" --before "[map all]" -l <temp>\program.lst -Xgnu --reproducible -o <temp>\program.com <source>
+     (<temp> is the build's temporary folder and <source> your file)
+     -f bin             a flat binary: the .COM format
+     --before "cpu 8086" only 8086 instructions are accepted
+     --before "[map all]" a map of the program's addresses, used to link the debugger to your source lines
+     -l ...program.lst  a listing, also used for the source-line mapping
+     -Xgnu              messages in the form file:line: message, which Assembly Studio reads
+     --reproducible     the same source always gives the same bytes
+  3. Unsaved text is assembled from a temporary copy, with your file's folder as the current folder, so %include
+     finds files next to your source.
+  4. A build that takes more than 10 seconds is stopped (BLD002). At most 1 MB of messages is kept.
+
+Your source
+  - Start a .COM program with org 100h.
+  - NASM syntax: square brackets for memory ([bx], [message]), labels without colons are allowed, and a label
+    starting with a dot (.loop) belongs to the label before it.
+  - Data: db, dw, dd for values, times n db 0 for repeated bytes, equ for constants.
+
+Build messages
+  ASM001 to ASM003   NASM's own errors, warnings and notes, with the file and line.
+  BLD001             No assembler found: install or set one in Settings.
+  BLD002             The build took too long and was stopped.
+  BLD003             The assembler crashed.
+  BLD004             The assembler failed without saying why; its raw output is shown.
+  BLD005             The build was cancelled.
+  BLD006             The program is larger than 65,280 bytes.
+  BLD007             The build failed and the source looks like MASM: see "NASM and MASM".
+  BLD008             The assembler is older than 3.02, or its version couldn't be read.
+  BLD009             A CPU directive above 8086 was used.
+  BLD010             The program built, but its source-line mapping couldn't be read; it runs without source lines.

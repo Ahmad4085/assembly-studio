@@ -66,6 +66,19 @@ public sealed partial class NasmAssembler : IAssembler
             : "The assembler must be an .exe file.";
     }
 
+    /// <summary>The build's NASM arguments (documented in the help page "Building with NASM", TASK-093).</summary>
+    internal static string[] Arguments(string listing, string image, string source) =>
+    [
+        "-f", "bin",
+        "--before", "cpu 8086",
+        "--before", "[map all]",
+        "-l", listing,
+        "-Xgnu",
+        "--reproducible",
+        "-o", image,
+        source,
+    ];
+
     /// <summary>Reads the version from <c>nasm -v</c> output, such as "NASM version 3.02 compiled on …".</summary>
     internal static Version? ParseVersion(string output)
     {
@@ -191,17 +204,7 @@ public sealed partial class NasmAssembler : IAssembler
             }
 
             string image = Path.Combine(work, "program.com");
-            string[] arguments =
-            [
-                "-f", "bin",
-                "--before", "cpu 8086",
-                "--before", "[map all]",
-                "-l", Path.Combine(work, "program.lst"),
-                "-Xgnu",
-                "--reproducible",
-                "-o", image,
-                source,
-            ];
+            string[] arguments = Arguments(Path.Combine(work, "program.lst"), image, source);
 
             ProcessRun run = await ProcessRunner.RunAsync(
                 assembler.Path!, arguments, workingDirectory, _options.Timeout, _options.OutputCap, cancellationToken).ConfigureAwait(false);

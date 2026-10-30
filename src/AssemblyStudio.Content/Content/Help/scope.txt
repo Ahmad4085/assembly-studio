@@ -1,0 +1,39 @@
+What Assembly Studio supports
+
+Assembly Studio builds and runs 8086 assembly programs written for NASM, as DOS .COM programs, inside its own
+emulated PC. Everything runs offline; nothing you write or run leaves your computer.
+
+Processor
+  An Intel 8086 in real mode with 1 MB of memory. Every documented 8086 instruction is supported, except the port
+  I/O instructions (IN, OUT) and the 8087 coprocessor (ESC) instructions; instructions added by the 80186 and later
+  processors are not supported either. The help page "Unsupported instructions" lists every opcode that isn't
+  supported, and the Reference section explains each supported instruction.
+  An unsupported instruction stops the program with a message naming it; nothing has been changed by it.
+
+Programs
+  Format: DOS .COM programs only, assembled by NASM as flat binaries starting at offset 100h (write org 100h at the
+  top). .EXE programs, segments and multiple source files linked together are not supported.
+  Size: the build accepts programs up to 65,280 bytes. Known issue (DEF-003): programs of 65,279 or 65,280 bytes
+  build but don't load; keep programs at or below 65,278 bytes until this is resolved.
+  Start state: CS = DS = ES = SS = 0800h, IP = 0100h, SP = FFFEh, the other general registers 0000h, and
+  FLAGS 0002h. The Program Segment Prefix (the first 256 bytes) holds INT 20h at offset 0, so RET with an empty
+  stack ends the program.
+
+Operating system services
+  A subset of DOS: INT 21h functions 00h, 01h, 02h, 07h, 08h, 09h, 0Ah and 4Ch, INT 20h, and Ctrl-C handling through
+  INT 23h. See the help page "DOS services". There are no files, disks, date, time, memory allocation or other DOS
+  functions, and no BIOS services (INT 10h, INT 16h and so on).
+  Calling an unsupported service stops the program with a message naming the interrupt and function.
+
+Input and output
+  Text only, through the Console panel: what a program prints with DOS functions 02h and 09h appears there, and what
+  you type is passed to functions 01h, 07h, 08h and 0Ah. There is no graphics, sound, mouse, timer or printer.
+
+Running
+  Each run executes at most 10,000,000 instructions by default (Settings, Execution); then it pauses so an endless
+  loop never hangs the application. You can continue or stop. Programs can't access your files, network or other
+  programs.
+
+Assembler
+  NASM, version 3.02 or later; one is installed with Assembly Studio. The help page "Building with NASM" describes
+  the options used. MASM and TASM syntax is not accepted; see "NASM and MASM".

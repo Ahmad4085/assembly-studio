@@ -11,6 +11,23 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done (TASK-090..093), milestone exit pending the M5-dependent tutorial walk-through |
+| Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
+| Recommended next action | **User: AC-059 check** (unblocks the editor and all of M5). Agent meanwhile: `TASK-101` (installer) or `/assembly-test` for M1–M6 so far |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), `TASK-100` (license decision), DEF-003 decision, Learn reading-width proposal |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 19:48 +0500 |
+| Milestone | M6 (Learning content) |
+| Goal | Document the supported scope and deviations offline |
+| Scope (in) | Supported instructions/services/formats from the TASK-018 table; deviations (ADR-0003/0004), assembler options, shortcuts |
+| Requirements | FR-032, FR-045, NFR-033; UI-015; AC-051 |
+| Expected files | `src/AssemblyStudio.Content/Help/` (catalog content folder `Content/Help/`), tests |
+
+---|---|
+| Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002); TASK-064..066, 069 wait for TASK-061; TASK-070 also needs TASK-006 |
 | Milestone 6 progress | TASK-090, 091, 092 Done. Eligible: `TASK-093` (help) |
@@ -201,6 +218,28 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts (Done 2026-10-30 20:05 +0500, Claude Code (Opus 5.5))
+- 7 help pages in `Content/Help/` (catalog kind help):
+  - What Assembly Studio supports, DOS services, Building with NASM, NASM and MASM, Differences from a real PC, Keyboard shortcuts.
+  - Unsupported instructions, **generated** from the engine's opcode table by `HelpTests` (`ASSEMBLY_STUDIO_WRITE_REFERENCE=1`).
+- AC-051 consistency tests (help vs implementation):
+  - `ProgramTests/HelpTests`: generated page up to date; every listed unsupported opcode and group form halts on the engine; **the DOS functions documented are exactly the ones the runtime handles** (all 256 INT 21h functions probed); INT 20h ends and INT 10h halts (RTE020) as documented; start state and the 65,278-byte load limit equal `ComLoader`; every Help file is in the catalog.
+  - `Toolchain.Nasm.Tests/HelpConsistencyTests`: the documented command line equals `NasmAssembler.Arguments` (extracted, behavior unchanged); every BLD/ASM code listed; 65,280-byte, 10 s, 1 MB and 3.02 limits; each MASM construct named produces BLD007 on a failed build.
+  - `App.Tests/HelpPagesTests`: every menu shortcut string is documented; budget default 10,000,000.
+- Text corrections found while checking:
+  - BLD007 only appears when a build fails (help said always).
+  - `resw` in a .COM gives a NASM warning (suggestion removed).
+  - The cancel-build shortcut Esc was missing.
+- DEF-003 is stated honestly in the help (build allows 65,280, load limit 65,278).
+- Mutation: removing 4Ch from the DOS page failed the coverage test; restored.
+- Release build 0 warnings / 0 errors; full solution 1383/1383 in two consecutive runs (20:02, 20:05).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 19:48 / 20:05 +0500 |
 
 ## Completed: TASK-092 Tutorials and reference (Done 2026-10-30 16:48 +0500, Claude Code (Opus 5.5))
 - **Tutorials** (`Content/Tutorials/*.txt`), each linked to a sample (new validated `ContentItem.Sample`):

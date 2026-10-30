@@ -1,0 +1,60 @@
+Keyboard shortcuts
+
+Every command is also in a menu (Alt and the underlined letter opens it), and all of Assembly Studio can be used
+with the keyboard alone.
+
+Files
+  Ctrl+N          New file
+  Ctrl+O          Open
+  Ctrl+S          Save
+  Ctrl+Shift+S    Save As
+  Ctrl+W          Close tab (also Ctrl+F4)
+  Alt+F, R        Recent files
+  Alt+F4          Exit
+  Ctrl+,          Settings
+
+Editing
+  Ctrl+Z / Ctrl+Y                      Undo / Redo
+  Ctrl+X / Ctrl+C / Ctrl+V / Ctrl+A    Cut / Copy / Paste / Select all
+  Ctrl+F                               Find
+  F3 / Shift+F3                        Find next / Find previous
+  Ctrl+H                               Replace
+  Ctrl+G                               Go to line
+  Tab / Shift+Tab                      Indent / unindent the selected lines
+  Ctrl+M                               Switch Tab between "insert a tab" and "move to the next control"
+
+View
+  F6 / Shift+F6        Next / previous area (editor, machine, bottom panels, Learn)
+  Ctrl+Alt+R           Registers
+  Ctrl+Alt+F           Flags
+  Ctrl+Alt+M           Memory
+  Ctrl+Alt+K           Stack
+  Ctrl+Alt+O           Console
+  Ctrl+Alt+P           Problems
+  Ctrl+Alt+U           Runtime messages
+  Ctrl+Alt+H           History
+  Ctrl+Alt+B           Breakpoints
+  Ctrl+Alt+L           Learn (then the arrow keys; Enter opens a sample)
+  Ctrl+Alt+N           Next number format in a machine panel
+  Ctrl+Plus / Ctrl+Minus / Ctrl+0    Zoom in / out / reset
+  Alt+V, L             Reset layout
+
+Build and run
+  Ctrl+Shift+B         Build
+  Esc                  Cancel a running build (when the status bar shows it)
+  F5                   Run or continue (builds first when needed)
+  Ctrl+Alt+Break       Pause
+  Shift+F5             Stop
+  Ctrl+Shift+F5        Reset (build again and reload)
+  F11                  Step into (one instruction)
+  F10                  Step over (a CALL or INT runs as one step)
+  F9                   Toggle a breakpoint on the current line
+
+Console
+  Ctrl+C               Send Ctrl-C to the running program (when the Console has the focus)
+  Ctrl+Break           Send Ctrl-C to the running program from anywhere
+  Ctrl+Shift+C         Copy the selected console text
+
+Help
+  F1                   Help
+  Alt+H, A             About Assembly Studio

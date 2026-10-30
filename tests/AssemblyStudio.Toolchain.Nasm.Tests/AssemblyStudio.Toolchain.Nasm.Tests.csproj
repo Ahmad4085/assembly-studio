@@ -4,5 +4,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
+    <!-- The help pages that describe the build (TASK-093, AC-051) -->
+    <ProjectReference Include="..\..\src\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
   </ItemGroup>
 </Project>

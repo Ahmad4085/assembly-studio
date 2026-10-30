@@ -87,7 +87,7 @@
 | TASK-090 | Content catalog and Learn sidebar | M6 | TASK-062 | M | FR-069, FR-071, NFR-023 | Done |
 | TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Done |
 | TASK-092 | Tutorials and reference | M6 | TASK-090, TASK-020 | M | FR-070, FR-071, FR-072 | Done |
-| TASK-093 | Help: scope, limitations, NASM vs MASM, shortcuts | M6 | TASK-090, TASK-018, TASK-043 | L | FR-032, FR-045, NFR-033 | Approved |
+| TASK-093 | Help: scope, limitations, NASM vs MASM, shortcuts | M6 | TASK-090, TASK-018, TASK-043 | L | FR-032, FR-045, NFR-033 | Done |
 | TASK-100 | Product license decision (user action) **(User action)** | M7 | — | M | NFR-030 | Approved |
 | TASK-101 | Self-contained publish and Inno Setup installer | M7 | TASK-005, TASK-068 | M | FR-083, FR-084, FR-085, FR-086, FR-087, FR-088, NFR-027, NFR-028 | Approved |
 | TASK-102 | Third-party notices and SBOM | M7 | TASK-101, TASK-100 | L | FR-090, NFR-030, NFR-031 | Approved |
@@ -1671,7 +1671,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M6 |
 | Requirements | FR-032, FR-045, NFR-033 |
 | Decisions / design | UI-015 |

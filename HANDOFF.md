@@ -5,24 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 16:48 +0500 by Claude Code (Opus 5.5), after completing TASK-092 |
-| Current task | **None in progress. M4: TASK-060, 062, 063, 067, 068 Done; TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: TASK-090, 091, 092 Done. Eligible: `TASK-093` help, `TASK-101` installer** |
-| Last completed | TASK-092 Tutorials and reference (Done 2026-10-30 16:48 +0500) |
-| Git state | HEAD `82c493a` (TASK-092 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 20:05 +0500 by Claude Code (Opus 5.5), after completing TASK-093 |
+| Current task | **None in progress. M4: TASK-061 Blocked (BLK-002), so the editor tasks and M5 wait. M6: all tasks Done. Eligible: `TASK-101` installer** |
+| Last completed | TASK-093 Help (Done 2026-10-30 20:05 +0500) |
+| Git state | HEAD `65cc2ed` + uncommitted TASK-093 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 16:28 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1315/1315 passed**, two consecutive runs (2026-10-30, finished 16:34 and after).
-- Engine suite including the SingleStepTests oracle: 629/629 after the DEF-008 fix.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 19:58 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1383/1383 passed**, two consecutive runs (2026-10-30 20:02 and 20:05 +0500).
 
 ## Changes since the previous handoff
-- **TASK-092 Tutorials and reference** (Claude Code, uncommitted):
-  - Content: `Tutorials/*.txt` (5), `Reference/*.txt` (4 concept + 7 generated instruction pages), catalog entries, `ContentItem.Sample` (tutorial → sample link, validated).
-  - Data: `src/AssemblyStudio.Content/ReferenceData/instructions.json` (not embedded).
-  - **To change the instruction reference:** edit `instructions.json`, then run `ReferenceTests` with `ASSEMBLY_STUDIO_WRITE_REFERENCE=1`, rebuild (so the pages are embedded), and run the tests again.
-  - **DEF-008 engine change** in `Cpu8086.Arithmetic.cs` and `Cpu8086.Logic.cs`: reports AF/OF undefined. The Flags panel (TASK-081) should show `UndefinedFlags` as undefined.
-  - Learn: tutorial sample-link button (`LearnViewModel.LinkedSample`, `OpenLinkedSampleCommand`).
-  - Open proposal: a wider reading view for Learn text (UI-015 design decision).
+- **TASK-093 Help** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.Content/Content/Help/*.txt` (7), catalog entries.
+  - `NasmAssembler.Arguments` (internal, extracted).
+  - Tests: `ProgramTests/HelpTests.cs`, `Toolchain.Nasm.Tests/HelpConsistencyTests.cs` (+ Content reference), `App.Tests/Learn/HelpPagesTests.cs`.
+  - **When behavior changes, update the help:** these tests fail when the DOS functions, NASM arguments, build codes, limits, start state or menu shortcuts change.
+  - DEF-003 is described in the scope and differences pages; update them when it is resolved.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -43,16 +41,14 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-092 committed. Files were:
-   - `src/AssemblyStudio.Content/{ContentCatalog.cs, ReferenceData/instructions.json, Content/catalog.json, Content/Tutorials/*, Content/Reference/*}`
-   - `src/AssemblyStudio.Engine.I8086/{Cpu8086.Arithmetic.cs, Cpu8086.Logic.cs}`
-   - `src/AssemblyStudio.App/{Learn/LearnViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.resx, Shell/Strings.cs}`
-   - `tests/AssemblyStudio.ProgramTests/{ProgramHarness.cs, ReferenceTests.cs}`
-   - `tests/AssemblyStudio.Engine.I8086.Tests/UndefinedFlagMaskTests.cs`
-   - `tests/AssemblyStudio.Content.Tests/{ContentCatalogTests.cs, Fixtures/valid/catalog.json, Fixtures/tutorial-without-sample/*}`
-   - `tests/AssemblyStudio.App.Tests/Learn/LearnTests.cs`
-   - `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, shared memory files
-2. `/assembly-implement TASK-093` (help). User: AC-059 check → TASK-061 → TASK-064 and M5.
+1. When the user asks: commit TASK-093. Files:
+   - `src/AssemblyStudio.Content/Content/{catalog.json, Help/*}`
+   - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`
+   - `tests/AssemblyStudio.ProgramTests/HelpTests.cs`
+   - `tests/AssemblyStudio.Toolchain.Nasm.Tests/{AssemblyStudio.Toolchain.Nasm.Tests.csproj, HelpConsistencyTests.cs}`
+   - `tests/AssemblyStudio.App.Tests/Learn/HelpPagesTests.cs`
+   - `docs/05-planning/backlog.md`, shared memory files
+2. User: AC-059 check → TASK-061 → TASK-064 and M5. Agent meanwhile: `/assembly-implement TASK-101` or `/assembly-test`.
 3. User: TASK-006, TASK-100, DEF-003 decision, the first version number, the Learn reading-width proposal.
 
 ## Do not overwrite or revert

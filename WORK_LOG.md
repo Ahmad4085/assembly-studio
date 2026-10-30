@@ -1564,3 +1564,25 @@
 - **Git state after:** uncommitted TASK-092 changes on top of `c44294e` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user). The Learn reading-width proposal (design decision). Tutorial steps describe M5 panels and must be walked through in QA.
 - **Next step:** `/assembly-implement TASK-093`.
+
+### 2026-10-30 19:48 – 20:05 +0500 · Claude Code (Opus 5.5) · TASK-093 Help: scope, limitations, NASM vs MASM, shortcuts
+- **Summary:** Ran `/assembly-implement TASK-093` (user request). Dependencies TASK-090, TASK-018 and TASK-043 are Done; the lock was free.
+  - Wrote 7 help pages (catalog kind help): scope, DOS services, building with NASM, NASM and MASM, differences from a real PC, keyboard shortcuts, and unsupported instructions. The last is generated from the engine's opcode table.
+  - Every factual statement that the code can check is tied to it by a test.
+  - For the command-line check, I extracted the NASM argument list into an internal `NasmAssembler.Arguments` (behavior unchanged).
+  - Checking the text against the code found three errors in my first draft, all fixed in the text:
+    - BLD007 appears only when a build fails.
+    - `resw` in a .COM program produces a NASM warning.
+    - The Esc (cancel build) shortcut was missing.
+  - DEF-003 (65,280 vs 65,278) is stated in the help as a known issue.
+- **Files changed:** `src/AssemblyStudio.Content/Content/{catalog.json, Help/*.txt (7 new)}`, `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `tests/AssemblyStudio.ProgramTests/HelpTests.cs (new)`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/{AssemblyStudio.Toolchain.Nasm.Tests.csproj, HelpConsistencyTests.cs (new)}`, `tests/AssemblyStudio.App.Tests/Learn/HelpPagesTests.cs (new)`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - First runs failed in the toolchain help tests: the placeholder with a space in the command line, and BLD007 not produced on successful builds (an error in the text). There was also one compile error and one line-wrap mismatch.
+  - After the fixes: HelpTests 6/6, HelpConsistencyTests 16/16, HelpPagesTests 46/46.
+  - The DOS check probed all 256 INT 21h functions; the runtime handles exactly 00h, 01h, 02h, 07h, 08h, 09h, 0Ah and 4Ch, as documented.
+  - Mutation: removing 4Ch from the DOS page failed the coverage test. Restored.
+  - Release build **0 warnings, 0 errors** (19:58).
+  - Full solution **1383/1383 at 20:02 and 20:05** (two consecutive runs, run in the background).
+- **Git state after:** uncommitted TASK-093 changes on top of `65cc2ed` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). Still open: DEF-003 (decision), DEF-006, DEF-001, DEF-002. TASK-100 (user). The Learn reading-width proposal.
+- **Next step:** the user's AC-059 check; meanwhile `/assembly-implement TASK-101` or `/assembly-test`.

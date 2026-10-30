@@ -1,0 +1,54 @@
+Unsupported instructions
+Generated from the engine's opcode table. Running one of these stops the program with "unsupported instruction" before the
+instruction changes anything. Every other 8086 instruction is supported; the Reference section explains each one.
+
+Port input and output (no devices are emulated)
+  E4h  IN AL, imm8
+  E5h  IN AX, imm8
+  E6h  OUT imm8, AL
+  E7h  OUT imm8, AX
+  ECh  IN AL, DX
+  EDh  IN AX, DX
+  EEh  OUT DX, AL
+  EFh  OUT DX, AX
+
+8087 coprocessor (ESC)
+  D8h  ESC 0, rm
+  D9h  ESC 1, rm
+  DAh  ESC 2, rm
+  DBh  ESC 3, rm
+  DCh  ESC 4, rm
+  DDh  ESC 5, rm
+  DEh  ESC 6, rm
+  DFh  ESC 7, rm
+
+80186 and later instructions, and undocumented aliases
+  0Fh  POP CS / 286+ escape
+  60h  80186+ opcode
+  61h  80186+ opcode
+  62h  80186+ opcode
+  63h  80186+ opcode
+  64h  80186+ opcode
+  65h  80186+ opcode
+  66h  80186+ opcode
+  67h  80186+ opcode
+  68h  80186+ opcode
+  69h  80186+ opcode
+  6Ah  80186+ opcode
+  6Bh  80186+ opcode
+  6Ch  80186+ opcode
+  6Dh  80186+ opcode
+  6Eh  80186+ opcode
+  6Fh  80186+ opcode
+  C0h  80186+ shift rm8, imm8
+  C1h  80186+ shift rm16, imm8
+  C8h  80186+ ENTER
+  C9h  80186+ LEAVE
+  D6h  SALC / SETALC
+  F1h  ICEBP / INT1
+
+Unsupported forms of supported opcodes (the reg field of the ModR/M byte)
+  F6h /1 (TEST alias)
+  F7h /1 (TEST alias)
+  FEh /2 to /7
+  FFh /7

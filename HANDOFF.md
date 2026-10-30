@@ -5,23 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 11:27 +0500 by Claude Code (Opus 5.5), after TASK-061 (automated part done; blocked on BLK-002) |
-| Current task | **None in progress. M1–M3 complete; M4: TASK-060 Done, TASK-061 Blocked (BLK-002: user AC-059 check). Next eligible: `TASK-062` document service** |
-| Last completed | TASK-054 (Done 2026-10-29 16:47 +0500). TASK-061 automated work done 2026-10-30 11:27 +0500, status Blocked |
-| Git state | HEAD `94b7e18` (TASK-061 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-30 11:51 +0500 by Claude Code (Opus 5.5), after completing TASK-062 |
+| Current task | **None in progress. M1–M3 complete; M4: TASK-060, TASK-062 Done, TASK-061 Blocked (BLK-002). Next eligible: `TASK-063` crash recovery, `TASK-064` editor integration** |
+| Last completed | TASK-062 Document service and file workflow (Done 2026-10-30 11:51 +0500) |
+| Git state | HEAD `5ef8c38` + uncommitted TASK-062 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 11:20 +0500).
-- `dotnet test --project tests/AssemblyStudio.App.Tests -c Release` → **60/60 passed** (2026-10-30 11:21 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1074/1074 passed**, two consecutive runs (2026-10-30 11:22 and 11:25 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 11:43 +0500).
+- `dotnet test --project tests/AssemblyStudio.App.Tests -c Release` → **102/102 passed** (2026-10-30 11:44 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1116/1116 passed**, two consecutive runs (2026-10-30 11:47 and 11:50 +0500).
 
 ## Changes since the previous handoff
-- **TASK-061 Themes, tokens and contrast test** (Claude Code, uncommitted, **Blocked** on BLK-002):
-  - `src/AssemblyStudio.App/Themes/{Shared,Dark,Light,HighContrast}.xaml`; `App.xaml` merges Shared, theme and ShellStyles.
-  - `src/AssemblyStudio.App/Shell/ThemeManager.cs`: `Resolve`, `Apply(AppTheme)`, `Watch()`, `Preference`. TASK-067 should persist the preference and set `ThemeManager.Preference`; App creates the manager in `OnStartup`.
-  - New views must reference color tokens with `DynamicResource` (live theme switching).
-  - `tests/AssemblyStudio.App.Tests/ThemeTokenTests.cs`.
-  - Verification and the user checklist: `docs/06-implementation/task-061-verification.md`.
+- **TASK-062 Document service and file workflow** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Documents/*` (codec, atomic file, errors, dialogs, recent files, document and workspace view models). `ShellViewModel.Workspace` (optional constructor parameter; the default uses WPF dialogs and an in-memory recent list). App composes `JsonRecentFilesStore(settingsPath)` and opens an Untitled document at startup.
+  - `MainWindow.xaml`:
+    - The editor area is `DocumentTabs` (tab strip only, empty content template) + `DocumentEditors` (ItemsControl over Documents, a Grid panel, each item visible when `IsActive`, holding a TextBox `EditorText`).
+    - **TASK-064 should replace the TextBox in that item template with AvalonEdit**, keeping one editor instance per document (AC-006), and keep `MainWindow.ActiveEditor()` returning the active one for focus.
+  - Strings: edit `Shell/Strings.resx`, then run `powershell -ExecutionPolicy Bypass -File build/generate-strings.ps1`.
+  - `Shell/MessageDialog` (UI-019) and `Shell/VisibilityConverters.cs`.
 
 ## Failed tests and known issues
 - `DEF-001`: App smoke test can fail in background runners (WPF menu focus). Open.
@@ -42,12 +43,13 @@
 - For TASK-050: a `RuntimeError` halt from a DOS service carries its message in `DosServices.LastError`. The router's `LastHalt` covers only unsupported services and CPU exceptions.
 
 ## Exact next action
-1. Done: TASK-061 committed. Files were:
-   - `src/AssemblyStudio.App/{App.xaml, App.xaml.cs, Themes/*, Shell/ThemeManager.cs}`
-   - `tests/AssemblyStudio.App.Tests/ThemeTokenTests.cs`
-   - `docs/06-implementation/task-061-verification.md`, `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-062` (document service and file workflow), or other M4 tasks whose dependencies are Done.
-3. User: AC-059 manual check (then TASK-061 → Done), TASK-006 test VMs, DEF-003 decision.
+1. When the user asks: commit TASK-062. Files:
+   - `build/generate-strings.ps1`
+   - `src/AssemblyStudio.App/{App.xaml.cs, Documents/*, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/MessageDialog.xaml(.cs), Shell/ShellViewModel.cs, Shell/Strings.resx, Shell/Strings.cs, Shell/VisibilityConverters.cs}`
+   - `tests/AssemblyStudio.App.Tests/Documents/*`
+   - `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-064` (AvalonEdit editor integration; ADR-0006) or `TASK-063` (crash recovery).
+3. User: AC-059 check (BLK-002), TASK-006 test VMs, DEF-003 decision.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:docs="clr-namespace:AssemblyStudio.App.Documents"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
         Title="{x:Static shell:Strings.AppTitle}"
@@ -15,7 +16,13 @@
         FontFamily="{DynamicResource Font.UI}"
         FontSize="{DynamicResource FontSize.UI}"
         UseLayoutRounding="True"
+        AllowDrop="True"
+        DragOver="OnDragOver"
+        Drop="OnDrop"
         FocusManager.FocusedElement="{Binding ElementName=EditorPanel}">
+  <Window.Resources>
+    <BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
+  </Window.Resources>
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:MainWindow.NextPaneCommand}" Executed="OnNextPane" />
     <CommandBinding Command="{x:Static shell:MainWindow.PreviousPaneCommand}" Executed="OnPreviousPane" />
@@ -33,18 +40,40 @@
     <KeyBinding Key="H" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.History}" />
     <KeyBinding Key="B" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Breakpoints}" />
     <KeyBinding Key="L" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Learn}" />
+    <!-- File commands (ui-spec section 6) -->
+    <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding Workspace.NewFileCommand}" />
+    <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding Workspace.OpenCommand}" />
+    <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding Workspace.SaveCommand}" />
+    <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="{Binding Workspace.SaveAsCommand}" />
+    <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding Workspace.CloseTabCommand}" />
+    <KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding Workspace.CloseTabCommand}" />
   </Window.InputBindings>
 
   <DockPanel Background="{DynamicResource Surface.Window}">
     <!-- UI-002 menus. Commands owned by later tasks are shown (with their shortcuts) but disabled. -->
     <Menu DockPanel.Dock="Top" AutomationProperties.Name="{x:Static shell:Strings.RegionMenu}" Padding="4,2">
       <MenuItem Header="{x:Static shell:Strings.MenuFile}">
-        <MenuItem Header="{x:Static shell:Strings.CmdNew}" InputGestureText="{x:Static shell:Strings.KeyNew}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdOpen}" InputGestureText="{x:Static shell:Strings.KeyOpen}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdSave}" InputGestureText="{x:Static shell:Strings.KeySave}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdSaveAs}" InputGestureText="{x:Static shell:Strings.KeySaveAs}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdCloseTab}" InputGestureText="{x:Static shell:Strings.KeyCloseTab}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdRecent}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdNew}" InputGestureText="{x:Static shell:Strings.KeyNew}" Command="{Binding Workspace.NewFileCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdNewFromTemplate}" Command="{Binding Workspace.NewProgramCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdOpen}" InputGestureText="{x:Static shell:Strings.KeyOpen}" Command="{Binding Workspace.OpenCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSave}" InputGestureText="{x:Static shell:Strings.KeySave}" Command="{Binding Workspace.SaveCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSaveAs}" InputGestureText="{x:Static shell:Strings.KeySaveAs}" Command="{Binding Workspace.SaveAsCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCloseTab}" InputGestureText="{x:Static shell:Strings.KeyCloseTab}" Command="{Binding Workspace.CloseTabCommand}" />
+        <MenuItem x:Name="RecentMenu" Header="{x:Static shell:Strings.CmdRecent}" ItemsSource="{Binding Workspace.RecentFiles}"
+                  IsEnabled="{Binding Workspace.HasRecentFiles}">
+          <MenuItem.ItemContainerStyle>
+            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+              <!-- The path is the header; no access-key underscores in file names. -->
+              <Setter Property="Header">
+                <Setter.Value>
+                  <TextBlock Text="{Binding}" />
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Command" Value="{Binding DataContext.Workspace.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+              <Setter Property="CommandParameter" Value="{Binding}" />
+            </Style>
+          </MenuItem.ItemContainerStyle>
+        </MenuItem>
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdSettings}" InputGestureText="{x:Static shell:Strings.KeySettings}" IsEnabled="False" />
         <Separator />
@@ -149,8 +178,18 @@
     <Border DockPanel.Dock="Bottom" Padding="8,3" Background="{DynamicResource Surface.Panel}"
             BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,1,0,0"
             AutomationProperties.Name="{x:Static shell:Strings.RegionStatusBar}">
-      <TextBlock x:Name="StatusText" Text="{Binding StatusText}" Foreground="{DynamicResource Text.Secondary}"
-                 FontSize="{DynamicResource FontSize.UI.Small}" />
+      <DockPanel>
+        <!-- Encoding and line endings of the active document (ui-spec section 5) -->
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" DataContext="{Binding Workspace.ActiveDocument}"
+                    Visibility="{Binding DataContext.Workspace.HasDocuments, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource VisibleWhenTrue}}">
+          <TextBlock x:Name="StatusEncoding" Text="{Binding StatusEncoding}" Foreground="{DynamicResource Text.Secondary}"
+                     FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
+          <TextBlock x:Name="StatusLineEnding" Text="{Binding StatusLineEnding}" Foreground="{DynamicResource Text.Secondary}"
+                     FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
+        </StackPanel>
+        <TextBlock x:Name="StatusText" Text="{Binding StatusText}" Foreground="{DynamicResource Text.Secondary}"
+                   FontSize="{DynamicResource FontSize.UI.Small}" />
+      </DockPanel>
     </Border>
 
     <!-- Regions (ui-spec section 2). Sizes and visibility are applied by the code-behind from the view model. -->
@@ -176,13 +215,118 @@
       <GridSplitter x:Name="LearnSplitter" Grid.Column="1" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
                     ResizeDirection="Columns" AutomationProperties.Name="{x:Static shell:Strings.SplitterLearn}" />
 
-      <!-- UI-003 editor area (editor arrives with TASK-064; welcome screen UI-020 with TASK-062) -->
+      <!-- UI-003 editor area: document tabs (the AvalonEdit editor replaces the text boxes in TASK-064), or the UI-020 welcome page -->
       <GroupBox x:Name="EditorPanel" Grid.Column="2" Style="{StaticResource Panel.Headerless}"
-                AutomationProperties.Name="{x:Static shell:Strings.RegionEditor}">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="420">
-          <TextBlock Style="{StaticResource EmptyState.Title}" Text="{x:Static shell:Strings.EmptyEditorTitle}" />
-          <TextBlock Style="{StaticResource EmptyState.Text}" TextAlignment="Center" Text="{x:Static shell:Strings.EmptyEditorText}" />
-        </StackPanel>
+                AutomationProperties.Name="{x:Static shell:Strings.RegionEditor}" DataContext="{Binding Workspace}">
+        <Grid>
+          <!-- UI-020 welcome page: no document open -->
+          <ScrollViewer x:Name="WelcomePage" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="{x:Static shell:Strings.RegionWelcome}">
+            <ScrollViewer.Style>
+              <Style TargetType="ScrollViewer">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding HasDocuments}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </ScrollViewer.Style>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="460" Margin="16">
+              <TextBlock Style="{StaticResource EmptyState.Title}" Text="{x:Static shell:Strings.WelcomeTitle}" />
+              <TextBlock Style="{StaticResource EmptyState.Text}" TextAlignment="Center" Text="{x:Static shell:Strings.WelcomeText}" />
+              <WrapPanel HorizontalAlignment="Center" Margin="0,12,0,0">
+                <Button x:Name="WelcomeNew" Content="{x:Static shell:Strings.WelcomeNew}" Command="{Binding NewFileCommand}" Margin="4" Padding="12,4" />
+                <Button x:Name="WelcomeNewProgram" Content="{x:Static shell:Strings.WelcomeNewTemplate}" Command="{Binding NewProgramCommand}" Margin="4" Padding="12,4" />
+                <Button x:Name="WelcomeOpen" Content="{x:Static shell:Strings.WelcomeOpen}" Command="{Binding OpenCommand}" Margin="4" Padding="12,4" />
+              </WrapPanel>
+              <TextBlock Text="{x:Static shell:Strings.WelcomeRecent}" FontWeight="SemiBold" Foreground="{DynamicResource Text.Secondary}" Margin="4,20,4,4" />
+              <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.WelcomeNoRecent}"
+                         Visibility="{Binding HasRecentFiles, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+              <ItemsControl x:Name="WelcomeRecent" ItemsSource="{Binding RecentFiles}" Focusable="False">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Button Command="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            CommandParameter="{Binding}" HorizontalContentAlignment="Left" Margin="4,1" Padding="8,2"
+                            AutomationProperties.Name="{Binding}">
+                      <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" />
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </ScrollViewer>
+
+          <!-- Open documents -->
+          <DockPanel x:Name="DocumentArea" Visibility="{Binding HasDocuments, Converter={StaticResource VisibleWhenTrue}}">
+            <!-- Tab strip only: each document keeps its own editor below, so caret and undo history stay per tab (AC-006). -->
+            <TabControl x:Name="DocumentTabs" DockPanel.Dock="Top" ItemsSource="{Binding Documents}" SelectedItem="{Binding ActiveDocument}"
+                        AutomationProperties.Name="{x:Static shell:Strings.RegionDocumentTabs}">
+              <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+                  <Setter Property="AutomationProperties.Name" Value="{Binding AutomationName}" />
+                  <Setter Property="ToolTip" Value="{Binding FilePath}" />
+                </Style>
+              </TabControl.ItemContainerStyle>
+              <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type docs:DocumentViewModel}">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DisplayTitle}" VerticalAlignment="Center" />
+                    <Button Margin="8,0,0,0" Padding="2,0" FontFamily="{DynamicResource Font.Icons}" FontSize="10" Content="&#xE711;"
+                            Focusable="False" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource Text.Secondary}"
+                            ToolTip="{x:Static shell:Strings.CmdCloseTabShort}" AutomationProperties.Name="{x:Static shell:Strings.CmdCloseTabShort}"
+                            Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
+                            CommandParameter="{Binding}" />
+                  </StackPanel>
+                </DataTemplate>
+              </TabControl.ItemTemplate>
+              <TabControl.ContentTemplate>
+                <DataTemplate />
+              </TabControl.ContentTemplate>
+            </TabControl>
+
+            <ItemsControl x:Name="DocumentEditors" ItemsSource="{Binding Documents}" Focusable="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <Grid />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                  <Setter Property="Visibility" Value="{Binding IsActive, Converter={StaticResource VisibleWhenTrue}}" />
+                </Style>
+              </ItemsControl.ItemContainerStyle>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type docs:DocumentViewModel}">
+                  <DockPanel>
+                    <!-- FR-019: not UTF-8 -->
+                    <Border DockPanel.Dock="Top" Padding="8,4" Background="{DynamicResource Surface.Raised}"
+                            BorderBrush="{DynamicResource Status.Warning}" BorderThickness="0,0,0,1"
+                            Visibility="{Binding EncodingNotice, Converter={x:Static shell:NullToCollapsedConverter.Instance}}">
+                      <TextBlock Text="{Binding EncodingNotice}" TextWrapping="Wrap" />
+                    </Border>
+                    <!-- FR-020: mixed line endings -->
+                    <Border DockPanel.Dock="Top" Padding="8,4" Background="{DynamicResource Surface.Raised}"
+                            BorderBrush="{DynamicResource Status.Warning}" BorderThickness="0,0,0,1"
+                            Visibility="{Binding HasMixedLineEndings, Converter={StaticResource VisibleWhenTrue}}">
+                      <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="{x:Static shell:Strings.BannerNormalize}" Padding="8,2" Margin="8,0,0,0"
+                                Command="{Binding DataContext.NormalizeLineEndingsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}" />
+                        <TextBlock Text="{x:Static shell:Strings.BannerMixedLineEndings}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                      </DockPanel>
+                    </Border>
+                    <TextBox x:Name="EditorText" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True" AcceptsTab="True" TextWrapping="NoWrap"
+                             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                             FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}"
+                             Background="{DynamicResource Surface.Editor}" Foreground="{DynamicResource Syntax.Text}"
+                             CaretBrush="{DynamicResource Text.Primary}" SelectionBrush="{DynamicResource Editor.Selection}"
+                             BorderThickness="0" Padding="4,2" AutomationProperties.Name="{Binding Title}" />
+                  </DockPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </DockPanel>
+        </Grid>
       </GroupBox>
 
       <GridSplitter x:Name="MachineSplitter" Grid.Column="3" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"

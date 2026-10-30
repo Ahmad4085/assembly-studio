@@ -158,4 +158,68 @@
   <data name="SplitterMachine" xml:space="preserve"><value>Resize machine column</value></data>
   <data name="SplitterBottom" xml:space="preserve"><value>Resize bottom area</value></data>
   <data name="SplitterMemoryStack" xml:space="preserve"><value>Resize memory and stack</value></data>
+  <data name="CmdNewFromTemplate" xml:space="preserve"><value>New .COM _Program</value><comment>File menu: new document from the .COM template (FR-002)</comment></data>
+  <data name="CmdCloseTabShort" xml:space="preserve"><value>Close</value><comment>Tab close button tooltip</comment></data>
+  <data name="DocUntitled" xml:space="preserve"><value>Untitled</value><comment>Tab title of the first new document</comment></data>
+  <data name="DocUntitledNumbered" xml:space="preserve"><value>Untitled {0}</value><comment>Tab title of further new documents. {0} = number</comment></data>
+  <data name="DocDirtyMarker" xml:space="preserve"><value>●</value><comment>Appended to a tab title with unsaved changes (also announced by the tab's automation name)</comment></data>
+  <data name="DocDirtyName" xml:space="preserve"><value>{0}, unsaved changes</value><comment>Automation name of a tab with unsaved changes. {0} = title</comment></data>
+  <data name="TemplateCom" xml:space="preserve"><value>; A .COM program: the code starts at offset 100h.
+org 100h
+
+start:
+    mov dx, message     ; DS:DX = the text
+    mov ah, 09h         ; DOS: print a $-terminated string
+    int 21h
+
+    mov ax, 4C00h       ; DOS: end the program, exit code 0
+    int 21h
+
+message db 'Hello, World!', 13, 10, '$'
+</value><comment>Starter template for New .COM Program (FR-002). New documents are saved with CRLF (FR-020) whatever the line breaks here</comment></data>
+  <data name="FileFilter" xml:space="preserve"><value>Assembly source (*.asm;*.inc;*.s)|*.asm;*.inc;*.s|All files (*.*)|*.*</value><comment>Open and Save As dialog filter</comment></data>
+  <data name="WelcomeTitle" xml:space="preserve"><value>Start</value><comment>Welcome page title (UI-020)</comment></data>
+  <data name="WelcomeText" xml:space="preserve"><value>Create a program or open a source file. You can also drop .asm files here.</value><comment>Welcome page text</comment></data>
+  <data name="WelcomeNew" xml:space="preserve"><value>_New file</value><comment>Welcome page button</comment></data>
+  <data name="WelcomeNewTemplate" xml:space="preserve"><value>New .COM _program</value><comment>Welcome page button</comment></data>
+  <data name="WelcomeOpen" xml:space="preserve"><value>_Open…</value><comment>Welcome page button</comment></data>
+  <data name="WelcomeRecent" xml:space="preserve"><value>Recent files</value><comment>Welcome page heading</comment></data>
+  <data name="WelcomeNoRecent" xml:space="preserve"><value>No recent files yet.</value><comment>Welcome page, empty recent list</comment></data>
+  <data name="RecentNone" xml:space="preserve"><value>(No recent files)</value><comment>Disabled File ▸ Recent Files entry</comment></data>
+  <data name="DialogSave" xml:space="preserve"><value>_Save</value><comment>Button</comment></data>
+  <data name="DialogDontSave" xml:space="preserve"><value>Do_n't Save</value><comment>Button</comment></data>
+  <data name="DialogCancel" xml:space="preserve"><value>Cancel</value><comment>Button</comment></data>
+  <data name="DialogOk" xml:space="preserve"><value>OK</value><comment>Button</comment></data>
+  <data name="DialogRemove" xml:space="preserve"><value>_Remove</value><comment>Button</comment></data>
+  <data name="DialogKeep" xml:space="preserve"><value>_Keep</value><comment>Button</comment></data>
+  <data name="DialogNormalize" xml:space="preserve"><value>_Normalize</value><comment>Button</comment></data>
+  <data name="SaveChangesTitle" xml:space="preserve"><value>Save changes?</value><comment>Unsaved-changes dialog title (FR-005)</comment></data>
+  <data name="SaveChangesText" xml:space="preserve"><value>{0} has unsaved changes. Save them before closing?</value><comment>{0} = document title</comment></data>
+  <data name="OpenFailedTitle" xml:space="preserve"><value>Couldn't open the file</value><comment>File error dialog title</comment></data>
+  <data name="SaveFailedTitle" xml:space="preserve"><value>Couldn't save the file</value><comment>File error dialog title</comment></data>
+  <data name="SaveFailedKept" xml:space="preserve"><value>Your changes are still in the editor. Save to another location or try again.</value><comment>Next step after a failed save (FR-008)</comment></data>
+  <data name="OpenFailedNext" xml:space="preserve"><value>Check the path and try again.</value><comment>Next step after a failed open</comment></data>
+  <data name="ErrNotFound" xml:space="preserve"><value>{0} doesn't exist.</value><comment>{0} = path</comment></data>
+  <data name="ErrFolderNotFound" xml:space="preserve"><value>The folder of {0} doesn't exist.</value><comment>{0} = path</comment></data>
+  <data name="ErrAccessDenied" xml:space="preserve"><value>You don't have permission to access {0}.</value><comment>{0} = path</comment></data>
+  <data name="ErrReadOnly" xml:space="preserve"><value>{0} is read-only.</value><comment>{0} = path</comment></data>
+  <data name="ErrLocked" xml:space="preserve"><value>{0} is being used by another program.</value><comment>{0} = path</comment></data>
+  <data name="ErrDiskFull" xml:space="preserve"><value>There isn't enough disk space to write {0}.</value><comment>{0} = path</comment></data>
+  <data name="ErrInvalidPath" xml:space="preserve"><value>{0} isn't a valid file path.</value><comment>{0} = path</comment></data>
+  <data name="ErrPathTooLong" xml:space="preserve"><value>The path {0} is too long.</value><comment>{0} = path</comment></data>
+  <data name="ErrOther" xml:space="preserve"><value>{0} couldn't be accessed: {1}</value><comment>{0} = path, {1} = system message</comment></data>
+  <data name="RecentMissingTitle" xml:space="preserve"><value>File not found</value><comment>Recent file no longer exists (FR-007)</comment></data>
+  <data name="RecentMissingText" xml:space="preserve"><value>{0} no longer exists. Remove it from the recent files?</value><comment>{0} = path</comment></data>
+  <data name="BannerEncoding" xml:space="preserve"><value>Opened as {0} because the file isn't valid UTF-8. Saving keeps this encoding.</value><comment>{0} = encoding name (FR-019)</comment></data>
+  <data name="BannerMixedLineEndings" xml:space="preserve"><value>This file mixes CRLF and LF line endings. Saving keeps them as they are.</value><comment>FR-020</comment></data>
+  <data name="BannerNormalize" xml:space="preserve"><value>_Normalize to CRLF</value><comment>Banner button</comment></data>
+  <data name="NormalizeTitle" xml:space="preserve"><value>Normalize line endings?</value><comment>Confirmation (FR-020)</comment></data>
+  <data name="NormalizeText" xml:space="preserve"><value>Convert every line ending in {0} to CRLF? The change is saved with the file.</value><comment>{0} = document title</comment></data>
+  <data name="EncodingUtf8" xml:space="preserve"><value>UTF-8</value><comment>Status bar</comment></data>
+  <data name="EncodingUtf8Bom" xml:space="preserve"><value>UTF-8 with BOM</value><comment>Status bar</comment></data>
+  <data name="LineEndingCrLf" xml:space="preserve"><value>CRLF</value><comment>Status bar</comment></data>
+  <data name="LineEndingLf" xml:space="preserve"><value>LF</value><comment>Status bar</comment></data>
+  <data name="LineEndingMixed" xml:space="preserve"><value>Mixed line endings</value><comment>Status bar</comment></data>
+  <data name="RegionDocumentTabs" xml:space="preserve"><value>Open documents</value><comment>Automation name of the document tab strip</comment></data>
+  <data name="RegionWelcome" xml:space="preserve"><value>Start page</value><comment>Automation name of the welcome page</comment></data>
 </root>

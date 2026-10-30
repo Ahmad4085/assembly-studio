@@ -3,6 +3,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using AssemblyStudio.App.Documents;
 
 namespace AssemblyStudio.App.Shell;
 
@@ -80,6 +82,53 @@ public partial class MainWindow : Window
 
     private void OnExit(object sender, RoutedEventArgs e) => Close();
 
+    /// <summary>Drag-and-drop onto the window opens the files (FR-003).</summary>
+    private void OnDragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void OnDrop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetData(DataFormats.FileDrop) is string[] files)
+        {
+            _viewModel.Workspace.OpenFiles(files);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>The text box of the active document, or <see langword="null"/> when none is open.</summary>
+    internal TextBox? ActiveEditor()
+    {
+        DocumentViewModel? active = _viewModel.Workspace.ActiveDocument;
+        if (active is null || DocumentEditors.ItemContainerGenerator.ContainerFromItem(active) is not DependencyObject container)
+        {
+            return null;
+        }
+
+        return FindDescendant<TextBox>(container);
+    }
+
+    private static T? FindDescendant<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T match)
+            {
+                return match;
+            }
+
+            if (FindDescendant<T>(child) is { } nested)
+            {
+                return nested;
+            }
+        }
+
+        return null;
+    }
+
     private FrameworkElement RegionContainer(ShellRegion region) => region switch
     {
         ShellRegion.Machine => MachineRegion,
@@ -95,9 +144,16 @@ public partial class MainWindow : Window
             ShellRegion.Machine => RegistersPanel,
             ShellRegion.Bottom => SelectedBottomTab(),
             ShellRegion.Learn => LearnPanel,
-            _ => EditorPanel,
+            _ => EditorFocusTarget(),
         };
         MoveFocus(target);
+    }
+
+    /// <summary>The editor region's focus target: the active document's text, else the welcome page's first action.</summary>
+    private UIElement EditorFocusTarget()
+    {
+        UpdateLayout();
+        return ActiveEditor() ?? (UIElement)(WelcomeNew.IsVisible ? WelcomeNew : EditorPanel);
     }
 
     private void FocusPanel(ShellPanel panel)
@@ -219,6 +275,13 @@ public partial class MainWindow : Window
 
     private void OnClosing(object? sender, CancelEventArgs e)
     {
+        // FR-005: unsaved documents are asked about first; Cancel keeps the window open.
+        if (!_viewModel.Workspace.ConfirmCloseAll())
+        {
+            e.Cancel = true;
+            return;
+        }
+
         if (!_persistLayout)
         {
             return;

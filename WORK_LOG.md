@@ -1369,3 +1369,34 @@
 - **Git state after:** uncommitted TASK-061 changes on top of `4e0d335` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 and DEF-002 are still open.
 - **Next step:** `/assembly-implement TASK-062`. User: the AC-059 checklist.
+
+### 2026-10-30 11:28 – 11:51 +0500 · Claude Code (Opus 5.5) · TASK-062 Document service and file workflow
+- **Summary:** Ran `/assembly-implement TASK-062` (user request). The lock was free; TASK-061 is Blocked (BLK-002) and not active.
+  - **`App/Documents`:**
+    - `TextFileCodec`: strict UTF-8 decode, BOM detection; invalid UTF-8 → the system ANSI code page (1252 when the locale is UTF-8); CRLF/LF/Mixed detection; encode back with the same BOM and code page; line breaks normalized to the file's ending except in mixed files.
+    - `AtomicFile`: temporary file in the target folder with WriteThrough, flushed to disk, then `File.Replace`/`File.Move`; deleted on failure; read-only targets refused up front.
+    - `FileErrors`: messages with the path and reason, mapped from exception type and HResult (sharing/lock violation, disk full).
+    - `IDialogService` + `WpfDialogService` (Open/Save As dialogs, `MessageDialog`).
+    - `IRecentFilesStore`: `JsonRecentFilesStore` writes "recentFiles" into settings.json, keeping the layout, atomically, and never overwrites an unreadable file.
+    - `DocumentViewModel`, `WorkspaceViewModel`.
+  - **Design points:**
+    - WPF's TabControl reuses one content element for all tabs, which would share undo and caret between documents. The editor area is therefore a tab strip plus an ItemsControl that keeps one TextBox per document, showing only the active one (AC-006).
+    - The standard message box can't label buttons Save / Don't Save / Cancel, so a themed `MessageDialog` (the UI-019 component) was added.
+    - FR-001 vs the UI-020 welcome page: the app starts with an Untitled document, and the welcome page shows once all tabs are closed.
+  - **`build/generate-strings.ps1`** replaces the TASK-060 resx → Strings.cs script, which lived in a deleted scratchpad. Verified: it regenerated the existing file identically except the header comment.
+- **Files changed:** `build/generate-strings.ps1` (new), `src/AssemblyStudio.App/App.xaml.cs`, `src/AssemblyStudio.App/Documents/{TextFileCodec, AtomicFile, FileErrors, IDialogService, WpfDialogService, RecentFiles, DocumentViewModel, WorkspaceViewModel}.cs` (new), `src/AssemblyStudio.App/Shell/{MainWindow.xaml, MainWindow.xaml.cs, ShellViewModel.cs, Strings.resx, Strings.cs, MessageDialog.xaml (new), MessageDialog.xaml.cs (new), VisibilityConverters.cs (new)}`, `tests/AssemblyStudio.App.Tests/Documents/{TextFileCodecTests, AtomicFileAndErrorsTests, WorkspaceViewModelTests, DocumentUiTests}.cs` (new), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (11:43 +0500), after fixing MVVMTK0007 (commands from value-returning methods) and a test helper name clash.
+  - `dotnet test --project tests/AssemblyStudio.App.Tests -c Release` → **102/102 passed** (11:44 +0500).
+  - New tests cover:
+    - AC-002, AC-003; AC-004 (mid-write fault injection; locked save in the workspace).
+    - AC-005: tab close Save / Don't Save / Cancel, Save As cancelled, window close Cancel.
+    - AC-006: per-tab TextBox, caret and undo.
+    - AC-007, AC-008: missing, locked, read-only, read permission denied with a real deny ACL, invalid path.
+    - AC-012 and normalization.
+  - Reviewed renders `artifacts/ui/editor-template.png` and `editor-tabs.png`.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release` → **1116/1116 passed** at 11:47 and 11:50 (two consecutive runs).
+  - Not automated: dropping files onto the window (WPF DragEventArgs can't be built in tests; the handler forwards to the tested `OpenFiles`); AC-001 with network adapters disabled (QA, TASK-103).
+- **Git state after:** uncommitted TASK-062 changes on top of `5ef8c38` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** BLK-002 (user AC-059 check). DEF-003 (decision). DEF-001 and DEF-002 are still open.
+- **Next step:** `/assembly-implement TASK-064` (AvalonEdit) or `TASK-063`.

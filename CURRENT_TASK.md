@@ -6,10 +6,29 @@
 
 ## Active Task
 
-None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check); its automated work is complete.
+None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 display check).
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Completed Milestones | **M1**, **M2**, **M3** |
+| Milestone 4 progress | TASK-060, TASK-062 Done; TASK-061 Blocked (BLK-002) |
+| Recommended next action | `/assembly-implement TASK-063` (crash recovery) or `TASK-064` (AvalonEdit editor integration) |
+| Parallel user actions | AC-059 manual check, `TASK-006` (clean test VMs), DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-30 11:28 +0500 |
+| Milestone | M4 (App shell and editor) |
+| Goal | Open, edit, save (atomic) and close documents safely, preserving encoding and line endings |
+| Scope (in) | New (empty / .COM template), Open (dialog, drag-drop), Save/Save As atomic, Close with prompt; encoding detection + preservation, EOL preservation + normalize confirmation; file error messages, recent files, welcome page |
+| Out of scope | Editor control (TASK-064): tabs use a plain text box until then |
+| Requirements | FR-001–FR-008, FR-019, FR-020, NFR-029; UI-003, UI-019, UI-020; AC-001–AC-008, AC-012 |
+| Expected files | `src/AssemblyStudio.App/Documents/`, shell view and view model, `tests/AssemblyStudio.App.Tests/` |
+| Note | TASK-061 stays Blocked on BLK-002 (user check), not active |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3** |
 | Milestone 4 progress | TASK-060 Done; TASK-061 Blocked (BLK-002, user check) |
@@ -72,6 +91,31 @@ None in progress. TASK-061 is **Blocked** on BLK-002 (the user's manual AC-059 d
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-062 Document service and file workflow (Done 2026-10-30 11:51 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Documents/`:
+  - `TextFileCodec`: UTF-8 with or without BOM (ASCII counts as UTF-8); invalid UTF-8 → ANSI code page with a notice; CRLF/LF/Mixed detection; saves the same encoding, BOM and line endings; mixed files are kept as-is until normalized.
+  - `AtomicFile`: temporary file in the same folder, flushed, then `File.Replace`/`Move`; the target is untouched on failure.
+  - `FileErrors`: path + reason for missing file or folder, access denied, read-only, locked, disk full, invalid path, path too long.
+  - `IDialogService`/`WpfDialogService` and `IRecentFilesStore` (`JsonRecentFilesStore` = "recentFiles" in settings.json, 10 entries).
+  - `DocumentViewModel` and `WorkspaceViewModel`: New / New .COM program, Open (dialog, drag-drop, recent), Save / Save As, Close and window close with Save / Don't Save / Cancel, normalize line endings after confirmation.
+- Shell:
+  - Editor area = tab strip + one TextBox per document (keeps caret and undo per tab); the AvalonEdit editor replaces the TextBox in TASK-064.
+  - UI-020 welcome page, encoding and mixed-EOL banners, encoding and EOL in the status bar, File menu and shortcuts, drag-and-drop, close prompt.
+  - New themed `MessageDialog` (UI-019). The app starts with an Untitled document (FR-001).
+- `build/generate-strings.ps1` regenerates `Shell/Strings.cs` from `Strings.resx`; the TASK-060 script was lost with an old scratchpad. 52 new strings.
+- Tests (42 new):
+  - `TextFileCodecTests`, `AtomicFileAndErrorsTests` (AC-004 fault injection mid-write, read-only, locked, messages).
+  - `WorkspaceViewModelTests`: AC-002, 003, 004, 005, 006, 007, 008 (missing, locked, read-only, **no read permission via a deny ACL**, invalid path), 012, normalize.
+  - `DocumentUiTests`: welcome/tabs, AC-006 caret and undo per tab, AC-005 window close Cancel, status bar, F6, menu state; renders `editor-template.png`, `editor-tabs.png`.
+- Not automated: dropping files onto the window (WPF's DragEventArgs can't be constructed in tests; the handler calls the tested `OpenFiles`); AC-001 with network adapters disabled (QA, TASK-103).
+- Release build 0 warnings / 0 errors; App 102/102; full solution 1116/1116 in two consecutive runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-30 11:28 / 11:51 +0500 |
 
 ## Blocked: TASK-061 Themes, tokens and contrast test (2026-10-30 11:27 +0500, Claude Code (Opus 5.5))
 - `src/AssemblyStudio.App/Themes/`:

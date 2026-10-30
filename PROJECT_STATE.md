@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 11:27 +0500 by Claude Code (Opus 5.5) (TASK-061 automated work done; blocked on BLK-002) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060 done, TASK-061 blocked on the user check BLK-002); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-30 11:51 +0500 by Claude Code (Opus 5.5) (TASK-062 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-060, TASK-062 done; TASK-061 blocked on BLK-002); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next eligible: `TASK-062` document service. User: AC-059 manual check (BLK-002), `TASK-006`, DEF-003 decision |
+| Active task | None in progress. Next eligible: `TASK-063` crash recovery, `TASK-064` editor integration (M4). User: AC-059 check (BLK-002), `TASK-006`, DEF-003 decision |
 
-| Next recommended action | `/assembly-implement TASK-062`. User: AC-059 check, TASK-006, DEF-003 decision |
+| Next recommended action | `/assembly-implement TASK-064` (or `TASK-063`). User: AC-059 check, TASK-006, DEF-003 decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-062 Document service and file workflow | 2026-10-30 11:51 +0500 | `App/Documents`: codec (UTF-8/BOM/ANSI, CRLF/LF/mixed preserved), atomic save, file error messages, workspace (new/template/open/drag-drop/recent/save/save as/close prompts), WPF dialogs + themed MessageDialog, welcome page, banners, status bar. 42 new tests incl. AC-002…AC-008, AC-012 (fault-injected save, deny-ACL read, locked, read-only). Release build 0w/0e; App 102/102; full solution 1116/1116 (twice) |
 | TASK-061 Themes, tokens and contrast test (**Blocked**, BLK-002) | 2026-10-30 11:27 +0500 (automated part) | Dark/Light/HighContrast dictionaries (32 tokens each) + Shared.xaml; `ThemeManager` (HC wins, follows app mode, live switching). Contrast 190/190 pairs (rebuilt superset of the 166; original list not in repo); values equal the token table; HC mapping per §3. 15 new tests; App 60/60; full solution 1074/1074 (twice). AC-059 manual display check pending the user |
 | TASK-054 Fault containment, fuzz and soak (M3 complete) | 2026-10-29 16:47 +0500 | `DebugSession`: faults → Error + `LastFault` + `faultLog`; subscriber exceptions isolated; error snapshot can't throw. DEF-005 (flood hang in `ConsoleDevice` delta) found by the soak and fixed. 10 robustness tests (containment, AC-045 flood, long-string flood, IVT wipe, self-modifying code, fuzz 600, soak). **30-min soak: 396,642 programs, 1,586,560 commands, 0 faults, memory 1.1 → 2.2 MiB, threads stable.** Release build 0w/0e; full solution 1055/1055 (twice) |
 | TASK-053 Input routing, Ctrl-C delivery and replay | 2026-10-29 15:43 +0500 | Core `IConsoleDevice.EnqueueInput`, `InputRecord`, `IDebugSession.SendInput/SendCtrlC/RecordedInput/Replay`. `DebugSession`: inline request queue (input, Ctrl-C, refresh) handled during a run without stopping (fixes WatchMemory pausing a run); waiting run/step continues on input; recording with instruction counts; replay delivers at the same counts. `InstructionsExecuted` published with the snapshot (fixes a TASK-052 test flake). 11 new tests incl. AC-047 session level, Ctrl-C in 01h/07h. Release build 0w/0e; full solution 1043/1043 (twice) |
@@ -99,8 +100,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-30 11:20 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 11:25 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1074/1074 passed** in two consecutive runs (3m 11s, 3m 00s) |
+| Product build (2026-10-30 11:43 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-30 11:50 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1116/1116 passed** in two consecutive runs (3m 41s, 3m 09s) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Shell;
 
 namespace AssemblyStudio.App;
@@ -24,8 +25,11 @@ public partial class App : Application
         Exit += (_, _) => themes.Dispose();
         TextScale.Apply(Resources, TextScale.ReadFactor());
 
-        var store = new JsonLayoutStore(options.SettingsPath ?? JsonLayoutStore.DefaultPath);
-        var viewModel = new ShellViewModel(store, AppVersion());
+        string settingsPath = options.SettingsPath ?? JsonLayoutStore.DefaultPath;
+        var store = new JsonLayoutStore(settingsPath);
+        var workspace = new WorkspaceViewModel(new WpfDialogService(), new JsonRecentFilesStore(settingsPath));
+        workspace.New(); // FR-001: start with an editable document
+        var viewModel = new ShellViewModel(store, AppVersion(), workspace);
         var window = new MainWindow(viewModel, persistLayout: options.SmokeReportPath is null);
         MainWindow = window;
 

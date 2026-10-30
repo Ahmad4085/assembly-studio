@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using AssemblyStudio.App.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -71,10 +72,13 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Creates the shell state from the saved layout.</summary>
     /// <param name="store">Layout persistence.</param>
     /// <param name="appVersion">Version shown in the status bar while no document is open.</param>
-    public ShellViewModel(ILayoutStore store, string appVersion)
+    /// <param name="workspace">The open documents and file workflow (TASK-062); by default one with the WPF dialogs
+    /// and an in-memory recent-files list.</param>
+    public ShellViewModel(ILayoutStore store, string appVersion, WorkspaceViewModel? workspace = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         _store = store;
+        Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
         Apply(store.Load());
     }
@@ -129,6 +133,9 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>Memory and Stack sit beside the bottom tab group (not compact).</summary>
     public bool IsMemoryStackDocked => !IsCompact;
+
+    /// <summary>The open documents and the file workflow (UI-003, UI-019, UI-020).</summary>
+    public WorkspaceViewModel Workspace { get; }
 
     /// <summary>Status bar text (UI-016, "Empty" state: the app version).</summary>
     public string StatusText { get; }

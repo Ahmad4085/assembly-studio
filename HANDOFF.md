@@ -8,7 +8,7 @@
 | Written | 2026-10-31 19:21 +0500 by Claude Code (Opus 5.5), after completing TASK-064 |
 | Current task | **None in progress. Next (user-approved): `TASK-066` diagnostics and gutter, then `TASK-080` Build/Run/Step** |
 | Last completed | TASK-064 Editor integration (AvalonEdit) (Done 2026-10-31 19:21 +0500) |
-| Git state | HEAD `2c19f92` + uncommitted TASK-064 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `ce9d42d` (TASK-064 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-31 19:11 +0500).
@@ -53,7 +53,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-064. Files:
+1. Done: TASK-064 committed. Files were:
    - `Directory.Packages.props`, `src/AssemblyStudio.App/{AssemblyStudio.App.csproj, App.xaml.cs, Editor/*, Settings/EditorAppearance.cs, Shell/LayoutState.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Themes/Shared.xaml}`
    - `tests/AssemblyStudio.App.Tests/{Editor/*, Documents/CrashRecoveryProcessTests.cs, Documents/DocumentUiTests.cs, Documents/OpenFromCommandLineProcessTests.cs, Settings/SettingsUiTests.cs}`
    - `docs/decisions/ADR-0006-editor-avalonedit.md` (validation), `docs/05-planning/backlog.md`, shared memory files

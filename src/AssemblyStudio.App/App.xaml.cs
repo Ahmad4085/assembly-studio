@@ -64,11 +64,13 @@ public partial class App : Application
         Exit += (_, _) => themes.Dispose();
         double textScale = TextScale.ReadFactor();
         TextScale.Apply(Resources, textScale);
-        EditorAppearance.Apply(Resources, settings.Current, textScale);
+        double codeSize = (double)Resources["FontSize.Code"];
+        double zoom = 1.0;
+        EditorAppearance.Apply(Resources, settings.Current, textScale, zoom);
         settings.Changed += (_, _) =>
         {
             themes.Preference = settings.Current.Theme;
-            EditorAppearance.Apply(Resources, settings.Current, textScale);
+            EditorAppearance.Apply(Resources, settings.Current, textScale, zoom);
         };
 
         // FR-079: the bundled NASM next to the application unless Settings names another one.
@@ -125,6 +127,22 @@ public partial class App : Application
                 Owner = window,
             }.ShowDialog(),
             learn: new LearnViewModel(LoadContent(log), workspace));
+        // FR-022: the zoom scales the editor and the debug panels' code font.
+        void ApplyZoom()
+        {
+            zoom = viewModel.ZoomPercent / 100.0;
+            EditorAppearance.Apply(Resources, settings.Current, textScale, zoom);
+            EditorAppearance.ApplyCodeZoom(Resources, codeSize, zoom);
+        }
+
+        ApplyZoom();
+        viewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(ShellViewModel.ZoomPercent))
+            {
+                ApplyZoom();
+            }
+        };
         window = new MainWindow(viewModel, persistLayout: !smoke, log);
         MainWindow = window;
         if (settings.InvalidFileBackup is { } backup && !smoke)

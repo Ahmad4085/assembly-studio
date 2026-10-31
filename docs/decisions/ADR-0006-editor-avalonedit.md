@@ -42,7 +42,12 @@ AvalonEditB stays a fallback if upstream proves inadequate. Switching is cheap b
   upstream SearchPanel capabilities. If Narrator support is insufficient, a requirement or design issue is raised (NFR-022) rather
   than silently accepted.
 - NFR-001 (≤ 50 ms keystroke latency in 5,000 lines) is measured in the editor task.
+- **Verified 2026-10-31 (TASK-064):** AvalonEdit 6.3.1.120 (its net8.0-windows build) loads, renders, edits and undoes on
+  `net10.0-windows` (.NET 10.0.14; `AvalonEditPlatformTests`). Its UI Automation peer is a Document with Value, Text and Scroll
+  patterns. NFR-001 measured on the development machine: median 14.5 ms, p95 22.2 ms (`EditorTests`). Narrator and the
+  SearchPanel remain for TASK-069 and TASK-065.
 
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
+- 2026-10-31: Validation updated with the TASK-064 results (no decision changed).

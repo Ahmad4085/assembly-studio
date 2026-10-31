@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using AssemblyStudio.App.Documents;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AssemblyStudio.App.Shell;
 
@@ -48,6 +49,7 @@ public partial class MainWindow : Window
         };
         SizeChanged += (_, e) => viewModel.UpdateWindowWidth(e.NewSize.Width);
         Closing += OnClosing;
+        PreviewMouseWheel += OnPreviewMouseWheel;
     }
 
     /// <summary>The region that currently holds keyboard (or, in an inactive window, logical)
@@ -100,8 +102,25 @@ public partial class MainWindow : Window
         }
     }
 
-    /// <summary>The text box of the active document, or <see langword="null"/> when none is open.</summary>
-    internal TextBox? ActiveEditor()
+    /// <summary>FR-022: Ctrl+mouse wheel zooms the editor and the code-font panels.</summary>
+    private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (Keyboard.Modifiers != ModifierKeys.Control)
+        {
+            return;
+        }
+
+        IRelayCommand command = e.Delta > 0 ? _viewModel.ZoomInCommand : _viewModel.ZoomOutCommand;
+        if (command.CanExecute(null))
+        {
+            command.Execute(null);
+        }
+
+        e.Handled = true;
+    }
+
+    /// <summary>The code editor of the active document, or <see langword="null"/> when none is open.</summary>
+    internal Editor.CodeEditor? ActiveEditor()
     {
         DocumentViewModel? active = _viewModel.Workspace.ActiveDocument;
         if (active is null || DocumentEditors.ItemContainerGenerator.ContainerFromItem(active) is not DependencyObject container)
@@ -109,7 +128,7 @@ public partial class MainWindow : Window
             return null;
         }
 
-        return FindDescendant<TextBox>(container);
+        return FindDescendant<Editor.CodeEditor>(container);
     }
 
     private static T? FindDescendant<T>(DependencyObject parent) where T : DependencyObject

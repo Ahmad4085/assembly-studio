@@ -17,6 +17,9 @@
   <!-- Editor font: the user's Settings choice (FR-077), applied by the App; these are the defaults. -->
   <FontFamily x:Key="Font.Editor">Cascadia Mono, Consolas</FontFamily>
   <sys:Double x:Key="FontSize.Editor">14</sys:Double>
+  <!-- Editor indentation: the user's Settings (FR-014), applied by the App; these are the defaults. -->
+  <sys:Int32 x:Key="Editor.TabWidth">4</sys:Int32>
+  <sys:Boolean x:Key="Editor.UseSpaces">True</sys:Boolean>
   <FontWeight x:Key="FontWeight.Changed">SemiBold</FontWeight>
 
   <!-- Spacing and sizes -->

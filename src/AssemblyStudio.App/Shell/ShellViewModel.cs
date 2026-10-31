@@ -92,8 +92,40 @@ public sealed partial class ShellViewModel : ObservableObject
         Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
         Learn = learn ?? new Learn.LearnViewModel(Content.EmbeddedContentCatalog.BuiltIn(), Workspace);
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
-        Apply(store.Load());
+        LayoutState saved = store.Load();
+        Apply(saved);
+        ZoomPercent = saved.ZoomPercent;
     }
+
+    /// <summary>Editor and debug-panel zoom in percent (FR-022); the application scales the code fonts by it.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ZoomInCommand), nameof(ZoomOutCommand), nameof(ZoomResetCommand))]
+    public partial int ZoomPercent { get; private set; }
+
+    /// <summary>Ctrl+M (Edit ▸ Tab Moves Focus): Tab and Shift+Tab move focus out of the editor instead of indenting.</summary>
+    [ObservableProperty]
+    public partial bool TabMovesFocus { get; set; }
+
+    /// <summary>Ctrl+Plus and Ctrl+wheel up: the next larger zoom step.</summary>
+    [RelayCommand(CanExecute = nameof(CanZoomIn))]
+    private void ZoomIn() => ZoomPercent = LayoutState.ZoomSteps.First(z => z > ZoomPercent);
+
+    /// <summary>Ctrl+Minus and Ctrl+wheel down: the next smaller zoom step.</summary>
+    [RelayCommand(CanExecute = nameof(CanZoomOut))]
+    private void ZoomOut() => ZoomPercent = LayoutState.ZoomSteps.Last(z => z < ZoomPercent);
+
+    /// <summary>Ctrl+0: 100 %.</summary>
+    [RelayCommand(CanExecute = nameof(CanZoomReset))]
+    private void ZoomReset() => ZoomPercent = 100;
+
+    [RelayCommand]
+    private void ToggleTabMovesFocus() => TabMovesFocus = !TabMovesFocus;
+
+    private bool CanZoomIn() => ZoomPercent < LayoutState.ZoomSteps[^1];
+
+    private bool CanZoomOut() => ZoomPercent > LayoutState.ZoomSteps[0];
+
+    private bool CanZoomReset() => ZoomPercent != 100;
 
     /// <summary>The Learn sidebar (UI-015).</summary>
     public Learn.LearnViewModel Learn { get; }
@@ -211,7 +243,7 @@ public sealed partial class ShellViewModel : ObservableObject
         Math.Round(LearnWidth), Math.Round(MachineWidth), Math.Round(BottomHeight), Math.Round(MemoryStackWidth),
         IsLearnVisible, IsMachineVisible, IsBottomVisible,
         BottomTab is BottomTab.Memory or BottomTab.Stack ? BottomTab.Console : BottomTab,
-        Math.Round(windowWidth), Math.Round(windowHeight), isMaximized).Sanitized();
+        Math.Round(windowWidth), Math.Round(windowHeight), isMaximized) { ZoomPercent = ZoomPercent }.Sanitized();
 
     /// <summary>Saves the layout (called when the window closes).</summary>
     public void Save(double windowWidth, double windowHeight, bool isMaximized) =>

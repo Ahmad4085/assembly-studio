@@ -6,10 +6,27 @@
 
 ## Active Task
 
-None in progress. Next (user-approved 2026-10-30 21:17): `TASK-064` editor integration (AvalonEdit), then toward `TASK-080`, one task at a time.
+None in progress. Next on the user-approved path: `TASK-066` (editor diagnostics and gutter), then `TASK-080` (Build/Run/Step).
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 4 progress | TASK-060, 061 (WVR-001), 062, 063, 064, 067, 068 Done; eligible: TASK-065 (find/replace), TASK-066 (diagnostics, gutter), TASK-069 (accessibility); TASK-070 needs TASK-006 |
+| Recommended next action | `/assembly-implement TASK-066` (needed by TASK-080) |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-31 11:17 +0500 |
+| Milestone | M4 |
+| Goal | Integrate AvalonEdit, verify it on .NET 10, add NASM highlighting, editing behavior and zoom |
+| Scope (in) | Verify the net8 build on net10 first (stop and report if it fails); XSHD for NASM 8086 with Syntax tokens; indent/unindent, auto-indent, Ctrl+M focus escape, tabs; zoom 50-300 %; keystroke latency measurement (NFR-001) |
+| Out of scope | Find/replace (TASK-065), diagnostics (TASK-066) |
+| Requirements | FR-011..FR-014, FR-022, NFR-001; ADR-0006; UI-003; AC-009, AC-010, AC-046, AC-056 part |
+| Dependencies | TASK-061 Done (waiver WVR-001) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Completed Milestones | **M1**, **M2**, **M3**; M6 tasks all Done |
 | Milestone 4 progress | TASK-060, 061 (waiver WVR-001), 062, 063, 067, 068 Done; eligible: TASK-064; then TASK-065, 066, 069; TASK-070 needs TASK-006 |
@@ -269,6 +286,31 @@ ecovery\`) |
 | Parallel user action | `TASK-006` (clean test VMs) can start any time; decide DEF-003 (.COM size limit 65,278 vs 65,280) |
 
 ---
+
+## Completed: TASK-064 Editor integration (AvalonEdit) (Done 2026-10-31 19:21 +0500, Claude Code (Opus 5.5))
+- **Platform check first:** AvalonEdit 6.3.1.120 (MIT, ADR-0006) works on net10.0-windows (`AvalonEditPlatformTests`). Added to `Directory.Packages.props` and the App only.
+- `src/AssemblyStudio.App/Editor/`:
+  - `NasmSyntax.xshd` (embedded): mnemonics, registers, directives and preprocessor, labels (definitions, data labels, jump/call targets), numbers (hex/binary/octal/decimal, character literals), strings, comments; case-insensitive.
+  - `NasmHighlighting`: colors drawn with the theme's `Syntax.*` brushes at render time.
+  - `CodeEditor` (TextEditor subclass): bindable `BoundText`; line numbers; current line; selection and caret from the theme; `TabWidth`/`UseSpaces` (Settings); auto-indent; Ctrl+M `TabMovesFocus`.
+- Shell:
+  - The per-document TextBox is replaced by `CodeEditor` (one per tab, AC-006 kept).
+  - Edit menu Undo/Redo/Cut/Copy/Paste/Select all bound to the standard commands.
+  - Zoom (`ShellViewModel.ZoomPercent`, steps 50–300, Ctrl+Plus/Minus/0, Ctrl+wheel, View menu), saved with the layout (`LayoutState.ZoomPercent`); the App scales `FontSize.Editor` and `FontSize.Code`.
+  - `Editor.TabWidth`/`Editor.UseSpaces` resource tokens.
+- Tests:
+  - `EditorTests` 13, including AC-009, AC-010, FR-014, Ctrl+M, AC-046 ×3, and NFR-001 (p95 22.2 ms, median 14.5 ms; Performance trait). `AvalonEditPlatformTests` 1.
+  - Renders `editor-highlighting.png`, `editor-zoom-300.png`.
+  - Existing UI and process tests adjusted (editor API; UIA ControlType Document).
+- Found and fixed while testing: a closing quote of a character literal started a string to the end of the line (regression test added).
+- Mutation: removing `mov` from the mnemonics failed 2 tests; restored.
+- Release build 0 warnings / 0 errors; full solution 1396/1396 twice (19:17, 19:20).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-31 11:17 / 19:21 +0500 (two session interruptions while waiting for full test runs) |
 
 ## Completed: TASK-087 Test reliability: wall-clock tests and placeholder tests (Done 2026-10-30 21:34 +0500, Claude Code (Opus 5.5))
 - Also recorded at 21:17: user waiver **WVR-001** (AC-059 postponed to QA) → TASK-061 Done under the waiver, BLK-002 resolved by it; TASK-087 added and approved.

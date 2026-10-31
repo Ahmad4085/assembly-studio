@@ -106,7 +106,7 @@ public sealed class SettingsUiTests : IDisposable
                 EditorAppearance.Apply(resources, AppSettings.Default with { FontFamily = "Consolas", FontSize = 20 }, textScale: 1.5);
                 window.UpdateLayout();
 
-                TextBox editor = window.ActiveEditor()!;
+                AssemblyStudio.App.Editor.CodeEditor editor = window.ActiveEditor()!;
                 Assert.Equal("Consolas", editor.FontFamily.Source);
                 Assert.Equal(30, editor.FontSize);
             }

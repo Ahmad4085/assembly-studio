@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        xmlns:editor="clr-namespace:AssemblyStudio.App.Editor"
         xmlns:learn="clr-namespace:AssemblyStudio.App.Learn"
         xmlns:content="clr-namespace:AssemblyStudio.Content;assembly=AssemblyStudio.Content"
         xmlns:about="clr-namespace:AssemblyStudio.App.About"
@@ -32,6 +33,14 @@
   </Window.CommandBindings>
   <Window.InputBindings>
     <KeyBinding Key="OemComma" Modifiers="Ctrl" Command="{Binding OpenSettingsCommand}" />
+    <!-- FR-022 zoom (also Ctrl+mouse wheel, handled in code-behind) and the Ctrl+M Tab mode. -->
+    <KeyBinding Key="OemPlus" Modifiers="Ctrl" Command="{Binding ZoomInCommand}" />
+    <KeyBinding Key="Add" Modifiers="Ctrl" Command="{Binding ZoomInCommand}" />
+    <KeyBinding Key="OemMinus" Modifiers="Ctrl" Command="{Binding ZoomOutCommand}" />
+    <KeyBinding Key="Subtract" Modifiers="Ctrl" Command="{Binding ZoomOutCommand}" />
+    <KeyBinding Key="D0" Modifiers="Ctrl" Command="{Binding ZoomResetCommand}" />
+    <KeyBinding Key="NumPad0" Modifiers="Ctrl" Command="{Binding ZoomResetCommand}" />
+    <KeyBinding Key="M" Modifiers="Ctrl" Command="{Binding ToggleTabMovesFocusCommand}" />
     <KeyBinding Key="F6" Command="{x:Static shell:MainWindow.NextPaneCommand}" />
     <KeyBinding Key="F6" Modifiers="Shift" Command="{x:Static shell:MainWindow.PreviousPaneCommand}" />
     <KeyBinding Key="R" Modifiers="Ctrl+Alt" Command="{Binding GoToCommand}" CommandParameter="{x:Static shell:ShellPanel.Registers}" />
@@ -84,13 +93,13 @@
         <MenuItem Header="{x:Static shell:Strings.CmdExit}" InputGestureText="{x:Static shell:Strings.KeyExit}" Click="OnExit" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuEdit}">
-        <MenuItem Header="{x:Static shell:Strings.CmdUndo}" InputGestureText="{x:Static shell:Strings.KeyUndo}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdRedo}" InputGestureText="{x:Static shell:Strings.KeyRedo}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdUndo}" InputGestureText="{x:Static shell:Strings.KeyUndo}" Command="ApplicationCommands.Undo" />
+        <MenuItem Header="{x:Static shell:Strings.CmdRedo}" InputGestureText="{x:Static shell:Strings.KeyRedo}" Command="ApplicationCommands.Redo" />
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdCut}" InputGestureText="{x:Static shell:Strings.KeyCut}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdCopy}" InputGestureText="{x:Static shell:Strings.KeyCopy}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdPaste}" InputGestureText="{x:Static shell:Strings.KeyPaste}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdSelectAll}" InputGestureText="{x:Static shell:Strings.KeySelectAll}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCut}" InputGestureText="{x:Static shell:Strings.KeyCut}" Command="ApplicationCommands.Cut" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCopy}" InputGestureText="{x:Static shell:Strings.KeyCopy}" Command="ApplicationCommands.Copy" />
+        <MenuItem Header="{x:Static shell:Strings.CmdPaste}" InputGestureText="{x:Static shell:Strings.KeyPaste}" Command="ApplicationCommands.Paste" />
+        <MenuItem Header="{x:Static shell:Strings.CmdSelectAll}" InputGestureText="{x:Static shell:Strings.KeySelectAll}" Command="ApplicationCommands.SelectAll" />
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdFind}" InputGestureText="{x:Static shell:Strings.KeyFind}" IsEnabled="False" />
         <MenuItem Header="{x:Static shell:Strings.CmdFindNext}" InputGestureText="{x:Static shell:Strings.KeyFindNext}" IsEnabled="False" />
@@ -98,7 +107,7 @@
         <MenuItem Header="{x:Static shell:Strings.CmdReplace}" InputGestureText="{x:Static shell:Strings.KeyReplace}" IsEnabled="False" />
         <MenuItem Header="{x:Static shell:Strings.CmdGoToLine}" InputGestureText="{x:Static shell:Strings.KeyGoToLine}" IsEnabled="False" />
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdTabMovesFocus}" InputGestureText="{x:Static shell:Strings.KeyTabMovesFocus}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdTabMovesFocus}" InputGestureText="{x:Static shell:Strings.KeyTabMovesFocus}" IsCheckable="True" IsChecked="{Binding TabMovesFocus}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuView}">
         <MenuItem Header="{x:Static shell:Strings.CmdNextPane}" InputGestureText="{x:Static shell:Strings.KeyNextPane}"
@@ -133,9 +142,9 @@
         <MenuItem Header="{x:Static shell:Strings.CmdShowMachine}" IsCheckable="True" IsChecked="{Binding IsMachineVisible}" />
         <MenuItem Header="{x:Static shell:Strings.CmdShowBottom}" IsCheckable="True" IsChecked="{Binding IsBottomVisible}" />
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdZoomIn}" InputGestureText="{x:Static shell:Strings.KeyZoomIn}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdZoomOut}" InputGestureText="{x:Static shell:Strings.KeyZoomOut}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdZoomReset}" InputGestureText="{x:Static shell:Strings.KeyZoomReset}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomIn}" InputGestureText="{x:Static shell:Strings.KeyZoomIn}" Command="{Binding ZoomInCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomOut}" InputGestureText="{x:Static shell:Strings.KeyZoomOut}" Command="{Binding ZoomOutCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdZoomReset}" InputGestureText="{x:Static shell:Strings.KeyZoomReset}" Command="{Binding ZoomResetCommand}" />
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdResetLayout}" Command="{Binding ResetLayoutCommand}" />
       </MenuItem>
@@ -394,12 +403,14 @@
                         <TextBlock Text="{x:Static shell:Strings.BannerMixedLineEndings}" TextWrapping="Wrap" VerticalAlignment="Center" />
                       </DockPanel>
                     </Border>
-                    <TextBox x:Name="EditorText" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                             AcceptsReturn="True" AcceptsTab="True" TextWrapping="NoWrap"
+                    <!-- UI-003 code editor (AvalonEdit, TASK-064): one instance per document keeps caret and undo per tab (AC-006). -->
+                    <editor:CodeEditor x:Name="EditorText" BoundText="{Binding Text, Mode=TwoWay}"
                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                              FontFamily="{DynamicResource Font.Editor}" FontSize="{DynamicResource FontSize.Editor}"
                              Background="{DynamicResource Surface.Editor}" Foreground="{DynamicResource Syntax.Text}"
-                             CaretBrush="{DynamicResource Text.Primary}" SelectionBrush="{DynamicResource Editor.Selection}"
+                             LineNumbersForeground="{DynamicResource Text.Secondary}"
+                             TabWidth="{DynamicResource Editor.TabWidth}" UseSpaces="{DynamicResource Editor.UseSpaces}"
+                             TabMovesFocus="{Binding DataContext.TabMovesFocus, RelativeSource={RelativeSource AncestorType=Window}}"
                              BorderThickness="0" Padding="4,2" AutomationProperties.Name="{Binding Title}" />
                   </DockPanel>
                 </DataTemplate>

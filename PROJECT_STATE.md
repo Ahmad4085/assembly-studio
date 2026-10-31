@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-10-30 21:34 +0500 by Claude Code (Opus 5.5) (WVR-001, TASK-087 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-061 Done under waiver WVR-001; TASK-064 next); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-10-31 19:21 +0500 by Claude Code (Opus 5.5) (TASK-064 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-064 done; next TASK-066); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next (user-approved): `TASK-064` editor, then toward `TASK-080` |
+| Active task | None in progress. Next (user-approved path): `TASK-066` editor diagnostics and gutter, then `TASK-080` |
 
-| Next recommended action | `/assembly-implement TASK-064`. User: TASK-100, TASK-006, DEF-003 decision; AC-059 still due in QA (WVR-001) |
+| Next recommended action | `/assembly-implement TASK-066`. User: TASK-100, TASK-006, DEF-003 decision; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-064 Editor integration (AvalonEdit) | 2026-10-31 19:21 +0500 | AvalonEdit 6.3.1.120 verified on .NET 10; NASM highlighting with theme tokens, line numbers, current line, editing commands, block indent and auto-indent, Settings tab width/spaces, Ctrl+M, zoom 50–300 % (saved). NFR-001 p95 22.2 ms. 14 new tests; full solution 1396/1396 (twice) |
 | TASK-087 Test reliability | 2026-10-30 21:34 +0500 | Flood test on CPU time in its own non-parallel class (DEF-006); performance trait excluded from coverage, coverage run complete (DEF-009); 6 placeholder tests deleted. Full solution 1382/1382 (twice) |
 | Testing phase (report 2026-10-30-1) | 2026-10-30 21:12 +0500 | Test plan v0.1 (TC-001..TC-072); 2 gap-fill test classes/cases; full run with TRX/xUnit XML: 1388 total, 1387 passed, **1 failed (DEF-006)**; coverage engine 99.6% / runtime 93.5% (run incomplete, DEF-009); traceability v2.4 and AC v2.1 test statuses |
 | TASK-101 Self-contained publish and Inno Setup installer | 2026-10-30 20:40 +0500 | Pinned Inno Setup 7.1.0 (SHA-256 verified, per-user); per-user offline installer 45.2 MB; installed 148.6 MB; silent install 15–17 s; install/upgrade/uninstall test 21/21 on the dev machine; command-line file opening for the .asm association. `docs/06-implementation/task-101-verification.md`. Full solution 1385/1385 (twice) |
@@ -113,8 +114,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-10-30 20:33 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-10-30 21:33 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1382/1382 passed** in two consecutive runs (after TASK-087). Last test-phase report 2026-10-30-1: 1387/1388 (DEF-006, now Fixed (unverified)) |
+| Product build (2026-10-31 19:11 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-10-31 19:20 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1396/1396 passed** in two consecutive runs. Last test-phase report 2026-10-30-1 (1387/1388; DEF-006 since Fixed (unverified)) |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!-- NASM 8086 syntax (FR-011, TASK-064). Color names are the design-token suffixes of the Syntax.* tokens; the brushes are
+     taken from the current theme at render time (NasmHighlighting), so Dark, Light and high contrast all apply. -->
+<SyntaxDefinition name="NASM 8086" extensions=".asm;.inc" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="Mnemonic" />
+  <Color name="Register" />
+  <Color name="Directive" />
+  <Color name="Number" />
+  <Color name="String" />
+  <Color name="Comment" />
+  <Color name="Label" />
+
+  <RuleSet ignoreCase="true">
+    <Span color="Comment">
+      <Begin>;</Begin>
+    </Span>
+
+    <!-- A single quoted character is a numeric literal in NASM ('A' = 41h); longer quoted text is a string. -->
+    <Rule color="Number">'[^'\r\n]'|"[^"\r\n]"</Rule>
+    <Span color="String" multiline="false">
+      <Begin>(?&lt;!'[^'\r\n])'(?![^'\r\n]')</Begin>
+      <End>'</End>
+    </Span>
+    <Span color="String" multiline="false">
+      <Begin>(?&lt;!"[^"\r\n])"(?![^"\r\n]")</Begin>
+      <End>"</End>
+    </Span>
+    <Span color="String" multiline="false">
+      <Begin>`</Begin>
+      <End>`</End>
+    </Span>
+
+    <!-- Label definitions: name followed by a colon at the start of a line, or a data/constant name before db, equ, times... -->
+    <Rule color="Label">^[ \t]*[A-Za-z_.?$][A-Za-z0-9_.?$@#~]*(?=:)</Rule>
+    <Rule color="Label">^[ \t]*[A-Za-z_.?$][A-Za-z0-9_.?$@#~]*(?=[ \t]+(db|dw|dd|dq|dt|equ|times|resb|resw|resd|resq|rest)\b)</Rule>
+    <!-- Label references after jumps, calls and loops. -->
+    <Rule color="Label">(?&lt;=\b(j[a-z]{1,4}|call|loop[a-z]*)[ \t]+(short[ \t]+|near[ \t]+|far[ \t]+)?)[A-Za-z_.?$][A-Za-z0-9_.?$@#~]*\b(?!\s*:)</Rule>
+
+    <Keywords color="Register">
+      <Word>ax</Word><Word>bx</Word><Word>cx</Word><Word>dx</Word>
+      <Word>ah</Word><Word>al</Word><Word>bh</Word><Word>bl</Word>
+      <Word>ch</Word><Word>cl</Word><Word>dh</Word><Word>dl</Word>
+      <Word>si</Word><Word>di</Word><Word>bp</Word><Word>sp</Word>
+      <Word>cs</Word><Word>ds</Word><Word>es</Word><Word>ss</Word>
+    </Keywords>
+
+    <Keywords color="Mnemonic">
+      <Word>aaa</Word><Word>aad</Word><Word>aam</Word><Word>aas</Word><Word>adc</Word><Word>add</Word><Word>and</Word>
+      <Word>call</Word><Word>cbw</Word><Word>clc</Word><Word>cld</Word><Word>cli</Word><Word>cmc</Word><Word>cmp</Word>
+      <Word>cmps</Word><Word>cmpsb</Word><Word>cmpsw</Word><Word>cwd</Word><Word>daa</Word><Word>das</Word><Word>dec</Word>
+      <Word>div</Word><Word>esc</Word><Word>hlt</Word><Word>idiv</Word><Word>imul</Word><Word>in</Word><Word>inc</Word>
+      <Word>int</Word><Word>into</Word><Word>iret</Word>
+      <Word>ja</Word><Word>jae</Word><Word>jb</Word><Word>jbe</Word><Word>jc</Word><Word>jcxz</Word><Word>je</Word>
+      <Word>jg</Word><Word>jge</Word><Word>jl</Word><Word>jle</Word><Word>jmp</Word><Word>jna</Word><Word>jnae</Word>
+      <Word>jnb</Word><Word>jnbe</Word><Word>jnc</Word><Word>jne</Word><Word>jng</Word><Word>jnge</Word><Word>jnl</Word>
+      <Word>jnle</Word><Word>jno</Word><Word>jnp</Word><Word>jns</Word><Word>jnz</Word><Word>jo</Word><Word>jp</Word>
+      <Word>jpe</Word><Word>jpo</Word><Word>js</Word><Word>jz</Word>
+      <Word>lahf</Word><Word>lds</Word><Word>lea</Word><Word>les</Word><Word>lock</Word><Word>lods</Word><Word>lodsb</Word>
+      <Word>lodsw</Word><Word>loop</Word><Word>loope</Word><Word>loopne</Word><Word>loopnz</Word><Word>loopz</Word>
+      <Word>mov</Word><Word>movs</Word><Word>movsb</Word><Word>movsw</Word><Word>mul</Word><Word>neg</Word><Word>nop</Word>
+      <Word>not</Word><Word>or</Word><Word>out</Word><Word>pop</Word><Word>popf</Word><Word>push</Word><Word>pushf</Word>
+      <Word>rcl</Word><Word>rcr</Word><Word>rep</Word><Word>repe</Word><Word>repne</Word><Word>repnz</Word><Word>repz</Word>
+      <Word>ret</Word><Word>retf</Word><Word>retn</Word><Word>rol</Word><Word>ror</Word><Word>sahf</Word><Word>sal</Word>
+      <Word>sar</Word><Word>sbb</Word><Word>scas</Word><Word>scasb</Word><Word>scasw</Word><Word>shl</Word><Word>shr</Word>
+      <Word>stc</Word><Word>std</Word><Word>sti</Word><Word>stos</Word><Word>stosb</Word><Word>stosw</Word><Word>sub</Word>
+      <Word>test</Word><Word>wait</Word><Word>xchg</Word><Word>xlat</Word><Word>xlatb</Word><Word>xor</Word>
+    </Keywords>
+
+    <Keywords color="Directive">
+      <Word>org</Word><Word>bits</Word><Word>cpu</Word><Word>section</Word><Word>segment</Word><Word>align</Word>
+      <Word>db</Word><Word>dw</Word><Word>dd</Word><Word>dq</Word><Word>dt</Word>
+      <Word>resb</Word><Word>resw</Word><Word>resd</Word><Word>resq</Word><Word>rest</Word>
+      <Word>times</Word><Word>equ</Word><Word>incbin</Word><Word>global</Word><Word>extern</Word><Word>absolute</Word>
+      <Word>struc</Word><Word>endstruc</Word><Word>istruc</Word><Word>iend</Word><Word>at</Word>
+      <Word>byte</Word><Word>word</Word><Word>dword</Word><Word>qword</Word><Word>tword</Word>
+      <Word>short</Word><Word>near</Word><Word>far</Word><Word>seg</Word><Word>wrt</Word>
+    </Keywords>
+
+    <!-- Preprocessor directives: %include, %define, %macro, %endmacro, %if, %rep and the rest. -->
+    <Rule color="Directive">%[A-Za-z]+</Rule>
+
+    <!-- Numbers: 0x1F, 1Fh, $1F (hex); 1010b, 0b1010, 1010y (binary); 17o, 17q, 0o17 (octal); 42, 42d (decimal). -->
+    <Rule color="Number">\b(0[xh][0-9a-f_]+|[0-9][0-9a-f_]*h|0[by][01_]+|[01][01_]*[by]|0[oq][0-7_]+|[0-7][0-7_]*[oq]|[0-9][0-9_]*d?)\b|\$[0-9][0-9a-f_]*\b</Rule>
+  </RuleSet>
+</SyntaxDefinition>

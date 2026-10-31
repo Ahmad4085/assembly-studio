@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="AvalonEdit" />
   </ItemGroup>
 
   <!-- FR-079: the NASM fetched by build/fetch-nasm.ps1 (tools/nasm, git-ignored, ADR-0005) is placed next to the
@@ -36,6 +37,11 @@
           Link="RELEASE-NOTES.md" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)..\..\THIRD-PARTY-NOTICES.txt" Condition="Exists('$(MSBuildThisFileDirectory)..\..\THIRD-PARTY-NOTICES.txt')"
           Link="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+  <!-- NASM highlighting definition (FR-011), loaded by Editor/NasmHighlighting.cs -->
+  <ItemGroup>
+    <EmbeddedResource Include="Editor\NasmSyntax.xshd" />
   </ItemGroup>
 
   <ItemGroup>

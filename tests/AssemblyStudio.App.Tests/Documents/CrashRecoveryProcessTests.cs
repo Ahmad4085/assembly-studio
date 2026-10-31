@@ -90,7 +90,7 @@ public sealed class CrashRecoveryProcessTests : IDisposable
 
     private static AutomationElement Editor(AutomationElement window) => Poll(() =>
         window.FindFirst(TreeScope.Descendants, new AndCondition(
-            new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit),
+            new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Document), // the AvalonEdit editor (TASK-064)
             new PropertyCondition(AutomationElement.NameProperty, "Untitled"))), "the editor");
 
     [Fact]

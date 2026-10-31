@@ -1668,3 +1668,29 @@
 - **Git state after:** uncommitted changes on top of `26c0a12` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** AC-059 still due (WVR-001). Open: DEF-001, DEF-002, DEF-003 (decision). User: TASK-006, TASK-100.
 - **Next step:** `/assembly-implement TASK-064` (user-approved).
+
+### 2026-10-31 11:17 – 19:21 +0500 · Claude Code (Opus 5.5) · TASK-064 Editor integration (AvalonEdit)
+- **Summary:** Ran `/assembly-implement TASK-064` (user request; dependency TASK-061 Done under WVR-001). Lock was free.
+  - **Step 1, the required platform check:** AvalonEdit 6.3.1.120 (MIT, pinned in ADR-0006) restored and runs on net10.0-windows (load, render, type, undo). The task continued.
+  - **Implemented:**
+    - The NASM 8086 XSHD; highlighting colors resolved from the theme's Syntax.* tokens at render time.
+    - `CodeEditor`: bindable text, line numbers, current line, theme selection/caret, tab width/spaces from Settings, auto-indent, Ctrl+M Tab mode.
+    - The per-document TextBox replaced by `CodeEditor`.
+    - Edit menu commands bound; zoom 50–300 % (keys, Ctrl+wheel, View menu, saved with the layout; the App scales the editor and code fonts).
+  - **Problems on the way:**
+    - The XSHD lookahead let the closing quote of a character literal start a string. Fixed with a lookbehind; regression test added.
+    - Two test expectations were wrong (Tab on a single-line selection replaces it; the Tab path is `EditingCommands.TabForward`/`TabBackward`).
+    - Several Python edits turned `\r\n` escapes into real line breaks; redone with the Edit tool.
+  - **UI Automation:** AvalonEdit's editor is a Document control (Value/Text/Scroll patterns). The three real-process tests now look for Document; the F6 test accepts focus inside the editor.
+  - **Interruptions:** the session ended twice while waiting on background full runs (no results recorded). The final runs were done as separate foreground commands.
+- **Files changed:** `Directory.Packages.props`, `src/AssemblyStudio.App/{AssemblyStudio.App.csproj, App.xaml.cs, Editor/CodeEditor.cs (new), Editor/NasmHighlighting.cs (new), Editor/NasmSyntax.xshd (new), Settings/EditorAppearance.cs, Shell/LayoutState.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Themes/Shared.xaml}`, `tests/AssemblyStudio.App.Tests/{Editor/AvalonEditPlatformTests.cs (new), Editor/EditorTests.cs (new), Documents/CrashRecoveryProcessTests.cs, Documents/DocumentUiTests.cs, Documents/OpenFromCommandLineProcessTests.cs, Settings/SettingsUiTests.cs}`, `docs/decisions/ADR-0006-editor-avalonedit.md` (validation result), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `AvalonEditPlatformTests` 1/1. `EditorTests` 13/13, after the fixes above.
+  - NFR-001: median 14.5 ms, p95 22.2 ms, max 102.9 ms over 200 keystrokes in a 5,000-line file, development machine (limit p95 ≤ 50 ms).
+  - Renders reviewed: `editor-highlighting.png`, `editor-zoom-300.png` (no clipping). Added a 6 px gap after the line numbers.
+  - Mutation: `mov` removed from the mnemonics failed 2 tests. Restored.
+  - App process tests 9/9 after the UIA update.
+  - Release build **0 warnings, 0 errors** (19:11). Full solution **1396/1396 at 19:17 and 19:20** (two consecutive runs).
+- **Git state after:** uncommitted TASK-064 changes on top of `2c19f92` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** Still open: AC-059 (WVR-001), DEF-006/009 Fixed (unverified), DEF-001, DEF-002, DEF-003 (decision). Narrator check (TASK-069).
+- **Next step:** `/assembly-implement TASK-066`, then TASK-080.

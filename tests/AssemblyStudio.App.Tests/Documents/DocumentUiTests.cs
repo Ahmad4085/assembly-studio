@@ -71,14 +71,14 @@ public sealed class DocumentUiTests
         WithWindow((window, workspace, _) =>
         {
             DocumentViewModel[] documents = [workspace.New(), workspace.New(), workspace.New()];
-            var editors = new TextBox[3];
+            var editors = new AssemblyStudio.App.Editor.CodeEditor[3];
             for (int i = 0; i < 3; i++)
             {
                 workspace.ActiveDocument = documents[i];
                 window.UpdateLayout();
                 editors[i] = window.ActiveEditor()!;
                 editors[i].AppendText($"line {i}\r\nmore {i}");
-                editors[i].CaretIndex = 2 + i;
+                editors[i].CaretOffset = 2 + i;
             }
 
             Assert.Equal(3, editors.Distinct().Count()); // one editor per document
@@ -87,7 +87,7 @@ public sealed class DocumentUiTests
             window.UpdateLayout();
 
             Assert.Same(editors[1], window.ActiveEditor());
-            Assert.Equal(3, editors[1].CaretIndex);
+            Assert.Equal(3, editors[1].CaretOffset);
             Assert.Equal(["line 0\r\nmore 0", "line 1\r\nmore 1", "line 2\r\nmore 2"], documents.Select(d => d.Text));
 
             editors[1].Undo();
@@ -150,7 +150,8 @@ public sealed class DocumentUiTests
             window.CyclePane(backwards: false); // to Machine
             window.CyclePane(backwards: true);  // back to the editor
 
-            Assert.Same(window.ActiveEditor(), FocusManager.GetFocusedElement(window));
+            var focused = (DependencyObject)FocusManager.GetFocusedElement(window)!;
+            Assert.True(window.ActiveEditor()!.IsAncestorOf(focused) || ReferenceEquals(window.ActiveEditor(), focused)); // the editor's text area
         });
     }
 

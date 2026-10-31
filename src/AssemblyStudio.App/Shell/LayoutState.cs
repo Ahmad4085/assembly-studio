@@ -41,6 +41,12 @@ public sealed record LayoutState(
 
     private const double MinRegion = 120;
 
+    /// <summary>The zoom steps of the editor and the code-font panels in percent (FR-022: 50–300 %).</summary>
+    public static readonly IReadOnlyList<int> ZoomSteps = [50, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300];
+
+    /// <summary>Editor and debug-panel zoom in percent (FR-022), one of <see cref="ZoomSteps"/>; 100 by default.</summary>
+    public int ZoomPercent { get; init; } = 100;
+
     /// <summary>The default layout, also used by View ▸ Reset Layout.</summary>
     public static LayoutState Default { get; } = new(
         LearnWidth: 200, MachineWidth: 280, BottomHeight: 220, MemoryStackWidth: 520,
@@ -59,6 +65,7 @@ public sealed record LayoutState(
         BottomTab = Enum.IsDefined(BottomTab) ? BottomTab : BottomTab.Console,
         WindowWidth = Clamp(WindowWidth, MinWindowWidth, 10000, Default.WindowWidth),
         WindowHeight = Clamp(WindowHeight, MinWindowHeight, 10000, Default.WindowHeight),
+        ZoomPercent = ZoomSteps.Contains(ZoomPercent) ? ZoomPercent : 100,
     };
 
     private static double Clamp(double value, double min, double max, double fallback) =>

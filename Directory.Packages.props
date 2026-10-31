@@ -13,5 +13,7 @@
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <!-- 8086 instruction disassembler (ADR-0003: Iced 1.21.0, MIT) -->
     <PackageVersion Include="Iced" Version="1.21.0" />
+    <!-- Code editor control (ADR-0006: AvalonEdit 6.3.1.120, MIT; its net8.0-windows build, verified on net10.0-windows in TASK-064) -->
+    <PackageVersion Include="AvalonEdit" Version="6.3.1.120" />
   </ItemGroup>
 </Project>

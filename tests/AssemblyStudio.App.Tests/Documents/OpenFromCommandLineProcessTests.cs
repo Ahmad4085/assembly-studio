@@ -41,7 +41,7 @@ public sealed class OpenFromCommandLineProcessTests : IDisposable
         AutomationElement editor = Poll(() =>
             AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, _process.Id))?
                 .FindFirst(TreeScope.Descendants, new AndCondition(
-                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit),
+                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Document),
                     new PropertyCondition(AutomationElement.NameProperty, "my program.asm"))));
 
         Assert.StartsWith("; opened from the command line", ((ValuePattern)editor.GetCurrentPattern(ValuePattern.Pattern)).Current.Value, StringComparison.Ordinal);
@@ -62,7 +62,7 @@ public sealed class OpenFromCommandLineProcessTests : IDisposable
         AutomationElement editor = Poll(() =>
             AutomationElement.RootElement.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ProcessIdProperty, _process.Id))?
                 .FindFirst(TreeScope.Descendants, new AndCondition(
-                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit),
+                    new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Document),
                     new PropertyCondition(AutomationElement.NameProperty, "Untitled"))));
         var value = (ValuePattern)editor.GetCurrentPattern(ValuePattern.Pattern);
 

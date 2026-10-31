@@ -5,21 +5,21 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-30 21:34 +0500 by Claude Code (Opus 5.5), after WVR-001 and TASK-087 |
-| Current task | **None in progress. Next (user-approved): `TASK-064` editor (AvalonEdit), then toward TASK-080, one task at a time with a commit after each** |
-| Last completed | TASK-087 Test reliability (Done 2026-10-30 21:34 +0500) |
-| Git state | HEAD `ea02833` (WVR-001 and TASK-087 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-10-31 19:21 +0500 by Claude Code (Opus 5.5), after completing TASK-064 |
+| Current task | **None in progress. Next (user-approved): `TASK-066` diagnostics and gutter, then `TASK-080` Build/Run/Step** |
+| Last completed | TASK-064 Editor integration (AvalonEdit) (Done 2026-10-31 19:21 +0500) |
+| Git state | HEAD `2c19f92` + uncommitted TASK-064 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-30 21:20 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1382/1382 passed**, two consecutive runs (2026-10-30 21:30 and 21:33 +0500).
-- `build/coverage.ps1 -NoBuild` → complete (21:27): engine 99.6%, runtime 93.5%.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-31 19:11 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1396/1396 passed**, two consecutive runs (2026-10-31 19:17 and 19:20 +0500).
 
 ## Changes since the previous handoff
-- **WVR-001 and TASK-087** (Claude Code, uncommitted):
-  - WVR-001: AC-059 postponed to QA, TASK-061 Done under it.
-  - TASK-087: `FloodPerformanceTests` (CPU-time limit), `Category=Performance` trait + `build/coverage.ps1` filter, 6 SkeletonTests deleted.
-  - Test plan v0.2, defects DEF-006/009 Fixed (unverified).
+- **TASK-064 Editor** (Claude Code, uncommitted):
+  - AvalonEdit package; `src/AssemblyStudio.App/Editor/{CodeEditor.cs, NasmHighlighting.cs, NasmSyntax.xshd}`; zoom in `ShellViewModel`/`LayoutState`/`EditorAppearance`/App; MainWindow editor template and Edit/View menu wiring.
+  - **For TASK-066:** add the diagnostics squiggles (a background renderer) and the breakpoint/current-line margin to `CodeEditor`.
+  - `MainWindow.ActiveEditor()` returns the active `CodeEditor`.
+  - UI Automation sees the editor as ControlType **Document** (Value/Text patterns).
 
 ## Failed tests and known issues
 - DEF-006 (flood test, failed in report 2026-10-30-1): fixed in TASK-087 (now `FloodPerformanceTests`, CPU-time limit); passed in two full runs (21:30, 21:33). **Fixed (unverified)** until `/assembly-test rerun DEF-006`.
@@ -53,12 +53,11 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: WVR-001 and TASK-087 committed. Files were:
-   - `PROJECT_STATE.md` (waiver, approval, blocker), `docs/05-planning/backlog.md` (TASK-061 Done, TASK-087)
-   - `tests/AssemblyStudio.Debugging.Tests/Robustness/{FloodPerformanceTests.cs, HostileProgramTests.cs}`
-   - tagged test files: `tests/AssemblyStudio.Engine.I8086.Tests/EnginePerformanceTests.cs`, `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildTimeTests.cs`, `tests/AssemblyStudio.App.Tests/StartupTimeTests.cs`, `tests/AssemblyStudio.Debugging.Tests/{DebugSessionTests.cs, SnapshotTests.cs}`, `tests/AssemblyStudio.Runtime.Tests/ConsoleDeviceTests.cs`
-   - the deleted `tests/*/SkeletonTests.cs` (6), `build/coverage.ps1`, `docs/07-testing/{test-plan.md, defects.md}`, shared memory files
-2. `/assembly-implement TASK-064` (user-approved path to Run/Debug).
+1. When the user asks: commit TASK-064. Files:
+   - `Directory.Packages.props`, `src/AssemblyStudio.App/{AssemblyStudio.App.csproj, App.xaml.cs, Editor/*, Settings/EditorAppearance.cs, Shell/LayoutState.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Themes/Shared.xaml}`
+   - `tests/AssemblyStudio.App.Tests/{Editor/*, Documents/CrashRecoveryProcessTests.cs, Documents/DocumentUiTests.cs, Documents/OpenFromCommandLineProcessTests.cs, Settings/SettingsUiTests.cs}`
+   - `docs/decisions/ADR-0006-editor-avalonedit.md` (validation), `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-066`, then `TASK-080`.
 3. User: TASK-006, TASK-100, DEF-003 decision; AC-059 in QA (WVR-001).
 
 ## Do not overwrite or revert

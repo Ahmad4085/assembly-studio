@@ -30,6 +30,7 @@
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:MainWindow.NextPaneCommand}" Executed="OnNextPane" />
     <CommandBinding Command="{x:Static shell:MainWindow.PreviousPaneCommand}" Executed="OnPreviousPane" />
+    <CommandBinding Command="{x:Static shell:MainWindow.ToggleBreakpointCommand}" Executed="OnToggleBreakpoint" CanExecute="OnCanToggleBreakpoint" />
   </Window.CommandBindings>
   <Window.InputBindings>
     <KeyBinding Key="OemComma" Modifiers="Ctrl" Command="{Binding OpenSettingsCommand}" />
@@ -60,11 +61,25 @@
     <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="{Binding Workspace.SaveAsCommand}" />
     <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding Workspace.CloseTabCommand}" />
     <KeyBinding Key="F4" Modifiers="Ctrl" Command="{Binding Workspace.CloseTabCommand}" />
+    <!-- TASK-080: build and session commands (ui-spec section 6). F10 and Alt combinations arrive as system keys; the
+         code-behind routes them to these bindings. -->
+    <KeyBinding Key="B" Modifiers="Ctrl+Shift" Command="{Binding BuildRun.BuildCommand}" />
+    <KeyBinding Key="Escape" Command="{Binding BuildRun.CancelBuildCommand}" />
+    <KeyBinding Key="F5" Command="{Binding BuildRun.RunCommand}" />
+    <KeyBinding Key="Cancel" Modifiers="Ctrl+Alt" Command="{Binding BuildRun.PauseCommand}" />
+    <KeyBinding Key="Pause" Modifiers="Ctrl+Alt" Command="{Binding BuildRun.PauseCommand}" />
+    <KeyBinding Key="F5" Modifiers="Shift" Command="{Binding BuildRun.StopCommand}" />
+    <KeyBinding Key="F5" Modifiers="Ctrl+Shift" Command="{Binding BuildRun.ResetCommand}" />
+    <KeyBinding Key="F11" Command="{Binding BuildRun.StepIntoCommand}" />
+    <KeyBinding Key="F10" Command="{Binding BuildRun.StepOverCommand}" />
+    <KeyBinding Key="F9" Command="{x:Static shell:MainWindow.ToggleBreakpointCommand}" />
+    <KeyBinding Key="Cancel" Modifiers="Ctrl" Command="{Binding BuildRun.SendCtrlCCommand}" />
+    <KeyBinding Key="F1" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Help}" />
   </Window.InputBindings>
 
   <DockPanel Background="{DynamicResource Surface.Window}">
     <!-- UI-002 menus. Commands owned by later tasks are shown (with their shortcuts) but disabled. -->
-    <Menu DockPanel.Dock="Top" AutomationProperties.Name="{x:Static shell:Strings.RegionMenu}" Padding="4,2">
+    <Menu x:Name="MainMenu" DockPanel.Dock="Top" AutomationProperties.Name="{x:Static shell:Strings.RegionMenu}" Padding="4,2">
       <MenuItem Header="{x:Static shell:Strings.MenuFile}">
         <MenuItem Header="{x:Static shell:Strings.CmdNew}" InputGestureText="{x:Static shell:Strings.KeyNew}" Command="{Binding Workspace.NewFileCommand}" />
         <MenuItem Header="{x:Static shell:Strings.CmdNewFromTemplate}" Command="{Binding Workspace.NewProgramCommand}" />
@@ -149,18 +164,20 @@
         <MenuItem Header="{x:Static shell:Strings.CmdResetLayout}" Command="{Binding ResetLayoutCommand}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuBuild}">
-        <MenuItem Header="{x:Static shell:Strings.CmdBuild}" InputGestureText="{x:Static shell:Strings.KeyBuild}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdCancelBuild}" InputGestureText="{x:Static shell:Strings.KeyCancelBuild}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdBuild}" InputGestureText="{x:Static shell:Strings.KeyBuild}" Command="{Binding BuildRun.BuildCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdCancelBuild}" InputGestureText="{x:Static shell:Strings.KeyCancelBuild}" Command="{Binding BuildRun.CancelBuildCommand}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuDebug}">
-        <MenuItem Header="{x:Static shell:Strings.CmdRun}" InputGestureText="{x:Static shell:Strings.KeyRun}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdPause}" InputGestureText="{x:Static shell:Strings.KeyPause}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdStop}" InputGestureText="{x:Static shell:Strings.KeyStop}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdReset}" InputGestureText="{x:Static shell:Strings.KeyReset}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdRun}" InputGestureText="{x:Static shell:Strings.KeyRun}" Command="{Binding BuildRun.RunCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdPause}" InputGestureText="{x:Static shell:Strings.KeyPause}" Command="{Binding BuildRun.PauseCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdStop}" InputGestureText="{x:Static shell:Strings.KeyStop}" Command="{Binding BuildRun.StopCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReset}" InputGestureText="{x:Static shell:Strings.KeyReset}" Command="{Binding BuildRun.ResetCommand}" />
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdStepInto}" InputGestureText="{x:Static shell:Strings.KeyStepInto}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdStepOver}" InputGestureText="{x:Static shell:Strings.KeyStepOver}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdToggleBreakpoint}" InputGestureText="{x:Static shell:Strings.KeyToggleBreakpoint}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdStepInto}" InputGestureText="{x:Static shell:Strings.KeyStepInto}" Command="{Binding BuildRun.StepIntoCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdStepOver}" InputGestureText="{x:Static shell:Strings.KeyStepOver}" Command="{Binding BuildRun.StepOverCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdToggleBreakpoint}" InputGestureText="{x:Static shell:Strings.KeyToggleBreakpoint}" Command="{x:Static shell:MainWindow.ToggleBreakpointCommand}" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdSendCtrlC}" InputGestureText="{x:Static shell:Strings.KeySendCtrlC}" Command="{Binding BuildRun.SendCtrlCCommand}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuLearn}">
         <MenuItem Header="{x:Static shell:Strings.CmdSamples}" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Sample}" />
@@ -168,7 +185,8 @@
         <MenuItem Header="{x:Static shell:Strings.CmdReference}" Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Reference}" />
       </MenuItem>
       <MenuItem Header="{x:Static shell:Strings.MenuHelp}">
-        <MenuItem Header="{x:Static shell:Strings.CmdHelp}" InputGestureText="{x:Static shell:Strings.KeyHelp}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdHelp}" InputGestureText="{x:Static shell:Strings.KeyHelp}"
+                  Command="{Binding ShowLearnSectionCommand}" CommandParameter="{x:Static content:ContentKind.Help}" />
         <MenuItem Header="{x:Static shell:Strings.CmdReleaseNotes}" Command="{Binding OpenAboutCommand}" CommandParameter="{x:Static about:AboutPage.ReleaseNotes}" />
         <MenuItem Header="{x:Static shell:Strings.CmdNotices}" Command="{Binding OpenAboutCommand}" CommandParameter="{x:Static about:AboutPage.Notices}" />
         <Separator />
@@ -180,13 +198,16 @@
     <Border DockPanel.Dock="Top" MinHeight="{DynamicResource Size.CommandBar}" Padding="8,2"
             BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,1,0,1">
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center" AutomationProperties.Name="{x:Static shell:Strings.RegionCommandBar}">
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE90F;" Content="{x:Static shell:Strings.BarBuild}" ToolTip="{x:Static shell:Strings.TipBuild}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE768;" Content="{x:Static shell:Strings.BarRun}" ToolTip="{x:Static shell:Strings.TipRun}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE769;" Content="{x:Static shell:Strings.BarPause}" ToolTip="{x:Static shell:Strings.TipPause}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE71A;" Content="{x:Static shell:Strings.BarStop}" ToolTip="{x:Static shell:Strings.TipStop}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE72C;" Content="{x:Static shell:Strings.BarReset}" ToolTip="{x:Static shell:Strings.TipReset}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE74B;" Content="{x:Static shell:Strings.BarStepInto}" ToolTip="{x:Static shell:Strings.TipStepInto}" IsEnabled="False" />
-        <Button Style="{StaticResource CommandButton}" Tag="&#xE7A6;" Content="{x:Static shell:Strings.BarStepOver}" ToolTip="{x:Static shell:Strings.TipStepOver}" IsEnabled="False" />
+        <Button x:Name="BarBuild" Style="{StaticResource CommandButton}" Tag="&#xE90F;" Content="{x:Static shell:Strings.BarBuild}" ToolTip="{x:Static shell:Strings.TipBuild}" Command="{Binding BuildRun.BuildCommand}" />
+        <Button x:Name="BarRun" Style="{StaticResource CommandButton}" Tag="&#xE768;" Content="{x:Static shell:Strings.BarRun}" ToolTip="{x:Static shell:Strings.TipRun}" Command="{Binding BuildRun.RunCommand}" />
+        <Button x:Name="BarPause" Style="{StaticResource CommandButton}" Tag="&#xE769;" Content="{x:Static shell:Strings.BarPause}" ToolTip="{x:Static shell:Strings.TipPause}" Command="{Binding BuildRun.PauseCommand}" />
+        <Button x:Name="BarStop" Style="{StaticResource CommandButton}" Tag="&#xE71A;" Content="{x:Static shell:Strings.BarStop}" ToolTip="{x:Static shell:Strings.TipStop}" Command="{Binding BuildRun.StopCommand}" />
+        <Button x:Name="BarReset" Style="{StaticResource CommandButton}" Tag="&#xE72C;" Content="{x:Static shell:Strings.BarReset}" ToolTip="{x:Static shell:Strings.TipReset}" Command="{Binding BuildRun.ResetCommand}" />
+        <Button x:Name="BarStepInto" Style="{StaticResource CommandButton}" Tag="&#xE74B;" Content="{x:Static shell:Strings.BarStepInto}" ToolTip="{x:Static shell:Strings.TipStepInto}" Command="{Binding BuildRun.StepIntoCommand}" />
+        <Button x:Name="BarStepOver" Style="{StaticResource CommandButton}" Tag="&#xE7A6;" Content="{x:Static shell:Strings.BarStepOver}" ToolTip="{x:Static shell:Strings.TipStepOver}" Command="{Binding BuildRun.StepOverCommand}" />
+        <!-- UI-002 state badge: glyph + words; a polite live region, announced when it changes (code-behind) -->
+        <TextBlock x:Name="StateBadge" Text="{Binding BuildRun.BadgeText}" Margin="16,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"
+                   AutomationProperties.Name="{x:Static shell:Strings.RegionStateBadge}" AutomationProperties.LiveSetting="Polite" />
       </StackPanel>
     </Border>
 
@@ -200,11 +221,25 @@
                     Visibility="{Binding DataContext.Workspace.HasDocuments, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource VisibleWhenTrue}}">
           <TextBlock x:Name="StatusEncoding" Text="{Binding StatusEncoding}" Foreground="{DynamicResource Text.Secondary}"
                      FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
+          <TextBlock x:Name="StatusCaret" Text="{Binding StatusCaret}" Foreground="{DynamicResource Text.Secondary}"
+                     FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
           <TextBlock x:Name="StatusLineEnding" Text="{Binding StatusLineEnding}" Foreground="{DynamicResource Text.Secondary}"
                      FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
         </StackPanel>
-        <TextBlock x:Name="StatusText" Text="{Binding StatusText}" Foreground="{DynamicResource Text.Secondary}"
-                   FontSize="{DynamicResource FontSize.UI.Small}" />
+        <TextBlock x:Name="StatusAssembler" DockPanel.Dock="Right" Text="{Binding BuildRun.AssemblerText}" Foreground="{DynamicResource Text.Secondary}"
+                   FontSize="{DynamicResource FontSize.UI.Small}" Margin="16,0,0,0" />
+        <TextBlock x:Name="StatusText" Foreground="{DynamicResource Text.Secondary}" FontSize="{DynamicResource FontSize.UI.Small}">
+          <TextBlock.Style>
+            <Style TargetType="TextBlock">
+              <Setter Property="Text" Value="{Binding BuildRun.StatusText}" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding BuildRun.StatusText}" Value="">
+                  <Setter Property="Text" Value="{Binding StatusText}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </TextBlock.Style>
+        </TextBlock>
       </DockPanel>
     </Border>
 
@@ -420,6 +455,7 @@
                              Diagnostics="{Binding Diagnostics}" Breakpoints="{Binding Breakpoints}"
                              ExecutionLine="{Binding ExecutionLine}" ExecutionMarker="{Binding ExecutionMarker}"
                              ToggleBreakpointCommand="{Binding ToggleBreakpointCommand}"
+                             CaretLine="{Binding CaretLine, Mode=OneWayToSource}" CaretColumn="{Binding CaretColumn, Mode=OneWayToSource}"
                              BorderThickness="0" Padding="4,2" AutomationProperties.Name="{Binding Title}" />
                   </DockPanel>
                 </DataTemplate>
@@ -463,7 +499,63 @@
             <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyConsole}" />
           </TabItem>
           <TabItem Header="{x:Static shell:Strings.TabProblems}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyProblems}" />
+            <DockPanel x:Name="ProblemsPanel" DataContext="{Binding BuildRun.Problems}">
+              <Border DockPanel.Dock="Top" Padding="8,4" Background="{DynamicResource Surface.Raised}" BorderBrush="{DynamicResource Status.Warning}"
+                      BorderThickness="0,0,0,1" Visibility="{Binding IsOutdated, Converter={StaticResource VisibleWhenTrue}}">
+                <TextBlock Text="{x:Static shell:Strings.ProblemsOutdated}" TextWrapping="Wrap" />
+              </Border>
+              <Button x:Name="ProblemsOpenSettings" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="8,6,0,0" Padding="12,2"
+                      Content="{x:Static shell:Strings.ProblemsOpenSettings}"
+                      Command="{Binding DataContext.OpenSettingsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                      Visibility="{Binding OffersSettings, Converter={StaticResource VisibleWhenTrue}}" />
+              <Grid>
+                <TextBlock x:Name="ProblemsEmpty" Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                           Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+                <ListBox x:Name="ProblemsList" ItemsSource="{Binding Items}" BorderThickness="0" HorizontalContentAlignment="Stretch"
+                         Background="Transparent" Foreground="{DynamicResource Text.Primary}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" AutomationProperties.Name="{x:Static shell:Strings.RegionProblems}"
+                         Visibility="{Binding IsEmpty, Converter={x:Static shell:InverseVisibilityConverter.Instance}}">
+                  <ListBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ActivateCommand}"
+                                CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                  </ListBox.InputBindings>
+                  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                      <Setter Property="AutomationProperties.Name" Value="{Binding AccessibleText}" />
+                      <EventSetter Event="MouseDoubleClick" Handler="OnProblemDoubleClick" />
+                    </Style>
+                  </ListBox.ItemContainerStyle>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <DockPanel Margin="2,1">
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding Glyph}" Width="18" FontWeight="Bold">
+                          <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                              <Setter Property="Foreground" Value="{DynamicResource Status.Info}" />
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding Diagnostic.Severity}" Value="Error">
+                                  <Setter Property="Foreground" Value="{DynamicResource Status.Error}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Diagnostic.Severity}" Value="Warning">
+                                  <Setter Property="Foreground" Value="{DynamicResource Status.Warning}" />
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding Diagnostic.Code}" Width="64" Foreground="{DynamicResource Text.Secondary}" />
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding Location}" Margin="12,0,0,0" Foreground="{DynamicResource Text.Secondary}" />
+                        <StackPanel>
+                          <TextBlock Text="{Binding Diagnostic.What}" TextWrapping="Wrap" />
+                          <TextBlock Text="{Binding Diagnostic.NextStep}" TextWrapping="Wrap" Foreground="{DynamicResource Text.Secondary}"
+                                     FontSize="{DynamicResource FontSize.UI.Small}" />
+                        </StackPanel>
+                      </DockPanel>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </Grid>
+            </DockPanel>
           </TabItem>
           <TabItem Header="{x:Static shell:Strings.TabRuntime}">
             <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyRuntime}" />

@@ -216,6 +216,32 @@ public sealed class AdornmentTests
         });
     }
 
+    /// <summary>DEF-013: switching the theme while squiggles are shown must not fail while drawing (a theme brush can't
+    /// always be frozen).</summary>
+    [Fact]
+    public void DEF_013_switching_the_theme_with_squiggles_shown_redraws_them_in_every_theme()
+    {
+        WithEditor((editor, window) =>
+        {
+            var manager = new ThemeManager(Application.Current.Resources);
+            try
+            {
+                editor.Diagnostics = [Warning, Error, new Diagnostic("ASM003", DiagnosticSeverity.Info, "note", null, 5, string.Empty)];
+                foreach (AppTheme theme in new[] { AppTheme.Light, AppTheme.HighContrast, AppTheme.Dark })
+                {
+                    manager.Apply(theme);
+                    window.UpdateLayout();
+                    editor.TextArea.TextView.EnsureVisualLines();
+                    Assert.Equal(3, Drawings(new Adapter(new DiagnosticRenderer(editor)), editor).Count);
+                }
+            }
+            finally
+            {
+                manager.Apply(AppTheme.Dark); // the application resources are shared by every WPF test
+            }
+        });
+    }
+
     [Fact]
     public void Glyphs_and_squiggles_differ_by_shape_not_only_by_color()
     {

@@ -77,13 +77,15 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <param name="openSettings">Opens the Settings dialog (TASK-067); the command is disabled without it.</param>
     /// <param name="openAbout">Opens the About window on a page (TASK-068); the commands are disabled without it.</param>
     /// <param name="learn">The Learn sidebar (TASK-090); by default one over the built-in content catalog.</param>
+    /// <param name="buildRun">The build and run commands (TASK-080); by default the bundled NASM and the 8086 session.</param>
     public ShellViewModel(
         ILayoutStore store,
         string appVersion,
         WorkspaceViewModel? workspace = null,
         Action? openSettings = null,
         Action<About.AboutPage>? openAbout = null,
-        Learn.LearnViewModel? learn = null)
+        Learn.LearnViewModel? learn = null,
+        Commands.BuildRunViewModel? buildRun = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         _store = store;
@@ -91,6 +93,10 @@ public sealed partial class ShellViewModel : ObservableObject
         OpenAboutCommand = new RelayCommand<About.AboutPage>(page => openAbout?.Invoke(page), _ => openAbout is not null);
         Workspace = workspace ?? new WorkspaceViewModel(new WpfDialogService(), new MemoryRecentFilesStore());
         Learn = learn ?? new Learn.LearnViewModel(Content.EmbeddedContentCatalog.BuiltIn(), Workspace);
+        BuildRun = buildRun ?? new Commands.BuildRunViewModel(
+            Workspace,
+            () => new Toolchain.Nasm.NasmAssembler(new Toolchain.Nasm.NasmOptions { BundledPath = Commands.SessionFactory.BundledAssemblerPath }),
+            build => Commands.SessionFactory.Create(build, Settings.AppSettings.Default.InstructionBudget));
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
         LayoutState saved = store.Load();
         Apply(saved);
@@ -126,6 +132,9 @@ public sealed partial class ShellViewModel : ObservableObject
     private bool CanZoomOut() => ZoomPercent > LayoutState.ZoomSteps[0];
 
     private bool CanZoomReset() => ZoomPercent != 100;
+
+    /// <summary>Build, Run, Step and the other session commands, the Problems panel and the state badge (TASK-080).</summary>
+    public Commands.BuildRunViewModel BuildRun { get; }
 
     /// <summary>The Learn sidebar (UI-015).</summary>
     public Learn.LearnViewModel Learn { get; }

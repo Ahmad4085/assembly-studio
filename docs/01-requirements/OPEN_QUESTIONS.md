@@ -41,6 +41,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-023 | `MachineSnapshot` lacks current-instruction decode, memory and stack windows, and history entries needed by UI-007/008/009/013 | Medium | Design (ADR-0007 amendment) | Resolved 2026-10-26 by ADR-0007 v1.1 amendment | FR-053, FR-054, FR-055, FR-058 |
 | OQ-024 | Floating and re-dockable panels (needs a docking library and an ADR) | Low | Post-MVP | Open | UI-001 |
 | OQ-025 | Are Cascadia Mono and Segoe Fluent Icons present on Windows 10 Enterprise LTSC 21H2? | Low | First shell task | Open (fallbacks: Consolas, Segoe MDL2 Assets) | NFR-025 |
+| OQ-026 | After a failed build, should Run be enabled? AC-013 (approved) says "Run is not enabled"; the ui-spec §4 state matrix (Build failed column) lists "Build, Run (rebuilds)". | Low | Next design or requirements review | Open. TASK-080 follows AC-013: Run is disabled after a failed build until the text changes, then Run rebuilds. Proposed: align the ui-spec matrix with AC-013 | AC-013, UI-002 |
 
 ## Assumptions to validate
 | ID | Assumption | Risk if false | Validation |
@@ -63,3 +64,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-10-26 v2.3: Minor. OQ-001, 005, 011, 013, 014, 015, 016 resolved by approved ADRs / D-014. OQ-022 updated. No requirement changed.
 - 2026-10-26 v2.4: Minor (SDLC-007). OQ-021 resolution proposed. OQ-023 to OQ-025 added. No requirement changed.
 - 2026-10-26 v2.5: Minor. OQ-021 and OQ-023 resolved (design approval). No requirement changed.
+- 2026-11-01: OQ-026 added (TASK-080 found AC-013 and the ui-spec §4 matrix disagree on Run after a failed build). No answer recorded.

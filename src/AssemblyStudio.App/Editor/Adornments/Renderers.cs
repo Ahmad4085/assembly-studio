@@ -91,7 +91,11 @@ public sealed class DiagnosticRenderer(CodeEditor editor) : IBackgroundRenderer
             pen.DashStyle = DashStyles.Dot;
         }
 
-        pen.Freeze();
+        if (pen.CanFreeze)
+        {
+            pen.Freeze(); // DEF-013: a theme brush (high contrast, during a theme switch) can't always be frozen
+        }
+
         return pen;
     }
 }

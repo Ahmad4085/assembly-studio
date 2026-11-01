@@ -317,4 +317,50 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="BreakpointNotBuilt" xml:space="preserve"><value>Breakpoint (checked at the next build)</value><comment>Gutter tooltip before a build</comment></data>
   <data name="BannerSessionStale" xml:space="preserve"><value>Changed since build — positions may not match. Reset (Ctrl+Shift+F5) rebuilds.</value><comment>Editor banner (ui-spec §5)</comment></data>
   <data name="EditorGutterName" xml:space="preserve"><value>Breakpoints and messages</value><comment>UIA name of the editor gutter</comment></data>
+  <data name="CmdSendCtrlC" xml:space="preserve"><value>Send Ctrl-_C to the Program</value><comment>Debug menu (D-015)</comment></data>
+  <data name="KeySendCtrlC" xml:space="preserve"><value>Ctrl+Break</value><comment>Shortcut text</comment></data>
+  <data name="StateEditing" xml:space="preserve"><value>Not built</value><comment>State badge: document open, no current build</comment></data>
+  <data name="StateAssembling" xml:space="preserve"><value>Building…</value><comment>State badge</comment></data>
+  <data name="StateBuildFailed" xml:space="preserve"><value>Build failed</value><comment>State badge</comment></data>
+  <data name="StateReady" xml:space="preserve"><value>Ready</value><comment>State badge: built and loaded</comment></data>
+  <data name="StateRunning" xml:space="preserve"><value>Running</value><comment>State badge</comment></data>
+  <data name="StatePaused" xml:space="preserve"><value>Paused</value><comment>State badge</comment></data>
+  <data name="StatePausedLine" xml:space="preserve"><value>Paused · line {0}</value><comment>State badge. {0} = source line</comment></data>
+  <data name="StateStepping" xml:space="preserve"><value>Stepping…</value><comment>State badge</comment></data>
+  <data name="StateWaiting" xml:space="preserve"><value>Waiting for input</value><comment>State badge and status bar</comment></data>
+  <data name="StateHaltedError" xml:space="preserve"><value>Halted: error</value><comment>State badge</comment></data>
+  <data name="StateHaltedUnsupported" xml:space="preserve"><value>Halted: unsupported</value><comment>State badge</comment></data>
+  <data name="StateEnded" xml:space="preserve"><value>Ended</value><comment>State badge, no exit code</comment></data>
+  <data name="StateEndedCode" xml:space="preserve"><value>Ended · exit {0}</value><comment>State badge. {0} = exit code</comment></data>
+  <data name="StatusBuildOutdated" xml:space="preserve"><value>Changed since the last build</value><comment>Status bar</comment></data>
+  <data name="StatusBuilding" xml:space="preserve"><value>Building… (Esc cancels)</value><comment>Status bar</comment></data>
+  <data name="StatusBuildOk" xml:space="preserve"><value>Build OK · {0} bytes · {1} · {2} ms</value><comment>Status bar (FR-028). {0} size, {1} warnings, {2} duration</comment></data>
+  <data name="StatusBuildFailed" xml:space="preserve"><value>Build failed · {0}</value><comment>Status bar. {0} = error count</comment></data>
+  <data name="StatusBuildCancelled" xml:space="preserve"><value>Build cancelled</value><comment>Status bar</comment></data>
+  <data name="StatusAssemblerMissing" xml:space="preserve"><value>Build not started: the assembler isn't available (see Problems)</value><comment>Status bar (AC-016)</comment></data>
+  <data name="StatusBuildTimedOut" xml:space="preserve"><value>Build stopped: the assembler took too long</value><comment>Status bar (AC-019)</comment></data>
+  <data name="StatusBuildCrashed" xml:space="preserve"><value>Build failed: the assembler stopped unexpectedly</value><comment>Status bar (AC-019)</comment></data>
+  <data name="StatusRunning" xml:space="preserve"><value>Running · {0}</value><comment>Status bar. {0} = instruction count</comment></data>
+  <data name="StatusPaused" xml:space="preserve"><value>Paused · {0}</value><comment>Status bar</comment></data>
+  <data name="StatusPausedLine" xml:space="preserve"><value>Paused · line {0} · {1}</value><comment>Status bar</comment></data>
+  <data name="StatusHaltUnsupportedInstruction" xml:space="preserve"><value>Halted: unsupported instruction</value><comment>Status bar</comment></data>
+  <data name="StatusHaltUnsupportedService" xml:space="preserve"><value>Halted: unsupported DOS or BIOS service</value><comment>Status bar</comment></data>
+  <data name="StatusHaltRuntimeError" xml:space="preserve"><value>Halted: runtime error</value><comment>Status bar</comment></data>
+  <data name="StatusHaltHlt" xml:space="preserve"><value>Halted: HLT instruction</value><comment>Status bar</comment></data>
+  <data name="StatusSessionError" xml:space="preserve"><value>Halted: internal error ({0}). Reset to try again.</value><comment>Status bar (NFR-010). {0} = fault</comment></data>
+  <data name="StatusCaret" xml:space="preserve"><value>Ln {0}, Col {1}</value><comment>Status bar caret position</comment></data>
+  <data name="StatusNasm" xml:space="preserve"><value>NASM {0}</value><comment>Status bar. {0} = version</comment></data>
+  <data name="StatusNasmWarning" xml:space="preserve"><value>▲ NASM {0}: {1}</value><comment>Status bar. {0} = version or ?, {1} = problem</comment></data>
+  <data name="ProblemsBuilding" xml:space="preserve"><value>Building…</value><comment>Problems panel while building</comment></data>
+  <data name="ProblemsLine" xml:space="preserve"><value>Line {0}</value><comment>Problems location in the untitled document</comment></data>
+  <data name="ProblemsOutdated" xml:space="preserve"><value>Outdated: the file changed after this build. Build again to update.</value><comment>Problems panel banner</comment></data>
+  <data name="ProblemsOpenSettings" xml:space="preserve"><value>Open _Settings</value><comment>Problems panel: assembler missing (FR-024)</comment></data>
+  <data name="RegionStateBadge" xml:space="preserve"><value>Session state</value><comment>UIA name of the state badge</comment></data>
+  <data name="RegionProblems" xml:space="preserve"><value>Problems</value><comment>UIA name of the problems list</comment></data>
+  <data name="CountError" xml:space="preserve"><value>{0} error</value><comment>Count, singular</comment></data>
+  <data name="CountErrors" xml:space="preserve"><value>{0} errors</value><comment>Count, plural</comment></data>
+  <data name="CountWarning" xml:space="preserve"><value>{0} warning</value><comment>Count, singular</comment></data>
+  <data name="CountWarnings" xml:space="preserve"><value>{0} warnings</value><comment>Count, plural</comment></data>
+  <data name="CountInstruction" xml:space="preserve"><value>{0:N0} instruction</value><comment>Count, singular</comment></data>
+  <data name="CountInstructions" xml:space="preserve"><value>{0:N0} instructions</value><comment>Count, plural</comment></data>
 </root>

@@ -915,4 +915,142 @@ public static class Strings
 
     /// <summary>Breakpoints and messages</summary>
     public static string EditorGutterName => Get(nameof(EditorGutterName));
+
+    /// <summary>Send Ctrl-_C to the Program</summary>
+    public static string CmdSendCtrlC => Get(nameof(CmdSendCtrlC));
+
+    /// <summary>Ctrl+Break</summary>
+    public static string KeySendCtrlC => Get(nameof(KeySendCtrlC));
+
+    /// <summary>Not built</summary>
+    public static string StateEditing => Get(nameof(StateEditing));
+
+    /// <summary>Building…</summary>
+    public static string StateAssembling => Get(nameof(StateAssembling));
+
+    /// <summary>Build failed</summary>
+    public static string StateBuildFailed => Get(nameof(StateBuildFailed));
+
+    /// <summary>Ready</summary>
+    public static string StateReady => Get(nameof(StateReady));
+
+    /// <summary>Running</summary>
+    public static string StateRunning => Get(nameof(StateRunning));
+
+    /// <summary>Paused</summary>
+    public static string StatePaused => Get(nameof(StatePaused));
+
+    /// <summary>Paused · line {0}</summary>
+    public static string StatePausedLine => Get(nameof(StatePausedLine));
+
+    /// <summary>Stepping…</summary>
+    public static string StateStepping => Get(nameof(StateStepping));
+
+    /// <summary>Waiting for input</summary>
+    public static string StateWaiting => Get(nameof(StateWaiting));
+
+    /// <summary>Halted: error</summary>
+    public static string StateHaltedError => Get(nameof(StateHaltedError));
+
+    /// <summary>Halted: unsupported</summary>
+    public static string StateHaltedUnsupported => Get(nameof(StateHaltedUnsupported));
+
+    /// <summary>Ended</summary>
+    public static string StateEnded => Get(nameof(StateEnded));
+
+    /// <summary>Ended · exit {0}</summary>
+    public static string StateEndedCode => Get(nameof(StateEndedCode));
+
+    /// <summary>Changed since the last build</summary>
+    public static string StatusBuildOutdated => Get(nameof(StatusBuildOutdated));
+
+    /// <summary>Building… (Esc cancels)</summary>
+    public static string StatusBuilding => Get(nameof(StatusBuilding));
+
+    /// <summary>Build OK · {0} bytes · {1} · {2} ms</summary>
+    public static string StatusBuildOk => Get(nameof(StatusBuildOk));
+
+    /// <summary>Build failed · {0}</summary>
+    public static string StatusBuildFailed => Get(nameof(StatusBuildFailed));
+
+    /// <summary>Build cancelled</summary>
+    public static string StatusBuildCancelled => Get(nameof(StatusBuildCancelled));
+
+    /// <summary>Build not started: the assembler isn&apos;t available (see Problems)</summary>
+    public static string StatusAssemblerMissing => Get(nameof(StatusAssemblerMissing));
+
+    /// <summary>Build stopped: the assembler took too long</summary>
+    public static string StatusBuildTimedOut => Get(nameof(StatusBuildTimedOut));
+
+    /// <summary>Build failed: the assembler stopped unexpectedly</summary>
+    public static string StatusBuildCrashed => Get(nameof(StatusBuildCrashed));
+
+    /// <summary>Running · {0}</summary>
+    public static string StatusRunning => Get(nameof(StatusRunning));
+
+    /// <summary>Paused · {0}</summary>
+    public static string StatusPaused => Get(nameof(StatusPaused));
+
+    /// <summary>Paused · line {0} · {1}</summary>
+    public static string StatusPausedLine => Get(nameof(StatusPausedLine));
+
+    /// <summary>Halted: unsupported instruction</summary>
+    public static string StatusHaltUnsupportedInstruction => Get(nameof(StatusHaltUnsupportedInstruction));
+
+    /// <summary>Halted: unsupported DOS or BIOS service</summary>
+    public static string StatusHaltUnsupportedService => Get(nameof(StatusHaltUnsupportedService));
+
+    /// <summary>Halted: runtime error</summary>
+    public static string StatusHaltRuntimeError => Get(nameof(StatusHaltRuntimeError));
+
+    /// <summary>Halted: HLT instruction</summary>
+    public static string StatusHaltHlt => Get(nameof(StatusHaltHlt));
+
+    /// <summary>Halted: internal error ({0}). Reset to try again.</summary>
+    public static string StatusSessionError => Get(nameof(StatusSessionError));
+
+    /// <summary>Ln {0}, Col {1}</summary>
+    public static string StatusCaret => Get(nameof(StatusCaret));
+
+    /// <summary>NASM {0}</summary>
+    public static string StatusNasm => Get(nameof(StatusNasm));
+
+    /// <summary>▲ NASM {0}: {1}</summary>
+    public static string StatusNasmWarning => Get(nameof(StatusNasmWarning));
+
+    /// <summary>Building…</summary>
+    public static string ProblemsBuilding => Get(nameof(ProblemsBuilding));
+
+    /// <summary>Line {0}</summary>
+    public static string ProblemsLine => Get(nameof(ProblemsLine));
+
+    /// <summary>Outdated: the file changed after this build. Build again to update.</summary>
+    public static string ProblemsOutdated => Get(nameof(ProblemsOutdated));
+
+    /// <summary>Open _Settings</summary>
+    public static string ProblemsOpenSettings => Get(nameof(ProblemsOpenSettings));
+
+    /// <summary>Session state</summary>
+    public static string RegionStateBadge => Get(nameof(RegionStateBadge));
+
+    /// <summary>Problems</summary>
+    public static string RegionProblems => Get(nameof(RegionProblems));
+
+    /// <summary>{0} error</summary>
+    public static string CountError => Get(nameof(CountError));
+
+    /// <summary>{0} errors</summary>
+    public static string CountErrors => Get(nameof(CountErrors));
+
+    /// <summary>{0} warning</summary>
+    public static string CountWarning => Get(nameof(CountWarning));
+
+    /// <summary>{0} warnings</summary>
+    public static string CountWarnings => Get(nameof(CountWarnings));
+
+    /// <summary>{0:N0} instruction</summary>
+    public static string CountInstruction => Get(nameof(CountInstruction));
+
+    /// <summary>{0:N0} instructions</summary>
+    public static string CountInstructions => Get(nameof(CountInstructions));
 }

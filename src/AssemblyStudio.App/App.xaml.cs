@@ -74,7 +74,7 @@ public partial class App : Application
         };
 
         // FR-079: the bundled NASM next to the application unless Settings names another one.
-        string bundledNasm = Path.Combine(AppContext.BaseDirectory, "tools", "nasm", "nasm.exe");
+        string bundledNasm = Commands.SessionFactory.BundledAssemblerPath;
         AssemblerInfo CheckAssembler(string? configured) =>
             new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = configured }).Check();
 
@@ -126,7 +126,13 @@ public partial class App : Application
             {
                 Owner = window,
             }.ShowDialog(),
-            learn: new LearnViewModel(LoadContent(log), workspace));
+            learn: new LearnViewModel(LoadContent(log), workspace),
+            buildRun: new Commands.BuildRunViewModel(
+                workspace,
+                () => new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = settings.Current.AssemblerPath }),
+                build => Commands.SessionFactory.Create(build, settings.Current.InstructionBudget,
+                    fault => log.Write(LogLevel.Error, "Debug session fault.", fault))));
+        Exit += (_, _) => viewModel.BuildRun.Dispose();
         // FR-022: the zoom scales the editor and the debug panels' code font.
         void ApplyZoom()
         {

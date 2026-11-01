@@ -1726,3 +1726,30 @@
 - **Git state after:** uncommitted TASK-066 changes on top of `a98efa1`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-012 Open. DEF-006, 009, 010 and 011 Fixed (unverified). Ctrl+K, Ctrl+I chord and mouse hover not automated. Narrator check (TASK-069).
 - **Next step:** `/assembly-implement TASK-080`.
+
+### 2026-11-01 11:53 – 12:48 +0500 · Claude Code (Opus 5.5) · TASK-080 Build/run commands, command bar and status
+- **Summary:** Ran `/assembly-implement TASK-080` (user request; dependencies TASK-042, 050, 066, 067 Done). Lock was free; I wrote the lock after the first new files (same session, no other agent).
+  - `BuildRunViewModel`: the ui-spec §4 state machine over the real NASM and the real 8086 debug session, with snapshot coalescing on the UI thread.
+  - `ProblemsViewModel` (UI-011) and `CommandTable` (ui-spec §6, with the later task named for each command not yet available).
+  - Shell: menus, command bar, key bindings (system-key routing for F10 and Alt combinations), F9, F1 → Help, Debug ▸ Send Ctrl-C; state badge as a live region; status bar build/session text, NASM version, Ln/Col.
+- **Decision on a conflict:** AC-013 says Run is disabled after a failed build; the ui-spec matrix says Run rebuilds. Followed the approved AC; opened OQ-026 instead of editing the spec.
+- **Found on the way:**
+  - Caret position didn't reach the status bar: setting a OneWayToSource-bound property from inside the control replaced the binding. Fixed with `SetCurrentValue`.
+  - Problems list was white in the dark theme (no list style in the themes); themed explicitly. "1 errors"/"1 instructions": singular/plural strings added.
+  - DEF-013 (High, TASK-066 code): switching the theme with underlines shown threw while drawing (a crash in the app). Found because my new tests pumped the dispatcher and let another test run inside them. Fixed (freeze only when possible), regression test fails before and passes after; those test classes moved to the non-parallel collection.
+  - DEF-014: the AC-015 Settings test timed out once on NASM's version check under load (13.4 s; alone 3.0–5.0 s). Open.
+- **Files changed:** `src/AssemblyStudio.App/{App.xaml.cs, Commands/BuildRunViewModel.cs (new), Commands/SessionFactory.cs (new), Commands/CommandTable.cs (new), Panels/Problems/ProblemsViewModel.cs (new), Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/Renderers.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/{Commands/BuildRunTests.cs (new), Commands/CommandTableTests.cs (new), Editor/AdornmentTests.cs}`, `docs/07-testing/defects.md` (DEF-013, DEF-014), `docs/01-requirements/OPEN_QUESTIONS.md` (OQ-026), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `BuildRunTests` 9/9 and `CommandTableTests` 6/6 (after the test and product fixes above).
+  - Renders reviewed: `build-failed.png`, `session-paused.png`.
+  - Mutations: Run allowed after a failed build → 2 failed; breakpoints not passed to the session → 1 failed; F10 binding removed → 2 failed. All restored and rebuilt.
+  - App project 261/261 (12:29).
+  - Full runs:
+    - 12:22: 1 failed (DEF-013).
+    - 12:30–12:34: 1421/1421.
+    - 12:34–12:38: 1 failed (DEF-014).
+    - **12:39–12:42 and 12:42–12:46: 1421/1421 twice.**
+  - Release build 0 warnings.
+- **Git state after:** uncommitted TASK-080 changes on top of `3475210`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** OQ-026, DEF-012 and DEF-014 Open. DEF-006, 009, 010, 011, 013 Fixed (unverified). No console panel yet (TASK-084): program output is collected but not shown; programs that read the keyboard can't get input from the UI until then. Not checked by hand: Narrator reading the badge (TASK-085), real Ctrl+Alt+Break and Ctrl+Break key presses (simulated through the key bindings).
+- **Next step:** `/assembly-implement TASK-084`.

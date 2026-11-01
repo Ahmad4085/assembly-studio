@@ -5,16 +5,24 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-01 11:49 +0500 by Claude Code (Opus 5.5), after completing TASK-066 |
-| Current task | **None in progress. Next (user-approved): `TASK-080` Build/Run/Step** |
-| Last completed | TASK-066 Editor diagnostics and gutter (Done 2026-11-01 11:49 +0500) |
-| Git state | HEAD `53ac5cc` (TASK-066 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-01 12:48 +0500 by Claude Code (Opus 5.5), after completing TASK-080 |
+| Current task | **None in progress. Next (user-approved): `TASK-084` console panel, then TASK-081..083** |
+| Last completed | TASK-080 Build/run commands, command bar and status (Done 2026-11-01 12:48 +0500) |
+| Git state | HEAD `3475210` + uncommitted TASK-080 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 11:35 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1404/1404 passed**, two consecutive runs (2026-11-01 11:46 and 11:48 +0500). The run before (11:35) failed DEF-012 once.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 12:30 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1421/1421 passed**, two consecutive runs (2026-11-01 12:39–12:42 and 12:42–12:46 +0500). The run before (12:34) failed DEF-014 once.
 
 ## Changes since the previous handoff
+- **TASK-080 Build/Run/Step** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Commands/{BuildRunViewModel, SessionFactory, CommandTable}.cs`, `src/AssemblyStudio.App/Panels/Problems/ProblemsViewModel.cs`.
+  - `ShellViewModel.BuildRun`; the App composes it with Settings (assembler path, instruction budget) and the log.
+  - **For TASK-084 (console):** `BuildRunViewModel.ConsoleText` holds the output since load/reset (cleared on Reset and on a new run); input goes through the session (`SendInput`); `SendCtrlCCommand` exists (Ctrl+Break). The console's own Ctrl+C routing (D-015) and Copy (Ctrl+Shift+C) are TASK-084.
+  - **For TASK-081..083:** read the session through `BuildRunViewModel` (add a snapshot property or event there); running snapshots have no current instruction (FR-057).
+  - Tests that wait for snapshots pump the dispatcher, so they must be in the `AppProcessTests` (non-parallel) collection.
+- DEF-013 fixed (`Renderers.cs`), DEF-014 Open, OQ-026 Open.
+
 - **TASK-066 Gutter and diagnostics** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Editor/Adornments/`; `CodeEditor`, `DocumentViewModel`, `MainWindow.xaml`, strings.
   - **For TASK-080:** set `DocumentViewModel.Diagnostics` from `BuildResult.Diagnostics` (lines in the built file); bind `Breakpoints` and replace each with `Bound` + address or `Unbound` after a build; set `ExecutionLine`/`ExecutionMarker` from the paused snapshot through the source map; set `HasSession` while a session runs (editing then sets `IsSessionStale`).
@@ -58,12 +66,12 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-066 committed. Files were:
-   - `src/AssemblyStudio.App/{Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/*, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/Editor/{AdornmentTests.cs, EditorLatencyTests.cs, EditorTests.cs}`
-   - `docs/07-testing/defects.md`, `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-080`.
-3. User: TASK-006, TASK-100, DEF-003 decision; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011; DEF-012 to investigate.
+1. When the user asks: commit TASK-080. Files:
+   - `src/AssemblyStudio.App/{App.xaml.cs, Commands/*, Panels/Problems/*, Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/Renderers.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/{Commands/*, Editor/AdornmentTests.cs}`
+   - `docs/07-testing/defects.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-084`.
+3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012 and DEF-014 to investigate.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -6,10 +6,51 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-080` (Build/Run/Step).
+None in progress. Next on the user-approved path: `TASK-084` (console panel, so program output and keyboard input are visible), then `TASK-081` to `TASK-083`.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 5 progress | TASK-080 Done; eligible: TASK-081, 082, 083, 084 |
+| Recommended next action | `/assembly-implement TASK-084` (console: hello.asm's output appears; input for programs that read the keyboard) |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-080 Build/run commands, command bar and status (Done 2026-11-01 12:48 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Commands/`:
+  - `BuildRunViewModel`: the ui-spec §4 states (`RunState`). Build (off the UI thread) and Cancel build; Run/Continue (builds when needed, restarts an ended program); Pause, Stop, Reset (rebuilds when the source changed), Step Into, Step Over, Ctrl-C to the program.
+  - Snapshots from the session's worker are coalesced and applied on the UI thread (ADR-0007 §3).
+  - Drives the editor: diagnostics, breakpoint binding with addresses (`0800:0103`) or unbound, the execution line and marker (current, fault, ended), `HasSession`/stale. Console text is collected for TASK-084.
+  - `SessionFactory`: the 8086 machine (memory, DOS, console, .COM loader) and the instruction budget from Settings.
+  - `CommandTable`: all 33 rows of ui-spec §6 with menu header, shortcut, scope, keys, and the task for those not yet available (find/replace/go to line TASK-065, number format TASK-081, console copy TASK-084, Run to Cursor P2).
+- `src/AssemblyStudio.App/Panels/Problems/ProblemsViewModel`: UI-011 list (errors first; glyph, words, code, message, location, next step); "Building…", "No problems", "outdated" banner, Open Settings when the assembler is missing; Enter/double-click goes to the line.
+- Shell:
+  - Build/Debug menus and command bar wired; key bindings for every shortcut; F10 and Alt combinations routed from system keys; F9 on the caret line; F1 opens Help in Learn; Debug ▸ Send Ctrl-C (Ctrl+Break).
+  - State badge (glyph + words, polite live region, announced on change).
+  - Status bar: build or session text (singular/plural counts), NASM version, Ln/Col.
+- AC-013 vs the ui-spec matrix on Run after a failed build: followed AC-013; OQ-026 opened.
+- Defects found: DEF-013 (theme switch with underlines shown threw while drawing; TASK-066 code; fixed, regression test), DEF-014 (AC-015 NASM version check timed out once under load; Open). Caret position binding needed `SetCurrentValue` (found by the status bar test).
+- Tests: `BuildRunTests` 9 (real NASM and real session: AC-017, AC-013, run to end, stepping, breakpoints and Reset, stale rebuild, missing assembler, cancel build, empty state), `CommandTableTests` 6 (spec coverage, keyboard reachability over the table, menus with access keys and shortcuts, command-bar tooltips, keyboard flow in the main window, renders `build-failed.png` and `session-paused.png`), `AdornmentTests` +1 (DEF-013). Mutations (Run allowed after a failed build; breakpoints not passed to the session; F10 binding removed) each caught.
+- Release build 0 warnings; full solution 1421/1421 twice (12:39–12:42, 12:42–12:46).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-01 11:53 / 12:48 +0500 |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-01 11:53 +0500 |
+| Milestone | M5 |
+| Goal | Wire the commands of ui-spec section 6 with shortcuts, the build flow, Problems panel, state badge and status bar |
+| Scope (in) | Command table incl. access keys and tooltips; Build to Problems, cancel build; state badge as live region |
+| Out of scope | Visualization panels (TASK-081..084) |
+| Requirements | FR-028, FR-035, FR-049, FR-050, FR-051, FR-067, FR-091; UI-002, UI-011, UI-016; ADR-0007; AC-013, AC-017 (UI flow) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 4 progress | TASK-060, 061 (WVR-001), 062, 063, 064, 066, 067, 068 Done; eligible: TASK-065 (find/replace), TASK-069 (accessibility); TASK-070 needs TASK-006 |
 | Recommended next action | `/assembly-implement TASK-080` (check its dependencies first) |

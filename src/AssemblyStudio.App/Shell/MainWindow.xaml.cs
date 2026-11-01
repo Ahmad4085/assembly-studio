@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Automation.Peers;
 using System.Windows.Input;
 using System.Windows.Media;
 using AssemblyStudio.App.Documents;
@@ -21,6 +22,9 @@ public partial class MainWindow : Window
 
     /// <summary>Shift+F6: previous region.</summary>
     public static readonly RoutedUICommand PreviousPaneCommand = new(Strings.CmdPreviousPane, nameof(PreviousPaneCommand), typeof(MainWindow));
+
+    /// <summary>F9 (Debug ▸ Toggle Breakpoint): a breakpoint on the caret line of the active editor (FR-052).</summary>
+    public static readonly RoutedUICommand ToggleBreakpointCommand = new(Strings.CmdToggleBreakpoint, nameof(ToggleBreakpointCommand), typeof(MainWindow));
 
     private readonly ShellViewModel _viewModel;
     private readonly Logging.ILog _log;
@@ -50,6 +54,112 @@ public partial class MainWindow : Window
         SizeChanged += (_, e) => viewModel.UpdateWindowWidth(e.NewSize.Width);
         Closing += OnClosing;
         PreviewMouseWheel += OnPreviewMouseWheel;
+
+        // TASK-080: F10 and Alt combinations arrive as system keys, which key bindings don't see; route them to the bindings.
+        PreviewKeyDown += OnPreviewSystemKey;
+        viewModel.BuildRun.Problems.GoToRequested += (_, item) => GoToLine(item.Document!, item.Diagnostic.Line!.Value);
+        viewModel.BuildRun.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Commands.BuildRunViewModel.BadgeText))
+            {
+                AnnounceState();
+            }
+        };
+        Closed += (_, _) => viewModel.BuildRun.Dispose();
+    }
+
+    /// <summary>The command and parameter a key press runs through the window's key bindings, or <see langword="null"/>.</summary>
+    internal (ICommand Command, object? Parameter)? ResolveShortcut(Key key, ModifierKeys modifiers)
+    {
+        foreach (KeyBinding binding in InputBindings.OfType<KeyBinding>())
+        {
+            if (binding.Key == key && binding.Modifiers == modifiers && binding.Command is { } command)
+            {
+                return (command, binding.CommandParameter);
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>Runs a key press's command when it can run (the keyboard path of the key bindings).</summary>
+    internal bool TryRunShortcut(Key key, ModifierKeys modifiers)
+    {
+        if (ResolveShortcut(key, modifiers) is not { } shortcut)
+        {
+            return false;
+        }
+
+        if (shortcut.Command is RoutedCommand routed)
+        {
+            if (!routed.CanExecute(shortcut.Parameter, this))
+            {
+                return false;
+            }
+
+            routed.Execute(shortcut.Parameter, this);
+            return true;
+        }
+
+        if (!shortcut.Command.CanExecute(shortcut.Parameter))
+        {
+            return false;
+        }
+
+        shortcut.Command.Execute(shortcut.Parameter);
+        return true;
+    }
+
+    private void OnPreviewSystemKey(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.System && e.SystemKey is Key.F10 or Key.Cancel or Key.Pause && TryRunShortcut(e.SystemKey, Keyboard.Modifiers))
+        {
+            e.Handled = true;
+        }
+    }
+
+    private void OnToggleBreakpoint(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (ActiveEditor() is { } editor)
+        {
+            editor.RequestToggleBreakpoint(editor.TextArea.Caret.Line);
+        }
+    }
+
+    private void OnCanToggleBreakpoint(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = _viewModel.Workspace.ActiveDocument is not null;
+
+    /// <summary>Activates <paramref name="document"/> and puts the caret at the start of <paramref name="line"/> (Problems, AC-013).</summary>
+    internal void GoToLine(DocumentViewModel document, int line)
+    {
+        _viewModel.Workspace.ActiveDocument = document;
+        UpdateLayout();
+        if (ActiveEditor() is not { } editor)
+        {
+            return;
+        }
+
+        line = Math.Clamp(line, 1, editor.Document.LineCount);
+        editor.TextArea.Caret.Location = new ICSharpCode.AvalonEdit.Document.TextLocation(line, 1);
+        editor.ScrollToLine(line);
+        editor.TextArea.Focus();
+    }
+
+    private void OnProblemDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is ListBoxItem { DataContext: Panels.Problems.ProblemItem item })
+        {
+            _viewModel.BuildRun.Problems.ActivateCommand.Execute(item);
+            e.Handled = true;
+        }
+    }
+
+    // UI-002: the state badge is a polite live region; Narrator reads it when the state changes.
+    private void AnnounceState()
+    {
+        if (StateBadge is not null && (UIElementAutomationPeer.FromElement(StateBadge) ?? UIElementAutomationPeer.CreatePeerForElement(StateBadge)) is { } peer)
+        {
+            peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+        }
     }
 
     /// <summary>The region that currently holds keyboard (or, in an inactive window, logical)

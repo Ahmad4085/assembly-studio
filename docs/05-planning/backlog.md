@@ -77,7 +77,7 @@
 | TASK-068 | About/Diagnostics, release notes, notices, logging | M4 | TASK-060 | L | FR-076, FR-087, FR-090, NFR-012 | Done |
 | TASK-069 | Editor accessibility verification | M4 | TASK-064 | H | FR-093, NFR-022 | Approved |
 | TASK-070 | Fonts and icons on Windows 10 LTSC | M4 | TASK-061, TASK-006 | L | NFR-025 | Approved |
-| TASK-080 | Build/run commands, command bar and status | M5 | TASK-050, TASK-066, TASK-067, TASK-042 | M | FR-028, FR-035, FR-049, FR-050, FR-051, FR-067, FR-091 | Approved |
+| TASK-080 | Build/run commands, command bar and status | M5 | TASK-050, TASK-066, TASK-067, TASK-042 | M | FR-028, FR-035, FR-049, FR-050, FR-051, FR-067, FR-091 | Done |
 | TASK-081 | Registers and flags panels | M5 | TASK-051, TASK-061 | M | FR-046, FR-047, FR-048, FR-056, FR-057, NFR-018 | Approved |
 | TASK-082 | Memory and stack panels | M5 | TASK-051, TASK-061 | M | FR-054, FR-055, FR-056, NFR-018 | Approved |
 | TASK-083 | Instruction strip, runtime messages, history, breakpoints panels | M5 | TASK-051, TASK-052, TASK-061 | M | FR-037, FR-038, FR-040, FR-041, FR-042, FR-053, FR-058, FR-065, FR-066, FR-052 | Approved |
@@ -1392,7 +1392,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M5 |
 | Requirements | FR-028, FR-035, FR-049, FR-050, FR-051, FR-067, FR-091 |
 | Decisions / design | UI-002, UI-011, UI-016, ADR-0007 |

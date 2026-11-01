@@ -61,6 +61,14 @@ public class CodeEditor : TextEditor
     public static readonly DependencyProperty ToggleBreakpointCommandProperty = DependencyProperty.Register(
         nameof(ToggleBreakpointCommand), typeof(ICommand), typeof(CodeEditor), new PropertyMetadata(null));
 
+    /// <summary>The caret's 1-based line, for the status bar (UI-016).</summary>
+    public static readonly DependencyProperty CaretLineProperty = DependencyProperty.Register(
+        nameof(CaretLine), typeof(int), typeof(CodeEditor), new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+    /// <summary>The caret's 1-based column, for the status bar (UI-016).</summary>
+    public static readonly DependencyProperty CaretColumnProperty = DependencyProperty.Register(
+        nameof(CaretColumn), typeof(int), typeof(CodeEditor), new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
     private readonly GlyphMargin _glyphMargin;
     private readonly ToolTip _textToolTip = new() { Placement = System.Windows.Controls.Primitives.PlacementMode.Relative };
     private bool _syncing;
@@ -106,6 +114,25 @@ public class CodeEditor : TextEditor
         TextArea.TextView.MouseHoverStopped += (_, _) => _textToolTip.IsOpen = false;
         TextArea.TextView.ToolTip = _textToolTip;
         ToolTipService.SetIsEnabled(TextArea.TextView, false); // opened by hand, only over lines with diagnostics
+        TextArea.Caret.PositionChanged += (_, _) =>
+        {
+            SetCurrentValue(CaretLineProperty, TextArea.Caret.Line); // keeps the binding to the document (status bar)
+            SetCurrentValue(CaretColumnProperty, TextArea.Caret.Column);
+        };
+    }
+
+    /// <inheritdoc cref="CaretLineProperty"/>
+    public int CaretLine
+    {
+        get => (int)GetValue(CaretLineProperty);
+        set => SetValue(CaretLineProperty, value);
+    }
+
+    /// <inheritdoc cref="CaretColumnProperty"/>
+    public int CaretColumn
+    {
+        get => (int)GetValue(CaretColumnProperty);
+        set => SetValue(CaretColumnProperty, value);
     }
 
     /// <summary>The diagnostics with a line, by line.</summary>

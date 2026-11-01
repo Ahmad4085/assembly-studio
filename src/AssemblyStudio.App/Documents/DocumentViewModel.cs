@@ -99,6 +99,19 @@ public sealed partial class DocumentViewModel : ObservableObject
     [ObservableProperty]
     public partial Editor.Adornments.ExecutionMarkerKind ExecutionMarker { get; set; }
 
+    /// <summary>The editor caret's 1-based line (status bar, UI-016).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusCaret))]
+    public partial int CaretLine { get; set; } = 1;
+
+    /// <summary>The editor caret's 1-based column.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusCaret))]
+    public partial int CaretColumn { get; set; } = 1;
+
+    /// <summary>"Ln 7, Col 5".</summary>
+    public string StatusCaret => string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusCaret), CaretLine, CaretColumn);
+
     /// <summary>Whether a debug session runs this document's build (TASK-080 sets it); editing then marks it stale.</summary>
     [ObservableProperty]
     public partial bool HasSession { get; set; }

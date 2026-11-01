@@ -363,4 +363,11 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="CountWarnings" xml:space="preserve"><value>{0} warnings</value><comment>Count, plural</comment></data>
   <data name="CountInstruction" xml:space="preserve"><value>{0:N0} instruction</value><comment>Count, singular</comment></data>
   <data name="CountInstructions" xml:space="preserve"><value>{0:N0} instructions</value><comment>Count, plural</comment></data>
+  <data name="ConsoleWaiting" xml:space="preserve"><value>⌨ Waiting for input: type in the console</value><comment>Console indicator (UI-010)</comment></data>
+  <data name="ConsoleEnded" xml:space="preserve"><value>— program ended (exit code {0}) —</value><comment>Console end line. {0} = exit code</comment></data>
+  <data name="ConsoleEndedNoCode" xml:space="preserve"><value>— program ended —</value><comment>Console end line without an exit code</comment></data>
+  <data name="ConsoleTrimmed" xml:space="preserve"><value>Earlier output was removed: the console keeps the last {0:N0} characters.</value><comment>Console cap notice (NFR-015). {0} = capacity</comment></data>
+  <data name="ConsoleCopy" xml:space="preserve"><value>_Copy</value><comment>Console context menu</comment></data>
+  <data name="KeyConsoleCopy" xml:space="preserve"><value>Ctrl+Shift+C</value><comment>Shortcut text (D-015)</comment></data>
+  <data name="RegionConsole" xml:space="preserve"><value>Program console</value><comment>UIA name of the console</comment></data>
 </root>

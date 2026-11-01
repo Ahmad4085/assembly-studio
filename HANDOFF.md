@@ -5,16 +5,21 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-01 12:48 +0500 by Claude Code (Opus 5.5), after completing TASK-080 |
-| Current task | **None in progress. Next (user-approved): `TASK-084` console panel, then TASK-081..083** |
-| Last completed | TASK-080 Build/run commands, command bar and status (Done 2026-11-01 12:48 +0500) |
-| Git state | HEAD `8aae8b7` (TASK-080 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-01 16:01 +0500 by Claude Code (Opus 5.5), after completing TASK-084 |
+| Current task | **None in progress. Next (user-approved): `TASK-081` registers and flags, then TASK-082, TASK-083** |
+| Last completed | TASK-084 Console panel (Done 2026-11-01 16:01 +0500) |
+| Git state | HEAD `b09199f` + uncommitted TASK-084 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 12:30 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1421/1421 passed**, two consecutive runs (2026-11-01 12:39–12:42 and 12:42–12:46 +0500). The run before (12:34) failed DEF-014 once.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 15:52 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1446/1446 passed**, two consecutive runs (2026-11-01 15:52–15:56 and 15:56–16:00 +0500).
+- Note: full runs take 3–4 minutes and need memory; one run at 13:34 was stopped by Claude Code for low system memory (not a failure).
 
 ## Changes since the previous handoff
+- **TASK-084 Console** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Panels/Console/{ConsoleScreen, ConsoleViewModel, ConsoleKeys, ConsoleView}.cs`; console tab in `MainWindow.xaml`; `BuildRunViewModel.Console` (bounded pending output); `ShellViewModel` tab follows the run state.
+  - **For TASK-081..083:** same pattern as the console: give `BuildRunViewModel` a panel view model and feed it from `ApplyPendingSnapshot` (UI thread, latest snapshot only).
+
 - **TASK-080 Build/Run/Step** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Commands/{BuildRunViewModel, SessionFactory, CommandTable}.cs`, `src/AssemblyStudio.App/Panels/Problems/ProblemsViewModel.cs`.
   - `ShellViewModel.BuildRun`; the App composes it with Settings (assembler path, instruction budget) and the log.
@@ -66,11 +71,11 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-080 committed. Files were:
-   - `src/AssemblyStudio.App/{App.xaml.cs, Commands/*, Panels/Problems/*, Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/Renderers.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/{Commands/*, Editor/AdornmentTests.cs}`
-   - `docs/07-testing/defects.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-084`.
+1. When the user asks: commit TASK-084. Files:
+   - `src/AssemblyStudio.App/{Panels/Console/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/{Panels/ConsoleTests.cs, Commands/BuildRunTests.cs, Commands/CommandTableTests.cs}`
+   - `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-081`.
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012 and DEF-014 to investigate.
 
 ## Do not overwrite or revert

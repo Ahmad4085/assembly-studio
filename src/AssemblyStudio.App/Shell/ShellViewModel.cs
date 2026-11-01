@@ -98,6 +98,13 @@ public sealed partial class ShellViewModel : ObservableObject
             () => new Toolchain.Nasm.NasmAssembler(new Toolchain.Nasm.NasmOptions { BundledPath = Commands.SessionFactory.BundledAssemblerPath }),
             build => Commands.SessionFactory.Create(build, Settings.AppSettings.Default.InstructionBudget));
         StatusText = string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.StatusAppVersion), appVersion);
+        BuildRun.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Commands.BuildRunViewModel.State))
+            {
+                OnRunStateChanged(BuildRun.State);
+            }
+        };
         LayoutState saved = store.Load();
         Apply(saved);
         ZoomPercent = saved.ZoomPercent;
@@ -135,6 +142,26 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>Build, Run, Step and the other session commands, the Problems panel and the state badge (TASK-080).</summary>
     public Commands.BuildRunViewModel BuildRun { get; }
+
+    // TASK-084: the bottom tab follows the session: Problems after a failed build, Console while a program runs, and the
+    // console takes the focus when the program waits for input (ui-spec §4: "input line focused").
+    private void OnRunStateChanged(Commands.RunState state)
+    {
+        switch (state)
+        {
+            case Commands.RunState.BuildFailed:
+                IsBottomVisible = true;
+                BottomTab = BottomTab.Problems;
+                break;
+            case Commands.RunState.Running:
+                IsBottomVisible = true;
+                BottomTab = BottomTab.Console;
+                break;
+            case Commands.RunState.WaitingForInput:
+                GoTo(ShellPanel.Console);
+                break;
+        }
+    }
 
     /// <summary>The Learn sidebar (UI-015).</summary>
     public Learn.LearnViewModel Learn { get; }

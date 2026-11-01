@@ -6,10 +6,45 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-084` (console panel, so program output and keyboard input are visible), then `TASK-081` to `TASK-083`.
+None in progress. Next on the user-approved path: `TASK-081` (registers and flags panels), then `TASK-082`, `TASK-083`.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 5 progress | TASK-080, TASK-084 Done; eligible: TASK-081, 082, 083 |
+| Recommended next action | `/assembly-implement TASK-081` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-084 Console panel (Done 2026-11-01 16:01 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Panels/Console/`:
+  - `ConsoleScreen`: DOS teletype model. Characters overwrite at the cursor; CR to column 0; LF down keeping the column; BS left without erasing; TAB to the next multiple of 8; BEL counted, not shown; other control codes as CP437 symbols. 1,048,576-character cap with the oldest lines trimmed; reports the changed lines.
+  - `ConsoleViewModel`: waiting indicator, end line ("— program ended (exit code n) —"), trimmed notice, input and Ctrl-C sinks (only while the program runs or waits).
+  - `ConsoleKeys`: Enter/BS/Tab/Esc, Ctrl+letter, extended keys as 00h + scan code; F1, F6, Alt and Shift+Ctrl combinations stay with the IDE (no keyboard trap); text in code page 437.
+  - `ConsoleView`: read-only AvalonEdit view that updates only the changed lines, follows the output, flashes its border on BEL, routes Ctrl+C per D-015, Ctrl+Shift+C copies the selection or all; context menu Copy / Select All.
+- `BuildRunViewModel`: output between two UI updates is bounded too (the old unbounded buffer is gone); the console is cleared on Run and Reset; console flags follow the state.
+- `ShellViewModel`: Problems tab after a failed build, Console tab while running, console focused when the program waits for input.
+- `CommandTable`: "Copy in the console" now available and checked.
+- Tests: `ConsoleTests` 24 (screen, cap, keys, AC-022, AC-023 with the keyboard-input sample, D-015 Ctrl-C, control characters and BEL, AC-045 flood with a 4,096-character cap: UI answers input-priority work in under 1 s, Stop works). Mutations (TAB stop 4; console ignoring Ctrl+C) caught. Render `console-input.png` reviewed.
+- One full run (13:34) was stopped by Claude Code because the computer was low on memory (not a test failure); after the user said continue: App tests alone 286/286 in 72 s (no hang), then full solution 1446/1446 twice, and after the command-table change 1446/1446 twice again (15:52–15:56, 15:56–16:00). Release build 0 warnings.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-01 12:53 / 16:01 +0500 (paused about 2 h while memory was low) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-01 12:53 +0500 |
+| Milestone | M5 |
+| Goal | Show program output and accept input, with Ctrl-C routing per D-015 |
+| Scope (in) | Output rendering (CR/LF/BS/TAB, visual BEL), cap notice; input line and waiting state; Ctrl+C/Ctrl+Break delivery, Ctrl+Shift+C copy |
+| Requirements | FR-063, FR-064, FR-096; UI-010; D-015; AC-022, AC-023, AC-045 (UI parts) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 5 progress | TASK-080 Done; eligible: TASK-081, 082, 083, 084 |
 | Recommended next action | `/assembly-implement TASK-084` (console: hello.asm's output appears; input for programs that read the keyboard) |

@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-01 12:48 +0500 by Claude Code (Opus 5.5) (TASK-080 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 069, 070 left); M5 started (TASK-080 done; next TASK-084); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-11-01 16:01 +0500 by Claude Code (Opus 5.5) (TASK-084 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 069, 070 left); M5 in progress (TASK-080, 084 done; next TASK-081); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next (user-approved path): `TASK-084` console panel, then TASK-081..083 |
+| Active task | None in progress. Next (user-approved path): `TASK-081` registers and flags panels |
 
-| Next recommended action | `/assembly-implement TASK-084`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Next recommended action | `/assembly-implement TASK-081`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-084 Console panel | 2026-11-01 16:01 +0500 | Program output with DOS CR/LF/BS/TAB, visual BEL, 1 MB cap with notice; keyboard input to the program while it runs or waits (waiting indicator, console focused); Ctrl+C per D-015, Ctrl+Shift+C copy. 24 new tests (AC-022, AC-023, AC-045 UI parts); full solution 1446/1446 (twice, on the final code) |
 | TASK-080 Build/run commands, command bar and status | 2026-11-01 12:48 +0500 | Build, Cancel, Run, Pause, Stop, Reset, Step Into/Over, Ctrl-C wired to the real NASM and 8086 session; Problems panel; state badge (live region); status bar; command table (ui-spec §6) with keyboard tests. 16 new tests; DEF-013 fixed, DEF-014 opened, OQ-026 opened; full solution 1421/1421 (twice) |
 | TASK-066 Editor diagnostics and gutter | 2026-11-01 11:49 +0500 | Squiggles per severity with hover and Ctrl+K, Ctrl+I text; gutter glyphs (⨯ ▲ ⓘ, ● ○, ➜ ■); F9 and click breakpoints; execution line; stale-session banner. 8 new tests; DEF-010/011 test fixes, DEF-012 opened; full solution 1404/1404 (twice) |
 | TASK-064 Editor integration (AvalonEdit) | 2026-10-31 19:21 +0500 | AvalonEdit 6.3.1.120 verified on .NET 10; NASM highlighting with theme tokens, line numbers, current line, editing commands, block indent and auto-indent, Settings tab width/spaces, Ctrl+M, zoom 50–300 % (saved). NFR-001 p95 22.2 ms. 14 new tests; full solution 1396/1396 (twice) |
@@ -116,8 +117,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-11-01 12:30 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-11-01 12:46 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1421/1421 passed** in two consecutive runs (12:39–12:42, 12:42–12:46); the run before failed DEF-014 once. Last test-phase report 2026-10-30-1 |
+| Product build (2026-11-01 15:52 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-11-01 16:00 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1446/1446 passed** in two consecutive runs (15:52–15:56, 15:56–16:00). Last test-phase report 2026-10-30-1 |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

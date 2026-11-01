@@ -155,7 +155,7 @@ public sealed class BuildRunTests
             run.RunCommand.Execute(null);
             WaitUntil(() => run.State == RunState.Terminated, "the program to end");
 
-            Assert.Equal("Hello, World!\r\n", run.ConsoleText);
+            Assert.Equal("Hello, World!\n", run.ConsoleText); // as the console shows it: CR LF ends the line
             Assert.Equal(0, run.ExitCode);
             Assert.Equal("■ Ended · exit 0", run.BadgeText);
             Assert.StartsWith("Ended · exit 0 · ", run.StatusText, StringComparison.Ordinal);
@@ -165,7 +165,7 @@ public sealed class BuildRunTests
 
             run.RunCommand.Execute(null);
             WaitUntil(() => run.State == RunState.Terminated && run.ConsoleText.Length > 0, "the second run to end");
-            Assert.Equal("Hello, World!\r\n", run.ConsoleText); // the console was cleared for the new run
+            Assert.Equal("Hello, World!\n", run.ConsoleText); // the console was cleared for the new run
         });
     }
 

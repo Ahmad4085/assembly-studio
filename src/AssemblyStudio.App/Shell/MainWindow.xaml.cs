@@ -296,6 +296,7 @@ public partial class MainWindow : Window
             ShellPanel.Learn => LearnTree,
             ShellPanel.Memory when _viewModel.IsMemoryStackDocked => MemoryPanel,
             ShellPanel.Stack when _viewModel.IsMemoryStackDocked => StackView,
+            ShellPanel.Console => ConsoleOutput,
             _ => SelectedBottomTab(),
         };
         MoveFocus(target);

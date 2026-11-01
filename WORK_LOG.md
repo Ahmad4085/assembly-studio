@@ -1753,3 +1753,27 @@
 - **Git state after:** uncommitted TASK-080 changes on top of `3475210`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** OQ-026, DEF-012 and DEF-014 Open. DEF-006, 009, 010, 011, 013 Fixed (unverified). No console panel yet (TASK-084): program output is collected but not shown; programs that read the keyboard can't get input from the UI until then. Not checked by hand: Narrator reading the badge (TASK-085), real Ctrl+Alt+Break and Ctrl+Break key presses (simulated through the key bindings).
 - **Next step:** `/assembly-implement TASK-084`.
+
+### 2026-11-01 12:53 – 16:01 +0500 · Claude Code (Opus 5.5) · TASK-084 Console panel
+- **Summary:** Ran `/assembly-implement TASK-084` (user request; dependencies TASK-053 and TASK-061 Done). Lock was free; I wrote it after the first new files (same session).
+  - **Implemented** in `Panels/Console/`:
+    - The DOS teletype screen model with the 1 MB cap.
+    - Key translation and a read-only AvalonEdit view that updates only the changed lines, with visual BEL.
+    - D-015 Ctrl+C routing and Ctrl+Shift+C copy.
+  - **Integration:**
+    - `BuildRunViewModel`'s unbounded TASK-080 output buffer was replaced by a bounded pending buffer feeding the console.
+    - The bottom tab follows the run state, and the console takes focus when the program waits.
+    - "Copy in the console" is now an available, checked command.
+- **Found on the way:** my own arithmetic in the cap test (fixed in the test). DOS 09h already expands TAB, so only the pure screen test sees a raw TAB.
+- **Interruption:** Claude Code stopped the first full run (started 13:34) because the computer was low on memory. I reported it and didn't restart. After the user said "continue": no test processes were left, 3.2 GB of 15.9 GB free.
+- **Files changed:** `src/AssemblyStudio.App/{Panels/Console/ConsoleScreen.cs (new), Panels/Console/ConsoleViewModel.cs (new), Panels/Console/ConsoleKeys.cs (new), Panels/Console/ConsoleView.cs (new), Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/{Panels/ConsoleTests.cs (new), Commands/BuildRunTests.cs, Commands/CommandTableTests.cs}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `ConsoleTests` 24/24 with the real NASM and session: AC-022; AC-023 with the keyboard-input sample; AC-045 flood with a 4,096-character cap, where the UI answered input-priority work in under 1 s and Stop worked; D-015.
+  - Mutations: TAB stop 4 → 1 failed; console ignoring Ctrl+C → 1 failed. Both restored.
+  - Render `console-input.png` reviewed.
+  - App tests alone 286/286 in 72 s.
+  - Full solution 1446/1446 at 15:43–15:47 and 15:47–15:50, then after the command-table change **1446/1446 at 15:52–15:56 and 15:56–16:00**.
+  - Release build 0 warnings.
+- **Git state after:** uncommitted TASK-084 changes on top of `b09199f`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** OQ-026, DEF-012 and DEF-014 Open; DEF-006, 009, 010, 011, 013 Fixed (unverified). Not checked by hand: real typing into the console with a physical keyboard (keys simulated through the view's handler), Narrator reading the console (TASK-085).
+- **Next step:** `/assembly-implement TASK-081`.

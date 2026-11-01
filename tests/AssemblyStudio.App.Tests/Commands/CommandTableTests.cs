@@ -105,6 +105,11 @@ public sealed class CommandTableTests
                     case ShortcutScope.Window:
                         problems.AddRange(entry.Keys.Where(k => window.ResolveShortcut(k.Key, k.Modifiers) is null).Select(k => $"{entry.Name}: no key binding for {k}"));
                         break;
+                    case ShortcutScope.Editor when entry.Name == "Copy in the console":
+                        var console = (AssemblyStudio.App.Panels.Console.ConsoleView)window.FindName("ConsoleOutput");
+                        problems.AddRange(entry.Keys.Where(k => !console.InputBindings.OfType<KeyBinding>().Any(b => b.Key == k.Key && b.Modifiers == k.Modifiers))
+                            .Select(k => $"{entry.Name}: the console has no binding for {k}"));
+                        break;
                     case ShortcutScope.Editor:
                         RoutedUICommand command = entry.Name switch
                         {

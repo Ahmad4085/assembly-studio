@@ -94,7 +94,7 @@ public static class CommandTable
         new("Toggle breakpoint", Strings.CmdToggleBreakpoint, Strings.KeyToggleBreakpoint, ShortcutScope.Window, [new(Key.F9)]),
         new("Run to Cursor", null, "Ctrl+F10", ShortcutScope.Window, [new(Key.F10, Ctrl)], "P2 (ui-spec §6), not planned for this release"),
         new("Send Ctrl-C to the program", Strings.CmdSendCtrlC, Strings.KeySendCtrlC, ShortcutScope.Window, [new(Key.Cancel, Ctrl)]),
-        new("Copy in the console", null, "Ctrl+Shift+C", ShortcutScope.Editor, [new(Key.C, Ctrl | Shift)], "TASK-084"),
+        new("Copy in the console", null, Strings.KeyConsoleCopy, ShortcutScope.Editor, [new(Key.C, Ctrl | Shift)]), // the console's binding and context menu
         new("Samples", Strings.CmdSamples, null, ShortcutScope.MenuAccess, []),
         new("Tutorials", Strings.CmdTutorials, null, ShortcutScope.MenuAccess, []),
         new("Reference", Strings.CmdReference, null, ShortcutScope.MenuAccess, []),

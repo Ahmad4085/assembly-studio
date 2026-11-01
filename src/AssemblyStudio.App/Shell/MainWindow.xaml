@@ -9,6 +9,7 @@
         xmlns:content="clr-namespace:AssemblyStudio.Content;assembly=AssemblyStudio.Content"
         xmlns:about="clr-namespace:AssemblyStudio.App.About"
         xmlns:docs="clr-namespace:AssemblyStudio.App.Documents"
+        xmlns:console="clr-namespace:AssemblyStudio.App.Panels.Console"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
         Title="{x:Static shell:Strings.AppTitle}"
@@ -496,7 +497,34 @@
         <TabControl x:Name="BottomTabs" SelectedIndex="{Binding BottomTab, Converter={x:Static shell:EnumIndexConverter.Instance}}"
                     AutomationProperties.Name="{x:Static shell:Strings.RegionBottomTabs}">
           <TabItem Header="{x:Static shell:Strings.TabConsole}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyConsole}" />
+            <!-- UI-010 program console (TASK-084) -->
+            <DockPanel x:Name="ConsolePanel" DataContext="{Binding BuildRun.Console}">
+              <Border DockPanel.Dock="Top" Padding="8,3" Background="{DynamicResource Surface.Raised}" BorderBrush="{DynamicResource Accent.Primary}"
+                      BorderThickness="0,0,0,1" Visibility="{Binding IsWaiting, Converter={StaticResource VisibleWhenTrue}}">
+                <TextBlock x:Name="ConsoleWaiting" Text="{x:Static shell:Strings.ConsoleWaiting}" FontWeight="SemiBold" AutomationProperties.LiveSetting="Assertive" />
+              </Border>
+              <Border DockPanel.Dock="Top" Padding="8,3" Background="{DynamicResource Surface.Raised}" BorderBrush="{DynamicResource Status.Warning}"
+                      BorderThickness="0,0,0,1" Visibility="{Binding TrimmedNotice, Converter={x:Static shell:NullToCollapsedConverter.Instance}}">
+                <TextBlock x:Name="ConsoleTrimmed" Text="{Binding TrimmedNotice}" TextWrapping="Wrap" />
+              </Border>
+              <TextBlock x:Name="ConsoleEnded" DockPanel.Dock="Bottom" Margin="8,2" Text="{Binding EndedText}" Foreground="{DynamicResource Text.Secondary}"
+                         FontFamily="{DynamicResource Font.Code}" AutomationProperties.LiveSetting="Polite"
+                         Visibility="{Binding EndedText, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+              <Grid>
+                <console:ConsoleView x:Name="ConsoleOutput" Console="{Binding}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}"
+                                     AutomationProperties.Name="{x:Static shell:Strings.RegionConsole}">
+                  <console:ConsoleView.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem Header="{x:Static shell:Strings.ConsoleCopy}" InputGestureText="{x:Static shell:Strings.KeyConsoleCopy}"
+                                Command="{x:Static console:ConsoleView.CopyAll}" />
+                      <MenuItem Header="{x:Static shell:Strings.CmdSelectAll}" InputGestureText="{x:Static shell:Strings.KeySelectAll}" Command="ApplicationCommands.SelectAll" />
+                    </ContextMenu>
+                  </console:ConsoleView.ContextMenu>
+                </console:ConsoleView>
+                <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyConsole}" IsHitTestVisible="False"
+                           Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+              </Grid>
+            </DockPanel>
           </TabItem>
           <TabItem Header="{x:Static shell:Strings.TabProblems}">
             <DockPanel x:Name="ProblemsPanel" DataContext="{Binding BuildRun.Problems}">

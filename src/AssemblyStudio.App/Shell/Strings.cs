@@ -1053,4 +1053,25 @@ public static class Strings
 
     /// <summary>{0:N0} instructions</summary>
     public static string CountInstructions => Get(nameof(CountInstructions));
+
+    /// <summary>⌨ Waiting for input: type in the console</summary>
+    public static string ConsoleWaiting => Get(nameof(ConsoleWaiting));
+
+    /// <summary>— program ended (exit code {0}) —</summary>
+    public static string ConsoleEnded => Get(nameof(ConsoleEnded));
+
+    /// <summary>— program ended —</summary>
+    public static string ConsoleEndedNoCode => Get(nameof(ConsoleEndedNoCode));
+
+    /// <summary>Earlier output was removed: the console keeps the last {0:N0} characters.</summary>
+    public static string ConsoleTrimmed => Get(nameof(ConsoleTrimmed));
+
+    /// <summary>_Copy</summary>
+    public static string ConsoleCopy => Get(nameof(ConsoleCopy));
+
+    /// <summary>Ctrl+Shift+C</summary>
+    public static string KeyConsoleCopy => Get(nameof(KeyConsoleCopy));
+
+    /// <summary>Program console</summary>
+    public static string RegionConsole => Get(nameof(RegionConsole));
 }

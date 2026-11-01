@@ -66,7 +66,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     private readonly Func<IAssembler> _assembler;
     private readonly Func<BuildResult, IDebugSession> _createSession;
     private readonly Dispatcher _dispatcher;
-    private readonly StringBuilder _console = new();
+    private readonly object _gate = new();
+    private readonly StringBuilder _pendingOutput = new();
+    private long _droppedOutput;
     private CancellationTokenSource? _buildCancel;
     private IDebugSession? _session;
     private MachineSnapshot? _pendingSnapshot;
@@ -79,7 +81,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     /// <param name="assembler">The assembler for the next build (Settings may change it between builds).</param>
     /// <param name="createSession">Creates the debug session for a successful build.</param>
     /// <param name="dispatcher">The UI thread's dispatcher; by default the current thread's.</param>
-    public BuildRunViewModel(WorkspaceViewModel workspace, Func<IAssembler> assembler, Func<BuildResult, IDebugSession> createSession, Dispatcher? dispatcher = null)
+    /// <param name="consoleCapacity">The most console characters kept (NFR-015).</param>
+    public BuildRunViewModel(WorkspaceViewModel workspace, Func<IAssembler> assembler, Func<BuildResult, IDebugSession> createSession, Dispatcher? dispatcher = null,
+        int consoleCapacity = Panels.Console.ConsoleScreen.DefaultCapacity)
     {
         ArgumentNullException.ThrowIfNull(workspace);
         ArgumentNullException.ThrowIfNull(assembler);
@@ -88,6 +92,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         _assembler = assembler;
         _createSession = createSession;
         _dispatcher = dispatcher ?? Dispatcher.CurrentDispatcher;
+        Console = new Panels.Console.ConsoleViewModel(consoleCapacity)
+        {
+            InputSink = bytes => _session?.SendInput(bytes),
+            CtrlCSink = () => _session?.SendCtrlC(),
+        };
         _workspace.PropertyChanged += OnWorkspaceChanged;
         Watch(_workspace.ActiveDocument);
         State = _workspace.ActiveDocument is null ? RunState.Empty : RunState.Editing;
@@ -95,6 +104,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     /// <summary>The Problems panel.</summary>
     public ProblemsViewModel Problems { get; } = new();
+
+    /// <summary>The program console (TASK-084).</summary>
+    public Panels.Console.ConsoleViewModel Console { get; }
 
     /// <summary>The current state.</summary>
     [ObservableProperty]
@@ -129,8 +141,8 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(BadgeText), nameof(StatusText))]
     public partial int? ExitCode { get; private set; }
 
-    /// <summary>The console output since load or reset (shown by the console panel, TASK-084).</summary>
-    public string ConsoleText => _console.ToString();
+    /// <summary>The console text since load or reset, as the console panel shows it.</summary>
+    public string ConsoleText => Console.Text;
 
     /// <summary>Whether a session exists (Stop and Reset are available).</summary>
     public bool HasSession => _session is not null;
@@ -356,12 +368,19 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     // Worker thread: keep only the latest snapshot and apply it on the UI thread (at most one queued at a time).
     private void OnSnapshotPublished(object? sender, MachineSnapshot snapshot)
     {
-        lock (_console)
+        lock (_gate)
         {
             _pendingSnapshot = snapshot;
             if (!string.IsNullOrEmpty(snapshot.ConsoleDelta))
             {
-                _console.Append(snapshot.ConsoleDelta);
+                // Bounded between two UI updates too (an output flood, AC-045): keep the newest output.
+                _pendingOutput.Append(snapshot.ConsoleDelta);
+                int excess = _pendingOutput.Length - Console.Screen.Capacity;
+                if (excess > 0)
+                {
+                    _pendingOutput.Remove(0, excess);
+                    _droppedOutput += excess;
+                }
             }
 
             if (_snapshotQueued)
@@ -378,14 +397,20 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     private void ApplyPendingSnapshot()
     {
         MachineSnapshot? snapshot;
-        lock (_console)
+        string output;
+        long dropped;
+        lock (_gate)
         {
             snapshot = _pendingSnapshot;
             _pendingSnapshot = null;
             _snapshotQueued = false;
+            output = _pendingOutput.ToString();
+            _pendingOutput.Clear();
+            dropped = _droppedOutput;
+            _droppedOutput = 0;
         }
 
-        OnPropertyChanged(nameof(ConsoleText));
+        Console.Write(output, dropped);
         if (snapshot is not { } s || _session is not { } session)
         {
             return;
@@ -532,15 +557,23 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     private void ResetConsole()
     {
-        lock (_console)
+        lock (_gate)
         {
-            _console.Clear();
+            _pendingOutput.Clear();
+            _droppedOutput = 0;
         }
 
-        OnPropertyChanged(nameof(ConsoleText));
+        Console.Clear();
     }
 
-    partial void OnStateChanged(RunState value) => NotifyCommands();
+    partial void OnStateChanged(RunState value)
+    {
+        Console.IsWaiting = value == RunState.WaitingForInput;
+        Console.IsInputActive = value is RunState.Running or RunState.WaitingForInput;
+        Console.EndedText = value != RunState.Terminated ? null
+            : ExitCode is int code ? Format(Strings.ConsoleEnded, code) : Strings.ConsoleEndedNoCode;
+        NotifyCommands();
+    }
 
     private void NotifyCommands()
     {

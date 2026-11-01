@@ -8,7 +8,7 @@
 | Written | 2026-11-01 16:01 +0500 by Claude Code (Opus 5.5), after completing TASK-084 |
 | Current task | **None in progress. Next (user-approved): `TASK-081` registers and flags, then TASK-082, TASK-083** |
 | Last completed | TASK-084 Console panel (Done 2026-11-01 16:01 +0500) |
-| Git state | HEAD `b09199f` + uncommitted TASK-084 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `cf941bb` (TASK-084 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 15:52 +0500).
@@ -71,7 +71,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-084. Files:
+1. Done: TASK-084 committed. Files were:
    - `src/AssemblyStudio.App/{Panels/Console/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/{Panels/ConsoleTests.cs, Commands/BuildRunTests.cs, Commands/CommandTableTests.cs}`
    - `docs/05-planning/backlog.md`, shared memory files

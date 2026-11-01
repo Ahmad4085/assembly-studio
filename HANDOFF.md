@@ -8,7 +8,7 @@
 | Written | 2026-11-01 12:48 +0500 by Claude Code (Opus 5.5), after completing TASK-080 |
 | Current task | **None in progress. Next (user-approved): `TASK-084` console panel, then TASK-081..083** |
 | Last completed | TASK-080 Build/run commands, command bar and status (Done 2026-11-01 12:48 +0500) |
-| Git state | HEAD `3475210` + uncommitted TASK-080 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `8aae8b7` (TASK-080 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 12:30 +0500).
@@ -66,7 +66,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-080. Files:
+1. Done: TASK-080 committed. Files were:
    - `src/AssemblyStudio.App/{App.xaml.cs, Commands/*, Panels/Problems/*, Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/Renderers.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/{Commands/*, Editor/AdornmentTests.cs}`
    - `docs/07-testing/defects.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `docs/05-planning/backlog.md`, shared memory files

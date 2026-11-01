@@ -8,7 +8,7 @@
 | Written | 2026-11-01 11:49 +0500 by Claude Code (Opus 5.5), after completing TASK-066 |
 | Current task | **None in progress. Next (user-approved): `TASK-080` Build/Run/Step** |
 | Last completed | TASK-066 Editor diagnostics and gutter (Done 2026-11-01 11:49 +0500) |
-| Git state | HEAD `a98efa1` + uncommitted TASK-066 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `53ac5cc` (TASK-066 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 11:35 +0500).
@@ -58,7 +58,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-066. Files:
+1. Done: TASK-066 committed. Files were:
    - `src/AssemblyStudio.App/{Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/*, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/Editor/{AdornmentTests.cs, EditorLatencyTests.cs, EditorTests.cs}`
    - `docs/07-testing/defects.md`, `docs/05-planning/backlog.md`, shared memory files

@@ -5,16 +5,21 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-10-31 19:21 +0500 by Claude Code (Opus 5.5), after completing TASK-064 |
-| Current task | **None in progress. Next (user-approved): `TASK-066` diagnostics and gutter, then `TASK-080` Build/Run/Step** |
-| Last completed | TASK-064 Editor integration (AvalonEdit) (Done 2026-10-31 19:21 +0500) |
-| Git state | HEAD `ce9d42d` (TASK-064 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-01 11:49 +0500 by Claude Code (Opus 5.5), after completing TASK-066 |
+| Current task | **None in progress. Next (user-approved): `TASK-080` Build/Run/Step** |
+| Last completed | TASK-066 Editor diagnostics and gutter (Done 2026-11-01 11:49 +0500) |
+| Git state | HEAD `a98efa1` + uncommitted TASK-066 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-10-31 19:11 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1396/1396 passed**, two consecutive runs (2026-10-31 19:17 and 19:20 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 11:35 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1404/1404 passed**, two consecutive runs (2026-11-01 11:46 and 11:48 +0500). The run before (11:35) failed DEF-012 once.
 
 ## Changes since the previous handoff
+- **TASK-066 Gutter and diagnostics** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Editor/Adornments/`; `CodeEditor`, `DocumentViewModel`, `MainWindow.xaml`, strings.
+  - **For TASK-080:** set `DocumentViewModel.Diagnostics` from `BuildResult.Diagnostics` (lines in the built file); bind `Breakpoints` and replace each with `Bound` + address or `Unbound` after a build; set `ExecutionLine`/`ExecutionMarker` from the paused snapshot through the source map; set `HasSession` while a session runs (editing then sets `IsSessionStale`).
+- Test fixes: DEF-010 (latency test serial, best of 3), DEF-011 (clipboard retry). DEF-012 Open.
+
 - **TASK-064 Editor** (Claude Code, uncommitted):
   - AvalonEdit package; `src/AssemblyStudio.App/Editor/{CodeEditor.cs, NasmHighlighting.cs, NasmSyntax.xshd}`; zoom in `ShellViewModel`/`LayoutState`/`EditorAppearance`/App; MainWindow editor template and Edit/View menu wiring.
   - **For TASK-066:** add the diagnostics squiggles (a background renderer) and the breakpoint/current-line margin to `CodeEditor`.
@@ -53,12 +58,12 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-064 committed. Files were:
-   - `Directory.Packages.props`, `src/AssemblyStudio.App/{AssemblyStudio.App.csproj, App.xaml.cs, Editor/*, Settings/EditorAppearance.cs, Shell/LayoutState.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Themes/Shared.xaml}`
-   - `tests/AssemblyStudio.App.Tests/{Editor/*, Documents/CrashRecoveryProcessTests.cs, Documents/DocumentUiTests.cs, Documents/OpenFromCommandLineProcessTests.cs, Settings/SettingsUiTests.cs}`
-   - `docs/decisions/ADR-0006-editor-avalonedit.md` (validation), `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-066`, then `TASK-080`.
-3. User: TASK-006, TASK-100, DEF-003 decision; AC-059 in QA (WVR-001).
+1. When the user asks: commit TASK-066. Files:
+   - `src/AssemblyStudio.App/{Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/*, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/Editor/{AdornmentTests.cs, EditorLatencyTests.cs, EditorTests.cs}`
+   - `docs/07-testing/defects.md`, `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-080`.
+3. User: TASK-006, TASK-100, DEF-003 decision; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011; DEF-012 to investigate.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

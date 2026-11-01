@@ -309,4 +309,12 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="DocSampleCopy" xml:space="preserve"><value>{0} (copy)</value><comment>Tab title of an untitled sample copy. {0} = sample file name</comment></data>
   <data name="WelcomeSample" xml:space="preserve"><value>Open a _sample</value><comment>Welcome page button (UI-020)</comment></data>
   <data name="LearnOpenTutorialSample" xml:space="preserve"><value>Open the sample: {0}</value><comment>Tutorial link button (FR-070). {0} = sample title</comment></data>
+  <data name="SeverityError" xml:space="preserve"><value>Error</value><comment>Diagnostic severity (editor tooltip)</comment></data>
+  <data name="SeverityWarning" xml:space="preserve"><value>Warning</value><comment>Diagnostic severity</comment></data>
+  <data name="SeverityInfo" xml:space="preserve"><value>Information</value><comment>Diagnostic severity</comment></data>
+  <data name="BreakpointBound" xml:space="preserve"><value>Breakpoint at {0}</value><comment>Gutter tooltip. {0} = address</comment></data>
+  <data name="BreakpointUnbound" xml:space="preserve"><value>Breakpoint: no code on this line, it won't stop here</value><comment>Gutter tooltip (ui-spec §5)</comment></data>
+  <data name="BreakpointNotBuilt" xml:space="preserve"><value>Breakpoint (checked at the next build)</value><comment>Gutter tooltip before a build</comment></data>
+  <data name="BannerSessionStale" xml:space="preserve"><value>Changed since build — positions may not match. Reset (Ctrl+Shift+F5) rebuilds.</value><comment>Editor banner (ui-spec §5)</comment></data>
+  <data name="EditorGutterName" xml:space="preserve"><value>Breakpoints and messages</value><comment>UIA name of the editor gutter</comment></data>
 </root>

@@ -891,4 +891,28 @@ public static class Strings
 
     /// <summary>Open the sample: {0}</summary>
     public static string LearnOpenTutorialSample => Get(nameof(LearnOpenTutorialSample));
+
+    /// <summary>Error</summary>
+    public static string SeverityError => Get(nameof(SeverityError));
+
+    /// <summary>Warning</summary>
+    public static string SeverityWarning => Get(nameof(SeverityWarning));
+
+    /// <summary>Information</summary>
+    public static string SeverityInfo => Get(nameof(SeverityInfo));
+
+    /// <summary>Breakpoint at {0}</summary>
+    public static string BreakpointBound => Get(nameof(BreakpointBound));
+
+    /// <summary>Breakpoint: no code on this line, it won&apos;t stop here</summary>
+    public static string BreakpointUnbound => Get(nameof(BreakpointUnbound));
+
+    /// <summary>Breakpoint (checked at the next build)</summary>
+    public static string BreakpointNotBuilt => Get(nameof(BreakpointNotBuilt));
+
+    /// <summary>Changed since build — positions may not match. Reset (Ctrl+Shift+F5) rebuilds.</summary>
+    public static string BannerSessionStale => Get(nameof(BannerSessionStale));
+
+    /// <summary>Breakpoints and messages</summary>
+    public static string EditorGutterName => Get(nameof(EditorGutterName));
 }

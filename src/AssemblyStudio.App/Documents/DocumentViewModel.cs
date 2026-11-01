@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using AssemblyStudio.App.Shell;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AssemblyStudio.App.Documents;
 
@@ -47,6 +48,10 @@ public sealed partial class DocumentViewModel : ObservableObject
             if (SetProperty(ref _text, value))
             {
                 IsDirty = true;
+                if (HasSession)
+                {
+                    IsSessionStale = true;
+                }
             }
         }
     }
@@ -77,6 +82,52 @@ public sealed partial class DocumentViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(HasMixedLineEndings))]
     [NotifyPropertyChangedFor(nameof(StatusLineEnding))]
     public partial LineEnding LineEnding { get; private set; }
+
+    /// <summary>The latest build's diagnostics for this document (FR-018; set by the build, TASK-080).</summary>
+    [ObservableProperty]
+    public partial IReadOnlyList<Core.Diagnostic> Diagnostics { get; set; } = [];
+
+    /// <summary>The document's breakpoints (FR-052), kept by line; the debug session binds them (TASK-080).</summary>
+    [ObservableProperty]
+    public partial IReadOnlyList<Editor.Adornments.EditorBreakpoint> Breakpoints { get; set; } = [];
+
+    /// <summary>The 1-based line about to execute while a session is paused (FR-053), or <see langword="null"/>.</summary>
+    [ObservableProperty]
+    public partial int? ExecutionLine { get; set; }
+
+    /// <summary>What the execution marker shows.</summary>
+    [ObservableProperty]
+    public partial Editor.Adornments.ExecutionMarkerKind ExecutionMarker { get; set; }
+
+    /// <summary>Whether a debug session runs this document's build (TASK-080 sets it); editing then marks it stale.</summary>
+    [ObservableProperty]
+    public partial bool HasSession { get; set; }
+
+    /// <summary>The text changed since the session's build: positions may not match (ui-spec §5 banner).</summary>
+    [ObservableProperty]
+    public partial bool IsSessionStale { get; set; }
+
+    /// <summary>Toggles a breakpoint on a 1-based line (gutter click, F9). A new one is unchecked until the next build.</summary>
+    [RelayCommand]
+    private void ToggleBreakpoint(int line)
+    {
+        if (line < 1)
+        {
+            return;
+        }
+
+        Breakpoints = Breakpoints.Any(b => b.Line == line)
+            ? [.. Breakpoints.Where(b => b.Line != line)]
+            : [.. Breakpoints, new Editor.Adornments.EditorBreakpoint(line)];
+    }
+
+    partial void OnHasSessionChanged(bool value)
+    {
+        if (!value)
+        {
+            IsSessionStale = false;
+        }
+    }
 
     /// <summary>Whether this is the document shown in the editor.</summary>
     [ObservableProperty]

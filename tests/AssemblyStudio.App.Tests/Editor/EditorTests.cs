@@ -18,7 +18,8 @@ namespace AssemblyStudio.App.Tests.Editor;
 
 /// <summary>
 /// TASK-064: the AvalonEdit code editor: NASM highlighting and line numbers (AC-009, FR-011, FR-012), editing commands,
-/// block indent and auto-indent (AC-010, FR-013, FR-014), the Ctrl+M Tab mode, and zoom (AC-046, FR-022).
+/// block indent and auto-indent (AC-010, FR-013, FR-014), the Ctrl+M Tab mode, and zoom (AC-046, FR-022). The NFR-001
+/// latency measurement is in <see cref="EditorLatencyTests"/>.
 /// </summary>
 public sealed class EditorTests
 {
@@ -139,16 +140,39 @@ public sealed class EditorTests
 
             ApplicationCommands.SelectAll.Execute(null, area);
             Assert.Equal(editor.Text.Length, editor.SelectionLength);
-            editor.Select(0, 3);
-            ApplicationCommands.Cut.Execute(null, area);
-            Assert.Equal(" ax, 1\nint 21h", editor.Text);
-            editor.CaretOffset = editor.Text.Length;
-            ApplicationCommands.Paste.Execute(null, area);
-            Assert.Equal(" ax, 1\nint 21hmov", editor.Text);
-            editor.Select(0, 3);
-            ApplicationCommands.Copy.Execute(null, area);
-            Assert.Equal(" ax", Clipboard.GetText());
+
+            // The Windows clipboard is shared with every other program on the machine; when one holds it, AvalonEdit's cut and
+            // copy do nothing and Clipboard.GetText throws. Retry the clipboard part a few times before failing (2026-10-31).
+            WithClipboardRetry(() =>
+            {
+                editor.Text = "mov ax, 1\nint 21h";
+                editor.Select(0, 3);
+                ApplicationCommands.Cut.Execute(null, area);
+                Assert.Equal(" ax, 1\nint 21h", editor.Text);
+                editor.CaretOffset = editor.Text.Length;
+                ApplicationCommands.Paste.Execute(null, area);
+                Assert.Equal(" ax, 1\nint 21hmov", editor.Text);
+                editor.Select(0, 3);
+                ApplicationCommands.Copy.Execute(null, area);
+                Assert.Equal(" ax", Clipboard.GetText());
+            });
         });
+    }
+
+    private static void WithClipboardRetry(Action body)
+    {
+        for (int attempt = 1; ; attempt++)
+        {
+            try
+            {
+                body();
+                return;
+            }
+            catch (Exception e) when (attempt < 5 && e is System.Runtime.InteropServices.COMException or Xunit.Sdk.EqualException)
+            {
+                Thread.Sleep(200);
+            }
+        }
     }
 
     [Fact]
@@ -326,44 +350,6 @@ public sealed class EditorTests
                 d.MarkSaved(d.FilePath ?? "x.asm");
             }
         }
-    }
-
-    [Fact]
-    [Trait("Category", "Performance")]
-    public void NFR_001_keystroke_to_render_is_within_50_ms_at_the_95th_percentile_in_a_5000_line_file()
-    {
-        StaTestThread.Run(() =>
-        {
-            string line = "    mov ax, [bx + si + 4]   ; load the next value\n";
-            var editor = new CodeEditor { BoundText = string.Concat(Enumerable.Repeat(line, 5000)) };
-            var window = new Window { Content = editor, Width = 1000, Height = 800 };
-            try
-            {
-                window.Show();
-                window.UpdateLayout();
-                editor.ScrollToLine(2500);
-                editor.CaretOffset = editor.Document.GetLineByNumber(2500).EndOffset;
-                var times = new List<double>();
-                for (int i = 0; i < 200; i++)
-                {
-                    var stopwatch = Stopwatch.StartNew();
-                    editor.TextArea.PerformTextInput(i % 10 == 9 ? "\n" : "a");
-                    window.UpdateLayout();
-                    editor.TextArea.TextView.EnsureVisualLines(); // the text is laid out for drawing
-                    stopwatch.Stop();
-                    times.Add(stopwatch.Elapsed.TotalMilliseconds);
-                }
-
-                times.Sort();
-                double p95 = times[(int)(times.Count * 0.95)];
-                TestContext.Current.TestOutputHelper?.WriteLine($"Keystroke to layout in a 5,000-line file: median {times[times.Count / 2]:F2} ms, p95 {p95:F2} ms, max {times[^1]:F2} ms");
-                Assert.True(p95 <= 50, $"p95 {p95:F2} ms");
-            }
-            finally
-            {
-                window.Close();
-            }
-        });
     }
 
     private static void WithEditor(string text, Action<CodeEditor> body)

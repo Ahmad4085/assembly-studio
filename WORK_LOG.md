@@ -1694,3 +1694,35 @@
 - **Git state after:** uncommitted TASK-064 changes on top of `2c19f92` (commit only on user request). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** Still open: AC-059 (WVR-001), DEF-006/009 Fixed (unverified), DEF-001, DEF-002, DEF-003 (decision). Narrator check (TASK-069).
 - **Next step:** `/assembly-implement TASK-066`, then TASK-080.
+
+### 2026-10-31 19:24 – 2026-11-01 11:49 +0500 · Claude Code (Opus 5.5) · TASK-066 Editor diagnostics and gutter
+- **Summary:** Ran `/assembly-implement TASK-066` (user request; dependencies TASK-064 and TASK-041 Done). Lock was free.
+  - **Implemented** in `Editor/Adornments/`:
+    - Severity underlines (short wave, long wave, dotted) in `Status.*` colors.
+    - A gutter with diagnostics glyphs (⨯ ▲ ⓘ), breakpoints (● bound or not built, ○ unbound) and the execution marker (➜, ⨯ fault, ■ ended); click to toggle a breakpoint; hover text.
+    - The execution-line background.
+  - **CodeEditor:** bindable diagnostics, breakpoints, execution line and marker; F9; Ctrl+K, Ctrl+I.
+  - **DocumentViewModel:** diagnostics, breakpoints with a toggle command, execution state, session/stale flags.
+  - **MainWindow:** bindings and the stale-session banner.
+  - Nothing produces build or session data for the editor yet (TASK-080). The editor draws only what it is given.
+- **Test reliability found on the way:**
+  - DEF-010: the NFR-001 latency test failed once at p95 57.7 ms under full-suite load. Moved to the serial collection; best of 3 rounds.
+  - DEF-011: the clipboard test failed. The machine's clipboard was locked by another program from at least 20:04 to 20:11: a plain PowerShell read failed too, and no window owned it. Added a retry; I didn't touch any process. By 11:34 the next day the clipboard was free.
+  - DEF-012: the AC-050 process test timed out once at 11:35; 3/3 alone. Logged Open.
+  - The session ended overnight during a full run (no result recorded). On resume the file times matched my own edits, so there were no foreign changes.
+- **Files changed:** `src/AssemblyStudio.App/{Documents/DocumentViewModel.cs, Editor/CodeEditor.cs, Editor/Adornments/EditorMarkers.cs (new), Editor/Adornments/Renderers.cs (new), Editor/Adornments/GlyphMargin.cs (new), Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/Editor/{AdornmentTests.cs (new), EditorLatencyTests.cs (new), EditorTests.cs}`, `docs/07-testing/defects.md` (DEF-010..012), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `AdornmentTests` 8/8. Render `editor-adornments.png` reviewed: glyphs, underlines and execution line are visible and distinct.
+  - Mutation: making the warning color the error color failed AC-013's test. Restored.
+  - Latency alone: p95 per round 44.3, 29.5, 24.5 ms.
+  - Full runs:
+    - 19:32: 1404/1404.
+    - 19:37: 1 failed (DEF-010).
+    - 19:59 and 20:04: 1 failed each (DEF-011, clipboard locked).
+    - 20:08: 1403/1403 without the clipboard test.
+    - 2026-11-01 11:35: 1 failed (DEF-012).
+    - **11:42–11:46 and 11:46–11:48: 1404/1404 twice.**
+  - Release build 0 warnings.
+- **Git state after:** uncommitted TASK-066 changes on top of `a98efa1`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-012 Open. DEF-006, 009, 010 and 011 Fixed (unverified). Ctrl+K, Ctrl+I chord and mouse hover not automated. Narrator check (TASK-069).
+- **Next step:** `/assembly-implement TASK-080`.

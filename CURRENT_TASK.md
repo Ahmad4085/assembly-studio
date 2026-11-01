@@ -6,10 +6,47 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-066` (editor diagnostics and gutter), then `TASK-080` (Build/Run/Step).
+None in progress. Next on the user-approved path: `TASK-080` (Build/Run/Step).
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 4 progress | TASK-060, 061 (WVR-001), 062, 063, 064, 066, 067, 068 Done; eligible: TASK-065 (find/replace), TASK-069 (accessibility); TASK-070 needs TASK-006 |
+| Recommended next action | `/assembly-implement TASK-080` (check its dependencies first) |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision |
+
+---
+
+## Completed: TASK-066 Editor diagnostics and gutter (Done 2026-11-01 11:49 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Editor/Adornments/`:
+  - `EditorMarkers.cs`: `EditorBreakpoint` (NotBuilt/Bound/Unbound + address), `ExecutionMarkerKind` (Current/Fault/Ended), `GlyphShapes` (● ○ ➜ ⨯ ▲ ⓘ ■, one shape per meaning).
+  - `Renderers.cs`: `DiagnosticRenderer` (underline per severity: short wave error, long wave warning, dotted info, theme `Status.*`), `ExecutionLineRenderer` (`Editor.ExecutionLine`).
+  - `GlyphMargin.cs`: diagnostics and breakpoint/execution columns, click toggles a breakpoint, hover text.
+- `CodeEditor`: `Diagnostics`, `Breakpoints`, `ExecutionLine` (scrolls into view), `ExecutionMarker`, `ToggleBreakpointCommand`; F9; hover and Ctrl+K, Ctrl+I show the line's messages.
+- `DocumentViewModel`: `Diagnostics`, `Breakpoints` + `ToggleBreakpointCommand`, `ExecutionLine`, `ExecutionMarker`, `HasSession`, `IsSessionStale` (editing during a session); MainWindow binds them and shows the stale-session banner. Encoding/line-ending banners already existed (TASK-061).
+- Nothing feeds these yet: the build (diagnostics) and the debug session (breakpoint binding, execution line) are TASK-080 and later. The editor shows only what it is given (no fabricated data).
+- Tests: `AdornmentTests` 8 (AC-013 UI part, FR-052, FR-053, banner, non-color cues, render `editor-adornments.png`). Mutation (warning color = error color) caught.
+- Test reliability found during the runs: DEF-010 (latency test under load: moved to the serial collection, best of 3 rounds), DEF-011 (clipboard busy: retry; the machine clipboard was locked by another program 20:04–20:11), DEF-012 (AC-050 process test timed out once; Open).
+- Not automated: the Ctrl+K, Ctrl+I key chord and mouse hover (both call tested methods); Narrator (TASK-069).
+- Release build 0 warnings; full solution 1404/1404 twice (2026-11-01 11:46, 11:48).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-10-31 19:24 / 2026-11-01 11:49 +0500 (session ended overnight during a test run) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-10-31 19:24 +0500 |
+| Milestone | M4 |
+| Goal | Diagnostics as squiggles and gutter glyphs, plus the breakpoint margin, execution arrow and banners |
+| Scope (in) | Squiggle renderer per severity with hover text; breakpoint margin (bound/unbound), execution arrow + line; stale-session and encoding banners |
+| Out of scope | Debugger panels |
+| Requirements | FR-018, FR-052, FR-053; ADR-0006; UI-003; AC-013 (UI part), glyph non-color cue |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 4 progress | TASK-060, 061 (WVR-001), 062, 063, 064, 067, 068 Done; eligible: TASK-065 (find/replace), TASK-066 (diagnostics, gutter), TASK-069 (accessibility); TASK-070 needs TASK-006 |
 | Recommended next action | `/assembly-implement TASK-066` (needed by TASK-080) |

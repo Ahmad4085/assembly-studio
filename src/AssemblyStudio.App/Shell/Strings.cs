@@ -1281,4 +1281,7 @@ public static class Strings
 
     /// <summary>Breakpoints</summary>
     public static string RegionBreakpoints => Get(nameof(RegionBreakpoints));
+
+    /// <summary>Assembly source. F9 toggles a breakpoint, Ctrl+K then Ctrl+I reads the line&apos;s messages, Ctrl+M makes Tab move focus.</summary>
+    public static string EditorHelpText => Get(nameof(EditorHelpText));
 }

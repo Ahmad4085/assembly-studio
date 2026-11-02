@@ -51,3 +51,5 @@ AvalonEditB stays a fallback if upstream proves inadequate. Switching is cheap b
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
 - 2026-10-31: Validation updated with the TASK-064 results (no decision changed).
+- 2026-11-02 (TASK-069, no decision changed): UIA structure verified by tests: the focused TextArea is a Document with the Text pattern (line/word/caret/selection) and raises selection events for caret moves and selections, received by an out-of-process client. Gap fixed: the TextArea had no UIA name (now the document title). What Narrator speaks is still unverified until the manual walkthrough in `docs/06-implementation/accessibility-findings.md` (Part B) is run.
+- 2026-11-02 (TASK-069): **Narrator support verified** by the user's manual check ("i check narrates its work and commit"; overall result, steps not itemized). The Unverified item "Narrator reads lines and caret position" is closed. No decision changed.

@@ -439,4 +439,5 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="RegionMessages" xml:space="preserve"><value>Runtime messages</value><comment>UIA name</comment></data>
   <data name="RegionHistory" xml:space="preserve"><value>Execution history</value><comment>UIA name</comment></data>
   <data name="RegionBreakpoints" xml:space="preserve"><value>Breakpoints</value><comment>UIA name</comment></data>
+  <data name="EditorHelpText" xml:space="preserve"><value>Assembly source. F9 toggles a breakpoint, Ctrl+K then Ctrl+I reads the line's messages, Ctrl+M makes Tab move focus.</value><comment>UIA help text of the code editor (TASK-069)</comment></data>
 </root>

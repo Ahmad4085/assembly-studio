@@ -114,6 +114,14 @@ public class CodeEditor : TextEditor
         TextArea.TextView.MouseHoverStopped += (_, _) => _textToolTip.IsOpen = false;
         TextArea.TextView.ToolTip = _textToolTip;
         ToolTipService.SetIsEnabled(TextArea.TextView, false); // opened by hand, only over lines with diagnostics
+        // TASK-069: keyboard focus is on the inner TextArea, the element with the Text pattern that Narrator reads; give it
+        // the document's name too, so Narrator announces "hello.asm, document" and not an unnamed document.
+        TextArea.SetBinding(System.Windows.Automation.AutomationProperties.NameProperty, new System.Windows.Data.Binding
+        {
+            Source = this,
+            Path = new PropertyPath(System.Windows.Automation.AutomationProperties.NameProperty),
+        });
+        TextArea.SetValue(System.Windows.Automation.AutomationProperties.HelpTextProperty, Strings.EditorHelpText);
         TextArea.Caret.PositionChanged += (_, _) =>
         {
             SetCurrentValue(CaretLineProperty, TextArea.Caret.Line); // keeps the binding to the document (status bar)

@@ -6,10 +6,50 @@
 
 ## Active Task
 
-None in progress. M5's panel tasks are done (TASK-080 to TASK-084). Remaining in M5: `TASK-085` (announcements, keyboard-only flow, UI smoke tests; needs TASK-069) and `TASK-086` (end-to-end performance; needs TASK-085).
+None in progress. Next: `TASK-085` (announcements, keyboard-only flow and UI smoke tests; its dependencies are now Done), then `TASK-086`.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone progress | M4: TASK-065, 070 left (070 needs TASK-006). M5: TASK-080..084 Done; TASK-085 eligible; TASK-086 after it |
+| Recommended next action | `/assembly-implement TASK-085` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-069 Editor accessibility verification (Done 2026-11-02 12:24 +0500, Claude Code (Opus 5.5) and the user)
+- Part A (automated): the focused TextArea is a Document with the Text pattern (line, word, caret, selection) and raises selection events, received out of process. Gap fixed: the TextArea had no UIA name; now the document title plus a help text. `EditorAccessibilityTests` 2; mutation caught.
+- Part B (manual Narrator walkthrough): run by the user, who reported "i check narrates its work and commit". Recorded as an overall pass; the steps weren't reported one by one.
+- ADR-0006's Unverified Narrator item is closed (changelog). Findings: `docs/06-implementation/accessibility-findings.md`.
+- Release build 0 warnings; full solution 1499/1499 twice (2026-11-02 12:07–12:11, 12:12–12:16). No code changed after those runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 11:58 / 12:24 +0500 |
+
+---|---|
+| Status | In progress: automated part done and verified; **waiting for the user** to run the Narrator walkthrough (Part B of `docs/06-implementation/accessibility-findings.md`) |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 11:58 +0500 |
+| Milestone | M4 |
+| Goal | Verify what Narrator reads in the editor and record the outcome; raise an issue if insufficient |
+| Requirements | FR-093, NFR-022; ADR-0006 (Unverified: Narrator support), UI-003; AC-044 (editor part) |
+| Done so far | Part A (what UIA exposes) measured: the focused TextArea is a Document with the Text pattern (line, word, caret, selection) and raises selection events, received out of process. Gap fixed: the TextArea had no UIA name (now the document title, plus a help text). Tests `EditorAccessibilityTests` 2 (mutation: name binding removed → both fail). Release build 0 warnings; full solution 1499/1499 twice (12:07–12:11, 12:12–12:16). ADR-0006 changelog updated |
+| Next | The user runs Part B (10 steps, about 5 minutes) and reports what Narrator said per step; Claude Code records it, raises an OQ if steps 1–6 fail, and closes the task |
+| Can commit now | Yes, the fix and the findings document (task stays In progress) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 11:58 +0500 |
+| Milestone | M4 |
+| Goal | Verify what Narrator reads in the editor and record the outcome; raise an issue if insufficient |
+| Scope (in) | Narrator walkthrough script (lines, caret, selection); UIA names on editor chrome; findings in `docs/06-implementation/accessibility-findings.md`; requirement/design issue if gaps |
+| Requirements | FR-093, NFR-022; ADR-0006 (Unverified: Narrator support), UI-003; AC-044 (editor part, manual Narrator check) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 5 progress | TASK-080, 081, 082, 083, 084 Done; TASK-085 waits on TASK-069 (M4 editor accessibility) |
 | Recommended next action | `/assembly-implement TASK-069`, then TASK-085; or TASK-065 (find/replace) |

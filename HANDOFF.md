@@ -5,17 +5,21 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 11:14 +0500 by Claude Code (Opus 5.5), after completing TASK-083 |
-| Current task | **None in progress. Next: `TASK-069` (editor accessibility; unblocks TASK-085) or `TASK-065` (find/replace)** |
-| Last completed | TASK-083 Instruction strip, runtime messages, history, breakpoints panels (Done 2026-11-02 11:14 +0500) |
-| Git state | HEAD `6ff9450` (TASK-083 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 12:24 +0500 by Claude Code (Opus 5.5), after completing TASK-069 |
+| Current task | **None in progress. Next: `TASK-085` announcements, keyboard-only flow, UI smoke tests** |
+| Last completed | TASK-069 Editor accessibility verification (Done 2026-11-02 12:24 +0500) |
+| Git state | HEAD `a7dc0b4` + uncommitted TASK-069 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 11:04 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1497/1497 passed**, two consecutive runs (2026-11-02 11:04–11:08 and 11:09–11:13 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 12:07 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1499/1499 passed**, two consecutive runs (2026-11-02 12:07–12:11 and 12:12–12:16 +0500).
 - Notes: Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app.
 
 ## Changes since the previous handoff
+- **TASK-069 Editor accessibility** (Claude Code, Done; Narrator walkthrough run by the user, overall pass):
+  - `CodeEditor`: TextArea UIA name bound to the editor's name + help text; `tests/AssemblyStudio.App.Tests/Accessibility/EditorAccessibilityTests.cs`; `docs/06-implementation/accessibility-findings.md` (Part A measured, Part B manual walkthrough NOT RUN); ADR-0006 changelog.
+  - **For TASK-085:** the step announcement ("Paused at line 7. Changed: AX, DX, ZF.") can use `CpuViewModel.ChangedNames`; the state badge already raises LiveRegionChanged.
+
 - **TASK-083 Session panels** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Panels/Session/SessionPanels.cs`; strip and tabs in `MainWindow.xaml`; `BuildRunViewModel.{Strip, Messages, History, Breakpoints}` and the event log (`LogEvent`).
   - **Additive contract change:** `StepResult.Message` (`RuntimeMessage` in Core) set by `InterruptRouter`; `RuntimeErrorPolicy` RTE010/011/090; `SnapshotContent` keeps 6 bytes for an undecodable instruction. ADR-0007 changelog updated.
@@ -85,12 +89,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-083 committed. Files were:
-   - `src/AssemblyStudio.Core/{StepResult.cs, MachineSnapshot.cs}`, `src/AssemblyStudio.Runtime/Interrupts/{InterruptRouter.cs, RuntimeErrorPolicy.cs, RuntimeHaltInfo.cs}`, `src/AssemblyStudio.Debugging/Snapshots/SnapshotContent.cs`
-   - `src/AssemblyStudio.App/{Panels/Session/*, Commands/BuildRunViewModel.cs, Editor/Adornments/EditorMarkers.cs, Editor/Adornments/GlyphMargin.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/Panels/SessionPanelsTests.cs`, `tests/AssemblyStudio.Runtime.Tests/RuntimeMessageTests.cs`, `tests/AssemblyStudio.Debugging.Tests/SnapshotTests.cs`
-   - `docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md`, `docs/05-planning/backlog.md`, shared memory files
-2. Next task (user's choice): `/assembly-implement TASK-069` (unblocks TASK-085) or `TASK-065`.
+1. Done: TASK-069 committed (see Git state).
+2. `/assembly-implement TASK-085` (its dependencies are Done), or `TASK-065`.
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate.
 
 ## Do not overwrite or revert

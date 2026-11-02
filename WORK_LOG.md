@@ -1865,3 +1865,28 @@
   - Step pauses aren't logged in the runtime messages (on purpose; the badge and strip show them). The spoken step announcement is TASK-085.
   - OQ-026 and the timing defects as before.
 - **Next step:** user's choice: `TASK-069` (unblocks TASK-085) or `TASK-065`.
+
+### 2026-11-02 11:58 – 12:17 +0500 · Claude Code (Opus 5.5) · TASK-069 Editor accessibility verification (automated part; waiting for the manual check)
+- **Summary:** Ran `/assembly-implement TASK-069` (user request; dependency TASK-064 Done). Lock was free.
+  - The task needs a manual Narrator check that I can't do (no audio), and I didn't inject real keystrokes (they would go to the user's focused window). So I measured what UI Automation exposes, which is what Narrator reads.
+  - **Measured:** the focused element is AvalonEdit's TextArea: a Document with Text and Value patterns; line, word, caret and selection ranges correct. Reflection over AvalonEdit 6.3.1.120's peer: it subscribes to `Caret.PositionChanged` and `SelectionChanged` and raises an automation event. A real out-of-process UIA client received `TextSelectionChanged`. No text-changed event is raised.
+  - **Gap found and fixed:** the TextArea had no UIA name, so Narrator would say an unnamed "document". It is now bound to the editor's name (the document title), with a help text.
+  - Editor chrome already named (tabs, close button, gutter, strip, banners).
+- **Findings:** `docs/06-implementation/accessibility-findings.md`, with a 10-step Narrator walkthrough (Part B, NOT RUN). ADR-0006 changelog: structure verified, speech unverified.
+- **Mistake:** one combined shell command failed to parse (heredoc quoting) before running anything. Redone with the Write tool; no partial changes.
+- **Files changed:** `src/AssemblyStudio.App/{Editor/CodeEditor.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/Accessibility/EditorAccessibilityTests.cs (new)`, `docs/06-implementation/accessibility-findings.md (new)`, `docs/decisions/ADR-0006-editor-avalonedit.md`, `docs/05-planning/backlog.md` (TASK-069 In progress), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `EditorAccessibilityTests` 2/2. Mutation: name binding removed → 2 failed. Restored.
+  - Release build 0 warnings; full solution **1499/1499 at 12:07–12:11 and 12:12–12:16**.
+  - The temporary probe tests were removed before the full runs.
+- **Git state after:** uncommitted TASK-069 changes on top of `a7dc0b4`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** the manual Narrator walkthrough (AC-044 editor part) NOT RUN; TASK-069 stays In progress until the user runs it. TASK-085 depends on TASK-069.
+- **Next step:** the user runs Part B and reports; then close TASK-069.
+
+### 2026-11-02 12:17 – 12:24 +0500 · Claude Code (Opus 5.5) · TASK-069 closed after the user's Narrator check
+- **Summary:** The user reported: "i check narrates its work and commit". Recorded as an overall pass of the manual Narrator walkthrough (Part B). The user didn't itemize the 10 steps, and the findings say so.
+  - TASK-069 Done; ADR-0006's Unverified Narrator item closed.
+  - No code changed after the 12:07 and 12:16 full runs (1499/1499 twice).
+- **Files changed:** `docs/06-implementation/accessibility-findings.md`, `docs/decisions/ADR-0006-editor-avalonedit.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** committed on the user's request (see HANDOFF).
+- **Next step:** `/assembly-implement TASK-085`.

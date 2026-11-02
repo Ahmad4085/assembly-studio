@@ -5,12 +5,12 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-02 11:14 +0500 by Claude Code (Opus 5.5) (TASK-083 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 069, 070 left); M5 in progress (TASK-080..084 done; TASK-085 needs TASK-069, then TASK-086); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-11-02 12:24 +0500 by Claude Code (Opus 5.5) (TASK-069 done) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 070 left); M5 in progress (TASK-080..084 done; next TASK-085, then TASK-086); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next: `TASK-069` (editor accessibility, unblocks TASK-085) or `TASK-065` (find/replace) |
+| Active task | None in progress. Next: `TASK-085` announcements, keyboard-only flow, UI smoke tests |
 
-| Next recommended action | `/assembly-implement TASK-069`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Next recommended action | `/assembly-implement TASK-085`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-069 Editor accessibility verification | 2026-11-02 12:24 +0500 | UIA structure measured (named Document, Text pattern, selection events out of process); TextArea name gap fixed; manual Narrator walkthrough run by the user ("i check narrates its work and commit", overall pass). ADR-0006 Narrator item closed. Full solution 1499/1499 (twice) |
 | TASK-083 Instruction strip, runtime messages, history, breakpoints panels | 2026-11-02 11:14 +0500 | Current-instruction strip; runtime messages with the runtime's code/what/where/next (StepResult.Message, additive; RTE010/011/090 added); budget Continue/Stop; history of the last 1,000 instructions with source lines; breakpoints panel with enable/disable. 13 new tests (AC-024, 028, 029, 031, 048, 049); full solution 1497/1497 (twice) |
 | TASK-082 Memory and stack panels | 2026-11-02 10:42 +0500 | Memory view (16 × 16 hex + ASCII at a typed address, default the program image, via WatchMemory) and stack view (16 words from SS:SP, SP marked); changes marked from the write journal. 20 new tests incl. AC-026 and byte-for-byte equality with the snapshot; full solution 1484/1484 (twice) |
 | TASK-081 Registers and flags panels | 2026-11-01 17:16 +0500 | Registers (AX–DX with their halves on the same row, D-017) and flags from the latest paused snapshot; hex/unsigned/signed/binary (Ctrl+Alt+N); changes marked with color, weight and a bar; undefined flags "?"; not-current state while running. 17 new tests incl. view equals engine after each step (NFR-018); full solution 1464/1464 (twice) |
@@ -120,8 +121,8 @@ None. Research documents revalidated against requirements v2.0.
 ## Latest build and test status
 | Item | Status |
 |---|---|
-| Product build (2026-11-02 11:04 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
-| Product tests (2026-11-02 11:13 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1497/1497 passed** in two consecutive runs (11:04–11:08, 11:09–11:13). Last test-phase report 2026-10-30-1 |
+| Product build (2026-11-02 12:07 +0500) | `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** |
+| Product tests (2026-11-02 12:16 +0500) | `dotnet test --solution AssemblyStudio.slnx -c Release` → **1499/1499 passed** in two consecutive runs (12:07–12:11, 12:12–12:16). Last test-phase report 2026-10-30-1 |
 | Coverage (2026-10-28 12:45 +0500) | `build/coverage.ps1` → exit 1 due to DEF-001 in App.Tests; Engine.I8086 alone has 49.7% coverage (951/1912 lines) |
 | POC-001 build (2026-10-26 18:33 +0500) | `dotnet build poc/POC-001-cpu-core/Poc.Cpu.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |

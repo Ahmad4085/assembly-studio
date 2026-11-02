@@ -1197,4 +1197,88 @@ public static class Strings
 
     /// <summary>Stack words</summary>
     public static string RegionStackRows => Get(nameof(RegionStackRows));
+
+    /// <summary>No instruction at this address</summary>
+    public static string StripNoInstruction => Get(nameof(StripNoInstruction));
+
+    /// <summary>(no disassembly)</summary>
+    public static string StripNoDisassembly => Get(nameof(StripNoDisassembly));
+
+    /// <summary>No source mapping for this address</summary>
+    public static string StripNoSourceMapping => Get(nameof(StripNoSourceMapping));
+
+    /// <summary>(macro expansion)</summary>
+    public static string StripMacroExpansion => Get(nameof(StripMacroExpansion));
+
+    /// <summary>Running — not current</summary>
+    public static string StripNotCurrent => Get(nameof(StripNotCurrent));
+
+    /// <summary>Current instruction</summary>
+    public static string RegionInstructionStrip => Get(nameof(RegionInstructionStrip));
+
+    /// <summary>line {0}</summary>
+    public static string HistoryLine => Get(nameof(HistoryLine));
+
+    /// <summary>disabled</summary>
+    public static string BreakpointStateDisabled => Get(nameof(BreakpointStateDisabled));
+
+    /// <summary>no code on this line</summary>
+    public static string BreakpointStateUnbound => Get(nameof(BreakpointStateUnbound));
+
+    /// <summary>not built yet</summary>
+    public static string BreakpointStateNotBuilt => Get(nameof(BreakpointStateNotBuilt));
+
+    /// <summary>paused here</summary>
+    public static string BreakpointStateHit => Get(nameof(BreakpointStateHit));
+
+    /// <summary>Breakpoint (disabled)</summary>
+    public static string BreakpointDisabled => Get(nameof(BreakpointDisabled));
+
+    /// <summary>_Enable / Disable</summary>
+    public static string BreakpointsToggle => Get(nameof(BreakpointsToggle));
+
+    /// <summary>_Remove</summary>
+    public static string BreakpointsRemove => Get(nameof(BreakpointsRemove));
+
+    /// <summary>at line {0} ({1})</summary>
+    public static string MessageAtLine => Get(nameof(MessageAtLine));
+
+    /// <summary>at {0}</summary>
+    public static string MessageAt => Get(nameof(MessageAt));
+
+    /// <summary>Program loaded at {0}.</summary>
+    public static string MessageLoaded => Get(nameof(MessageLoaded));
+
+    /// <summary>Breakpoint hit</summary>
+    public static string MessageBreakpoint => Get(nameof(MessageBreakpoint));
+
+    /// <summary>Paused</summary>
+    public static string MessagePaused => Get(nameof(MessagePaused));
+
+    /// <summary>The run reached its instruction budget of {0:N0} instructions and paused</summary>
+    public static string MessageBudget => Get(nameof(MessageBudget));
+
+    /// <summary>Continue runs another budget; Stop ends the session. Settings sets the budget.</summary>
+    public static string MessageBudgetNext => Get(nameof(MessageBudgetNext));
+
+    /// <summary>Waiting for keyboard input (type in the console)</summary>
+    public static string MessageWaiting => Get(nameof(MessageWaiting));
+
+    /// <summary>Program ended through {0} with exit code {1}.</summary>
+    public static string MessageEnded => Get(nameof(MessageEnded));
+
+    /// <summary>_Continue</summary>
+    public static string MessagesContinue => Get(nameof(MessagesContinue));
+
+    /// <summary>_Stop</summary>
+    public static string MessagesStop => Get(nameof(MessagesStop));
+
+    /// <summary>Runtime messages</summary>
+    public static string RegionMessages => Get(nameof(RegionMessages));
+
+    /// <summary>Execution history</summary>
+    public static string RegionHistory => Get(nameof(RegionHistory));
+
+    /// <summary>Breakpoints</summary>
+    public static string RegionBreakpoints => Get(nameof(RegionBreakpoints));
 }

@@ -28,6 +28,9 @@ public sealed record RuntimeHaltInfo(
     /// </summary>
     public string FormattedMessage => $"{What} {Where}. {NextStep}";
 
+    /// <summary>The message as it travels with the halt's <see cref="StepResult"/> (TASK-083).</summary>
+    public RuntimeMessage ToMessage() => new(Code, What, Where, NextStep);
+
     /// <inheritdoc />
     public override string ToString() => $"[{Code}] {What} {Where}. Suggested next step: {NextStep}";
 }

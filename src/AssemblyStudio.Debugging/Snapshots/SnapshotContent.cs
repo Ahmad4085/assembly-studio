@@ -29,7 +29,8 @@ internal static class SnapshotContent
         return new CurrentInstruction(
             cpu.CS,
             cpu.IP,
-            buffer[..(decoded?.Length ?? 1)].ToArray(),
+            // An instruction that can't be decoded has no known length: it carries the bytes read at CS:IP (AC-028).
+            (decoded is { } d ? buffer[..d.Length] : buffer).ToArray(),
             decoded?.Text,
             mapping?.Location.File,
             mapping?.Location.Line,

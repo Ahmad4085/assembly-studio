@@ -75,7 +75,7 @@ public sealed class InterruptRouter : IInterruptRouter
         {
             var exceptionHalt = RuntimeErrorPolicy.CreateCpuExceptionHalt(vector, state);
             LastHalt = exceptionHalt;
-            return new StepResult(StepOutcome.Halted, state.CS, state.IP, exceptionHalt.HaltReason, FlagBit.None);
+            return new StepResult(StepOutcome.Halted, state.CS, state.IP, exceptionHalt.HaltReason, FlagBit.None) { Message = exceptionHalt.ToMessage() };
         }
 
         // 3. OS Services delegation (e.g. INT 20h, INT 21h):
@@ -90,6 +90,7 @@ public sealed class InterruptRouter : IInterruptRouter
                     serviceResult.Value.HaltReason == HaltReason.UnsupportedService)
                 {
                     LastHalt = RuntimeErrorPolicy.CreateUnsupportedServiceHalt(vector, state);
+                    return serviceResult.Value with { Message = LastHalt.ToMessage() };
                 }
 
                 return serviceResult.Value;
@@ -99,7 +100,7 @@ public sealed class InterruptRouter : IInterruptRouter
         // 4. Any software interrupt or function outside the supported set halts with UnsupportedService (FR-040, NFR-013).
         var unsupportedHalt = RuntimeErrorPolicy.CreateUnsupportedServiceHalt(vector, state);
         LastHalt = unsupportedHalt;
-        return new StepResult(StepOutcome.Halted, state.CS, state.IP, unsupportedHalt.HaltReason, FlagBit.None);
+        return new StepResult(StepOutcome.Halted, state.CS, state.IP, unsupportedHalt.HaltReason, FlagBit.None) { Message = unsupportedHalt.ToMessage() };
     }
 
     private sealed class MachineFallback(IMemory memory) : IMachine

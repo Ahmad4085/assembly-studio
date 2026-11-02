@@ -6,10 +6,46 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-083` (instruction strip, runtime messages, history, breakpoints panels).
+None in progress. M5's panel tasks are done (TASK-080 to TASK-084). Remaining in M5: `TASK-085` (announcements, keyboard-only flow, UI smoke tests; needs TASK-069) and `TASK-086` (end-to-end performance; needs TASK-085).
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 5 progress | TASK-080, 081, 082, 083, 084 Done; TASK-085 waits on TASK-069 (M4 editor accessibility) |
+| Recommended next action | `/assembly-implement TASK-069`, then TASK-085; or TASK-065 (find/replace) |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-083 Instruction strip, runtime messages, history, breakpoints panels (Done 2026-11-02 11:14 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Panels/Session/SessionPanels.cs`:
+  - `InstructionStripViewModel` (UI-007: CS:IP, bytes, disassembly; "No source mapping"; the halt's message; not current while running).
+  - `RuntimeMessagesViewModel` (UI-012: loaded, breakpoint hit, paused, budget reached with Continue/Stop, waiting for input, halted with code/what/where/next, ended with path and exit code; steps are not logged).
+  - `HistoryViewModel` (UI-013: the session's last 1,000 instructions with address, bytes, disassembly and source line; activation selects the line).
+  - `BreakpointsViewModel` (UI-014: every open document's breakpoints, address or unbound/disabled/not built, the hit one marked; Space enable/disable, Delete remove, Enter go to line).
+- Runtime messages come from the runtime itself: **additive Core/Runtime change** `StepResult.Message` (`RuntimeMessage`) attached by `InterruptRouter`; new catalog entries RTE010 unsupported instruction, RTE011 HLT, RTE090 engine fault (`RuntimeErrorPolicy`). `SnapshotContent`: an undecodable instruction carries the 6 bytes at CS:IP (AC-028). Recorded in ADR-0007's changelog (no decision changed).
+- `EditorBreakpoint.IsEnabled` (gutter draws a disabled breakpoint as a grey outline; synced to the session with `SetBreakpoint(…, enabled)`).
+- Shell: strip above the editors; Runtime/History/Breakpoints tabs; a halt shows the Runtime tab; status bar shows the halt's code and text.
+- Tests: `SessionPanelsTests` 9 (AC-024, AC-028, AC-029, AC-031, FR-042 budget Continue/Stop, FR-041 end message, AC-049 + AC-048 history and not-current, FR-052 breakpoints panel, window with Runtime tab and renders `runtime-halt.png`, `history.png`), `RuntimeMessageTests` 3, `SnapshotTests` +1. Mutation (router drops the exception message) → 2 failed.
+- Your app was open at the start (Release locked); worked in Debug until it was closed; not stopped.
+- Release build 0 warnings; full solution 1497/1497 twice (11:04–11:08, 11:09–11:13).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 10:48 / 11:14 +0500 |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 10:48 +0500 |
+| Milestone | M5 |
+| Goal | Show the current instruction, session messages, execution history and breakpoints |
+| Scope (in) | Unsupported/runtime error details with what/where/next; budget reached with Continue/Stop; history activation selects line |
+| Requirements | FR-037, FR-038, FR-040, FR-041, FR-042, FR-052, FR-053, FR-058, FR-065, FR-066; UI-007, UI-012, UI-013, UI-014; AC-024, AC-028, AC-029, AC-031, AC-048, AC-049 |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 5 progress | TASK-080, 081, 082, 084 Done; eligible: TASK-083; then TASK-085 (needs TASK-069), TASK-086 |
 | Recommended next action | `/assembly-implement TASK-083` |

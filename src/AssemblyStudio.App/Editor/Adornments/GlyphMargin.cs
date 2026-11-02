@@ -84,8 +84,9 @@ public sealed class GlyphMargin : AbstractMargin
 
             if (breakpoints.TryGetValue(line, out EditorBreakpoint? breakpoint))
             {
-                bool unbound = breakpoint.Binding == BreakpointBinding.Unbound;
-                Draw(drawingContext, GlyphShapes.Breakpoint, unbound ? null : breakpointBrush, unbound ? new Pen(breakpointBrush, 1.5) : null, cell, top, size);
+                bool hollow = breakpoint.Binding == BreakpointBinding.Unbound || !breakpoint.IsEnabled;
+                Brush outline = breakpoint.IsEnabled ? breakpointBrush : Resource("Text.Secondary");
+                Draw(drawingContext, GlyphShapes.Breakpoint, hollow ? null : breakpointBrush, hollow ? new Pen(outline, 1.5) : null, cell, top, size);
             }
 
             if (_editor.ExecutionLine == line)
@@ -140,12 +141,12 @@ public sealed class GlyphMargin : AbstractMargin
 
         if (_editor.Breakpoints?.FirstOrDefault(b => b.Line == line) is { } breakpoint)
         {
-            parts.Add(breakpoint.Binding switch
+            parts.Add(breakpoint.IsEnabled ? breakpoint.Binding switch
             {
                 BreakpointBinding.Bound => string.Format(CultureInfo.CurrentCulture, CompositeFormat.Parse(Strings.BreakpointBound), breakpoint.Address),
                 BreakpointBinding.Unbound => Strings.BreakpointUnbound,
                 _ => Strings.BreakpointNotBuilt,
-            });
+            } : Strings.BreakpointDisabled);
         }
 
         return parts.Count == 0 ? null : string.Join(Environment.NewLine, parts);

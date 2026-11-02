@@ -598,6 +598,34 @@
               </TabControl.ContentTemplate>
             </TabControl>
 
+            <!-- UI-007 current-instruction strip (TASK-083): only while a program is loaded -->
+            <Border x:Name="InstructionStrip" DockPanel.Dock="Top" Padding="8,3" Background="{DynamicResource Surface.Raised}"
+                    BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,0,0,1"
+                    DataContext="{Binding DataContext.BuildRun.Strip, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Visibility="{Binding IsVisible, Converter={StaticResource VisibleWhenTrue}}"
+                    AutomationProperties.Name="{x:Static shell:Strings.RegionInstructionStrip}">
+              <StackPanel>
+                <DockPanel>
+                  <TextBlock DockPanel.Dock="Right" Text="{Binding Note}" Margin="12,0,0,0" Foreground="{DynamicResource Text.Secondary}"
+                             Visibility="{Binding Note, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+                  <TextBlock x:Name="StripText" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" TextTrimming="CharacterEllipsis">
+                    <TextBlock.Style>
+                      <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="{Binding Text}" />
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                            <Setter Property="Text" Value="{x:Static shell:Strings.StripNotCurrent}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Text.Secondary}" />
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </TextBlock.Style>
+                  </TextBlock>
+                </DockPanel>
+                <TextBlock x:Name="StripHalt" Text="{Binding HaltText}" Foreground="{DynamicResource Status.Error}" TextWrapping="Wrap" Margin="0,2,0,0"
+                           Visibility="{Binding HaltText, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+              </StackPanel>
+            </Border>
             <ItemsControl x:Name="DocumentEditors" ItemsSource="{Binding Documents}" Focusable="False">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -844,14 +872,146 @@
               </Grid>
             </DockPanel>
           </TabItem>
+          <!-- UI-012 runtime messages (TASK-083) -->
           <TabItem Header="{x:Static shell:Strings.TabRuntime}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyRuntime}" />
+            <DockPanel DataContext="{Binding BuildRun.Messages}">
+              <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="8,4" Visibility="{Binding OffersBudgetChoice, Converter={StaticResource VisibleWhenTrue}}">
+                <Button x:Name="BudgetContinue" Content="{x:Static shell:Strings.MessagesContinue}" Padding="12,2"
+                        Command="{Binding DataContext.BuildRun.RunCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <Button x:Name="BudgetStop" Content="{x:Static shell:Strings.MessagesStop}" Padding="12,2" Margin="8,0,0,0"
+                        Command="{Binding DataContext.BuildRun.StopCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+              </StackPanel>
+              <Grid>
+                <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyRuntime}"
+                           Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+                <ListBox x:Name="MessagesList" ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" AutomationProperties.Name="{x:Static shell:Strings.RegionMessages}"
+                         AutomationProperties.LiveSetting="Polite" Visibility="{Binding IsEmpty, Converter={x:Static shell:InverseVisibilityConverter.Instance}}">
+                  <ListBox.Style>
+                    <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                    </Style>
+                  </ListBox.Style>
+                  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}" />
+                  </ListBox.ItemContainerStyle>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <DockPanel Margin="2,2">
+                        <TextBlock x:Name="Glyph" DockPanel.Dock="Left" Width="18" Text="{Binding Glyph}" FontWeight="Bold" Foreground="{DynamicResource Status.Info}" />
+                        <TextBlock DockPanel.Dock="Left" Width="64" Text="{Binding Code}" Foreground="{DynamicResource Text.Secondary}" />
+                        <StackPanel>
+                          <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                          <TextBlock Text="{Binding NextStep}" TextWrapping="Wrap" Foreground="{DynamicResource Text.Secondary}" FontSize="{DynamicResource FontSize.UI.Small}"
+                                     Visibility="{Binding NextStep, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+                        </StackPanel>
+                      </DockPanel>
+                      <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Kind}" Value="Error">
+                          <Setter TargetName="Glyph" Property="Foreground" Value="{DynamicResource Status.Error}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Kind}" Value="Warning">
+                          <Setter TargetName="Glyph" Property="Foreground" Value="{DynamicResource Status.Warning}" />
+                        </DataTrigger>
+                      </DataTemplate.Triggers>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </Grid>
+            </DockPanel>
           </TabItem>
+          <!-- UI-013 execution history (TASK-083) -->
           <TabItem Header="{x:Static shell:Strings.TabHistory}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyHistory}" />
+            <Grid DataContext="{Binding BuildRun.History}">
+              <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyHistory}"
+                         Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+              <ListBox x:Name="HistoryList" ItemsSource="{Binding Rows}" HorizontalContentAlignment="Stretch" AutomationProperties.Name="{x:Static shell:Strings.RegionHistory}"
+                       Visibility="{Binding IsEmpty, Converter={x:Static shell:InverseVisibilityConverter.Instance}}">
+                <ListBox.Style>
+                  <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                        <Setter Property="Opacity" Value="0.55" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </ListBox.Style>
+                <ListBox.InputBindings>
+                  <KeyBinding Key="Enter" Command="{Binding ActivateCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                </ListBox.InputBindings>
+                <ListBox.ItemContainerStyle>
+                  <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="OnHistoryDoubleClick" />
+                  </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                      <TextBlock Width="86" Text="{Binding Address}" Foreground="{DynamicResource Text.Secondary}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+                      <TextBlock Width="150" Text="{Binding Bytes}" Foreground="{DynamicResource Syntax.Number}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+                      <TextBlock Width="220" Text="{Binding Disassembly}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+                      <TextBlock Text="{Binding LineText}" Foreground="{DynamicResource Text.Secondary}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </Grid>
           </TabItem>
+          <!-- UI-014 breakpoints (TASK-083) -->
           <TabItem Header="{x:Static shell:Strings.TabBreakpoints}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyBreakpoints}" />
+            <DockPanel DataContext="{Binding BuildRun.Breakpoints}">
+              <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6,4" Visibility="{Binding IsEmpty, Converter={x:Static shell:InverseVisibilityConverter.Instance}}">
+                <Button x:Name="BreakpointToggle" Content="{x:Static shell:Strings.BreakpointsToggle}" Padding="10,1"
+                        Command="{Binding ToggleEnabledCommand}" CommandParameter="{Binding SelectedItem, ElementName=BreakpointList}" />
+                <Button x:Name="BreakpointRemove" Content="{x:Static shell:Strings.BreakpointsRemove}" Padding="10,1" Margin="6,0,0,0"
+                        Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedItem, ElementName=BreakpointList}" />
+              </StackPanel>
+              <Grid>
+                <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyBreakpoints}"
+                           Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhenTrue}}" />
+                <ListBox x:Name="BreakpointList" ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" AutomationProperties.Name="{x:Static shell:Strings.RegionBreakpoints}"
+                         Visibility="{Binding IsEmpty, Converter={x:Static shell:InverseVisibilityConverter.Instance}}">
+                  <ListBox.Style>
+                    <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                    </Style>
+                  </ListBox.Style>
+                  <ListBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ActivateCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                    <KeyBinding Key="Space" Command="{Binding ToggleEnabledCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                    <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                  </ListBox.InputBindings>
+                  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}">
+                      <EventSetter Event="MouseDoubleClick" Handler="OnBreakpointDoubleClick" />
+                    </Style>
+                  </ListBox.ItemContainerStyle>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="Marker" Width="18" Text="●" Foreground="{DynamicResource Accent.Breakpoint}" />
+                        <TextBlock Width="180" Text="{Binding Location}" />
+                        <TextBlock x:Name="State" Text="{Binding State}" Foreground="{DynamicResource Text.Secondary}" FontFamily="{DynamicResource Font.Code}" />
+                      </StackPanel>
+                      <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Breakpoint.IsEnabled}" Value="False">
+                          <Setter TargetName="Marker" Property="Text" Value="○" />
+                          <Setter TargetName="Marker" Property="Foreground" Value="{DynamicResource Text.Secondary}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Breakpoint.Binding}" Value="Unbound">
+                          <Setter TargetName="Marker" Property="Text" Value="○" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsHit}" Value="True">
+                          <Setter TargetName="Marker" Property="Text" Value="➜" />
+                          <Setter TargetName="State" Property="FontWeight" Value="Bold" />
+                          <Setter TargetName="State" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+                        </DataTrigger>
+                      </DataTemplate.Triggers>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </Grid>
+            </DockPanel>
           </TabItem>
           <TabItem x:Name="MemoryTab" Header="{x:Static shell:Strings.TabMemory}">
             <ContentControl Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource MemoryPanelTemplate}" Focusable="False" />

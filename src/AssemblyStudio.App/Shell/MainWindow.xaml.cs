@@ -58,6 +58,14 @@ public partial class MainWindow : Window
         // TASK-080: F10 and Alt combinations arrive as system keys, which key bindings don't see; route them to the bindings.
         PreviewKeyDown += OnPreviewSystemKey;
         viewModel.BuildRun.Problems.GoToRequested += (_, item) => GoToLine(item.Document!, item.Diagnostic.Line!.Value);
+        viewModel.BuildRun.History.GoToLineRequested += (_, line) =>
+        {
+            if (viewModel.BuildRun.BuiltDocument is { } built)
+            {
+                GoToLine(built, line, select: true); // UI-013: selects the line (read only)
+            }
+        };
+        viewModel.BuildRun.Breakpoints.GoToRequested += (_, item) => GoToLine(item.Document, item.Breakpoint.Line);
         viewModel.BuildRun.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(Commands.BuildRunViewModel.BadgeText))
@@ -129,7 +137,7 @@ public partial class MainWindow : Window
     private void OnCanToggleBreakpoint(object sender, CanExecuteRoutedEventArgs e) => e.CanExecute = _viewModel.Workspace.ActiveDocument is not null;
 
     /// <summary>Activates <paramref name="document"/> and puts the caret at the start of <paramref name="line"/> (Problems, AC-013).</summary>
-    internal void GoToLine(DocumentViewModel document, int line)
+    internal void GoToLine(DocumentViewModel document, int line, bool select = false)
     {
         _viewModel.Workspace.ActiveDocument = document;
         UpdateLayout();
@@ -140,8 +148,32 @@ public partial class MainWindow : Window
 
         line = Math.Clamp(line, 1, editor.Document.LineCount);
         editor.TextArea.Caret.Location = new ICSharpCode.AvalonEdit.Document.TextLocation(line, 1);
+        if (select)
+        {
+            ICSharpCode.AvalonEdit.Document.DocumentLine documentLine = editor.Document.GetLineByNumber(line);
+            editor.Select(documentLine.Offset, documentLine.Length);
+        }
+
         editor.ScrollToLine(line);
         editor.TextArea.Focus();
+    }
+
+    private void OnHistoryDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is ListBoxItem { DataContext: Panels.Session.HistoryRow row })
+        {
+            _viewModel.BuildRun.History.ActivateCommand.Execute(row);
+            e.Handled = true;
+        }
+    }
+
+    private void OnBreakpointDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is ListBoxItem { DataContext: Panels.Session.BreakpointItem item })
+        {
+            _viewModel.BuildRun.Breakpoints.ActivateCommand.Execute(item);
+            e.Handled = true;
+        }
     }
 
     private void OnProblemDoubleClick(object sender, MouseButtonEventArgs e)

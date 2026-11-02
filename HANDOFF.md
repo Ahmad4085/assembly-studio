@@ -5,17 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 10:42 +0500 by Claude Code (Opus 5.5), after completing TASK-082 |
-| Current task | **None in progress. Next (user-approved): `TASK-083` instruction strip, runtime messages, history, breakpoints** |
-| Last completed | TASK-082 Memory and stack panels (Done 2026-11-02 10:42 +0500) |
-| Git state | HEAD `d73b4c4` (TASK-082 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 11:14 +0500 by Claude Code (Opus 5.5), after completing TASK-083 |
+| Current task | **None in progress. Next: `TASK-069` (editor accessibility; unblocks TASK-085) or `TASK-065` (find/replace)** |
+| Last completed | TASK-083 Instruction strip, runtime messages, history, breakpoints panels (Done 2026-11-02 11:14 +0500) |
+| Git state | HEAD `8b45846` + uncommitted TASK-083 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 10:33 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1484/1484 passed**, two consecutive runs (2026-11-02 10:33–10:37 and 10:37–10:41 +0500).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 11:04 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1497/1497 passed**, two consecutive runs (2026-11-02 11:04–11:08 and 11:09–11:13 +0500).
 - Notes: Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app.
 
 ## Changes since the previous handoff
+- **TASK-083 Session panels** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Panels/Session/SessionPanels.cs`; strip and tabs in `MainWindow.xaml`; `BuildRunViewModel.{Strip, Messages, History, Breakpoints}` and the event log (`LogEvent`).
+  - **Additive contract change:** `StepResult.Message` (`RuntimeMessage` in Core) set by `InterruptRouter`; `RuntimeErrorPolicy` RTE010/011/090; `SnapshotContent` keeps 6 bytes for an undecodable instruction. ADR-0007 changelog updated.
+  - **For TASK-085:** `CpuViewModel.ChangedNames` and the runtime messages list (polite live region) are ready for the step announcement ("Paused at line 7. Changed: AX, DX, ZF.").
+
 - **TASK-082 Memory and stack** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Panels/Memory/{MemoryAddress, MemoryViewModel}.cs`; `MemoryPanelTemplate`/`StackPanelTemplate` in `MainWindow.xaml` (docked and compact tabs); `BuildRunViewModel.Memory` and the write-journal collection.
   - **For TASK-083:** the history panel can use `IDebugSession.History` (or accumulate `HistoryDelta` like the write journal); breakpoints already live on `DocumentViewModel.Breakpoints` and `IDebugSession.Breakpoints`; the runtime messages come from `RunState`/`Detail`/`ExitCode` in `BuildRunViewModel`; `ApplyPendingSnapshot` now separates a new pause from a refresh (`newPause`).
@@ -80,12 +85,13 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-082 committed. Files were:
-   - `src/AssemblyStudio.App/{Panels/Memory/*, Commands/BuildRunViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/Panels/MemoryTests.cs`
-   - `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-083`.
-3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate (all load or focus sensitive).
+1. When the user asks: commit TASK-083. Files:
+   - `src/AssemblyStudio.Core/{StepResult.cs, MachineSnapshot.cs}`, `src/AssemblyStudio.Runtime/Interrupts/{InterruptRouter.cs, RuntimeErrorPolicy.cs, RuntimeHaltInfo.cs}`, `src/AssemblyStudio.Debugging/Snapshots/SnapshotContent.cs`
+   - `src/AssemblyStudio.App/{Panels/Session/*, Commands/BuildRunViewModel.cs, Editor/Adornments/EditorMarkers.cs, Editor/Adornments/GlyphMargin.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/Panels/SessionPanelsTests.cs`, `tests/AssemblyStudio.Runtime.Tests/RuntimeMessageTests.cs`, `tests/AssemblyStudio.Debugging.Tests/SnapshotTests.cs`
+   - `docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md`, `docs/05-planning/backlog.md`, shared memory files
+2. Next task (user's choice): `/assembly-implement TASK-069` (unblocks TASK-085) or `TASK-065`.
+3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

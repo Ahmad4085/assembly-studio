@@ -411,4 +411,32 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="StackMarker" xml:space="preserve"><value>SP ▶</value><comment>Stack panel SP marker</comment></data>
   <data name="RegionMemoryRows" xml:space="preserve"><value>Memory bytes</value><comment>UIA name of the memory rows</comment></data>
   <data name="RegionStackRows" xml:space="preserve"><value>Stack words</value><comment>UIA name of the stack rows</comment></data>
+  <data name="StripNoInstruction" xml:space="preserve"><value>No instruction at this address</value><comment>Instruction strip</comment></data>
+  <data name="StripNoDisassembly" xml:space="preserve"><value>(no disassembly)</value><comment>Instruction strip / history</comment></data>
+  <data name="StripNoSourceMapping" xml:space="preserve"><value>No source mapping for this address</value><comment>Instruction strip (ui-spec UI-007)</comment></data>
+  <data name="StripMacroExpansion" xml:space="preserve"><value>(macro expansion)</value><comment>Instruction strip</comment></data>
+  <data name="StripNotCurrent" xml:space="preserve"><value>Running — not current</value><comment>Instruction strip while running</comment></data>
+  <data name="RegionInstructionStrip" xml:space="preserve"><value>Current instruction</value><comment>UIA name of the strip</comment></data>
+  <data name="HistoryLine" xml:space="preserve"><value>line {0}</value><comment>History source line. {0} = line</comment></data>
+  <data name="BreakpointStateDisabled" xml:space="preserve"><value>disabled</value><comment>Breakpoints panel state</comment></data>
+  <data name="BreakpointStateUnbound" xml:space="preserve"><value>no code on this line</value><comment>Breakpoints panel state</comment></data>
+  <data name="BreakpointStateNotBuilt" xml:space="preserve"><value>not built yet</value><comment>Breakpoints panel state</comment></data>
+  <data name="BreakpointStateHit" xml:space="preserve"><value>paused here</value><comment>Breakpoints panel: the hit breakpoint</comment></data>
+  <data name="BreakpointDisabled" xml:space="preserve"><value>Breakpoint (disabled)</value><comment>Gutter tooltip</comment></data>
+  <data name="BreakpointsToggle" xml:space="preserve"><value>_Enable / Disable</value><comment>Breakpoints panel (Space)</comment></data>
+  <data name="BreakpointsRemove" xml:space="preserve"><value>_Remove</value><comment>Breakpoints panel (Delete)</comment></data>
+  <data name="MessageAtLine" xml:space="preserve"><value>at line {0} ({1})</value><comment>Runtime message location. {0} = line, {1} = CS:IP</comment></data>
+  <data name="MessageAt" xml:space="preserve"><value>at {0}</value><comment>Runtime message location. {0} = CS:IP</comment></data>
+  <data name="MessageLoaded" xml:space="preserve"><value>Program loaded at {0}.</value><comment>Runtime message (UI-012)</comment></data>
+  <data name="MessageBreakpoint" xml:space="preserve"><value>Breakpoint hit</value><comment>Runtime message</comment></data>
+  <data name="MessagePaused" xml:space="preserve"><value>Paused</value><comment>Runtime message (user pause)</comment></data>
+  <data name="MessageBudget" xml:space="preserve"><value>The run reached its instruction budget of {0:N0} instructions and paused</value><comment>Runtime message (FR-042)</comment></data>
+  <data name="MessageBudgetNext" xml:space="preserve"><value>Continue runs another budget; Stop ends the session. Settings sets the budget.</value><comment>Runtime message next step</comment></data>
+  <data name="MessageWaiting" xml:space="preserve"><value>Waiting for keyboard input (type in the console)</value><comment>Runtime message</comment></data>
+  <data name="MessageEnded" xml:space="preserve"><value>Program ended through {0} with exit code {1}.</value><comment>Runtime message (FR-041)</comment></data>
+  <data name="MessagesContinue" xml:space="preserve"><value>_Continue</value><comment>Runtime messages: budget choice</comment></data>
+  <data name="MessagesStop" xml:space="preserve"><value>_Stop</value><comment>Runtime messages: budget choice</comment></data>
+  <data name="RegionMessages" xml:space="preserve"><value>Runtime messages</value><comment>UIA name</comment></data>
+  <data name="RegionHistory" xml:space="preserve"><value>Execution history</value><comment>UIA name</comment></data>
+  <data name="RegionBreakpoints" xml:space="preserve"><value>Breakpoints</value><comment>UIA name</comment></data>
 </root>

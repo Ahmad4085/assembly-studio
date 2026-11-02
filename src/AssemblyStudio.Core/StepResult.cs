@@ -59,4 +59,16 @@ public readonly record struct StepResult(
     /// <summary>The termination path and exit code when <see cref="Outcome"/> is
     /// <see cref="StepOutcome.Terminated"/>, else <see langword="null"/> (FR-041).</summary>
     public ProgramTermination? Termination { get; init; }
+
+    /// <summary>The runtime's message for a halt (code, what, where, next step; FR-038, FR-040, FR-066), when the component
+    /// that halted provides one; else <see langword="null"/>.</summary>
+    public RuntimeMessage? Message { get; init; }
 }
+
+/// <summary>A runtime message in the catalog's structure (FR-066, NFR-024): a stable code, what happened, where and a
+/// suggested next step.</summary>
+/// <param name="Code">Stable message code (for example <c>RTE001</c>).</param>
+/// <param name="What">What happened.</param>
+/// <param name="Where">Where (for example <c>at 0800:0105</c>).</param>
+/// <param name="NextStep">A suggested next step.</param>
+public sealed record RuntimeMessage(string Code, string What, string Where, string NextStep);

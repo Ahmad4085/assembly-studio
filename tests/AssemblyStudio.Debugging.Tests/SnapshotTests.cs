@@ -104,6 +104,18 @@ public sealed class SnapshotTests
         Assert.Equal(Disassembler.Decode([.. current.Bytes, 0, 0, 0, 0, 0], cpu.IP)!.Value.Text, current.Disassembly);
     }
 
+    [Fact]
+    public void An_instruction_that_cant_be_decoded_carries_the_bytes_at_CS_IP_and_no_disassembly()
+    {
+        var source = new MachineSource([0x0F, 0xA2, 0xCD, 0x20]); // cpuid (not 8086), int 20h
+        using var session = new DebugSession(source.Load, Disassembler);
+        MachineSnapshot loaded = WaitFor(session, s => PausedBy(s, PauseReason.Loaded));
+
+        CurrentInstruction current = loaded.CurrentInstruction!.Value;
+        Assert.Null(current.Disassembly);
+        Assert.Equal([0x0F, 0xA2, 0xCD, 0x20, 0x00, 0x00], current.Bytes); // AC-028: the bytes are shown
+    }
+
     private static ushort[] SnapshotWords(IMachine machine, CpuState cpu) =>
         [.. Enumerable.Range(0, 16).Select(i => machine.Memory.Read16(cpu.SS, (ushort)(cpu.SP + (2 * i))))];
 

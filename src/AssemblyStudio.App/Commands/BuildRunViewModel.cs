@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Editor.Adornments;
 using AssemblyStudio.App.Panels.Problems;
+using AssemblyStudio.App.Panels.Session;
 using AssemblyStudio.App.Shell;
 using AssemblyStudio.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -95,6 +96,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     {
         Cpu = new Panels.Machine.CpuViewModel(numberFormat);
         Memory = new Panels.Memory.MemoryViewModel(Cpu, SessionFactory.ProgramSegment, 0x0100);
+        Breakpoints = new Panels.Session.BreakpointsViewModel(workspace);
         ArgumentNullException.ThrowIfNull(workspace);
         ArgumentNullException.ThrowIfNull(assembler);
         ArgumentNullException.ThrowIfNull(createSession);
@@ -120,6 +122,18 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     /// <summary>The registers and flags panels (TASK-081).</summary>
     public Panels.Machine.CpuViewModel Cpu { get; }
+
+    /// <summary>The current-instruction strip (TASK-083).</summary>
+    public Panels.Session.InstructionStripViewModel Strip { get; } = new();
+
+    /// <summary>The runtime messages panel (TASK-083).</summary>
+    public Panels.Session.RuntimeMessagesViewModel Messages { get; } = new();
+
+    /// <summary>The execution history panel (TASK-083).</summary>
+    public Panels.Session.HistoryViewModel History { get; } = new();
+
+    /// <summary>The breakpoints panel (TASK-083).</summary>
+    public Panels.Session.BreakpointsViewModel Breakpoints { get; }
 
     /// <summary>The memory and stack panels (TASK-082).</summary>
     public Panels.Memory.MemoryViewModel Memory { get; }
@@ -350,11 +364,12 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         _session = session;
         foreach (EditorBreakpoint breakpoint in document.Breakpoints)
         {
-            session.SetBreakpoint(document.FilePath, breakpoint.Line);
+            session.SetBreakpoint(document.FilePath, breakpoint.Line, breakpoint.IsEnabled);
         }
 
         ShowBreakpointBinding(document);
         Memory.Attach(session);
+        Messages.Clear();
         document.HasSession = true;
         State = RunState.Stepping; // until the loaded snapshot arrives (Ready)
         session.SnapshotPublished += OnSnapshotPublished;
@@ -378,7 +393,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             document.HasSession = false;
             document.ExecutionLine = null;
-            document.Breakpoints = [.. document.Breakpoints.Select(b => new EditorBreakpoint(b.Line))];
+            document.Breakpoints = [.. document.Breakpoints.Select(b => new EditorBreakpoint(b.Line, IsEnabled: b.IsEnabled))];
         }
 
         CurrentLine = null;
@@ -386,6 +401,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         Detail = null;
         Cpu.Clear();
         Memory.Clear();
+        Strip.Clear();
+        History.Clear();
+        Breakpoints.SetHit(null, null);
+        Messages.OffersBudgetChoice = false;
+        _lastEvent = null;
         _lastPauseCount = null;
         lock (_gate)
         {
@@ -480,6 +500,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             Cpu.MarkRunning();
             Memory.MarkRunning();
+            Strip.MarkRunning();
+            History.MarkRunning();
+            Messages.OffersBudgetChoice = false;
+            Breakpoints.SetHit(null, null);
+            _lastEvent = null;
             return;
         }
 
@@ -501,7 +526,90 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
         Memory.Show(s, writes, newPause, baseline);
         _lastPauseCount = InstructionCount;
+
+        RuntimeMessage? halt = HaltMessage(s, session);
+        if (halt is not null)
+        {
+            Detail = $"{halt.Code} {halt.What} {halt.Where}";
+        }
+
+        Strip.Show(s.CurrentInstruction, halt);
+        if (newPause)
+        {
+            History.Show(session.History, LineOf);
+        }
+
+        LogEvent(s, session, halt);
     }
+
+    // UI-012: one message per session event (a step is shown by the badge and strip, not logged).
+    private (RunState, PauseReason, ulong)? _lastEvent;
+
+    private void LogEvent(MachineSnapshot snapshot, IDebugSession session, RuntimeMessage? halt)
+    {
+        PauseReason reason = session.PauseReason;
+        (RunState, PauseReason, ulong) key = (State, reason, InstructionCount);
+        if (_lastEvent == key)
+        {
+            return; // a refresh of the same pause
+        }
+
+        _lastEvent = key;
+        string where = snapshot.CurrentInstruction is { } c ? $"{c.Cs:X4}:{c.Ip:X4}" : $"{snapshot.Cpu.CS:X4}:{snapshot.Cpu.IP:X4}";
+        string line = CurrentLine is int l ? Format(Strings.MessageAtLine, l, where) : Format(Strings.MessageAt, where);
+        Messages.OffersBudgetChoice = State == RunState.Paused && reason == PauseReason.BudgetExhausted;
+        Breakpoints.SetHit(State == RunState.Paused && reason == PauseReason.Breakpoint ? BuiltDocument : null, CurrentLine);
+        SessionMessage? message = State switch
+        {
+            RunState.Ready => new SessionMessage(SessionMessageKind.Info, Format(Strings.MessageLoaded, where)),
+            RunState.Paused when reason == PauseReason.Breakpoint => new SessionMessage(SessionMessageKind.Info, Strings.MessageBreakpoint + " " + line),
+            RunState.Paused when reason == PauseReason.UserPause => new SessionMessage(SessionMessageKind.Info, Strings.MessagePaused + " " + line),
+            RunState.Paused when reason == PauseReason.BudgetExhausted => new SessionMessage(SessionMessageKind.Warning,
+                Format(Strings.MessageBudget, session.InstructionBudget) + " " + line, NextStep: Strings.MessageBudgetNext),
+            RunState.WaitingForInput => new SessionMessage(SessionMessageKind.Info, Strings.MessageWaiting + " " + line),
+            RunState.HaltedError or RunState.HaltedUnsupported when halt is not null =>
+                new SessionMessage(SessionMessageKind.Error, $"{halt.What} {halt.Where}.", halt.Code, halt.NextStep),
+            RunState.Terminated => new SessionMessage(SessionMessageKind.Info, Format(Strings.MessageEnded, TerminationText(session.LastStep?.Termination), ExitCode?.ToString(CultureInfo.CurrentCulture) ?? "—")),
+            _ => null,
+        };
+        if (message is not null)
+        {
+            Messages.Add(message);
+        }
+    }
+
+    // The halt's message: the runtime's (exceptions, services), or the catalog's for an unsupported instruction, HLT or an
+    // engine fault (RuntimeErrorPolicy, TASK-083).
+    private static RuntimeMessage? HaltMessage(MachineSnapshot snapshot, IDebugSession session) => snapshot.State switch
+    {
+        SessionState.Error => Runtime.Interrupts.RuntimeErrorPolicy.EngineFault(session.LastFault ?? string.Empty),
+        SessionState.Halted => session.LastStep is { } step
+            ? step.Message ?? step.HaltReason switch
+            {
+                HaltReason.UnsupportedInstruction => Runtime.Interrupts.RuntimeErrorPolicy.UnsupportedInstruction(
+                    step.InstructionCs, step.InstructionIp, snapshot.CurrentInstruction?.Bytes ?? []),
+                HaltReason.Halt => Runtime.Interrupts.RuntimeErrorPolicy.Hlt(step.InstructionCs, step.InstructionIp),
+                _ => null,
+            }
+            : null,
+        _ => null,
+    };
+
+    private static string TerminationText(ProgramTermination? termination) => termination?.Path switch
+    {
+        TerminationPath.Int20h => "INT 20h",
+        TerminationPath.Int21hFunction00h => "INT 21h function 00h",
+        TerminationPath.Int21hFunction4Ch => "INT 21h function 4Ch",
+        TerminationPath.ReturnToPsp => "RET to PSP:0000",
+        TerminationPath.CtrlC => "Ctrl-C (INT 23h)",
+        _ => "—",
+    };
+
+    // The source line of an executed instruction in the built document (history), from the build's map.
+    private int? LineOf(ushort cs, ushort ip) =>
+        cs == SessionFactory.ProgramSegment && LastBuild?.SourceMap?.Find(ip) is { } mapping && mapping.Location.File is null == (BuiltDocument?.FilePath is null)
+            ? mapping.Location.Line
+            : null;
 
     private static (RunState, string?) HaltState(HaltReason reason) => reason switch
     {
@@ -550,14 +658,17 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
         else if (e.PropertyName == nameof(DocumentViewModel.Breakpoints) && !_syncingBreakpoints && document == BuiltDocument && _session is { } session)
         {
-            var wanted = document.Breakpoints.Select(b => b.Line).ToHashSet();
-            var current = session.Breakpoints.Where(b => SameFile(b.Location.File, document.FilePath)).Select(b => b.Location.Line).ToHashSet();
-            foreach (int line in wanted.Except(current))
+            var wanted = document.Breakpoints.ToDictionary(b => b.Line, b => b.IsEnabled);
+            var current = session.Breakpoints.Where(b => SameFile(b.Location.File, document.FilePath)).ToDictionary(b => b.Location.Line, b => b.IsEnabled);
+            foreach ((int line, bool enabled) in wanted)
             {
-                session.SetBreakpoint(document.FilePath, line);
+                if (!current.TryGetValue(line, out bool was) || was != enabled)
+                {
+                    session.SetBreakpoint(document.FilePath, line, enabled); // added, enabled or disabled
+                }
             }
 
-            foreach (int line in current.Except(wanted))
+            foreach (int line in current.Keys.Except(wanted.Keys))
             {
                 session.RemoveBreakpoint(document.FilePath, line);
             }
@@ -579,9 +690,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             document.Breakpoints = [.. document.Breakpoints.Select(b => bound.TryGetValue(b.Line, out Breakpoint s)
                 ? s.IsBound && s.Offset is ushort offset
-                    ? new EditorBreakpoint(b.Line, BreakpointBinding.Bound, $"{SessionFactory.ProgramSegment:X4}:{offset:X4}")
-                    : new EditorBreakpoint(b.Line, BreakpointBinding.Unbound)
-                : new EditorBreakpoint(b.Line))];
+                    ? new EditorBreakpoint(b.Line, BreakpointBinding.Bound, $"{SessionFactory.ProgramSegment:X4}:{offset:X4}", b.IsEnabled)
+                    : new EditorBreakpoint(b.Line, BreakpointBinding.Unbound, IsEnabled: b.IsEnabled)
+                : new EditorBreakpoint(b.Line, IsEnabled: b.IsEnabled))];
         }
         finally
         {

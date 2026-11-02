@@ -160,6 +160,10 @@ public sealed partial class ShellViewModel : ObservableObject
             case Commands.RunState.WaitingForInput:
                 GoTo(ShellPanel.Console);
                 break;
+            case Commands.RunState.HaltedError or Commands.RunState.HaltedUnsupported:
+                IsBottomVisible = true;
+                BottomTab = BottomTab.Runtime; // the halt's what, where and next step (UI-012)
+                break;
         }
     }
 

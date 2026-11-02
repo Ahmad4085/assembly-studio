@@ -1845,3 +1845,23 @@
   - Memory editing (FR-062, P2) not in scope.
   - OQ-026 and the timing defects as before.
 - **Next step:** `/assembly-implement TASK-083`.
+
+### 2026-11-02 10:48 – 11:14 +0500 · Claude Code (Opus 5.5) · TASK-083 Instruction strip, runtime messages, history, breakpoints panels
+- **Summary:** Ran `/assembly-implement TASK-083` (user request; dependencies TASK-051, 052, 061 Done). Lock was free; written after the first new files (same session).
+  - **The gap:** the runtime builds structured halt messages (code, what, where, next) in `InterruptRouter.LastHalt`, but nothing carried them to the debugger.
+  - **Fix, additive:** `StepResult.Message` (Core `RuntimeMessage`), set by the router. The catalog gained RTE010 (unsupported instruction), RTE011 (HLT) and RTE090 (engine fault).
+  - **Found while testing AC-028:** the snapshot kept 1 byte for an undecodable instruction, so the bytes couldn't be shown. It now carries the 6 bytes at CS:IP, worded "bytes at CS:IP" since the length is unknown.
+  - Both changes are recorded in ADR-0007's changelog (no decision changed).
+  - **App:** the four panels; `EditorBreakpoint.IsEnabled` with gutter and session sync; the strip; tabs; a halt shows the Runtime tab; the status bar shows the halt code.
+- **The user's app was open at the start,** so I used the Debug build until it was closed; the app wasn't stopped.
+- **Files changed:** `src/AssemblyStudio.Core/{StepResult.cs, MachineSnapshot.cs}`, `src/AssemblyStudio.Runtime/Interrupts/{InterruptRouter.cs, RuntimeErrorPolicy.cs, RuntimeHaltInfo.cs}`, `src/AssemblyStudio.Debugging/Snapshots/SnapshotContent.cs`, `src/AssemblyStudio.App/{Panels/Session/SessionPanels.cs (new), Commands/BuildRunViewModel.cs, Editor/Adornments/EditorMarkers.cs, Editor/Adornments/GlyphMargin.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/Panels/SessionPanelsTests.cs (new)`, `tests/AssemblyStudio.Runtime.Tests/RuntimeMessageTests.cs (new)`, `tests/AssemblyStudio.Debugging.Tests/SnapshotTests.cs`, `docs/decisions/ADR-0007-ui-architecture-mvvm-threading.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `SessionPanelsTests` 9/9 (after the AC-028 bytes fix), `RuntimeMessageTests` 3/3, `SnapshotTests` 13/13.
+  - Mutation: router drops the exception message → 2 failed. Restored.
+  - Renders `runtime-halt.png` and `history.png` reviewed.
+  - Release build 0 warnings; full solution **1497/1497 at 11:04–11:08 and 11:09–11:13**.
+- **Git state after:** uncommitted TASK-083 changes on top of `8b45846`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - Step pauses aren't logged in the runtime messages (on purpose; the badge and strip show them). The spoken step announcement is TASK-085.
+  - OQ-026 and the timing defects as before.
+- **Next step:** user's choice: `TASK-069` (unblocks TASK-085) or `TASK-065`.

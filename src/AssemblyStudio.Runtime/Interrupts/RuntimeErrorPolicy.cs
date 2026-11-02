@@ -104,4 +104,36 @@ public static class RuntimeErrorPolicy
             Vector: vector,
             Function: ah);
     }
+
+    /// <summary>
+    /// The message for an instruction outside the supported 8086 set (FR-037, AC-028). The CPU halts before it; the
+    /// debugger adds this message from the halt and the instruction's bytes.
+    /// </summary>
+    /// <param name="cs">CS of the instruction.</param>
+    /// <param name="ip">IP of the instruction.</param>
+    /// <param name="bytes">The bytes at CS:IP (the opcode and what follows; its length is unknown).</param>
+    public static RuntimeMessage UnsupportedInstruction(ushort cs, ushort ip, IReadOnlyList<byte> bytes)
+    {
+        ArgumentNullException.ThrowIfNull(bytes);
+        string hex = string.Join(" ", bytes.Take(6).Select(b => b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture)));
+        return new RuntimeMessage(
+            Code: "RTE010",
+            What: $"Unsupported instruction (bytes at CS:IP: {hex})",
+            Where: $"at {cs:X4}:{ip:X4}",
+            NextStep: "This instruction is outside the supported 8086 set. See Help for the supported instructions, change the code, then Reset.");
+    }
+
+    /// <summary>The message for a HLT instruction: the program stopped the CPU (it has no hardware interrupts to wait for).</summary>
+    public static RuntimeMessage Hlt(ushort cs, ushort ip) => new(
+        Code: "RTE011",
+        What: "The program executed HLT and the CPU stopped",
+        Where: $"at {cs:X4}:{ip:X4}",
+        NextStep: "End the program with INT 21h function 4Ch instead of HLT, then Reset.");
+
+    /// <summary>The message for an internal emulator fault (NFR-010): the session stopped; the IDE stays usable.</summary>
+    public static RuntimeMessage EngineFault(string fault) => new(
+        Code: "RTE090",
+        What: $"Internal emulator error ({fault})",
+        Where: "in the emulator, not in your program",
+        NextStep: "Reset to try again. The log has the details (Help ▸ About ▸ Diagnostics).");
 }

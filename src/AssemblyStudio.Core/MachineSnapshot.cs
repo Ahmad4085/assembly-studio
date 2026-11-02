@@ -28,7 +28,7 @@ public enum SessionState
 /// <summary>The instruction the CPU is about to execute (ADR-0007 v1.1, from ui-spec §10).</summary>
 /// <param name="Cs">CS of the instruction.</param>
 /// <param name="Ip">IP of the instruction.</param>
-/// <param name="Bytes">The instruction bytes (up to 6).</param>
+/// <param name="Bytes">The instruction bytes (up to 6); for an instruction that can't be decoded (unsupported), the 6 bytes at CS:IP.</param>
 /// <param name="Disassembly">Decoded text via <see cref="IDisassembler"/>, or <see langword="null"/> when not decodable.</param>
 /// <param name="SourcePath">Source file from the source map, or <see langword="null"/> when unknown.</param>
 /// <param name="SourceLine">1-based source line from the source map, or <see langword="null"/> when unknown.</param>

@@ -33,7 +33,8 @@ public enum ExecutionMarkerKind
 /// <param name="Line">The 1-based source line.</param>
 /// <param name="Binding">Whether the line has code.</param>
 /// <param name="Address">The bound address as text (for example <c>0800:0105</c>), when bound.</param>
-public sealed record EditorBreakpoint(int Line, BreakpointBinding Binding = BreakpointBinding.NotBuilt, string? Address = null);
+/// <param name="IsEnabled">Whether the breakpoint stops the program (the breakpoints panel disables it, UI-014).</param>
+public sealed record EditorBreakpoint(int Line, BreakpointBinding Binding = BreakpointBinding.NotBuilt, string? Address = null, bool IsEnabled = true);
 
 /// <summary>
 /// The gutter glyph shapes (design tokens §3: ● breakpoint, ○ unbound, ➜ execution, ⨯ error, ▲ warning, ⓘ info). Each kind

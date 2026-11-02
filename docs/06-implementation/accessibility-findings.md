@@ -53,6 +53,28 @@ How to judge: steps 1–6 are the minimum for NFR-022 (reading lines, the caret 
 says the wrong text, record what was heard; I then raise it as a requirement/design issue (OQ) as ADR-0006 says, rather than
 patching AvalonEdit internals here (out of scope unless the fix is small).
 
+## Part C: step announcements (TASK-085, AC-044)
+
+**Automated (measured):** each step, pause, halt and end raises one announcement through a polite live region
+(`AnnouncementRegion`), built from the real state: "Ready at line 2.", "Paused at line 3. Changed: AX, IP.", "Halted: RTE001
+Divide error…", "Waiting for keyboard input. Type in the console.", "Program ended with exit code 0.". The state badge no longer
+announces itself, so nothing is read twice. Evidence: `AnnouncementTests` (3); mutation (no "Changed" part) fails. The keyboard-only
+workflow (AC-043) passed with real keys on 2026-11-02 12:52 +0500 (`UiSmokeTests.AC_043…`, opt-in, D-018): focus was in the app,
+on screen and keyboard-focused after every step.
+
+**Manual Narrator check: RUN by the user, 2026-11-02 13:11 +0500.** The user's report, verbatim: "i check narrator says paused and changed, commit". Result: the step
+announcement is spoken ("Paused …" with "Changed …"). Checks 1 and 3 (after the build, after F5) weren't reported separately.
+1. Run Assembly Studio, open the Hello sample (Learn ▸ Samples ▸ Hello, World ▸ Open a copy), build (Ctrl+Shift+B).
+2. Start Narrator (Ctrl+Win+Enter), click in the editor.
+3. Press **F11** three times. Narrator should say, after each step, something like "Paused at line 4. Changed: AX, IP."
+4. Press **F5**. Narrator should say "Running." and then "Program ended with exit code 0."
+
+| # | Expected | Result |
+|---|---|---|
+| 1 | "Ready at line …" after the build | Not reported separately |
+| 2 | "Paused at line N. Changed: …" after each F11 | **Heard** (user: "narrator says paused and changed") |
+| 3 | "Running." and "Program ended with exit code 0." after F5 | Not reported separately |
+
 ## Changes made in TASK-069
 - `CodeEditor`: the inner `TextArea` takes the editor's UIA name and gets a help text (`Strings.EditorHelpText`).
 - Tests: `tests/AssemblyStudio.App.Tests/Accessibility/EditorAccessibilityTests.cs` (2).
@@ -60,3 +82,5 @@ patching AvalonEdit internals here (out of scope unless the fix is small).
 ## Changelog
 - 2026-11-02: Created (TASK-069). Part A measured; Part B written, not run.
 - 2026-11-02: Part B run by the user ("i check narrates its work and commit"); overall pass recorded. TASK-069 closed.
+- 2026-11-02: Part C (step announcements, TASK-085) added; automated part measured; manual Narrator check not run yet.
+- 2026-11-02: Part C manual check run by the user ("i check narrator says paused and changed, commit"): the step announcement is spoken. TASK-085 closed.

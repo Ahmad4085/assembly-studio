@@ -123,6 +123,28 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     /// <summary>The registers and flags panels (TASK-081).</summary>
     public Panels.Machine.CpuViewModel Cpu { get; }
 
+    /// <summary>The latest screen-reader announcement (FR-093, TASK-085): one sentence per step, pause, halt or end, e.g.
+    /// "Paused at line 7. Changed: AX, DX, ZF." The view raises it through a polite live region.</summary>
+    [ObservableProperty]
+    public partial string Announcement { get; private set; } = string.Empty;
+
+    /// <summary>Raised with each announcement, also when the text repeats (two identical steps are still two events).</summary>
+    public event EventHandler<string>? Announced;
+
+    private void Announce(string text)
+    {
+        Announcement = text;
+        Announced?.Invoke(this, text);
+    }
+
+    // The pause sentence: where, and which registers and flags changed (16-bit registers and flags; the halves follow them).
+    private string PauseAnnouncement(bool ready)
+    {
+        string where = CurrentLine is int line ? Format(ready ? Strings.AnnounceReadyLine : Strings.AnnouncePausedLine, line) : Strings.AnnouncePaused;
+        string[] changed = [.. Cpu.Registers.Where(r => r.IsChanged).Select(r => r.Name), .. Cpu.Flags.Where(f => f.IsChanged).Select(f => f.Bit.ToString())];
+        return changed.Length == 0 ? where : $"{where} {Format(Strings.AnnounceChanged, string.Join(", ", changed))}";
+    }
+
     /// <summary>The current-instruction strip (TASK-083).</summary>
     public Panels.Session.InstructionStripViewModel Strip { get; } = new();
 
@@ -540,7 +562,20 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
 
         LogEvent(s, session, halt);
+        if (newPause || _lastAnnouncedState != State)
+        {
+            _lastAnnouncedState = State;
+            Announce(State switch
+            {
+                RunState.WaitingForInput => Strings.AnnounceWaiting,
+                RunState.HaltedError or RunState.HaltedUnsupported => Format(Strings.AnnounceHalted, halt is null ? Detail ?? BadgeText : $"{halt.Code} {halt.What}"),
+                RunState.Terminated => ExitCode is int code ? Format(Strings.AnnounceEnded, code) : Strings.AnnounceEndedNoCode,
+                _ => PauseAnnouncement(ready: State == RunState.Ready),
+            });
+        }
     }
+
+    private RunState? _lastAnnouncedState;
 
     // UI-012: one message per session event (a step is shown by the badge and strip, not logged).
     private (RunState, PauseReason, ulong)? _lastEvent;
@@ -753,6 +788,20 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             Cpu.Clear();
             Memory.Clear();
+        }
+
+        switch (value)
+        {
+            case RunState.Assembling:
+                Announce(Strings.AnnounceBuilding);
+                break;
+            case RunState.BuildFailed:
+                Announce(StatusText);
+                break;
+            case RunState.Running:
+                _lastAnnouncedState = value;
+                Announce(Strings.AnnounceRunning);
+                break;
         }
 
         Console.IsWaiting = value == RunState.WaitingForInput;

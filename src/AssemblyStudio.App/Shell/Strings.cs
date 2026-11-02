@@ -1284,4 +1284,37 @@ public static class Strings
 
     /// <summary>Assembly source. F9 toggles a breakpoint, Ctrl+K then Ctrl+I reads the line&apos;s messages, Ctrl+M makes Tab move focus.</summary>
     public static string EditorHelpText => Get(nameof(EditorHelpText));
+
+    /// <summary>Paused at line {0}.</summary>
+    public static string AnnouncePausedLine => Get(nameof(AnnouncePausedLine));
+
+    /// <summary>Paused.</summary>
+    public static string AnnouncePaused => Get(nameof(AnnouncePaused));
+
+    /// <summary>Ready at line {0}.</summary>
+    public static string AnnounceReadyLine => Get(nameof(AnnounceReadyLine));
+
+    /// <summary>Changed: {0}.</summary>
+    public static string AnnounceChanged => Get(nameof(AnnounceChanged));
+
+    /// <summary>Waiting for keyboard input. Type in the console.</summary>
+    public static string AnnounceWaiting => Get(nameof(AnnounceWaiting));
+
+    /// <summary>Halted: {0}.</summary>
+    public static string AnnounceHalted => Get(nameof(AnnounceHalted));
+
+    /// <summary>Program ended with exit code {0}.</summary>
+    public static string AnnounceEnded => Get(nameof(AnnounceEnded));
+
+    /// <summary>Program ended.</summary>
+    public static string AnnounceEndedNoCode => Get(nameof(AnnounceEndedNoCode));
+
+    /// <summary>Running.</summary>
+    public static string AnnounceRunning => Get(nameof(AnnounceRunning));
+
+    /// <summary>Building.</summary>
+    public static string AnnounceBuilding => Get(nameof(AnnounceBuilding));
+
+    /// <summary>Announcements</summary>
+    public static string RegionAnnouncements => Get(nameof(RegionAnnouncements));
 }

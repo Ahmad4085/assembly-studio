@@ -206,7 +206,7 @@ public sealed class CommandTableTests
         {
             BuildRunViewModel run = shell.BuildRun;
             var badge = (TextBlock)window.FindName("StateBadge");
-            Assert.Equal(AutomationLiveSetting.Polite, AutomationProperties.GetLiveSetting(badge));
+            Assert.Equal(AutomationLiveSetting.Polite, AutomationProperties.GetLiveSetting((TextBlock)window.FindName("AnnouncementRegion"))); // TASK-085
 
             DocumentViewModel document = workspace.New();
             document.Text = BuildRunTests.WarningAndError;

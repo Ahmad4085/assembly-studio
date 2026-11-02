@@ -63,3 +63,4 @@ mode [Measured].
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
 - 2026-10-26 v1.1: Minor. Validation results recorded (skeleton, oracle data pin and SHA-256 manifests). Decision unchanged.
 - 2026-10-27 v1.2: Minor. Coverage validation result (TASK-004, coverlet.MTP 10.1.0) and the 8088 v2 manifest recorded. Decision unchanged.
+- 2026-11-02 (TASK-085, no decision changed): FlaUI.UIA3 5.0.0 added to `tests/AssemblyStudio.App.UiTests` as decided. Licenses checked in the restored packages: FlaUI.UIA3 5.0.0 MIT, FlaUI.Core 5.0.0 MIT, Interop.UIAutomationClient 10.19041.0 MIT; FlaUI.Core's other dependencies are Microsoft .NET packages (MIT). Test-only: nothing is shipped with the application, so no notice obligation in the installer. Real-key UI tests are opt-in (D-018).

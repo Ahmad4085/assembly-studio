@@ -398,7 +398,11 @@
         <Button x:Name="BarStepOver" Style="{StaticResource CommandButton}" Tag="&#xE7A6;" Content="{x:Static shell:Strings.BarStepOver}" ToolTip="{x:Static shell:Strings.TipStepOver}" Command="{Binding BuildRun.StepOverCommand}" />
         <!-- UI-002 state badge: glyph + words; a polite live region, announced when it changes (code-behind) -->
         <TextBlock x:Name="StateBadge" Text="{Binding BuildRun.BadgeText}" Margin="16,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"
-                   AutomationProperties.Name="{x:Static shell:Strings.RegionStateBadge}" AutomationProperties.LiveSetting="Polite" />
+                   AutomationProperties.HelpText="{x:Static shell:Strings.RegionStateBadge}" />
+        <!-- FR-093 (TASK-085): screen-reader announcements, one per step/pause/halt/end; a polite live region raised by the code-behind.
+             1 x 1 and transparent: present in the UI Automation tree, not visible. -->
+        <TextBlock x:Name="AnnouncementRegion" Width="1" Height="1" Opacity="0" Focusable="False" Text="{Binding BuildRun.Announcement}"
+                   AutomationProperties.LiveSetting="Polite" />
       </StackPanel>
     </Border>
 

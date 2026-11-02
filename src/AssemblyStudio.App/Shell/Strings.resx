@@ -440,4 +440,15 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="RegionHistory" xml:space="preserve"><value>Execution history</value><comment>UIA name</comment></data>
   <data name="RegionBreakpoints" xml:space="preserve"><value>Breakpoints</value><comment>UIA name</comment></data>
   <data name="EditorHelpText" xml:space="preserve"><value>Assembly source. F9 toggles a breakpoint, Ctrl+K then Ctrl+I reads the line's messages, Ctrl+M makes Tab move focus.</value><comment>UIA help text of the code editor (TASK-069)</comment></data>
+  <data name="AnnouncePausedLine" xml:space="preserve"><value>Paused at line {0}.</value><comment>Screen-reader announcement (ui-spec §4, FR-093)</comment></data>
+  <data name="AnnouncePaused" xml:space="preserve"><value>Paused.</value><comment>Announcement without a line</comment></data>
+  <data name="AnnounceReadyLine" xml:space="preserve"><value>Ready at line {0}.</value><comment>Announcement after a build or reset</comment></data>
+  <data name="AnnounceChanged" xml:space="preserve"><value>Changed: {0}.</value><comment>Announcement suffix. {0} = AX, DX, ZF</comment></data>
+  <data name="AnnounceWaiting" xml:space="preserve"><value>Waiting for keyboard input. Type in the console.</value><comment>Announcement</comment></data>
+  <data name="AnnounceHalted" xml:space="preserve"><value>Halted: {0}.</value><comment>Announcement. {0} = code and message</comment></data>
+  <data name="AnnounceEnded" xml:space="preserve"><value>Program ended with exit code {0}.</value><comment>Announcement</comment></data>
+  <data name="AnnounceEndedNoCode" xml:space="preserve"><value>Program ended.</value><comment>Announcement</comment></data>
+  <data name="AnnounceRunning" xml:space="preserve"><value>Running.</value><comment>Announcement</comment></data>
+  <data name="AnnounceBuilding" xml:space="preserve"><value>Building.</value><comment>Announcement</comment></data>
+  <data name="RegionAnnouncements" xml:space="preserve"><value>Announcements</value><comment>UIA name of the announcement live region</comment></data>
 </root>

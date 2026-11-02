@@ -1890,3 +1890,31 @@
 - **Files changed:** `docs/06-implementation/accessibility-findings.md`, `docs/decisions/ADR-0006-editor-avalonedit.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** committed on the user's request (see HANDOFF).
 - **Next step:** `/assembly-implement TASK-085`.
+
+### 2026-11-02 12:25 – 13:07 +0500 · Claude Code (Opus 5.5) · TASK-085 Announcements, keyboard-only flow and UI smoke tests (automated part)
+- **Summary:** Ran `/assembly-implement TASK-085` (user request; all dependencies Done). Lock was free; written after the first edits (same session).
+  - FlaUI.UIA3 was already approved (ADR-0008, MIT; project named in ADR-0002). Licenses of the restored packages checked (all MIT) and recorded in ADR-0008's changelog. Test-only.
+  - **User decision D-018:** real-key UI tests are opt-in (AskUserQuestion: "Opt-in (Recommended)").
+  - **Announcements:** one sentence per step, pause, halt, waiting and end from the real state ("Paused at line 3. Changed: AX, IP."), raised through a polite live region. The badge's own live region was removed to avoid double reading; the TASK-080 test was updated accordingly.
+  - **UI test project:** a structure smoke test (always) and the AC-043 keyboard-only workflow (opt-in), with a focus guard that sends keys only while the app has keyboard focus.
+- **Keyboard test runs** (each started with the user's go-ahead):
+  - 12:48: failed, my test asserted focus while the menu was closing. Waits made tolerant; focus logged.
+  - 12:50 and 12:51: the guard refused to send any key, because Windows kept the focus in another program (WhatsApp, pid 8336). I stopped retrying.
+  - Added: wait up to 60 s for the user to click the app window. The user agreed and clicked.
+  - **12:52: passed.** Sample opened (Alt+L, S, Down, Enter), build, F9, F5 to the breakpoint, F10, Ctrl+Alt+R read "AX 0924, changed; AH 09; AL 24, changed", Stop. Focus was in the app, keyboard-focused and on screen after every step.
+- **Files changed:** `src/AssemblyStudio.App/{Commands/BuildRunViewModel.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/{Panels/AnnouncementTests.cs (new), Commands/CommandTableTests.cs}`, `tests/AssemblyStudio.App.UiTests/{AssemblyStudio.App.UiTests.csproj, AppUnderTest.cs, UiSmokeTests.cs} (new)`, `Directory.Packages.props`, `AssemblyStudio.slnx`, `DECISIONS.md` (D-018), `docs/decisions/ADR-0008-testing-strategy-and-tools.md`, `docs/06-implementation/accessibility-findings.md` (Part C), `docs/05-planning/backlog.md` (In progress), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `AnnouncementTests` 3/3, after fixing my test's Enter: `FromText` drops control characters by design.
+  - Mutation: no "Changed" part → 1 failed. Restored.
+  - UI structure test passed.
+  - Release build 0 warnings; full solution **1503 passed + 1 skipped (opt-in), 0 failed, at 12:54–13:01 and 13:01–13:06**.
+- **Git state after:** uncommitted TASK-085 changes on top of `b6a35c8`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** the manual Narrator check of the step announcements (Part C) NOT RUN; TASK-085 stays In progress. FR-092's "visible" focus is checked as keyboard-focused and on screen, not by looking at the focus ring.
+- **Next step:** the user's Narrator check, then TASK-086.
+
+### 2026-11-02 13:07 – 13:11 +0500 · Claude Code (Opus 5.5) · TASK-085 closed after the user's Narrator check
+- **Summary:** The user reported: "i check narrator says paused and changed, commit". Recorded in accessibility-findings.md Part C: the step announcement is spoken. The build and run/end announcements weren't reported separately, and the findings say so.
+  - TASK-085 Done. No code changed after the 12:54 and 13:01 full runs.
+- **Files changed:** `docs/06-implementation/accessibility-findings.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** committed on the user's request (see HANDOFF).
+- **Next step:** `/assembly-implement TASK-086`.

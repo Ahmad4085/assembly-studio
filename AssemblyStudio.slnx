@@ -19,6 +19,7 @@
     <Project Path="tests/AssemblyStudio.Debugging.Tests/AssemblyStudio.Debugging.Tests.csproj" />
     <Project Path="tests/AssemblyStudio.Content.Tests/AssemblyStudio.Content.Tests.csproj" />
     <Project Path="tests/AssemblyStudio.App.Tests/AssemblyStudio.App.Tests.csproj" />
+    <Project Path="tests/AssemblyStudio.App.UiTests/AssemblyStudio.App.UiTests.csproj" />
     <Project Path="tests/AssemblyStudio.ArchitectureTests/AssemblyStudio.ArchitectureTests.csproj" />
   </Folder>
 </Solution>

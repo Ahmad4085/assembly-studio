@@ -66,13 +66,7 @@ public partial class MainWindow : Window
             }
         };
         viewModel.BuildRun.Breakpoints.GoToRequested += (_, item) => GoToLine(item.Document, item.Breakpoint.Line);
-        viewModel.BuildRun.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(Commands.BuildRunViewModel.BadgeText))
-            {
-                AnnounceState();
-            }
-        };
+        viewModel.BuildRun.Announced += (_, _) => Announce();
         Closed += (_, _) => viewModel.BuildRun.Dispose();
     }
 
@@ -185,12 +179,16 @@ public partial class MainWindow : Window
         }
     }
 
-    // UI-002: the state badge is a polite live region; Narrator reads it when the state changes.
-    private void AnnounceState()
+    // FR-093: the announcement region is a polite live region; Narrator reads its text when it is raised.
+    private void Announce()
     {
-        if (StateBadge is not null && (UIElementAutomationPeer.FromElement(StateBadge) ?? UIElementAutomationPeer.CreatePeerForElement(StateBadge)) is { } peer)
+        if (AnnouncementRegion is not null)
         {
-            peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+            AnnouncementRegion.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+            if ((UIElementAutomationPeer.FromElement(AnnouncementRegion) ?? UIElementAutomationPeer.CreatePeerForElement(AnnouncementRegion)) is { } peer)
+            {
+                peer.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+            }
         }
     }
 

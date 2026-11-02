@@ -7,6 +7,8 @@
   <ItemGroup>
     <!-- Test framework (ADR-0008: xUnit v3 4.0.2, Apache-2.0) -->
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <!-- ADR-0008: UI automation for the smoke tests (MIT, test-only) -->
+    <PackageVersion Include="FlaUI.UIA3" Version="5.0.0" />
     <!-- Coverage under Microsoft.Testing.Platform (ADR-0008: coverlet, MIT). Collects only when the coverlet option is passed -->
     <PackageVersion Include="coverlet.MTP" Version="10.1.0" />
     <!-- MVVM source generators for the WPF app (ADR-0007: CommunityToolkit.Mvvm 8.4.2, MIT) -->

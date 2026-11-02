@@ -6,10 +6,50 @@
 
 ## Active Task
 
-None in progress. Next: `TASK-085` (announcements, keyboard-only flow and UI smoke tests; its dependencies are now Done), then `TASK-086`.
+None in progress. Next: `TASK-086` (end-to-end performance check), the last M5 task.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone progress | M5: TASK-080..085 Done; TASK-086 left. M4: TASK-065, 070 left (070 needs TASK-006) |
+| Recommended next action | `/assembly-implement TASK-086` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-085 Announcements, keyboard-only flow and UI smoke tests (Done 2026-11-02 13:11 +0500, Claude Code (Opus 5.5) and the user)
+- Announcements (FR-093): one sentence per step, pause, halt, waiting and end from the real state, through the polite live region `AnnouncementRegion`; the state badge no longer announces.
+- `tests/AssemblyStudio.App.UiTests` (FlaUI.UIA3 5.0.0, MIT, test-only): structure smoke test (always); AC-043 keyboard-only workflow (opt-in, D-018) passed with real keys 2026-11-02 12:52 +0500.
+- Manual Narrator check (AC-044): run by the user, who reported "i check narrator says paused and changed, commit" (the step announcement is spoken; the build and run/end announcements weren't reported separately).
+- `AnnouncementTests` 3; mutation caught. Release build 0 warnings; full solution 1503 passed + 1 skipped (opt-in) twice (12:54–13:01, 13:01–13:06). No code changed after those runs.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 12:25 / 13:11 +0500 |
+
+---|---|
+| Status | In progress: everything automated is done and verified; **waiting for the user** to listen to the step announcements with Narrator (Part C of `docs/06-implementation/accessibility-findings.md`, 3 checks) |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 12:25 +0500 |
+| Milestone | M5 |
+| Requirements | FR-091, FR-092, FR-093, NFR-022; UI-001; ADR-0008; AC-043, AC-044 |
+| Done so far | Announcements (`BuildRunViewModel.Announcement`/`Announced`, `AnnouncementRegion` live region; the badge no longer announces). New `tests/AssemblyStudio.App.UiTests` (FlaUI.UIA3 5.0.0, MIT, test-only): structure smoke test (always) and the AC-043 keyboard-only workflow (opt-in, D-018) — **passed with real keys 2026-11-02 12:52 +0500**. `AnnouncementTests` 3; mutation caught. Release build 0 warnings; full solution 1503 passed + 1 skipped (the opt-in test) twice (12:54–13:01, 13:01–13:06) |
+| Next | The user runs Part C (about 2 minutes) and reports; then TASK-085 Done |
+| Can commit now | Yes (task stays In progress) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 12:25 +0500 |
+| Milestone | M5 |
+| Goal | Add live announcements and prove the keyboard-only core flow with FlaUI |
+| Scope (in) | Per-step announcement text; FlaUI.UIA3 smoke tests (license recorded) |
+| Decision | User 2026-11-02: keyboard-only UI tests with real key presses are **opt-in** (environment variable), skipped in normal full runs; run once with the user away from the PC |
+| Requirements | FR-091, FR-092, FR-093, NFR-022; UI-001; ADR-0008 (FlaUI.UIA3 5.0.0, MIT); AC-043; AC-044 (automated part + Narrator check) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone progress | M4: TASK-065, 070 left (070 needs TASK-006). M5: TASK-080..084 Done; TASK-085 eligible; TASK-086 after it |
 | Recommended next action | `/assembly-implement TASK-085` |

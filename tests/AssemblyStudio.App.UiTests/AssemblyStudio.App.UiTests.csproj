@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <!-- ADR-0008: FlaUI.UIA3 5.0.0 (MIT) for the UI smoke tests (AC-043/044). Test-only: not shipped with the application. -->
+    <PackageReference Include="FlaUI.UIA3" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The application under test; its executable is copied next to the tests. -->
+    <ProjectReference Include="..\..\src\AssemblyStudio.App\AssemblyStudio.App.csproj" />
+  </ItemGroup>
+</Project>

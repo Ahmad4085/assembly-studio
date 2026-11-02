@@ -4,16 +4,17 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.2 |
-| Last updated | 2026-10-30 |
-| Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.4), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-10-30-1.md` |
+| Version | 0.3 |
+| Last updated | 2026-11-02 |
+| Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-02-1.md` |
 
 ## 1. Scope
-Everything implemented so far: the 40 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 TASK-060, 062, 063, 067, 068;
-M6 TASK-090..093; M7 TASK-101). Not in scope because not built yet: the code editor (TASK-064..066, 069), the run/debug
-panels and commands (M5, TASK-080..086), fonts on Windows 10 LTSC (TASK-070), notices (TASK-102), the clean-VM installer test
-(TASK-103) and the release checks (TASK-104, 105). Their acceptance criteria are listed as not run in §6.
+Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
+the added TASK-106; M6; M7 TASK-101). TASK-061's automated part is done; its manual display check (AC-059) is waived until QA
+(WVR-001). Not in scope because not built yet: fonts on Windows 10 LTSC (TASK-070), notices and supply chain (TASK-102), the
+clean-VM installer test (TASK-103), the localization review (TASK-104) and the usability session (TASK-105). Their acceptance
+criteria are listed as not run in §6.
 
 ## 2. Test levels and tools
 | Level | Tool / framework | Project | Automated? |
@@ -25,6 +26,8 @@ panels and commands (M5, TASK-080..086), fonts on Windows 10 LTSC (TASK-070), no
 | Integration: debug session, robustness, fuzz/soak | xUnit v3 | `tests/AssemblyStudio.Debugging.Tests` | Yes |
 | Program-level: source → NASM → loader → engine → output; samples, reference, help | xUnit v3 | `tests/AssemblyStudio.ProgramTests` | Yes |
 | UI / view model / real-process (UI Automation) | xUnit v3, WPF on an STA thread, System.Windows.Automation | `tests/AssemblyStudio.App.Tests` | Yes |
+| UI on the real process (FlaUI.UIA3 5.0.0, ADR-0008) | xUnit v3 | `tests/AssemblyStudio.App.UiTests` | Yes (the real-key test is opt-in, D-018) |
+| End-to-end performance on the reference machine (D-014) | xUnit v3, `build/bench/run-e2e.ps1` (`ASSEMBLY_STUDIO_BENCH=1`) | `App.Tests`, `App.UiTests` | Yes (opt-in) |
 | Content catalog | xUnit v3 | `tests/AssemblyStudio.Content.Tests` | Yes |
 | Architecture rules (ADR-0002) | xUnit v3, reflection and project-file analysis | `tests/AssemblyStudio.ArchitectureTests` | Yes |
 | Coverage (NFR-021) | coverlet.MTP, `build/coverage.ps1` | all test projects | Yes |
@@ -64,14 +67,14 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-023 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-024 | `Os.Dos.Tests.DosServicesTests` | Integration (DOS services on the engine) | AC-022, AC-023, AC-064, TASK-034, TASK-035, TASK-036 | 72 |
 | TC-025 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
-| TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041 | 27 |
+| TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041 | 28 |
 | TC-027 | `Toolchain.Nasm.Tests.BuildTimeTests` | Integration (NASM toolchain) | AC-056, NFR-006, TASK-086 | 1 |
 | TC-028 | `Toolchain.Nasm.Tests.CpuDirectiveGuardTests` | Integration (NASM toolchain) | FR-027, TASK-042 | 16 |
 | TC-029 | `Toolchain.Nasm.Tests.HelpConsistencyTests` | Integration (NASM toolchain) | AC-051, FR-032, TASK-093 | 16 |
 | TC-030 | `Toolchain.Nasm.Tests.NasmAssemblerTests` | Integration (NASM toolchain) | AC-015, AC-016, AC-019, FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, TASK-040 | 29 |
 | TC-031 | `Toolchain.Nasm.Tests.NasmLocatorTests` | Integration (NASM toolchain) | — | 5 |
 | TC-032 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
-| TC-033 | `Toolchain.Nasm.Tests.SourceMapTests` | Integration (NASM toolchain) | TASK-042, TASK-043 | 45 |
+| TC-033 | `Toolchain.Nasm.Tests.SourceMapTests` | Integration (NASM toolchain) | TASK-042, TASK-043 | 49 |
 | TC-034 | `Debugging.Tests.AcceptanceStepTests` | Integration (debug session) | AC-024, AC-026, FR-049, FR-054, FR-055, FR-056, TASK-080, TASK-082 | 2 |
 | TC-035 | `Debugging.Tests.BreakpointStepOverTests` | Integration (debug session) | AC-032, AC-033, FR-050, FR-052, TASK-052 | 12 |
 | TC-036 | `Debugging.Tests.DebugSessionTests` | Integration (debug session) | AC-027, AC-030, AC-054, NFR-004, NFR-010, TASK-050 | 15 |
@@ -80,7 +83,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-039 | `Debugging.Tests.Robustness.FuzzAndSoakTests` | Integration (debug session) | NFR-010, TASK-054 | 2 |
 | TC-040 | `Debugging.Tests.Robustness.HostileProgramTests` | Integration (debug session) | AC-045, FR-096, NFR-015, TASK-054 | 3 |
 | TC-041 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
-| TC-042 | `Debugging.Tests.SnapshotTests` | Integration (debug session) | AC-048, AC-049, FR-053, NFR-002, NFR-018, TASK-051 | 12 |
+| TC-042 | `Debugging.Tests.SnapshotTests` | Integration (debug session) | AC-048, AC-049, FR-053, NFR-002, NFR-018, TASK-051 | 13 |
 | TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093 | 6 |
 | TC-044 | `ProgramTests.ProgramTests` | Program-level (assembler -> loader -> engine) | AC-017, AC-021, AC-022, AC-023, AC-029, AC-031, AC-047, AC-064, TASK-044 | 14 |
 | TC-045 | `ProgramTests.ReferenceTests` | Program-level (assembler -> loader -> engine) | AC-037, FR-071, FR-072, TASK-092 | 80 |
@@ -94,7 +97,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-053 | `App.Tests.Documents.TextFileCodecTests` | UI / view model / process | FR-019, FR-020, TASK-062 | 12 |
 | TC-054 | `App.Tests.Documents.WorkspaceViewModelTests` | UI / view model / process | AC-002, AC-003, AC-004, AC-005, AC-006, AC-007, AC-008, AC-012, TASK-062 | 19 |
 | TC-055 | `App.Tests.JsonLayoutStoreTests` | UI / view model / process | TASK-060 | 6 |
-| TC-056 | `App.Tests.Learn.HelpPagesTests` | UI / view model / process | AC-051, NFR-033, TASK-093 | 46 |
+| TC-056 | `App.Tests.Learn.HelpPagesTests` | UI / view model / process | AC-051, NFR-033, TASK-093 | 49 |
 | TC-057 | `App.Tests.Learn.LearnTests` | UI / view model / process | AC-035, AC-036, FR-069, FR-070, TASK-090, TASK-091, TASK-092, TASK-093 | 12 |
 | TC-058 | `App.Tests.Logging.LoggingTests` | UI / view model / process | AC-063, NFR-009, NFR-012, TASK-068 | 10 |
 | TC-059 | `App.Tests.MainWindowSmokeTests` | UI / view model / process | NFR-026, TASK-060 | 8 |
@@ -112,6 +115,24 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-071 | `ArchitectureTests.ArchitectureRuleTests` | Architecture rules | AC-057, NFR-019, NFR-020 | 23 |
 | TC-072 | `ArchitectureTests.ProjectFileRuleTests` | Architecture rules | AC-057, NFR-019 | 16 |
 | TC-073 | `Debugging.Tests.Robustness.FloodPerformanceTests` | Integration (debug session), performance | AC-045, FR-096, NFR-015, TASK-054, TASK-087 | 1 |
+| TC-074 | `App.Tests.Editor.AvalonEditPlatformTests` | UI / view model | TASK-064 | 1 |
+| TC-075 | `App.Tests.Editor.EditorTests` | UI / view model | AC-009, AC-010, AC-046, FR-011, FR-012, FR-013, FR-014, FR-022, NFR-001, TASK-064 | 12 |
+| TC-076 | `App.Tests.Editor.EditorLatencyTests` | UI, performance | NFR-001, TASK-064, DEF-010 | 1 |
+| TC-077 | `App.Tests.Editor.AdornmentTests` | UI / view model | AC-013, FR-018, FR-052, FR-053, TASK-066, DEF-013 | 9 |
+| TC-078 | `App.Tests.Commands.BuildRunTests` | UI / view model (real NASM and session) | AC-013, AC-017, FR-028, FR-049, FR-052, FR-067, TASK-080 | 9 |
+| TC-079 | `App.Tests.Commands.CommandTableTests` | UI / view model | AC-013, AC-017, FR-091, UI-016, TASK-065, TASK-080, TASK-085 | 6 |
+| TC-080 | `App.Tests.Panels.ConsoleTests` | UI / view model (real NASM and session) | AC-022, AC-023, AC-045, FR-063, FR-064, NFR-015, UI-010, TASK-080, TASK-084 | 25 |
+| TC-081 | `App.Tests.Panels.CpuTests` | UI / view model (real NASM and session) | AC-025, AC-037, AC-052, FR-047, FR-057, NFR-018, UI-005, UI-006, TASK-081, DEF-008 | 17 |
+| TC-082 | `App.Tests.Panels.MemoryTests` | UI / view model (real NASM and session) | AC-026, FR-054, NFR-018, UI-008, UI-009, TASK-082 | 20 |
+| TC-083 | `App.Tests.Panels.SessionPanelsTests` | UI / view model (real NASM and session) | AC-024, AC-028, AC-029, AC-031, AC-048, AC-049, FR-041, FR-042, FR-052, FR-058, UI-007, UI-012, UI-013, UI-014, TASK-083 | 9 |
+| TC-084 | `Runtime.Tests.RuntimeMessageTests` | Unit (runtime) | FR-038, FR-040, FR-066, TASK-083 | 3 |
+| TC-085 | `App.Tests.Accessibility.EditorAccessibilityTests` | UI / UI Automation | FR-093, NFR-022, TASK-069 | 2 |
+| TC-086 | `App.Tests.Panels.AnnouncementTests` | UI / view model | FR-093, TASK-085 | 3 |
+| TC-087 | `App.UiTests.UiSmokeTests` | UI (real process, FlaUI) | AC-043, FR-091, FR-092, TASK-085 | 2 |
+| TC-088 | `App.Tests.Performance.EndToEndPerformanceTests` | UI, performance (opt-in) | AC-030, NFR-002, NFR-004, NFR-006, NFR-007, TASK-086 | 4 |
+| TC-089 | `App.UiTests.PerformanceTests` | UI (real process), performance (opt-in) | NFR-005, NFR-007, TASK-086, DEF-017 | 2 |
+| TC-090 | `App.Tests.Panels.VariablesTests` | UI / view model (real NASM and session) | AC-065, FR-057, FR-097, NFR-018, UI-023, TASK-106 | 18 |
+| TC-091 | `App.Tests.Editor.FindReplaceTests` | UI / view model | AC-011, FR-015, FR-016, FR-017, UI-004, TASK-065 | 22 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -131,15 +152,20 @@ has a defect; no unexplained failure.
 
 ## 6. Known limitations
 - **Performance tests** (not deterministic by nature) carry the trait `Category=Performance`: TC-008 engine performance,
-  TC-027 build time, TC-065 startup time, TC-073 flood (CPU time, DEF-006), and single methods in TC-019, TC-036 and TC-042.
-  They run in non-parallel collections within their assembly and are left out of the instrumented coverage run (DEF-009).
-- **Not run (not built):** AC-009, AC-010, AC-011, AC-046 (editor, TASK-064/065), AC-052 (number format, TASK-081), AC-043
-  (keyboard-only workflow, needs M5), AC-060 (localizable strings, TASK-104), AC-061 (supply chain, TASK-102).
-- **Not run (needs the user or clean machines):** AC-059 (display scaling, BLK-002), AC-044 (Narrator, TASK-069), AC-001 and
-  AC-034 (offline with a network monitor), AC-040 and AC-041 (clean VMs, TASK-103; the installer script passed 21/21 on the
-  development machine in TASK-101), AC-042 (notices, TASK-102), AC-062 (usability session).
-- **Partial coverage:** AC-024 and AC-026 are tested at session level (TC-034); their UI part waits for TASK-080/TASK-082.
+  TC-027 build time, TC-065 startup time, TC-073 flood (CPU time), TC-076 editor latency, and single methods in TC-019,
+  TC-036 and TC-042. They run in non-parallel collections within their assembly and are left out of the instrumented
+  coverage run (DEF-009).
+- **Opt-in tests** skip in a normal full run and run on request: TC-088 and TC-089 (the end-to-end measurements, run by
+  `build/bench/run-e2e.ps1`), and the AC-043 keyboard-only workflow in TC-087, which presses real keys
+  (`ASSEMBLY_STUDIO_UI_INPUT=1`, only with the user's agreement and the user away from the PC, D-018).
+- **Not run (not built):** AC-060 (localizable strings, TASK-104), AC-061 and AC-042 (supply chain and notices, TASK-102).
+- **Not run (needs the user or clean machines):** AC-059 (display scaling; waived until QA, WVR-001), AC-001 and AC-034
+  (offline with a network monitor), AC-040 and AC-041 (clean VMs, TASK-103; the installer script passed 21/21 on the
+  development machine in TASK-101), AC-062 (usability session, TASK-105).
+- **Manual checks run by the user** (not automated, recorded as manual evidence): the Narrator walkthrough of the editor
+  (TASK-069) and of the step announcements (TASK-085), part of AC-044.
 
 ## Changelog
 - 2026-10-30 v0.1: Initial plan (testing phase, Claude Code (Opus 5.5)): inventory TC-001..TC-072 from the executed suite.
 - 2026-10-30 v0.2: TASK-087: TC-015, TC-023, TC-025, TC-032, TC-041, TC-070 retired (placeholders deleted); TC-073 `FloodPerformanceTests` (moved from TC-040); performance trait and coverage exclusion.
+- 2026-11-02 v0.3: Testing phase run 2026-11-02-1 (Claude Code (Opus 5.5)): TC-074..TC-091 added for the test classes of TASK-064..086, 065 and 106 (one per class, IDs as the classes name them); test counts refreshed from the run; scope, levels (FlaUI UI tests, opt-in end-to-end measurements) and limitations updated.

@@ -1983,3 +1983,18 @@
 - **Git state after:** uncommitted TASK-065 changes on top of `031566c`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** the find bar's text boxes and buttons use the system look, like the existing memory address box (no themed TextBox/Button style exists yet). AC-011 test status is left to the testing phase.
 - **Next step:** the user tries it and says "commit"; then `/assembly-test` (TASK-070 waits for TASK-006).
+
+### 2026-11-02 20:00 – 20:28 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-02-1
+- **Summary:** Ran `/assembly-test` (user request; default scope: everything implemented, 57 Done tasks). No production or test code changed.
+  - Test plan v0.3: TC-074..TC-091 for the 18 test classes added since the last report; counts refreshed (sum 1556 = runner total); scope, levels and limitations updated.
+  - Result: 1556 tests: 1548 passed, 1 failed (TC-087 UI smoke test, DEF-020), 7 skipped (opt-in); measurement script 6 of 7 passed (NFR-005 startup median 3,005 ms > 3 s, DEF-021); coverage complete (engine 99.6%, runtime 93.8%, total 90.9%); 53 of 65 acceptance criteria pass, AC-056 fails, 11 not run; DEF-006, 009, 010, 013, 017, 018, 019 verified.
+  - Not retried, per the procedure. New defects: DEF-020 (TC-087's window not found within 30 s; also leaves its process and folder on that path) and DEF-021 (NFR-005).
+  - Traceability v2.6 and acceptance criteria v2.3 refreshed from the run. Three statuses set by hand where a class-level result was too coarse: NFR-007 PASS (only TC-089's NFR-005 test failed), AC-043 NOT RUN (its real-key test is opt-in), AC-056 FAIL (NFR-005).
+- **Commands:**
+  - `dotnet build AssemblyStudio.slnx -c Release` → 0 warnings, 0 errors.
+  - `dotnet test --solution AssemblyStudio.slnx -c Release --no-build --results-directory artifacts/test-results/2026-11-02-1 --report-xunit-trx --report-xunit-xml` (20:06–20:10) → 1556 total, 1548 passed, 1 failed, 7 skipped.
+  - `powershell -File build/coverage.ps1 -NoBuild` (20:10–20:23) → exit 0, 11 of 11 projects passed.
+  - `powershell -File build/bench/run-e2e.ps1` (20:23–20:25) → exit 1, 6 of 7 passed.
+- **Files changed:** `docs/07-testing/{test-plan.md, test-report-2026-11-02-1.md (new), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `16814e0`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the user decides on fix tasks for DEF-020 and DEF-021 (they need approval: new backlog tasks), then `/assembly-qa`.

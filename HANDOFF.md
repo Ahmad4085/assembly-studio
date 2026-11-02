@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 19:52 +0500 by Claude Code (Opus 5.5), after completing TASK-065 |
-| Current task | **None in progress. Next: `/assembly-test` (TASK-070 waits for TASK-006)** |
-| Last completed | TASK-065 Find, replace and go to line (Done 2026-11-02 19:52 +0500) |
-| Git state | HEAD after `17313c4` (TASK-065 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 20:28 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-02-1) |
+| Current task | **None in progress. Testing phase done with 2 failures (DEF-020, DEF-021); waiting for the user's decision on fix tasks** |
+| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-02-1.md` (2026-11-02 20:28 +0500) |
+| Git state | HEAD `16814e0`; testing-phase documents **uncommitted** (report 2026-11-02-1). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Testing phase 2026-11-02-1** (Claude Code; documents only): 1556 tests: 1548 passed, 1 failed (TC-087 UI smoke test, DEF-020), 7 skipped (opt-in); measurement script 6 of 7 passed (NFR-005 startup median 3,005 ms > 3 s, DEF-021); coverage complete (engine 99.6%, runtime 93.8%, total 90.9%); 53 of 65 acceptance criteria pass, AC-056 fails, 11 not run; DEF-006, 009, 010, 013, 017, 018, 019 verified. Test plan v0.3 (TC-074..TC-091), traceability v2.6, AC v2.3, defects DEF-020 and DEF-021 opened.
+
 - **TASK-065 Find, replace and go to line** (Claude Code, Done, committed `17313c4`):
   - `src/AssemblyStudio.App/Editor/Search/`: `SearchRules` (pure matching rules), `ISearchTarget` (implemented explicitly by `CodeEditor`), `FindReplaceViewModel` (`ShellViewModel.Find`; the window supplies `ActiveSearchTarget` and `AskLine`), `GoToLineDialog`.
   - `FindBar` in `MainWindow.xaml` above the editors; key bindings on `EditorPanel` (Ctrl+F, F3, Shift+F3, Ctrl+H, Ctrl+G); Esc in the bar closes it (element binding wins over the window's Esc = Cancel build).
@@ -110,8 +112,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-065 committed (`17313c4`).
-2. `/assembly-test` (M4/M5 implementation done apart from TASK-070, which waits for TASK-006).
+1. The user reviews the test report and says "commit" (then commit and record the hash here).
+2. Fix tasks for DEF-020 (UI smoke test: stop the process and clean up when the window isn't found; wait longer or run after the other projects) and DEF-021 (NFR-005: profile startup, measure a cold start) need the user's approval as new backlog tasks; then `/assembly-implement`, else `/assembly-qa`.
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-011 (reopened 2026-11-02: AvalonEdit's paste check outside the retry), DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); AC-065 test status; update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 
 ## Do not overwrite or revert

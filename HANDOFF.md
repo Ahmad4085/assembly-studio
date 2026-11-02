@@ -8,7 +8,7 @@
 | Written | 2026-11-01 17:16 +0500 by Claude Code (Opus 5.5), after completing TASK-081 (with layout D-017) |
 | Current task | **None in progress. Next (user-approved): `TASK-082` memory and stack, then TASK-083** |
 | Last completed | TASK-081 Registers and flags panels (Done 2026-11-01 17:16 +0500) |
-| Git state | HEAD `1e4632e` + uncommitted TASK-081 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `d19fe2b` (TASK-081 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 16:53 +0500).
@@ -76,7 +76,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-081. Files:
+1. Done: TASK-081 committed. Files were:
    - `src/AssemblyStudio.App/{Panels/Machine/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, App.xaml.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/{Panels/CpuTests.cs, Commands/CommandTableTests.cs}`
    - `DECISIONS.md` (D-017), `docs/04-design/ui-spec.md` (UI-005), `docs/07-testing/defects.md` (DEF-014 note, DEF-015, DEF-016), `docs/05-planning/backlog.md`, shared memory files

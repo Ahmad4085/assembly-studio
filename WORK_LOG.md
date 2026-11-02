@@ -1777,3 +1777,51 @@
 - **Git state after:** uncommitted TASK-084 changes on top of `b09199f`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** OQ-026, DEF-012 and DEF-014 Open; DEF-006, 009, 010, 011, 013 Fixed (unverified). Not checked by hand: real typing into the console with a physical keyboard (keys simulated through the view's handler), Narrator reading the console (TASK-085).
 - **Next step:** `/assembly-implement TASK-081`.
+
+### 2026-11-01 16:06 – 16:26 +0500 · Claude Code (Opus 5.5) · TASK-081 Registers and flags panels
+- **Summary:** Ran `/assembly-implement TASK-081` (user request; dependencies TASK-051 and TASK-061 Done). Lock was free; written after the first new files (same session).
+  - **Implemented** in `Panels/Machine/`: `ValueFormat` and `CpuViewModel` (register and flag cells, change marking against the previous pause, undefined "?", the four panel states).
+  - **Integration:**
+    - Panels fed from `BuildRunViewModel`; Settings number format.
+    - Ctrl+Alt+N on the machine region and in the View menu.
+    - Command table: new MachinePanel scope.
+- **Release build blocked by the user's running app:** the Release output folder was locked by AssemblyStudio.App (PID 19720, started by the user). I worked in Debug until it was closed and didn't stop it.
+- **Files changed:** `src/AssemblyStudio.App/{Panels/Machine/ValueFormat.cs (new), Panels/Machine/CpuViewModel.cs (new), Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, App.xaml.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/{Panels/CpuTests.cs (new), Commands/CommandTableTests.cs}`, `docs/07-testing/defects.md` (DEF-014 second occurrence), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `CpuTests` 16/16 and `CommandTableTests` 6/6 (Debug, then Release).
+  - Render `registers-flags.png` reviewed; I then tightened the row padding.
+  - Mutation: registers never marked changed → 2 failed. Restored.
+  - Full runs:
+    - 16:14–16:18: 1 failed (DEF-014: `AboutTests.AC_038`, NASM version check 15.6 s).
+    - **16:18–16:21 and 16:21–16:25: 1463/1463 twice.**
+  - Release build 0 warnings.
+- **Git state after:** uncommitted TASK-081 changes on top of `1e4632e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - OQ-026, DEF-012 and DEF-014 Open; DEF-006, 009, 010, 011, 013 Fixed (unverified).
+  - The format box isn't themed: no ComboBox style in the themes yet; the Settings dialog has the same look.
+  - Register/flag editing (FR-062, P2) not in scope.
+  - The screen-reader step announcement is TASK-085.
+- **Next step:** `/assembly-implement TASK-082`.
+
+### 2026-11-01 16:26 – 17:16 +0500 · Claude Code (Opus 5.5) · TASK-081 register layout change (D-017) and final verification
+- **Summary:** After the TASK-081 report the user asked, before the next task, for a different register layout: "before going next task i want please make register like this", with a reference image.
+  - Implemented as D-017: `RegisterRow` (AX–DX with AH/AL … on the same row), value boxes (`Surface.Raised`, `Syntax.Number`), names in `Accent.Primary`. Changed value: `Value.Changed` + bold + an outline + the row bar.
+  - In the dark theme `Value.Changed` and `Syntax.Number` are close, so the outline and weight carry the cue.
+  - The "8-bit halves" option was removed; binary values wrap the halves to a second line.
+  - DECISIONS.md and ui-spec UI-005 updated in place with a changelog line.
+- **Mistakes and fixes:**
+  - I first numbered the decision D-016, which already exists (OpenCode, 2026-10-27; the table isn't in numeric order). Renumbered to D-017 before anything was committed; D-016 untouched.
+  - The new templates used `VisibleWhenTrue` before it was defined (XAML parse error); moved the converter to the top of the window resources.
+- **The user's app was open again** (PID 8112), so I built and tested in Debug.
+  - CpuTests 17/17.
+  - Full Debug run 1463/1464: the flood performance test fails unoptimized, so Debug can't judge it.
+  - After the user said "continue" and closed the app: Release build 0 warnings. Full runs:
+    - 16:53: 1 failed (DEF-015, startup 11.46 s; 2.3 GB free memory).
+    - 16:58: 1464/1464.
+    - 17:02: 2 failed (DEF-016 View menu popup closed; DEF-012 again).
+    - **17:07–17:11 and 17:11–17:15: 1464/1464 twice.**
+  - DEF-016's test passed 2 of 2 alone.
+- **Files changed (in addition to the TASK-081 entry):** `src/AssemblyStudio.App/{Panels/Machine/CpuViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/Panels/CpuTests.cs`, `DECISIONS.md`, `docs/04-design/ui-spec.md`, `docs/07-testing/defects.md` (DEF-015, DEF-016), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted TASK-081 changes on top of `1e4632e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** DEF-012, 014, 015, 016 Open: load or focus sensitive checks, now 4 of them. A test-phase look at running the wall-clock and UI-focus tests serially is worth proposing.
+- **Next step:** commit on request, then `/assembly-implement TASK-082`.

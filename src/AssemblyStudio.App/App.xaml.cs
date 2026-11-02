@@ -131,7 +131,9 @@ public partial class App : Application
                 workspace,
                 () => new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = settings.Current.AssemblerPath }),
                 build => Commands.SessionFactory.Create(build, settings.Current.InstructionBudget,
-                    fault => log.Write(LogLevel.Error, "Debug session fault.", fault))));
+                    fault => log.Write(LogLevel.Error, "Debug session fault.", fault)),
+                numberFormat: settings.Current.NumberFormat));
+        settings.Changed += (_, _) => viewModel.BuildRun.Cpu.Format = settings.Current.NumberFormat;
         Exit += (_, _) => viewModel.BuildRun.Dispose();
         // FR-022: the zoom scales the editor and the debug panels' code font.
         void ApplyZoom()

@@ -27,6 +27,68 @@
         FocusManager.FocusedElement="{Binding ElementName=EditorPanel}">
   <Window.Resources>
     <BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
+    <!-- TASK-081 ValueCell (ui-spec section 7, D-017): the value in a box in the code font. Changed = Value.Changed + FontWeight.Changed
+         + an outline (the outline and weight are the non-color cues). -->
+    <DataTemplate x:Key="RegisterChipTemplate">
+      <Border x:Name="Chip" Background="{DynamicResource Surface.Raised}" BorderBrush="Transparent" BorderThickness="1" CornerRadius="3" Padding="6,0" Margin="0,1">
+        <TextBlock x:Name="ChipValue" Text="{Binding Text}" Foreground="{DynamicResource Syntax.Number}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+      </Border>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding IsChanged}" Value="True">
+          <Setter TargetName="Chip" Property="BorderBrush" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="ChipValue" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="ChipValue" Property="FontWeight" Value="{DynamicResource FontWeight.Changed}" />
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+    <!-- One register row: "AX [000A]  AH [00]  AL [0A]" (D-017); the halves wrap below when the format is too wide (binary). -->
+    <DataTemplate x:Key="RegisterRowTemplate">
+      <DockPanel Margin="0,1">
+        <Border x:Name="Marker" DockPanel.Dock="Left" Width="2" Margin="0,2,6,2" Background="Transparent" />
+        <TextBlock DockPanel.Dock="Left" Width="44" VerticalAlignment="Center" Text="{Binding Main.Name}" Foreground="{DynamicResource Accent.Primary}"
+                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" FontWeight="SemiBold" />
+        <WrapPanel VerticalAlignment="Center">
+          <ContentControl Content="{Binding Main}" ContentTemplate="{StaticResource RegisterChipTemplate}" Focusable="False" />
+          <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Visibility="{Binding HasHalves, Converter={StaticResource VisibleWhenTrue}}">
+            <TextBlock Text="{Binding High.Name}" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="{DynamicResource Text.Secondary}" FontSize="{DynamicResource FontSize.UI.Small}" />
+            <ContentControl Content="{Binding High}" ContentTemplate="{StaticResource RegisterChipTemplate}" Focusable="False" />
+            <TextBlock Text="{Binding Low.Name}" Margin="10,0,5,0" VerticalAlignment="Center" Foreground="{DynamicResource Text.Secondary}" FontSize="{DynamicResource FontSize.UI.Small}" />
+            <ContentControl Content="{Binding Low}" ContentTemplate="{StaticResource RegisterChipTemplate}" Focusable="False" />
+          </StackPanel>
+        </WrapPanel>
+      </DockPanel>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding Main.IsChanged}" Value="True">
+          <Setter TargetName="Marker" Property="Background" Value="{DynamicResource Value.Changed}" />
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+    <!-- FlagCell: letter, 0/1/?, changed = color + weight + a 2 px underline; full name and meaning as tooltip and UIA name -->
+    <DataTemplate x:Key="FlagCellTemplate">
+      <StackPanel Width="26" Margin="1,0" ToolTip="{Binding Tooltip}">
+        <TextBlock Text="{Binding Letter}" HorizontalAlignment="Center" Foreground="{DynamicResource Text.Secondary}" />
+        <TextBlock x:Name="FlagValue" Text="{Binding Text}" HorizontalAlignment="Center" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+        <Border x:Name="Marker" Height="2" Margin="3,1,3,0" Background="Transparent" />
+      </StackPanel>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding IsChanged}" Value="True">
+          <Setter TargetName="Marker" Property="Background" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="FlagValue" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="FlagValue" Property="FontWeight" Value="{DynamicResource FontWeight.Changed}" />
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+    <Style x:Key="MachineListItem" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+      <Setter Property="Padding" Value="2,0" />
+      <Setter Property="AutomationProperties.Name" Value="{Binding AccessibleName}" />
+    </Style>
+    <Style x:Key="MachineList" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource Text.Primary}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
   </Window.Resources>
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:MainWindow.NextPaneCommand}" Executed="OnNextPane" />
@@ -161,6 +223,8 @@
         <MenuItem Header="{x:Static shell:Strings.CmdZoomIn}" InputGestureText="{x:Static shell:Strings.KeyZoomIn}" Command="{Binding ZoomInCommand}" />
         <MenuItem Header="{x:Static shell:Strings.CmdZoomOut}" InputGestureText="{x:Static shell:Strings.KeyZoomOut}" Command="{Binding ZoomOutCommand}" />
         <MenuItem Header="{x:Static shell:Strings.CmdZoomReset}" InputGestureText="{x:Static shell:Strings.KeyZoomReset}" Command="{Binding ZoomResetCommand}" />
+        <Separator />
+        <MenuItem Header="{x:Static shell:Strings.CmdCycleFormat}" InputGestureText="{x:Static shell:Strings.KeyCycleFormat}" Command="{Binding BuildRun.Cpu.CycleFormatCommand}" />
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdResetLayout}" Command="{Binding ResetLayoutCommand}" />
       </MenuItem>
@@ -471,16 +535,85 @@
 
       <!-- Machine column: UI-005 registers above UI-006 flags -->
       <Grid x:Name="MachineRegion" Grid.Column="4" AutomationProperties.Name="{x:Static shell:Strings.RegionMachine}">
+        <Grid.InputBindings>
+          <!-- ui-spec section 6: Cycle number format, when a machine panel has focus -->
+          <KeyBinding Key="N" Modifiers="Ctrl+Alt" Command="{Binding BuildRun.Cpu.CycleFormatCommand}" />
+        </Grid.InputBindings>
         <Grid.RowDefinitions>
           <RowDefinition Height="*" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <!-- UI-005 registers (TASK-081): values of the latest paused snapshot only (NFR-018) -->
         <GroupBox x:Name="RegistersPanel" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderRegisters}">
-          <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          <DockPanel DataContext="{Binding BuildRun.Cpu}">
+            <DockPanel DockPanel.Dock="Top" Margin="4,2,4,4" Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+              <ComboBox x:Name="NumberFormatList" Width="104" HorizontalAlignment="Left" SelectedIndex="{Binding FormatIndex}"
+                        AutomationProperties.Name="{x:Static shell:Strings.RegionNumberFormat}" ToolTip="{x:Static shell:Strings.KeyCycleFormat}">
+                <ComboBoxItem Content="{x:Static shell:Strings.FormatHex}" />
+                <ComboBoxItem Content="{x:Static shell:Strings.FormatUnsigned}" />
+                <ComboBoxItem Content="{x:Static shell:Strings.FormatSigned}" />
+                <ComboBoxItem Content="{x:Static shell:Strings.FormatBinary}" />
+              </ComboBox>
+            </DockPanel>
+            <Border x:Name="RegistersNotCurrent" DockPanel.Dock="Top" Padding="6,2" Background="{DynamicResource Surface.Raised}"
+                    Visibility="{Binding IsNotCurrent, Converter={StaticResource VisibleWhenTrue}}">
+              <TextBlock Text="{x:Static shell:Strings.CpuNotCurrent}" Foreground="{DynamicResource Text.Secondary}" TextWrapping="Wrap" />
+            </Border>
+            <Grid>
+              <TextBlock x:Name="RegistersEmpty" Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                         Visibility="{Binding HasValues, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+              <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False" Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+                <StackPanel>
+                  <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                          <Setter Property="Opacity" Value="0.55" />
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </StackPanel.Style>
+                  <ListBox x:Name="RegisterList" Style="{StaticResource MachineList}" ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource RegisterRowTemplate}"
+                           HorizontalContentAlignment="Stretch" AutomationProperties.Name="{x:Static shell:Strings.RegionRegisters}">
+                    <ListBox.ItemContainerStyle>
+                      <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}" />
+                    </ListBox.ItemContainerStyle>
+                  </ListBox>
+                </StackPanel>
+              </ScrollViewer>
+            </Grid>
+          </DockPanel>
         </GroupBox>
+        <!-- UI-006 flags (TASK-081): 0, 1 or "?" when the last instruction left the flag undefined (FR-048) -->
         <GroupBox x:Name="FlagsPanel" Grid.Row="1" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderFlags}"
                   BorderThickness="0,1,0,0" MinHeight="96">
-          <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+          <Grid DataContext="{Binding BuildRun.Cpu}">
+            <TextBlock x:Name="FlagsEmpty" Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                       Visibility="{Binding HasValues, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+            <ListBox x:Name="FlagList" ItemsSource="{Binding Flags}" ItemTemplate="{StaticResource FlagCellTemplate}"
+                     Margin="4" AutomationProperties.Name="{x:Static shell:Strings.RegionFlags}"
+                     Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+              <ListBox.Style>
+                <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                      <Setter Property="Opacity" Value="0.55" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </ListBox.Style>
+              <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+              </ListBox.ItemsPanel>
+              <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}">
+                  <Setter Property="AutomationProperties.HelpText" Value="{Binding Tooltip}" />
+                </Style>
+              </ListBox.ItemContainerStyle>
+            </ListBox>
+          </Grid>
         </GroupBox>
       </Grid>
 

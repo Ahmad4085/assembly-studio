@@ -5,17 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-01 16:01 +0500 by Claude Code (Opus 5.5), after completing TASK-084 |
-| Current task | **None in progress. Next (user-approved): `TASK-081` registers and flags, then TASK-082, TASK-083** |
-| Last completed | TASK-084 Console panel (Done 2026-11-01 16:01 +0500) |
-| Git state | HEAD `cf941bb` (TASK-084 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-01 17:16 +0500 by Claude Code (Opus 5.5), after completing TASK-081 (with layout D-017) |
+| Current task | **None in progress. Next (user-approved): `TASK-082` memory and stack, then TASK-083** |
+| Last completed | TASK-081 Registers and flags panels (Done 2026-11-01 17:16 +0500) |
+| Git state | HEAD `1e4632e` + uncommitted TASK-081 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 15:52 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1446/1446 passed**, two consecutive runs (2026-11-01 15:52–15:56 and 15:56–16:00 +0500).
-- Note: full runs take 3–4 minutes and need memory; one run at 13:34 was stopped by Claude Code for low system memory (not a failure).
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 16:53 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1464/1464 passed**, two consecutive runs (2026-11-01 17:07–17:11 and 17:11–17:15 +0500). Earlier runs that afternoon failed once each on DEF-015 (startup time), DEF-016 (View menu popup) and DEF-012.
+- Notes: Debug runs can't judge the performance tests (unoptimized). While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app.
 
 ## Changes since the previous handoff
+- **TASK-081 Registers and flags** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Panels/Machine/{ValueFormat, CpuViewModel}.cs`; templates and panels in `MainWindow.xaml`; `BuildRunViewModel.Cpu` and `LatestSnapshot`.
+  - **D-017 (user request):** register rows show AX–DX with their halves on the same row, values in boxes (`RegisterRow`, `RegisterChipTemplate`, `RegisterRowTemplate`); DECISIONS.md and ui-spec UI-005 updated. Note: the decision table in DECISIONS.md is not in numeric order; check the highest ID before adding one.
+  - **For TASK-082:** reuse `CpuViewModel.Format` (or move it to a shared machine-panel object) for the memory and stack values; `MemoryWindows` need `IDebugSession.WatchMemory`; follow the same Show/MarkRunning/Clear pattern from `ApplyPendingSnapshot`. Ctrl+Alt+N is bound on `MachineRegion`; the memory and stack panels are in the bottom region, so add the binding there too.
+
 - **TASK-084 Console** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Panels/Console/{ConsoleScreen, ConsoleViewModel, ConsoleKeys, ConsoleView}.cs`; console tab in `MainWindow.xaml`; `BuildRunViewModel.Console` (bounded pending output); `ShellViewModel` tab follows the run state.
   - **For TASK-081..083:** same pattern as the console: give `BuildRunViewModel` a panel view model and feed it from `ApplyPendingSnapshot` (UI thread, latest snapshot only).
@@ -48,7 +53,7 @@
 - `WVR-001`: the AC-059 manual display check is waived until QA (BLK-002 resolved by the waiver); it must still pass before release.
 
 ## Decisions and constraints to respect
-- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-016.
+- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-017.
 - `AssemblyStudio.Runtime`, `AssemblyStudio.Os.Dos`, and `AssemblyStudio.Toolchain.Nasm` reference only `AssemblyStudio.Core` (ADR-0002 graph, enforced by architecture tests).
 - Console buffer cap is 1 MB with oldest output trimmed. Input events stamped with instruction count for replay determinism.
 - Composition for a runnable machine (as in `DosServicesTests.Rig`):
@@ -71,12 +76,12 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-084 committed. Files were:
-   - `src/AssemblyStudio.App/{Panels/Console/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/{Panels/ConsoleTests.cs, Commands/BuildRunTests.cs, Commands/CommandTableTests.cs}`
-   - `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-081`.
-3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012 and DEF-014 to investigate.
+1. When the user asks: commit TASK-081. Files:
+   - `src/AssemblyStudio.App/{Panels/Machine/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, App.xaml.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/{Panels/CpuTests.cs, Commands/CommandTableTests.cs}`
+   - `DECISIONS.md` (D-017), `docs/04-design/ui-spec.md` (UI-005), `docs/07-testing/defects.md` (DEF-014 note, DEF-015, DEF-016), `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-082`.
+3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate (all load or focus sensitive).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -123,6 +123,11 @@ public sealed class CommandTableTests
                         problems.AddRange(entry.Keys.Where(k => !command.InputGestures.OfType<KeyGesture>().Any(g => g.Key == k.Key && g.Modifiers == k.Modifiers))
                             .Select(k => $"{entry.Name}: {k} is not a gesture of {command.Name}"));
                         break;
+                    case ShortcutScope.MachinePanel:
+                        var machine = (FrameworkElement)window.FindName("MachineRegion");
+                        problems.AddRange(entry.Keys.Where(k => !machine.InputBindings.OfType<KeyBinding>().Any(b => b.Key == k.Key && b.Modifiers == k.Modifiers && b.Command is not null))
+                            .Select(k => $"{entry.Name}: the machine panels have no binding for {k}"));
+                        break;
                     case ShortcutScope.MenuAccess or ShortcutScope.System:
                         break; // checked through the menu below
                 }

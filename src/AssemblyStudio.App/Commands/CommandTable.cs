@@ -17,6 +17,9 @@ public enum ShortcutScope
 
     /// <summary>Handled by Windows (Alt+F4).</summary>
     System,
+
+    /// <summary>A key binding of the machine panels (registers, flags, memory, stack): works when one of them has focus.</summary>
+    MachinePanel,
 }
 
 /// <summary>A key and its modifiers.</summary>
@@ -81,7 +84,7 @@ public static class CommandTable
         new("Go to History", Strings.GoHistory, Strings.KeyGoHistory, ShortcutScope.Window, [new(Key.H, Ctrl | Alt)]),
         new("Go to Breakpoints", Strings.GoBreakpoints, Strings.KeyGoBreakpoints, ShortcutScope.Window, [new(Key.B, Ctrl | Alt)]),
         new("Go to Learn", Strings.GoLearn, Strings.KeyGoLearn, ShortcutScope.Window, [new(Key.L, Ctrl | Alt)]),
-        new("Cycle number format", null, "Ctrl+Alt+N", ShortcutScope.Window, [new(Key.N, Ctrl | Alt)], "TASK-081"),
+        new("Cycle number format", Strings.CmdCycleFormat, Strings.KeyCycleFormat, ShortcutScope.MachinePanel, [new(Key.N, Ctrl | Alt)]),
         new("Reset layout", Strings.CmdResetLayout, null, ShortcutScope.MenuAccess, []),
         new("Build", Strings.CmdBuild, Strings.KeyBuild, ShortcutScope.Window, [new(Key.B, Ctrl | Shift)]),
         new("Cancel build", Strings.CmdCancelBuild, Strings.KeyCancelBuild, ShortcutScope.Window, [new(Key.Escape)]),

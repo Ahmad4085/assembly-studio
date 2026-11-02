@@ -6,10 +6,47 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-081` (registers and flags panels), then `TASK-082`, `TASK-083`.
+None in progress. Next on the user-approved path: `TASK-082` (memory and stack panels), then `TASK-083`.
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 5 progress | TASK-080, 081, 084 Done; eligible: TASK-082, 083 |
+| Recommended next action | `/assembly-implement TASK-082` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-081 Registers and flags panels (Done 2026-11-01 17:16 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Panels/Machine/`:
+  - `ValueFormat`: hex (width digits), unsigned, signed (two's complement), binary in groups of four; Ctrl+Alt+N order.
+  - `CpuViewModel`: `RegisterCell` (AX…FLAGS, halves AH…DL) and `FlagCell` (O D I T S Z A P C with full name and meaning). Values only from the latest paused snapshot; change marking against the previous pause (none after load/reset, none while running); undefined flags "?" with "Undefined after <instruction>"; states Empty, BuildFailed, Current, NotCurrent (dimmed, "Running — values not current"); UIA names include the value and "changed"/"undefined"; `ChangedNames` ready for the TASK-085 announcement.
+- `BuildRunViewModel`: feeds the panels (`Cpu`) from each applied snapshot; number format from Settings (updated on change); `LatestSnapshot` for the NFR-018 comparison.
+- Main window: register rows with the format box (D-017, the user's layout: AX–DX with their halves on the same row, names in Accent.Primary, values in boxes; changed = Value.Changed + bold + outline + row bar), flags row; Ctrl+Alt+N on the machine region and View ▸ Cycle Number Format; F6/Go to focus the lists.
+- After the first report the user asked for a different register layout (reference image); done before committing as D-017 (DECISIONS.md, ui-spec UI-005 updated in place with a changelog line). `RegisterRow` added; the "8-bit halves" option removed.
+- `CommandTable`: "Cycle number format" available (new scope MachinePanel, checked by the keyboard test).
+- Tests: `CpuTests` 17 (D-017 rows, formats, cycle, empty states, AC-025 with the real session incl. exact flag-change marking against the engine, AF "?" after AND, AC-052 over all registers and formats, FR-057 not-current/pause/stop, build failed, UIA names and render `registers-flags.png`). NFR-018 checked after every step: every register, half and flag equals the engine snapshot. Mutation (registers never marked changed) → 2 failed.
+- Known cosmetic gap: the format box uses the default (light) ComboBox look in the dark theme, like the Settings dialog's lists; the themes have no ComboBox style yet.
+- While the user ran the app (process 19720) the Release output was locked; I worked in Debug until it was closed and did not stop it.
+- DEF-014 recurred once in the About test (NASM version check 15.6 s under load); recorded.
+- First verification (old layout): full solution 1463/1463 twice (16:18–16:21, 16:21–16:25). After the D-017 layout change (the user's app was open again, so Debug first; Debug can't judge the performance tests): Release build 0 warnings; full runs 16:53 (1 failed: DEF-015 startup time 11.46 s), 16:58 (1464/1464), 17:02 (2 failed: DEF-016 View menu popup, DEF-012 again), then **1464/1464 twice (17:07–17:11, 17:11–17:15)**.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-01 16:06 / 17:16 +0500 (layout change D-017 after the first report) |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-01 16:06 +0500 |
+| Milestone | M5 |
+| Goal | Show registers and flags from snapshots with formats, change marking, undefined "?" and stale state |
+| Scope (in) | ValueCell/FlagCell components; formats hex/unsigned/signed/binary; UIA names incl. changed state |
+| Requirements | FR-046, FR-047, FR-048, FR-056, FR-057, NFR-018; UI-005, UI-006; ADR-0007; AC-025, AC-052, AC-037 (view model equals snapshot) |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 5 progress | TASK-080, TASK-084 Done; eligible: TASK-081, 082, 083 |
 | Recommended next action | `/assembly-implement TASK-081` |

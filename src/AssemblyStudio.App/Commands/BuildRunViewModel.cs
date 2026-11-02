@@ -82,9 +82,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     /// <param name="createSession">Creates the debug session for a successful build.</param>
     /// <param name="dispatcher">The UI thread's dispatcher; by default the current thread's.</param>
     /// <param name="consoleCapacity">The most console characters kept (NFR-015).</param>
+    /// <param name="numberFormat">The machine panels' number format (Settings, FR-047).</param>
     public BuildRunViewModel(WorkspaceViewModel workspace, Func<IAssembler> assembler, Func<BuildResult, IDebugSession> createSession, Dispatcher? dispatcher = null,
-        int consoleCapacity = Panels.Console.ConsoleScreen.DefaultCapacity)
+        int consoleCapacity = Panels.Console.ConsoleScreen.DefaultCapacity, Settings.NumberFormat numberFormat = Settings.NumberFormat.Hexadecimal)
     {
+        Cpu = new Panels.Machine.CpuViewModel(numberFormat);
         ArgumentNullException.ThrowIfNull(workspace);
         ArgumentNullException.ThrowIfNull(assembler);
         ArgumentNullException.ThrowIfNull(createSession);
@@ -104,6 +106,12 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     /// <summary>The Problems panel.</summary>
     public ProblemsViewModel Problems { get; } = new();
+
+    /// <summary>The session's latest snapshot (what the panels must equal while paused, NFR-018), or <see langword="null"/>.</summary>
+    public MachineSnapshot? LatestSnapshot => _session?.LatestSnapshot;
+
+    /// <summary>The registers and flags panels (TASK-081).</summary>
+    public Panels.Machine.CpuViewModel Cpu { get; }
 
     /// <summary>The program console (TASK-084).</summary>
     public Panels.Console.ConsoleViewModel Console { get; }
@@ -314,6 +322,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         document.Diagnostics = [.. result.Diagnostics.Where(d => ProblemsViewModel.IsAbout(d, document) && d.Line is > 0)];
         if (result.Outcome != BuildOutcome.Succeeded)
         {
+            Cpu.Clear(buildFailed: true);
             State = RunState.BuildFailed;
             return false;
         }
@@ -362,6 +371,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         CurrentLine = null;
         ExitCode = null;
         Detail = null;
+        Cpu.Clear();
         OnPropertyChanged(nameof(HasSession));
     }
 
@@ -431,6 +441,14 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
             _ => (_workspace.ActiveDocument is null ? RunState.Empty : RunState.Editing, (string?)null),
         };
         UpdateExecutionMarker(s);
+        if (State == RunState.Running)
+        {
+            Cpu.MarkRunning();
+        }
+        else
+        {
+            Cpu.Show(s.Cpu, s.UndefinedFlags, s.HistoryDelta.Count > 0 ? s.HistoryDelta[^1].Disassembly : null, baseline: State == RunState.Ready);
+        }
     }
 
     private static (RunState, string?) HaltState(HaltReason reason) => reason switch
@@ -568,6 +586,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     partial void OnStateChanged(RunState value)
     {
+        if (value is RunState.Editing or RunState.Empty)
+        {
+            Cpu.Clear();
+        }
+
         Console.IsWaiting = value == RunState.WaitingForInput;
         Console.IsInputActive = value is RunState.Running or RunState.WaitingForInput;
         Console.EndedText = value != RunState.Terminated ? null

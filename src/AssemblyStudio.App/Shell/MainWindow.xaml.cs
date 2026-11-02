@@ -291,8 +291,8 @@ public partial class MainWindow : Window
     {
         UIElement target = panel switch
         {
-            ShellPanel.Registers => RegistersPanel,
-            ShellPanel.Flags => FlagsPanel,
+            ShellPanel.Registers => RegisterList.IsVisible ? RegisterList : RegistersPanel,
+            ShellPanel.Flags => FlagList.IsVisible ? FlagList : FlagsPanel,
             ShellPanel.Learn => LearnTree,
             ShellPanel.Memory when _viewModel.IsMemoryStackDocked => MemoryPanel,
             ShellPanel.Stack when _viewModel.IsMemoryStackDocked => StackView,

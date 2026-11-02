@@ -1074,4 +1074,103 @@ public static class Strings
 
     /// <summary>Program console</summary>
     public static string RegionConsole => Get(nameof(RegionConsole));
+
+    /// <summary>changed</summary>
+    public static string CellChanged => Get(nameof(CellChanged));
+
+    /// <summary>undefined</summary>
+    public static string FlagUndefined => Get(nameof(FlagUndefined));
+
+    /// <summary>Undefined after {0}</summary>
+    public static string FlagUndefinedAfter => Get(nameof(FlagUndefinedAfter));
+
+    /// <summary>the last instruction</summary>
+    public static string FlagUndefinedLastInstruction => Get(nameof(FlagUndefinedLastInstruction));
+
+    /// <summary>Overflow flag (OF)</summary>
+    public static string FlagOF => Get(nameof(FlagOF));
+
+    /// <summary>set when a signed result doesn&apos;t fit in the destination</summary>
+    public static string FlagOFText => Get(nameof(FlagOFText));
+
+    /// <summary>Direction flag (DF)</summary>
+    public static string FlagDF => Get(nameof(FlagDF));
+
+    /// <summary>set: string instructions go down in memory; clear: up</summary>
+    public static string FlagDFText => Get(nameof(FlagDFText));
+
+    /// <summary>Interrupt flag (IF)</summary>
+    public static string FlagIF => Get(nameof(FlagIF));
+
+    /// <summary>set: hardware interrupts are enabled</summary>
+    public static string FlagIFText => Get(nameof(FlagIFText));
+
+    /// <summary>Trap flag (TF)</summary>
+    public static string FlagTF => Get(nameof(FlagTF));
+
+    /// <summary>set: the CPU stops after each instruction (single-step)</summary>
+    public static string FlagTFText => Get(nameof(FlagTFText));
+
+    /// <summary>Sign flag (SF)</summary>
+    public static string FlagSF => Get(nameof(FlagSF));
+
+    /// <summary>copy of the result&apos;s highest bit (negative when signed)</summary>
+    public static string FlagSFText => Get(nameof(FlagSFText));
+
+    /// <summary>Zero flag (ZF)</summary>
+    public static string FlagZF => Get(nameof(FlagZF));
+
+    /// <summary>set when the result is zero</summary>
+    public static string FlagZFText => Get(nameof(FlagZFText));
+
+    /// <summary>Auxiliary carry flag (AF)</summary>
+    public static string FlagAF => Get(nameof(FlagAF));
+
+    /// <summary>carry or borrow out of the low 4 bits (used for BCD)</summary>
+    public static string FlagAFText => Get(nameof(FlagAFText));
+
+    /// <summary>Parity flag (PF)</summary>
+    public static string FlagPF => Get(nameof(FlagPF));
+
+    /// <summary>set when the low byte of the result has an even number of 1 bits</summary>
+    public static string FlagPFText => Get(nameof(FlagPFText));
+
+    /// <summary>Carry flag (CF)</summary>
+    public static string FlagCF => Get(nameof(FlagCF));
+
+    /// <summary>carry or borrow out of the highest bit (unsigned overflow)</summary>
+    public static string FlagCFText => Get(nameof(FlagCFText));
+
+    /// <summary>Fix build errors to inspect the CPU</summary>
+    public static string EmptyMachineBuildFailed => Get(nameof(EmptyMachineBuildFailed));
+
+    /// <summary>Running — values not current</summary>
+    public static string CpuNotCurrent => Get(nameof(CpuNotCurrent));
+
+    /// <summary>Cycle _Number Format</summary>
+    public static string CmdCycleFormat => Get(nameof(CmdCycleFormat));
+
+    /// <summary>Ctrl+Alt+N</summary>
+    public static string KeyCycleFormat => Get(nameof(KeyCycleFormat));
+
+    /// <summary>Hex</summary>
+    public static string FormatHex => Get(nameof(FormatHex));
+
+    /// <summary>Unsigned</summary>
+    public static string FormatUnsigned => Get(nameof(FormatUnsigned));
+
+    /// <summary>Signed</summary>
+    public static string FormatSigned => Get(nameof(FormatSigned));
+
+    /// <summary>Binary</summary>
+    public static string FormatBinary => Get(nameof(FormatBinary));
+
+    /// <summary>Number format</summary>
+    public static string RegionNumberFormat => Get(nameof(RegionNumberFormat));
+
+    /// <summary>Registers</summary>
+    public static string RegionRegisters => Get(nameof(RegionRegisters));
+
+    /// <summary>Flags</summary>
+    public static string RegionFlags => Get(nameof(RegionFlags));
 }

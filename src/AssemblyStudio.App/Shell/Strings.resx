@@ -370,4 +370,37 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="ConsoleCopy" xml:space="preserve"><value>_Copy</value><comment>Console context menu</comment></data>
   <data name="KeyConsoleCopy" xml:space="preserve"><value>Ctrl+Shift+C</value><comment>Shortcut text (D-015)</comment></data>
   <data name="RegionConsole" xml:space="preserve"><value>Program console</value><comment>UIA name of the console</comment></data>
+  <data name="CellChanged" xml:space="preserve"><value>changed</value><comment>Screen-reader suffix of a changed value</comment></data>
+  <data name="FlagUndefined" xml:space="preserve"><value>undefined</value><comment>Screen-reader value of an undefined flag</comment></data>
+  <data name="FlagUndefinedAfter" xml:space="preserve"><value>Undefined after {0}</value><comment>Flag tooltip (ui-spec §4). {0} = instruction</comment></data>
+  <data name="FlagUndefinedLastInstruction" xml:space="preserve"><value>the last instruction</value><comment>Flag tooltip when the instruction text is unknown</comment></data>
+  <data name="FlagOF" xml:space="preserve"><value>Overflow flag (OF)</value><comment>Flag name</comment></data>
+  <data name="FlagOFText" xml:space="preserve"><value>set when a signed result doesn't fit in the destination</value><comment>Flag meaning</comment></data>
+  <data name="FlagDF" xml:space="preserve"><value>Direction flag (DF)</value><comment>Flag name</comment></data>
+  <data name="FlagDFText" xml:space="preserve"><value>set: string instructions go down in memory; clear: up</value><comment>Flag meaning</comment></data>
+  <data name="FlagIF" xml:space="preserve"><value>Interrupt flag (IF)</value><comment>Flag name</comment></data>
+  <data name="FlagIFText" xml:space="preserve"><value>set: hardware interrupts are enabled</value><comment>Flag meaning</comment></data>
+  <data name="FlagTF" xml:space="preserve"><value>Trap flag (TF)</value><comment>Flag name</comment></data>
+  <data name="FlagTFText" xml:space="preserve"><value>set: the CPU stops after each instruction (single-step)</value><comment>Flag meaning</comment></data>
+  <data name="FlagSF" xml:space="preserve"><value>Sign flag (SF)</value><comment>Flag name</comment></data>
+  <data name="FlagSFText" xml:space="preserve"><value>copy of the result's highest bit (negative when signed)</value><comment>Flag meaning</comment></data>
+  <data name="FlagZF" xml:space="preserve"><value>Zero flag (ZF)</value><comment>Flag name</comment></data>
+  <data name="FlagZFText" xml:space="preserve"><value>set when the result is zero</value><comment>Flag meaning</comment></data>
+  <data name="FlagAF" xml:space="preserve"><value>Auxiliary carry flag (AF)</value><comment>Flag name</comment></data>
+  <data name="FlagAFText" xml:space="preserve"><value>carry or borrow out of the low 4 bits (used for BCD)</value><comment>Flag meaning</comment></data>
+  <data name="FlagPF" xml:space="preserve"><value>Parity flag (PF)</value><comment>Flag name</comment></data>
+  <data name="FlagPFText" xml:space="preserve"><value>set when the low byte of the result has an even number of 1 bits</value><comment>Flag meaning</comment></data>
+  <data name="FlagCF" xml:space="preserve"><value>Carry flag (CF)</value><comment>Flag name</comment></data>
+  <data name="FlagCFText" xml:space="preserve"><value>carry or borrow out of the highest bit (unsigned overflow)</value><comment>Flag meaning</comment></data>
+  <data name="EmptyMachineBuildFailed" xml:space="preserve"><value>Fix build errors to inspect the CPU</value><comment>Machine panels after a failed build (ui-spec §4)</comment></data>
+  <data name="CpuNotCurrent" xml:space="preserve"><value>Running — values not current</value><comment>Machine panels while running (FR-057)</comment></data>
+  <data name="CmdCycleFormat" xml:space="preserve"><value>Cycle _Number Format</value><comment>View menu (FR-047)</comment></data>
+  <data name="KeyCycleFormat" xml:space="preserve"><value>Ctrl+Alt+N</value><comment>Shortcut text</comment></data>
+  <data name="FormatHex" xml:space="preserve"><value>Hex</value><comment>Number format</comment></data>
+  <data name="FormatUnsigned" xml:space="preserve"><value>Unsigned</value><comment>Number format</comment></data>
+  <data name="FormatSigned" xml:space="preserve"><value>Signed</value><comment>Number format</comment></data>
+  <data name="FormatBinary" xml:space="preserve"><value>Binary</value><comment>Number format</comment></data>
+  <data name="RegionNumberFormat" xml:space="preserve"><value>Number format</value><comment>UIA name of the format list</comment></data>
+  <data name="RegionRegisters" xml:space="preserve"><value>Registers</value><comment>UIA name of the register list</comment></data>
+  <data name="RegionFlags" xml:space="preserve"><value>Flags</value><comment>UIA name of the flag list</comment></data>
 </root>

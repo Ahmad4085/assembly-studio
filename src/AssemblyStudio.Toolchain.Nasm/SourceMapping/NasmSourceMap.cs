@@ -29,7 +29,11 @@ internal sealed partial class NasmSourceMap : ISourceMap
         Map = map;
         Rows = rows;
         _byAddress = [.. ranges.Where(r => !r.IsReserved).OrderBy(r => r.Address)];
+        DataSymbols = FindDataSymbols(ranges, map, rows);
     }
+
+    /// <inheritdoc />
+    public IReadOnlyList<DataSymbol> DataSymbols { get; }
 
     /// <summary>All mapped ranges in listing order.</summary>
     public IReadOnlyList<MappedRange> Ranges { get; }
@@ -152,6 +156,53 @@ internal sealed partial class NasmSourceMap : ISourceMap
         return first is int address ? (ushort)address : null;
     }
 
+    // FR-097: a map symbol is a data label when the first bytes at its address come from a data line (db, times … dw, resb,
+    // incbin); its size runs over the data lines that follow in the listing, up to the next symbol, a gap or a line that
+    // isn't data (code, align padding). Code labels and labels without bytes (equ, the end of the program) are left out.
+    private static DataSymbol[] FindDataSymbols(IReadOnlyList<MappedRange> ranges, NasmMapFile map, IReadOnlyList<ListingRow> rows)
+    {
+        var symbolAddresses = new HashSet<int>(map.Symbols.Values);
+        var symbols = new List<DataSymbol>();
+        foreach ((string name, int address) in map.Symbols)
+        {
+            int first = -1;
+            for (int i = 0; i < ranges.Count; i++)
+            {
+                if (ranges[i].Address == address)
+                {
+                    first = i;
+                    break;
+                }
+            }
+
+            if (first < 0 || address > ushort.MaxValue || !IsDataLine(rows[ranges[first].ListingIndex].Source))
+            {
+                continue;
+            }
+
+            int length = 0;
+            for (int i = first; i < ranges.Count; i++)
+            {
+                MappedRange range = ranges[i];
+                bool sameLine = i > first && range.Mapping == ranges[i - 1].Mapping && string.IsNullOrWhiteSpace(rows[range.ListingIndex].Source);
+                if (range.Address != address + length
+                    || (i > first && symbolAddresses.Contains(range.Address))
+                    || (!sameLine && !IsDataLine(rows[range.ListingIndex].Source)))
+                {
+                    break;
+                }
+
+                length += range.Length;
+            }
+
+            symbols.Add(new DataSymbol(name, (ushort)address, length, ranges[first].Mapping.Location));
+        }
+
+        return [.. symbols.OrderBy(s => s.Offset).ThenBy(s => s.Name, StringComparer.Ordinal)];
+    }
+
+    private static bool IsDataLine(string source) => DataLine().IsMatch(StripComment(source));
+
     private static bool SameFile(string? a, string? b) =>
         a is null || b is null ? a == b : string.Equals(Path.GetFullPath(a), Path.GetFullPath(b), StringComparison.OrdinalIgnoreCase);
 
@@ -218,4 +269,9 @@ internal sealed partial class NasmSourceMap : ISourceMap
 
     [GeneratedRegex(@"^\s*%endrep\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex RepEnd();
+
+    /// <summary>A data line: an optional label, an optional <c>times n</c>, then a data or reserve directive (FR-097).</summary>
+    [GeneratedRegex(@"^\s*(?:[A-Za-z_.?$@][\w.?$@#~]*:?\s+)?(?:times\s+\S.*?\s+)?(?:d[bwdqtoyz]|res[bwdqtoyz]|incbin)\b",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex DataLine();
 }

@@ -91,6 +91,9 @@ public enum BottomTab
     /// <summary>Breakpoints (UI-014).</summary>
     Breakpoints,
 
+    /// <summary>Variables (UI-023).</summary>
+    Variables,
+
     /// <summary>Memory (UI-008), compact layout only.</summary>
     Memory,
 

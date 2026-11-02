@@ -299,7 +299,7 @@ public sealed class ConsoleTests
         }, consoleCapacity: 4096);
     }
 
-    private static void Render(Window window, string fileName)
+    internal static void Render(Window window, string fileName)
     {
         var content = (FrameworkElement)window.Content;
         var bitmap = new RenderTargetBitmap((int)Math.Ceiling(content.ActualWidth), (int)Math.Ceiling(content.ActualHeight), 96, 96, PixelFormats.Pbgra32);

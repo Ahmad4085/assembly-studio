@@ -55,3 +55,4 @@ detects such directives, even inside macros [Measured].
 ## Changelog
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
+- 2026-11-02: Additive contract change for TASK-106 (FR-097, D-020): `ISourceMap.DataSymbols` (default: none) lists the labels on data with their size, read from the `[map all]` symbols and the listing (a symbol whose first bytes come from a `db`/`dw`/…/`times`/`res*`/`incbin` line; its size runs over the following data lines up to the next symbol). No change to the NASM command line or the decision.

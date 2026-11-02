@@ -1317,4 +1317,49 @@ public static class Strings
 
     /// <summary>Announcements</summary>
     public static string RegionAnnouncements => Get(nameof(RegionAnnouncements));
+
+    /// <summary>Variables</summary>
+    public static string TabVariables => Get(nameof(TabVariables));
+
+    /// <summary>Variables</summary>
+    public static string RegionVariables => Get(nameof(RegionVariables));
+
+    /// <summary>Build to see your variables</summary>
+    public static string EmptyVariables => Get(nameof(EmptyVariables));
+
+    /// <summary>This program has no data labels</summary>
+    public static string EmptyVariablesNone => Get(nameof(EmptyVariablesNone));
+
+    /// <summary>Name</summary>
+    public static string VariableHeaderName => Get(nameof(VariableHeaderName));
+
+    /// <summary>Address</summary>
+    public static string VariableHeaderAddress => Get(nameof(VariableHeaderAddress));
+
+    /// <summary>Value</summary>
+    public static string VariableHeaderValue => Get(nameof(VariableHeaderValue));
+
+    /// <summary>(not read)</summary>
+    public static string VariableNotRead => Get(nameof(VariableNotRead));
+
+    /// <summary>(not shown: too far from the other variables)</summary>
+    public static string VariableNotWatched => Get(nameof(VariableNotWatched));
+
+    /// <summary>text</summary>
+    public static string VariableKindText => Get(nameof(VariableKindText));
+
+    /// <summary>byte</summary>
+    public static string VariableKindByte => Get(nameof(VariableKindByte));
+
+    /// <summary>word</summary>
+    public static string VariableKindWord => Get(nameof(VariableKindWord));
+
+    /// <summary>bytes</summary>
+    public static string VariableKindBytes => Get(nameof(VariableKindBytes));
+
+    /// <summary>{0} at {1}, {2} {3}</summary>
+    public static string VariableAccessible => Get(nameof(VariableAccessible));
+
+    /// <summary>Show in Memory</summary>
+    public static string VariableShowInMemory => Get(nameof(VariableShowInMemory));
 }

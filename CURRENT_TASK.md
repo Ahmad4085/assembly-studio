@@ -6,14 +6,28 @@
 
 ## Active Task
 
-None in progress. M5 is complete. Next: `TASK-065` (find and replace, M4).
+None in progress. Next: `TASK-065` (find and replace, M4).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Milestone progress | M5: TASK-080..086 Done (complete). M4: TASK-065, 070 left (070 needs TASK-006) |
+| Milestone progress | M5: TASK-080..086 and TASK-106 Done. M4: TASK-065, 070 left (070 needs TASK-006) |
 | Recommended next action | `/assembly-implement TASK-065` |
 | Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-106 Variables panel (Done 2026-11-02 16:27 +0500, Claude Code (Opus 5.5))
+- Added by the user's request and approval (D-020): User 2026-11-02 15:50 +0500: "Approve and implement now (Recommended)".
+- Variables panel (FR-097, AC-065, UI-023, D-020): a bottom tab listing the program's data labels with their address and current value (text, byte, word with decimal, or hex bytes), read through memory watches; changes marked; Enter/double-click shows the address in the memory view. Data labels and sizes come from the NASM map and listing (`ISourceMap.DataSymbols`, additive).
+- Shown automatically when a program with data labels is loaded, or ends without output (Console when it printed).
+- Tests: `SourceMapTests` FR-097 fixture (`13-variables.asm`); `VariablesTests` 18 (AC-065 with the user's VUID program, values equal to session memory, change marks, formats, watch limit, empty/running states, Show in Memory, window and screen-reader names); mutation caught. Full solution 1527 passed + 7 skipped (opt-in) twice (16:19–16:23, 16:23–16:27).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 15:50 / 16:27 +0500 |
 
 ---
 

@@ -4,8 +4,8 @@
 |---|---|
 | Document | Functional requirements |
 | Status | Approved |
-| Version | 2.0 |
-| Last updated | 2026-10-26 |
+| Version | 2.1 |
+| Last updated | 2026-11-02 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
 
@@ -146,9 +146,11 @@ Definitions of priority and status: `PRODUCT_REQUIREMENTS.md` §2. Every require
 | FR-094 | The application shall honor Windows high-contrast themes and Windows text scaling. | P1 | APPROVED | US-021 | AC-044 | NFR-022, NFR-026 |
 | FR-095 | If the assembler or the execution engine fails, the application shall stay usable with open documents intact, report the failure, and allow the next build or run without restarting. | P0 | APPROVED | US-016 | AC-019 | NFR-010 |
 | FR-096 | Malformed or hostile programs (endless loops, self-modifying code, output floods, overwriting the interrupt vector table) shall not crash or hang the application, and shall not access the host system. | P0 | APPROVED | US-016 | AC-030, AC-045 | NFR-010, NFR-013, NFR-015 |
+| FR-097 | While paused, a Variables panel shall list each data label of the built program (a label on `db`/`dw`/`dd`/`dq`/`dt`/`times`/`res*`/`incbin` data; code labels excluded) with its `seg:off` address and its current value read from emulated memory: printable text in quotes, a 1-byte variable as a byte, a 2-byte variable as a word (in the panels' number format, plus decimal), otherwise hex bytes. A variable's size runs from its label over the data lines that follow, up to the next label (at most 64 bytes shown). Values changed since the previous pause are marked (FR-056 cues); opening a variable shows its address in the memory view. Running: values not current (FR-057). No value is invented: a variable that couldn't be read says so. | P1 | APPROVED | US-009 | AC-065 | D-020 (added 2026-11-02 by the user's request) |
 
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
+- 2026-11-02 v2.1: FR-097 (Variables panel) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

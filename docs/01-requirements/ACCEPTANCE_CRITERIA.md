@@ -4,7 +4,7 @@
 |---|---|
 | Document | Acceptance criteria |
 | Status | Approved |
-| Version | 2.1 |
+| Version | 2.2 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -406,9 +406,16 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Then** each session ends normally and reports its termination path. (c) reports exit code 05h, and (a), (b) and (d) report exit code 00h
 - Verifies: FR-039, FR-041 · Priority: P0 · Test status: PASS 2026-10-30-1 (TC-024, TC-044)
 
+### AC-065 Variables panel
+- **Given** the CS401P VUID program (data labels `vuid`, `prefix`, `lhs`, `rhs` as strings and `lhsval`, `rhsval` as words, each string on its own 16-byte row) built and run to its end
+- **When** the user opens the Variables panel
+- **Then** it lists exactly the six data labels (no code labels) with their addresses `0800:0110` … `0800:0152`, and shows `prefix` "BC", `lhs` "1234", `rhs` "56789", `lhsval` 04D2h = 1234, `rhsval` DDD5h = 56789, each value equal byte for byte to the session's memory; values that changed since the previous pause are marked
+- Verifies: FR-097 · Priority: P1 · Test status: NOT RUN
+
 ## Changelog
 - 2026-10-26 v0.1: Initial draft (SDLC-003, Claude Code).
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
 - 2026-10-30 v2.1: Minor (testing phase). "Test status" updated from test run 2026-10-30-1 for the 48 criteria covered by executed tests; the introduction no longer says no code exists. No criterion changed.
+- 2026-11-02 v2.2: AC-065 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

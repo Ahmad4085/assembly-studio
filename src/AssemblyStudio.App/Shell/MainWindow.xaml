@@ -1017,6 +1017,65 @@
               </Grid>
             </DockPanel>
           </TabItem>
+          <!-- UI-023 variables (TASK-106): the program's data labels and their current values -->
+          <TabItem x:Name="VariablesTab" Header="{x:Static shell:Strings.TabVariables}">
+            <Grid DataContext="{Binding BuildRun.Variables}">
+              <Grid.InputBindings>
+                <KeyBinding Key="N" Modifiers="Ctrl+Alt" Command="{Binding DataContext.BuildRun.Memory.CycleFormatCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+              </Grid.InputBindings>
+              <TextBlock Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                         Visibility="{Binding HasValues, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+              <DockPanel Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,4,4,2" TextElement.Foreground="{DynamicResource Text.Secondary}">
+                  <TextBlock Width="140" Text="{x:Static shell:Strings.VariableHeaderName}" />
+                  <TextBlock Width="100" Text="{x:Static shell:Strings.VariableHeaderAddress}" />
+                  <TextBlock Text="{x:Static shell:Strings.VariableHeaderValue}" />
+                </StackPanel>
+                <ListBox x:Name="VariableList" ItemsSource="{Binding Rows}" HorizontalContentAlignment="Stretch" Margin="4,0,4,2"
+                         AutomationProperties.Name="{x:Static shell:Strings.RegionVariables}">
+                  <ListBox.Style>
+                    <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                          <Setter Property="Opacity" Value="0.55" />
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </ListBox.Style>
+                  <ListBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ShowInMemoryCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                  </ListBox.InputBindings>
+                  <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}">
+                      <Setter Property="ToolTip" Value="{x:Static shell:Strings.VariableShowInMemory}" />
+                      <EventSetter Event="MouseDoubleClick" Handler="OnVariableDoubleClick" />
+                    </Style>
+                  </ListBox.ItemContainerStyle>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <DockPanel Margin="0,1">
+                        <TextBlock DockPanel.Dock="Left" Width="140" Text="{Binding Name}" Foreground="{DynamicResource Accent.Primary}" FontWeight="SemiBold"
+                                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                        <TextBlock DockPanel.Dock="Left" Width="100" Text="{Binding Address}" Foreground="{DynamicResource Text.Secondary}" VerticalAlignment="Center"
+                                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+                        <Border x:Name="Chip" HorizontalAlignment="Left" Background="{DynamicResource Surface.Raised}" BorderBrush="Transparent" BorderThickness="1" CornerRadius="3" Padding="6,0">
+                          <TextBlock x:Name="VariableValue" Text="{Binding Value}" Foreground="{DynamicResource Syntax.Number}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+                        </Border>
+                      </DockPanel>
+                      <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsChanged}" Value="True">
+                          <Setter TargetName="Chip" Property="BorderBrush" Value="{DynamicResource Value.Changed}" />
+                          <Setter TargetName="VariableValue" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+                          <Setter TargetName="VariableValue" Property="FontWeight" Value="{DynamicResource FontWeight.Changed}" />
+                        </DataTrigger>
+                      </DataTemplate.Triggers>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </DockPanel>
+            </Grid>
+          </TabItem>
           <TabItem x:Name="MemoryTab" Header="{x:Static shell:Strings.TabMemory}">
             <ContentControl Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource MemoryPanelTemplate}" Focusable="False" />
           </TabItem>

@@ -451,4 +451,19 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="AnnounceRunning" xml:space="preserve"><value>Running.</value><comment>Announcement</comment></data>
   <data name="AnnounceBuilding" xml:space="preserve"><value>Building.</value><comment>Announcement</comment></data>
   <data name="RegionAnnouncements" xml:space="preserve"><value>Announcements</value><comment>UIA name of the announcement live region</comment></data>
+  <data name="TabVariables" xml:space="preserve"><value>Variables</value><comment>Bottom tab (UI-023)</comment></data>
+  <data name="RegionVariables" xml:space="preserve"><value>Variables</value><comment>UIA name of the variables list (UI-023)</comment></data>
+  <data name="EmptyVariables" xml:space="preserve"><value>Build to see your variables</value><comment>Variables panel, no session (UI-023)</comment></data>
+  <data name="EmptyVariablesNone" xml:space="preserve"><value>This program has no data labels</value><comment>Variables panel, a build without labels on db/dw/… data (UI-023)</comment></data>
+  <data name="VariableHeaderName" xml:space="preserve"><value>Name</value><comment>Variables panel column</comment></data>
+  <data name="VariableHeaderAddress" xml:space="preserve"><value>Address</value><comment>Variables panel column</comment></data>
+  <data name="VariableHeaderValue" xml:space="preserve"><value>Value</value><comment>Variables panel column</comment></data>
+  <data name="VariableNotRead" xml:space="preserve"><value>(not read)</value><comment>Variables panel: no memory copy for this variable yet; nothing is invented (FR-097)</comment></data>
+  <data name="VariableNotWatched" xml:space="preserve"><value>(not shown: too far from the other variables)</value><comment>Variables panel: outside the watched memory regions (FR-097)</comment></data>
+  <data name="VariableKindText" xml:space="preserve"><value>text</value><comment>Screen-reader kind of a variable value</comment></data>
+  <data name="VariableKindByte" xml:space="preserve"><value>byte</value><comment>Screen-reader kind of a variable value</comment></data>
+  <data name="VariableKindWord" xml:space="preserve"><value>word</value><comment>Screen-reader kind of a variable value</comment></data>
+  <data name="VariableKindBytes" xml:space="preserve"><value>bytes</value><comment>Screen-reader kind of a variable value</comment></data>
+  <data name="VariableAccessible" xml:space="preserve"><value>{0} at {1}, {2} {3}</value><comment>Screen-reader text of a variable row (UI-023). {0} = name, {1} = address, {2} = kind, {3} = value</comment></data>
+  <data name="VariableShowInMemory" xml:space="preserve"><value>Show in Memory</value><comment>Variables panel action (Enter / double-click)</comment></data>
 </root>

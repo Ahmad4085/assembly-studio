@@ -96,6 +96,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     {
         Cpu = new Panels.Machine.CpuViewModel(numberFormat);
         Memory = new Panels.Memory.MemoryViewModel(Cpu, SessionFactory.ProgramSegment, 0x0100);
+        Variables = new Panels.Memory.VariablesViewModel(Cpu, Memory, SessionFactory.ProgramSegment);
         Breakpoints = new Panels.Session.BreakpointsViewModel(workspace);
         ArgumentNullException.ThrowIfNull(workspace);
         ArgumentNullException.ThrowIfNull(assembler);
@@ -159,6 +160,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     /// <summary>The memory and stack panels (TASK-082).</summary>
     public Panels.Memory.MemoryViewModel Memory { get; }
+
+    /// <summary>The variables panel (TASK-106).</summary>
+    public Panels.Memory.VariablesViewModel Variables { get; }
 
     /// <summary>The program console (TASK-084).</summary>
     public Panels.Console.ConsoleViewModel Console { get; }
@@ -371,6 +375,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             Cpu.Clear(buildFailed: true);
             Memory.Clear(buildFailed: true);
+            Variables.Clear(buildFailed: true);
             State = RunState.BuildFailed;
             return false;
         }
@@ -391,6 +396,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
         ShowBreakpointBinding(document);
         Memory.Attach(session);
+        Variables.Attach(session, build.SourceMap?.DataSymbols ?? []);
         Messages.Clear();
         document.HasSession = true;
         State = RunState.Stepping; // until the loaded snapshot arrives (Ready)
@@ -423,6 +429,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         Detail = null;
         Cpu.Clear();
         Memory.Clear();
+        Variables.Clear();
         Strip.Clear();
         History.Clear();
         Breakpoints.SetHit(null, null);
@@ -522,6 +529,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             Cpu.MarkRunning();
             Memory.MarkRunning();
+            Variables.MarkRunning();
             Strip.MarkRunning();
             History.MarkRunning();
             Messages.OffersBudgetChoice = false;
@@ -547,6 +555,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
 
         Memory.Show(s, writes, newPause, baseline);
+        Variables.Show(s, newPause, baseline);
         _lastPauseCount = InstructionCount;
 
         RuntimeMessage? halt = HaltMessage(s, session);
@@ -788,6 +797,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         {
             Cpu.Clear();
             Memory.Clear();
+            Variables.Clear();
         }
 
         switch (value)

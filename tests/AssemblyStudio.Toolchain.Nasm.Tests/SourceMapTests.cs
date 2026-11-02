@@ -22,7 +22,7 @@ public sealed partial class SourceMapTests
     public static TheoryData<string> MappedFixtures => new()
     {
         "01-single.asm", "02-sections.asm", "03-times-align.asm", "04-macro.asm", "05-include.asm",
-        "08-deep-nesting.asm", "09-nested-include.asm", "10-rep.asm", "11-macro-section.asm", "12-long-data.asm",
+        "08-deep-nesting.asm", "09-nested-include.asm", "10-rep.asm", "11-macro-section.asm", "12-long-data.asm", "13-variables.asm",
     };
 
     private static string FindFixtures()
@@ -229,6 +229,32 @@ public sealed partial class SourceMapTests
         Assert.Equal(At("12-long-data.asm", 11), map.Find(0x146)); // nop
         Assert.Null(map.Find((ushort)map.Map.Symbols["buffer"]));  // resb in .bss
         Assert.Null(map.FirstOffsetOf(Fixture("12-long-data.asm"), 13));
+    }
+
+    // ---- Data labels (TASK-106, FR-097) ----
+
+    [Fact]
+    public async Task FR_097_data_labels_have_the_size_of_their_data_lines_and_code_labels_are_left_out()
+    {
+        (NasmSourceMap map, byte[] image) = await BuildAndMap("13-variables.asm");
+        ISourceMap contract = map;
+        string file = Fixture("13-variables.asm");
+
+        Assert.Equal(
+            [
+                ("vuid", 0x110, 12, 7),     // one wrapped data line
+                ("prefix", 0x11C, 3, 8),    // times 2 db 0 + db 0; the align padding after it is not part of it
+                ("lhsval", 0x120, 2, 11),
+                ("rhsval", 0x122, 2, 12),
+                ("title", 0x124, 37, 13),   // a string over five listing rows
+                ("table", 0x149, 3, 15),    // a bare label: the data of the next line
+                ("table.row", 0x149, 3, 15),
+                ("flag", 0x14C, 1, 16),     // no colon
+                ("buffer", 0x158, 20, 27),  // resb in .bss
+            ],
+            contract.DataSymbols.Select(s => (s.Name, (int)s.Offset, s.Length, s.Location.Line)));
+        Assert.All(contract.DataSymbols, s => Assert.Equal(file, s.Location.File));
+        Assert.Equal("BC123456789\0"u8.ToArray(), image[0x10..0x1C]); // the bytes the label names are the image's
     }
 
     // ---- Documents that are not saved as built ----

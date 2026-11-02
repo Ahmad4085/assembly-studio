@@ -11,6 +11,13 @@ public readonly record struct SourceLocation(string? File, int Line);
 /// then the line that invoked the macro (ADR-0005 §5).</param>
 public readonly record struct SourceMapping(SourceLocation Location, bool FromMacroExpansion);
 
+/// <summary>A label on data in the program (FR-097): the bytes its data lines generate, up to the next label.</summary>
+/// <param name="Name">The label as the assembler names it (a local label with its parent: <c>table.row</c>).</param>
+/// <param name="Offset">Its offset in the program segment.</param>
+/// <param name="Length">The bytes of its data lines (at least 1).</param>
+/// <param name="Location">The line that defines the label's first data.</param>
+public sealed record DataSymbol(string Name, ushort Offset, int Length, SourceLocation Location);
+
 /// <summary>
 /// Address ↔ source line mapping produced by a successful build (FR-028, FR-052, FR-053, ADR-0005 §5). Addresses
 /// are offsets in the program segment: a .COM image starts at offset 0100h. A failed build has no source map.
@@ -26,4 +33,7 @@ public interface ISourceMap
     /// <param name="file">Full path of the file, or <see langword="null"/> for the untitled document.</param>
     /// <param name="line">1-based line number.</param>
     ushort? FirstOffsetOf(string? file, int line);
+
+    /// <summary>The labels on data, in address order (FR-097, additive: maps without symbol data have none).</summary>
+    IReadOnlyList<DataSymbol> DataSymbols => [];
 }

@@ -95,6 +95,7 @@
 | TASK-103 | Clean-VM install, offline and compatibility verification | M7 | TASK-101, TASK-006 | M | NFR-008, NFR-025, NFR-027, FR-083, FR-085, FR-088 | Approved |
 | TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Approved |
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
+| TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
 
 ## 3. Task details
 
@@ -1886,6 +1887,34 @@
 
 **Definition of Done:** standard (§4), plus: the user confirms completion of the user action.
 
+### TASK-106 Variables panel
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Milestone | M5 (added 2026-11-02, D-020) |
+| Requirements | FR-097, FR-047, FR-056, FR-057 |
+| Decisions / design | D-020, UI-023 |
+| Depends on | TASK-082 |
+| Risk | M |
+
+**Goal:** Show the program's data labels and their current values so a learner doesn't have to read raw bytes.
+
+**Scope (in):**
+- Data labels and sizes from the NASM listing and map (`ISourceMap.DataSymbols`, additive Core contract)
+- Variables view model fed by memory watches; value formats; change marks; open in the memory view
+- Bottom tab, keyboard access, accessible names
+
+**Out of scope:**
+- Editing values (FR-062), type annotations, structures and arrays beyond hex bytes
+
+**Expected files / projects touched:** `src/AssemblyStudio.Core`, `src/AssemblyStudio.Toolchain.Nasm`, `src/AssemblyStudio.App`, tests
+
+**Test requirements:**
+- AC-065
+
+**Definition of Done:** standard (§4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -1933,3 +1962,4 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-02: TASK-106 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

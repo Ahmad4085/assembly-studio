@@ -1944,3 +1944,25 @@
   - DEF-017/018/019 stay Fixed (unverified) until `/assembly-test` reruns them.
   - The traceability test statuses ("TASK-086 pending") and test-plan TC entries for the new classes are left to the testing phase.
 - **Next step:** user review / "commit"; then `/assembly-implement TASK-065`.
+
+### 2026-11-02 15:38 – 16:27 +0500 · Claude Code (Opus 5.5) · TASK-106 Variables panel (added by the user)
+- **Summary:** After TASK-086 the user shared a CS401P assignment program and asked to make its memory output readable.
+  - Program help (not project code): aligned each data item to its own 16-byte row (`align 16, db 0`); assembled and checked with NASM 3.02. The file is in the session scratchpad, not the repository.
+  - The user then said: "its ui ux not look good i dont understand what is lhs and rhs its mix everything". No requirement covered naming variables in the debugger, so I proposed one.
+  - The user chose "Variables panel (Recommended)", then approved FR-097, AC-065, UI-023 and TASK-106 at 15:50: "Approve and implement now (Recommended)". Recorded as D-020; requirements v2.1/AC v2.2/traceability v2.5, ui-spec, backlog.
+  - Variables panel (FR-097, AC-065, UI-023, D-020): a bottom tab listing the program's data labels with their address and current value (text, byte, word with decimal, or hex bytes), read through memory watches; changes marked; Enter/double-click shows the address in the memory view. Data labels and sizes come from the NASM map and listing (`ISourceMap.DataSymbols`, additive).
+  - Full run b found a real race in my tab rule: a short program run straight from the editor passes through Ready (tab → Variables) and can end before a Running snapshot is shown, so the hello sample ended on Variables instead of Console (`ConsoleTests.AC_022`). Fixed: at the end the tab is chosen explicitly (Console when the program printed). AC_022 5/5 and VariablesTests 5/5 afterwards.
+- **Files changed:**
+  - `src/AssemblyStudio.Core/ISourceMap.cs` (`DataSymbol`, `DataSymbols`), `src/AssemblyStudio.Toolchain.Nasm/SourceMapping/NasmSourceMap.cs`.
+  - `src/AssemblyStudio.App/Panels/Memory/{VariablesViewModel.cs (new), MemoryViewModel.cs}`, `src/AssemblyStudio.App/Commands/BuildRunViewModel.cs`, `src/AssemblyStudio.App/Shell/{MainWindow.xaml, MainWindow.xaml.cs, ShellViewModel.cs, LayoutState.cs, Strings.resx, Strings.cs}`.
+  - `tests/AssemblyStudio.Toolchain.Nasm.Tests/{SourceMapTests.cs, fixtures/13-variables.asm (new)}`, `tests/AssemblyStudio.App.Tests/Panels/{VariablesTests.cs (new), ConsoleTests.cs}`.
+  - `docs/01-requirements/{FUNCTIONAL_REQUIREMENTS.md, ACCEPTANCE_CRITERIA.md, REQUIREMENTS_TRACEABILITY.md}`, `docs/04-design/ui-spec.md`, `docs/decisions/ADR-0005-assembler-integration-nasm.md`, `docs/05-planning/backlog.md`, `docs/07-testing/defects.md` (DEF-011 reopened), `DECISIONS.md` (D-020), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `SourceMapTests` 49/49 (Debug; first run failed on a wrong expected line number in my test, corrected).
+  - `VariablesTests` 17/17 twice, then 3/3 runs, then 18/18 with the window test.
+  - Mutation (no change marks): 4 failed; restored.
+  - Release build 0 warnings. Full solution run a 16:08–16:12: 1526 passed, 1 failed: DEF-011 clipboard (another program held the clipboard; reopened). Run b 16:12–16:16: 1 failed (the tab race above, fixed).
+  - After the fix: **1527 passed + 7 skipped (opt-in), 0 failed, at 16:19–16:23 and 16:23–16:27**.
+- **Git state after:** uncommitted TASK-106 changes on top of `65901a2`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** AC-065 and traceability test statuses are left to the testing phase. A 2-byte string (`db 'OK'`) is shown as a word, because NASM records no types.
+- **Next step:** the user tries the panel and says "commit"; then `/assembly-implement TASK-065`.

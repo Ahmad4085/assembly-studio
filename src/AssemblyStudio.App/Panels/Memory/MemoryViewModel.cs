@@ -214,7 +214,8 @@ public sealed partial class MemoryViewModel : ObservableObject
             _writes = writesSincePause;
         }
 
-        MemoryWindow? window = snapshot.MemoryWindows?.FirstOrDefault(w => w.Segment == _segment && w.Offset == _offset && w.Bytes.Count > 0);
+        // Its own watch: the variables panel (TASK-106) watches other regions, possibly at the same address.
+        MemoryWindow? window = snapshot.MemoryWindows?.FirstOrDefault(w => w.Segment == _segment && w.Offset == _offset && w.Bytes.Count == WindowLength);
         if (window is { } w)
         {
             byte[] bytes = [.. w.Bytes];
@@ -291,6 +292,14 @@ public sealed partial class MemoryViewModel : ObservableObject
         {
             row.IsChanged = false;
         }
+    }
+
+    /// <summary>Shows <paramref name="segment"/>:<paramref name="offset"/> as if typed in the address field (the variables
+    /// panel's "Show in Memory", TASK-106).</summary>
+    public void ShowAddress(ushort segment, ushort offset)
+    {
+        AddressText = MemoryAddress.Format(segment, offset);
+        Go();
     }
 
     /// <summary>Enter in the address field (or Go): watch the typed address; the bytes come with the next snapshot.</summary>

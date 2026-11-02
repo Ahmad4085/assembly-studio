@@ -161,6 +161,15 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnVariableDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is ListBoxItem { DataContext: Panels.Memory.VariableRow row })
+        {
+            _viewModel.BuildRun.Variables.ShowInMemoryCommand.Execute(row);
+            e.Handled = true;
+        }
+    }
+
     private void OnBreakpointDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (sender is ListBoxItem { DataContext: Panels.Session.BreakpointItem item })

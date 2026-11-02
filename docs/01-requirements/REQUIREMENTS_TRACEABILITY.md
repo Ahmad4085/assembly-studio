@@ -4,7 +4,7 @@
 |---|---|
 | Document | Requirements traceability matrix |
 | Status | Approved |
-| Version | 2.4 |
+| Version | 2.5 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -113,6 +113,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-4 | US-021 | FR-094 | P1 | APPROVED | AC-044 | ADR-0006, ADR-0007 | UI-001 | TASK-061 | NOT CREATED | NOT RUN |
 | PG-4 | US-016 | FR-095 | P0 | APPROVED | AC-019 | ADR-0005, ADR-0007 | UI-011, UI-012 | TASK-040 | TC-030 | PASS 2026-10-30-1 |
 | PG-4 | US-016 | FR-096 | P0 | APPROVED | AC-030, AC-045 | ADR-0003, ADR-0004, ADR-0007 | UI-010, UI-012 | TASK-054, TASK-084 | TC-019, TC-036, TC-040 | FAIL (TC-040: 1 of 4, DEF-006) 2026-10-30-1 (partial: TASK-084 pending) |
+| PG-1 | US-009 | FR-097 | P1 | APPROVED | AC-065 | ADR-0005, ADR-0007 | UI-023 | TASK-106 | NOT CREATED | NOT RUN |
 | PG-2 | — | NFR-001 | P1 | APPROVED | AC-056 | ADR-0006 | UI-003 | TASK-064, TASK-086 | TC-008, TC-027 | PASS 2026-10-30-1 (partial: TASK-064, TASK-086 pending) |
 | PG-1 | — | NFR-002 | P0 | APPROVED | AC-024 | ADR-0003, ADR-0007 | UI-005 | TASK-020, TASK-051, TASK-086 | TC-008, TC-034, TC-042 | PASS 2026-10-30-1 (partial: TASK-086 pending) |
 | PG-3 | — | NFR-003 | P1 | NEEDS_RESEARCH | AC-056 | ADR-0003 | — | TASK-020 | TC-008, TC-027 | PASS 2026-10-30-1 |
@@ -163,3 +164,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-10-26 v2.2: Minor (SDLC-007). UI items column added (UI-001 to UI-022 from `docs/04-design/ui-spec.md` v0.1, awaiting approval). No requirement changed.
 - 2026-10-26 v2.3: Minor (SDLC-008). Tasks column added (`docs/05-planning/backlog.md` v0.1, awaiting approval). No requirement changed.
 - 2026-10-30 v2.4: Minor (testing phase, `docs/07-testing/test-report-2026-10-30-1.md`). "Test cases" and "Test status" filled from test run 2026-10-30-1 (TC IDs from `docs/07-testing/test-plan.md` v0.1). "(partial: TASK-… pending)" marks requirements whose remaining tasks are not built. No requirement changed.
+- 2026-11-02 v2.5: FR-097 / AC-065 / UI-023 / TASK-106 (Variables panel) added by the user's request (D-020). No other requirement changed.

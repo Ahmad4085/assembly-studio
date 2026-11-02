@@ -105,6 +105,7 @@ public sealed partial class ShellViewModel : ObservableObject
                 OnRunStateChanged(BuildRun.State);
             }
         };
+        BuildRun.Variables.ShownInMemory += (_, _) => GoTo(ShellPanel.Memory);
         LayoutState saved = store.Load();
         Apply(saved);
         ZoomPercent = saved.ZoomPercent;
@@ -144,7 +145,8 @@ public sealed partial class ShellViewModel : ObservableObject
     public Commands.BuildRunViewModel BuildRun { get; }
 
     // TASK-084: the bottom tab follows the session: Problems after a failed build, Console while a program runs, and the
-    // console takes the focus when the program waits for input (ui-spec §4: "input line focused").
+    // console takes the focus when the program waits for input (ui-spec §4: "input line focused"). TASK-106: Variables when
+    // a program with data labels is loaded, or ends without having printed anything.
     private void OnRunStateChanged(Commands.RunState state)
     {
         switch (state)
@@ -159,6 +161,15 @@ public sealed partial class ShellViewModel : ObservableObject
                 break;
             case Commands.RunState.WaitingForInput:
                 GoTo(ShellPanel.Console);
+                break;
+            case Commands.RunState.Ready when BuildRun.Variables.Rows.Count > 0 && BuildRun.Console.IsEmpty:
+                IsBottomVisible = true;
+                BottomTab = BottomTab.Variables; // TASK-106: a loaded program: its variables
+                break;
+            case Commands.RunState.Terminated when BuildRun.Variables.Rows.Count > 0:
+                IsBottomVisible = true;
+                // A short run can end before a Running snapshot is shown: choose explicitly, output first.
+                BottomTab = BuildRun.Console.IsEmpty ? BottomTab.Variables : BottomTab.Console;
                 break;
             case Commands.RunState.HaltedError or Commands.RunState.HaltedUnsupported:
                 IsBottomVisible = true;

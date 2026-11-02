@@ -83,6 +83,7 @@ the ADR-0007 v1.1 amendment (§10, approved 2026-10-26).
 | UI-020 | Welcome / empty state | No document: New, Open, Open sample, recent files. Drop target for files | `IDocumentService`, `IContentCatalog`, `ISettingsService` (recent) | FR-001, FR-002, FR-003, FR-007, FR-069, NFR-005, NFR-023 |
 | UI-021 | Recovery prompt | On start after an unexpected exit: list recoverable documents with Restore / Discard | `IDocumentService` (recovery folder, architecture §5) | NFR-011 |
 | UI-022 | Presentation mode (P2) | One action: larger code and value fonts, thicker execution and focus markers | `ISettingsService` | FR-022, FR-074 |
+| UI-023 | Variables panel | Bottom tab "Variables" (after Breakpoints): one row per data label of the build: name, `seg:off`, value (text in quotes, byte, word with decimal, or hex bytes; FR-047 format). Changed values marked as registers (color, weight, bar). Enter/double-click shows the address in the memory view. Empty: "Build to see your variables"; no data labels: "This program has no data labels"; running: dimmed, "not current". Shown automatically when a program with data labels is loaded, or ends without having printed anything. Each row's accessible name: "lhs at 0800:0130, text 1234, changed" | `BuildResult.SourceMap.DataSymbols`, `MachineSnapshot.MemoryWindows` (`IDebugSession.WatchMemory`) | FR-097, FR-047, FR-056, FR-057 |
 
 Not app UI (engine or installer only): FR-033, FR-036, FR-043, FR-044, FR-083–FR-086, FR-088, FR-089 (Inno Setup's own wizard follows its defaults).
 
@@ -246,3 +247,4 @@ publish (≤ 30/s while running) [Hypothesis: negligible, validated by the sessi
 - 2026-10-26 v0.1: Initial UI/UX specification (SDLC-007).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:03 +0500: "approve" (reply to the gate question naming ui-spec v0.1, design tokens v0.1, the ADR-0007 v1.1 amendment and the Ctrl+C proposal)).
 - 2026-11-01: UI-005 changed by the user's request (D-017): the 8-bit halves are shown on the rows of AX–DX instead of on expand; register values in boxes. No other change.
+- 2026-11-02: UI-023 Variables panel added by the user's request (D-020, FR-097). No other change.

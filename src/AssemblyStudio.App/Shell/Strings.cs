@@ -1360,6 +1360,60 @@ public static class Strings
     /// <summary>{0} at {1}, {2} {3}</summary>
     public static string VariableAccessible => Get(nameof(VariableAccessible));
 
+    /// <summary>Find</summary>
+    public static string FindBoxName => Get(nameof(FindBoxName));
+
+    /// <summary>Replace with</summary>
+    public static string FindReplaceBoxName => Get(nameof(FindReplaceBoxName));
+
+    /// <summary>Match _case</summary>
+    public static string FindMatchCase => Get(nameof(FindMatchCase));
+
+    /// <summary>_Whole word</summary>
+    public static string FindWholeWord => Get(nameof(FindWholeWord));
+
+    /// <summary>Previous match (Shift+F3)</summary>
+    public static string FindPreviousButton => Get(nameof(FindPreviousButton));
+
+    /// <summary>Next match (F3)</summary>
+    public static string FindNextButton => Get(nameof(FindNextButton));
+
+    /// <summary>_Replace</summary>
+    public static string FindReplaceOne => Get(nameof(FindReplaceOne));
+
+    /// <summary>Replace _all</summary>
+    public static string FindReplaceAll => Get(nameof(FindReplaceAll));
+
+    /// <summary>Close (Esc)</summary>
+    public static string FindClose => Get(nameof(FindClose));
+
+    /// <summary>Find and replace</summary>
+    public static string FindBarName => Get(nameof(FindBarName));
+
+    /// <summary>Match {0} of {1}</summary>
+    public static string FindMatchOf => Get(nameof(FindMatchOf));
+
+    /// <summary>{0} matches</summary>
+    public static string FindMatches => Get(nameof(FindMatches));
+
+    /// <summary>No matches for &quot;{0}&quot;</summary>
+    public static string FindNoMatches => Get(nameof(FindNoMatches));
+
+    /// <summary>(wrapped around)</summary>
+    public static string FindWrapped => Get(nameof(FindWrapped));
+
+    /// <summary>Replaced {0}</summary>
+    public static string FindReplaced => Get(nameof(FindReplaced));
+
+    /// <summary>Go to Line</summary>
+    public static string GoToLineTitle => Get(nameof(GoToLineTitle));
+
+    /// <summary>_Line number (1–{0}):</summary>
+    public static string GoToLinePrompt => Get(nameof(GoToLinePrompt));
+
+    /// <summary>Enter a whole number from 1 to {0}.</summary>
+    public static string GoToLineInvalid => Get(nameof(GoToLineInvalid));
+
     /// <summary>Show in Memory</summary>
     public static string VariableShowInMemory => Get(nameof(VariableShowInMemory));
 }

@@ -5,18 +5,22 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 16:27 +0500 by Claude Code (Opus 5.5), after completing TASK-106 |
-| Current task | **None in progress. Next: `TASK-065` find and replace (M4)** |
-| Last completed | TASK-106 Variables panel (added by the user, D-020; Done 2026-11-02 16:27 +0500) |
-| Git state | HEAD after `a40f682` (TASK-106 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 19:52 +0500 by Claude Code (Opus 5.5), after completing TASK-065 |
+| Current task | **None in progress. Next: `/assembly-test` (TASK-070 waits for TASK-006)** |
+| Last completed | TASK-065 Find, replace and go to line (Done 2026-11-02 19:52 +0500) |
+| Git state | HEAD `031566c`; TASK-065 changes **uncommitted** (waiting for the user's "commit"). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1527 passed, 7 skipped, 0 failed**, two consecutive runs (2026-11-02 16:19–16:23 and 16:23–16:27 +0500, after TASK-106). The skips are the opt-in measurement and real-key tests (D-018, `ASSEMBLY_STUDIO_BENCH`).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1549 passed, 7 skipped, 0 failed**, two consecutive runs (2026-11-02 19:42–19:47 and 19:47–19:51 +0500, after TASK-065). The skips are the opt-in measurement and real-key tests (D-018, `ASSEMBLY_STUDIO_BENCH`).
 - `build/bench/run-e2e.ps1` → 7/7 measurement tests passed, every NFR target met (15:02 +0500; `docs/07-testing/performance-report-2026-11-02.md`).
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-065 Find, replace and go to line** (Claude Code, Done, uncommitted):
+  - `src/AssemblyStudio.App/Editor/Search/`: `SearchRules` (pure matching rules), `ISearchTarget` (implemented explicitly by `CodeEditor`), `FindReplaceViewModel` (`ShellViewModel.Find`; the window supplies `ActiveSearchTarget` and `AskLine`), `GoToLineDialog`.
+  - `FindBar` in `MainWindow.xaml` above the editors; key bindings on `EditorPanel` (Ctrl+F, F3, Shift+F3, Ctrl+H, Ctrl+G); Esc in the bar closes it (element binding wins over the window's Esc = Cancel build).
+
 - **TASK-106 Variables panel** (Claude Code, Done, committed `a40f682`; added by the user's request, D-020):
   - Core: `DataSymbol`, `ISourceMap.DataSymbols` (default empty). NASM: `NasmSourceMap.FindDataSymbols` (map symbols whose first bytes come from a data line; size over the following data lines).
   - App: `Panels/Memory/VariablesViewModel.cs` (up to 2 watch regions of 4 KiB; the memory view now matches only its own 256-byte window), `VariablesTab` in `MainWindow.xaml`, `BottomTab.Variables`, `ShellViewModel` tab rule (Ready → Variables; end → Console if it printed, else Variables).
@@ -106,8 +110,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-106 committed (`a40f682`).
-2. `/assembly-implement TASK-065` (find and replace, M4).
+1. The user reviews TASK-065 and says "commit" (then commit and record the hash here).
+2. `/assembly-test` (M4/M5 implementation done apart from TASK-070, which waits for TASK-006).
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-011 (reopened 2026-11-02: AvalonEdit's paste check outside the retry), DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); AC-065 test status; update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 
 ## Do not overwrite or revert

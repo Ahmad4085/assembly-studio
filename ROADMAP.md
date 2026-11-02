@@ -43,7 +43,7 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 | M1 | 8086 engine (headless) | TASK-010–020 | **Completed** (TASK-010..020 Done) |
 | M2 | Runtime, DOS and toolchain | TASK-030–044 | **Done** (2026-10-29 13:25 +0500) |
 | M3 | Debug session (headless) | TASK-050–054 | **Done** (2026-10-29 16:47 +0500) |
-| M4 | App shell and editor | TASK-060–070 | **In progress** (TASK-060..064, 066..069 Done; TASK-061 under WVR-001; TASK-065, 070 left) |
+| M4 | App shell and editor | TASK-060–070 | **In progress** (TASK-060..069 Done; TASK-061 under WVR-001; TASK-070 left, needs TASK-006) |
 | M5 | Debugger UI and visualization | TASK-080–086, TASK-106 | **Done** (2026-11-02 15:36 +0500; TASK-106 Variables panel added and done 16:27; end-to-end NFR measurements in `docs/07-testing/performance-report-2026-11-02.md`) |
 | M6 | Learning content | TASK-090–093 | **Tasks done** (TASK-090–093 Done; tutorial steps to be walked through once M5 exists) |
 | M7 | Packaging and release readiness | TASK-100–105 | **In progress** (TASK-101 Done; TASK-102 waits for TASK-100, TASK-103 for TASK-006) |

@@ -1966,3 +1966,20 @@
 - **Git state after:** uncommitted TASK-106 changes on top of `65901a2`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** AC-065 and traceability test statuses are left to the testing phase. A 2-byte string (`db 'OK'`) is shown as a word, because NASM records no types.
 - **Next step:** the user tries the panel and says "commit"; then `/assembly-implement TASK-065`.
+
+### 2026-11-02 19:31 – 19:52 +0500 · Claude Code (Opus 5.5) · TASK-065 Find, replace and go to line
+- **Summary:** Ran `/assembly-implement TASK-065` (user request; TASK-064 Done). Lock taken at 19:31.
+  - Find/replace bar and Go to Line (UI-004; FR-015, FR-016, FR-017): match case, whole word (no NASM name character next to the match), find next/previous from the selection with wrap-around and a "Match 2 of 5" status (polite live region), search as you type, Replace (only a selected match, then the next), Replace All as one undo step, Esc back to the editor; Go to Line dialog with a 1–N range check. Ctrl+F, F3, Shift+F3, Ctrl+H, Ctrl+G on the editor area and in the Edit menu.
+  - The five commands lose their "arrives with TASK-065" mark in the command table; the keyboard test checks their bindings on the editor area.
+  - Renamed my `TextSearch` to `SearchRules` (it clashed with WPF's `System.Windows.Controls.TextSearch`) and `ISearchTarget.Select` to `SelectRange` (CA1716).
+- **Files changed:**
+  - `src/AssemblyStudio.App/Editor/Search/{SearchRules.cs, ISearchTarget.cs, FindReplaceViewModel.cs, GoToLineDialog.xaml, GoToLineDialog.xaml.cs}` (new), `src/AssemblyStudio.App/Editor/CodeEditor.cs`, `src/AssemblyStudio.App/Shell/{MainWindow.xaml, MainWindow.xaml.cs, ShellViewModel.cs, Strings.resx, Strings.cs}`, `src/AssemblyStudio.App/Commands/CommandTable.cs`.
+  - `tests/AssemblyStudio.App.Tests/Editor/FindReplaceTests.cs` (new), `tests/AssemblyStudio.App.Tests/Commands/CommandTableTests.cs`.
+  - `docs/decisions/ADR-0006-*.md` (changelog), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `FindReplaceTests`: first run 21/22 (my expected offset in one case was wrong, 12 vs 13; corrected), then 22/22 twice. `CommandTableTests` 6/6.
+  - Mutation (whole word ignored): 7 failed; restored. (A first mutation didn't compile; not counted.)
+  - Release build 0 warnings; full solution **1549 passed + 7 skipped (opt-in), 0 failed, at 19:42–19:47 and 19:47–19:51**.
+- **Git state after:** uncommitted TASK-065 changes on top of `031566c`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** the find bar's text boxes and buttons use the system look, like the existing memory address box (no themed TextBox/Button style exists yet). AC-011 test status is left to the testing phase.
+- **Next step:** the user tries it and says "commit"; then `/assembly-test` (TASK-070 waits for TASK-006).

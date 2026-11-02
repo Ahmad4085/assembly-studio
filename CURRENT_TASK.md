@@ -6,14 +6,27 @@
 
 ## Active Task
 
-None in progress. Next: `TASK-065` (find and replace, M4).
+None in progress. M4: only TASK-070 left, and it needs TASK-006 (user action).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Milestone progress | M5: TASK-080..086 and TASK-106 Done. M4: TASK-065, 070 left (070 needs TASK-006) |
-| Recommended next action | `/assembly-implement TASK-065` |
+| Milestone progress | M4: TASK-060..069 Done (TASK-061 under WVR-001); TASK-070 waits for TASK-006. M5 Done (with TASK-106) |
+| Recommended next action | `/assembly-test` (M4 and M5 implementation tasks are done apart from TASK-070) |
 | Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-065 Find, replace and go to line (Done 2026-11-02 19:52 +0500, Claude Code (Opus 5.5))
+- Find/replace bar and Go to Line (UI-004; FR-015, FR-016, FR-017): match case, whole word (no NASM name character next to the match), find next/previous from the selection with wrap-around and a "Match 2 of 5" status (polite live region), search as you type, Replace (only a selected match, then the next), Replace All as one undo step, Esc back to the editor; Go to Line dialog with a 1–N range check. Ctrl+F, F3, Shift+F3, Ctrl+H, Ctrl+G on the editor area and in the Edit menu.
+- `src/AssemblyStudio.App/Editor/Search/` (SearchRules, ISearchTarget, FindReplaceViewModel, GoToLineDialog); `CodeEditor` implements ISearchTarget.
+- `FindReplaceTests` 22 (AC-011 on exact offsets, wrap-around, replace, replace all, go to line range, the dialog, the bar in the real window with one undo step); mutation caught (7 failed). Full solution 1549 passed + 7 skipped (opt-in) twice (19:42–19:47, 19:47–19:51).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 19:31 / 19:52 +0500 |
 
 ---
 

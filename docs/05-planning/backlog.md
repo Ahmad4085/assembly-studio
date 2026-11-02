@@ -71,7 +71,7 @@
 | TASK-062 | Document service and file workflow | M4 | TASK-060 | M | FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, FR-019, FR-020, NFR-029 | Done |
 | TASK-063 | Crash recovery | M4 | TASK-062 | L | NFR-011 | Done |
 | TASK-064 | Editor integration (AvalonEdit) | M4 | TASK-061 | H | FR-011, FR-012, FR-013, FR-014, FR-022, NFR-001 | Done |
-| TASK-065 | Find, replace and go to line | M4 | TASK-064 | L | FR-015, FR-016, FR-017 | Approved |
+| TASK-065 | Find, replace and go to line | M4 | TASK-064 | L | FR-015, FR-016, FR-017 | Done |
 | TASK-066 | Editor diagnostics and gutter | M4 | TASK-064, TASK-041 | M | FR-018, FR-052, FR-053 | Done |
 | TASK-067 | Settings service and dialog | M4 | TASK-060, TASK-040 | M | FR-075, FR-077, FR-078, FR-079, FR-080, FR-081, FR-082, NFR-009 | Done |
 | TASK-068 | About/Diagnostics, release notes, notices, logging | M4 | TASK-060 | L | FR-076, FR-087, FR-090, NFR-012 | Done |
@@ -1225,7 +1225,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M4 |
 | Requirements | FR-015, FR-016, FR-017 |
 | Decisions / design | ADR-0006, UI-004 |

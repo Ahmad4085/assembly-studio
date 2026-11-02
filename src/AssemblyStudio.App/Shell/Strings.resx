@@ -465,5 +465,23 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="VariableKindWord" xml:space="preserve"><value>word</value><comment>Screen-reader kind of a variable value</comment></data>
   <data name="VariableKindBytes" xml:space="preserve"><value>bytes</value><comment>Screen-reader kind of a variable value</comment></data>
   <data name="VariableAccessible" xml:space="preserve"><value>{0} at {1}, {2} {3}</value><comment>Screen-reader text of a variable row (UI-023). {0} = name, {1} = address, {2} = kind, {3} = value</comment></data>
+  <data name="FindBoxName" xml:space="preserve"><value>Find</value><comment>Find bar: UIA name of the find box (UI-004)</comment></data>
+  <data name="FindReplaceBoxName" xml:space="preserve"><value>Replace with</value><comment>Find bar: UIA name of the replace box</comment></data>
+  <data name="FindMatchCase" xml:space="preserve"><value>Match _case</value><comment>Find bar option (FR-015)</comment></data>
+  <data name="FindWholeWord" xml:space="preserve"><value>_Whole word</value><comment>Find bar option (FR-015)</comment></data>
+  <data name="FindPreviousButton" xml:space="preserve"><value>Previous match (Shift+F3)</value><comment>Find bar button tooltip and UIA name</comment></data>
+  <data name="FindNextButton" xml:space="preserve"><value>Next match (F3)</value><comment>Find bar button tooltip and UIA name</comment></data>
+  <data name="FindReplaceOne" xml:space="preserve"><value>_Replace</value><comment>Find bar button (FR-016)</comment></data>
+  <data name="FindReplaceAll" xml:space="preserve"><value>Replace _all</value><comment>Find bar button (FR-016)</comment></data>
+  <data name="FindClose" xml:space="preserve"><value>Close (Esc)</value><comment>Find bar button tooltip and UIA name</comment></data>
+  <data name="FindBarName" xml:space="preserve"><value>Find and replace</value><comment>UIA name of the find bar</comment></data>
+  <data name="FindMatchOf" xml:space="preserve"><value>Match {0} of {1}</value><comment>Find bar status. {0} = this match, {1} = all</comment></data>
+  <data name="FindMatches" xml:space="preserve"><value>{0} matches</value><comment>Find bar status</comment></data>
+  <data name="FindNoMatches" xml:space="preserve"><value>No matches for "{0}"</value><comment>Find bar status</comment></data>
+  <data name="FindWrapped" xml:space="preserve"><value>(wrapped around)</value><comment>Find bar status suffix: the search passed the end or start of the document</comment></data>
+  <data name="FindReplaced" xml:space="preserve"><value>Replaced {0}</value><comment>Find bar status after Replace All. {0} = count</comment></data>
+  <data name="GoToLineTitle" xml:space="preserve"><value>Go to Line</value><comment>Dialog title (UI-004, FR-017)</comment></data>
+  <data name="GoToLinePrompt" xml:space="preserve"><value>_Line number (1–{0}):</value><comment>Go to Line dialog. {0} = the last line</comment></data>
+  <data name="GoToLineInvalid" xml:space="preserve"><value>Enter a whole number from 1 to {0}.</value><comment>Go to Line dialog error. {0} = the last line</comment></data>
   <data name="VariableShowInMemory" xml:space="preserve"><value>Show in Memory</value><comment>Variables panel action (Enter / double-click)</comment></data>
 </root>

@@ -1,0 +1,27 @@
+<Window x:Class="AssemblyStudio.App.Editor.Search.GoToLineDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:AssemblyStudio.App.Shell"
+        Title="{x:Static shell:Strings.GoToLineTitle}"
+        SizeToContent="WidthAndHeight"
+        MinWidth="300"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Surface.Raised}"
+        Foreground="{DynamicResource Text.Primary}"
+        FontFamily="{DynamicResource Font.UI}"
+        FontSize="{DynamicResource FontSize.UI}"
+        UseLayoutRounding="True">
+  <!-- UI-004 Go to Line (FR-017): a line number from 1 to the last line; an invalid entry keeps the dialog open with the reason. -->
+  <StackPanel Margin="16">
+    <Label x:Name="Prompt" Target="{Binding ElementName=LineBox}" Padding="0,0,0,4" Foreground="{DynamicResource Text.Primary}" />
+    <TextBox x:Name="LineBox" Padding="4,2" />
+    <TextBlock x:Name="Error" Margin="0,6,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Status.Error}" Visibility="Collapsed"
+               AutomationProperties.LiveSetting="Assertive" />
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+      <Button x:Name="OkButton" Content="{x:Static shell:Strings.DialogOk}" MinWidth="88" Padding="12,4" IsDefault="True" Click="OnOk" />
+      <Button Content="{x:Static shell:Strings.DialogCancel}" MinWidth="88" Padding="12,4" Margin="8,0,0,0" IsCancel="True" />
+    </StackPanel>
+  </StackPanel>
+</Window>

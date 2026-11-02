@@ -106,6 +106,14 @@ public sealed partial class ShellViewModel : ObservableObject
             }
         };
         BuildRun.Variables.ShownInMemory += (_, _) => GoTo(ShellPanel.Memory);
+        Find = new Editor.Search.FindReplaceViewModel(() => ActiveSearchTarget?.Invoke());
+        Workspace.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Documents.WorkspaceViewModel.ActiveDocument))
+            {
+                Find.Refresh();
+            }
+        };
         LayoutState saved = store.Load();
         Apply(saved);
         ZoomPercent = saved.ZoomPercent;
@@ -180,6 +188,20 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>The Learn sidebar (UI-015).</summary>
     public Learn.LearnViewModel Learn { get; }
+
+    /// <summary>The find and replace bar and Go to Line (UI-004, TASK-065).</summary>
+    public Editor.Search.FindReplaceViewModel Find { get; }
+
+    /// <summary>The active editor, supplied by the view (the find bar works on it), or <see langword="null"/>.</summary>
+    public Func<Editor.Search.ISearchTarget?>? ActiveSearchTarget
+    {
+        get;
+        set
+        {
+            field = value;
+            Find.Refresh();
+        }
+    }
 
     /// <summary>File ▸ Settings (Ctrl+,).</summary>
     public IRelayCommand OpenSettingsCommand { get; }

@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using AssemblyStudio.App.Editor.Adornments;
+using AssemblyStudio.App.Editor.Search;
 using AssemblyStudio.App.Shell;
 using AssemblyStudio.Core;
 using ICSharpCode.AvalonEdit;
@@ -22,7 +23,7 @@ namespace AssemblyStudio.App.Editor;
 /// leave the editor (no focus trap, ui-spec §8).
 /// </para>
 /// </summary>
-public class CodeEditor : TextEditor
+public class CodeEditor : TextEditor, ISearchTarget
 {
     /// <summary>The document text, two-way bindable.</summary>
     public static readonly DependencyProperty BoundTextProperty = DependencyProperty.Register(
@@ -302,6 +303,52 @@ public class CodeEditor : TextEditor
 
     /// <summary>Redraws the text, for example after the theme changed the syntax brushes.</summary>
     public void Redraw() => TextArea.TextView.Redraw();
+
+    // ---- TASK-065: the find bar and Go to Line work on the editor through ISearchTarget ----
+
+    string ISearchTarget.Text => Document.Text;
+
+    int ISearchTarget.SelectionStart => SelectionStart;
+
+    int ISearchTarget.SelectionLength => SelectionLength;
+
+    int ISearchTarget.LineCount => Document.LineCount;
+
+    int ISearchTarget.CaretLine => TextArea.Caret.Line;
+
+    void ISearchTarget.SelectRange(int start, int length)
+    {
+        Select(start, length);
+        TextArea.Caret.BringCaretToView();
+    }
+
+    void ISearchTarget.Replace(int start, int length, string text) => Document.Replace(start, length, text);
+
+    void ISearchTarget.ReplaceAll(IReadOnlyList<int> starts, int length, string text)
+    {
+        Document.BeginUpdate(); // one undo step (FR-016)
+        try
+        {
+            for (int i = starts.Count - 1; i >= 0; i--) // back to front: earlier offsets stay valid
+            {
+                Document.Replace(starts[i], length, text);
+            }
+        }
+        finally
+        {
+            Document.EndUpdate();
+        }
+    }
+
+    void ISearchTarget.GoToLine(int line)
+    {
+        TextArea.Caret.Location = new ICSharpCode.AvalonEdit.Document.TextLocation(line, 1);
+        TextArea.ClearSelection();
+        ScrollToLine(line);
+        TextArea.Focus();
+    }
+
+    void ISearchTarget.Focus() => TextArea.Focus();
 
     /// <inheritdoc />
     protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)

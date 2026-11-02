@@ -110,6 +110,11 @@ public sealed class CommandTableTests
                         problems.AddRange(entry.Keys.Where(k => !console.InputBindings.OfType<KeyBinding>().Any(b => b.Key == k.Key && b.Modifiers == k.Modifiers))
                             .Select(k => $"{entry.Name}: the console has no binding for {k}"));
                         break;
+                    case ShortcutScope.Editor when entry.Name is "Find" or "Find next" or "Find previous" or "Replace" or "Go to Line":
+                        var editorPanel = (FrameworkElement)window.FindName("EditorPanel"); // TASK-065: the editor and the find bar
+                        problems.AddRange(entry.Keys.Where(k => !editorPanel.InputBindings.OfType<KeyBinding>().Any(b => b.Key == k.Key && b.Modifiers == k.Modifiers && b.Command is not null))
+                            .Select(k => $"{entry.Name}: the editor area has no binding for {k}"));
+                        break;
                     case ShortcutScope.Editor:
                         RoutedUICommand command = entry.Name switch
                         {

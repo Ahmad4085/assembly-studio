@@ -67,6 +67,17 @@ public partial class MainWindow : Window
         };
         viewModel.BuildRun.Breakpoints.GoToRequested += (_, item) => GoToLine(item.Document, item.Breakpoint.Line);
         viewModel.BuildRun.Announced += (_, _) => Announce();
+
+        // TASK-065: the find bar works on the active editor; Go to Line asks through its dialog.
+        viewModel.ActiveSearchTarget = ActiveEditor;
+        viewModel.Find.AskLine = (lineCount, currentLine) => Editor.Search.GoToLineDialog.Ask(this, lineCount, currentLine);
+        viewModel.Find.FocusRequested += (_, replace) =>
+        {
+            UpdateLayout(); // the bar was just shown
+            System.Windows.Controls.TextBox box = replace ? ReplaceBox : FindBox;
+            box.Focus();
+            box.SelectAll();
+        };
         Closed += (_, _) => viewModel.BuildRun.Dispose();
     }
 

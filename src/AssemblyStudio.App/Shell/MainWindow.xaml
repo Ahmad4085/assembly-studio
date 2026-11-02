@@ -305,11 +305,11 @@
         <MenuItem Header="{x:Static shell:Strings.CmdPaste}" InputGestureText="{x:Static shell:Strings.KeyPaste}" Command="ApplicationCommands.Paste" />
         <MenuItem Header="{x:Static shell:Strings.CmdSelectAll}" InputGestureText="{x:Static shell:Strings.KeySelectAll}" Command="ApplicationCommands.SelectAll" />
         <Separator />
-        <MenuItem Header="{x:Static shell:Strings.CmdFind}" InputGestureText="{x:Static shell:Strings.KeyFind}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdFindNext}" InputGestureText="{x:Static shell:Strings.KeyFindNext}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdFindPrevious}" InputGestureText="{x:Static shell:Strings.KeyFindPrevious}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdReplace}" InputGestureText="{x:Static shell:Strings.KeyReplace}" IsEnabled="False" />
-        <MenuItem Header="{x:Static shell:Strings.CmdGoToLine}" InputGestureText="{x:Static shell:Strings.KeyGoToLine}" IsEnabled="False" />
+        <MenuItem Header="{x:Static shell:Strings.CmdFind}" InputGestureText="{x:Static shell:Strings.KeyFind}" Command="{Binding Find.FindCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdFindNext}" InputGestureText="{x:Static shell:Strings.KeyFindNext}" Command="{Binding Find.FindNextCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdFindPrevious}" InputGestureText="{x:Static shell:Strings.KeyFindPrevious}" Command="{Binding Find.FindPreviousCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdReplace}" InputGestureText="{x:Static shell:Strings.KeyReplace}" Command="{Binding Find.OpenReplaceCommand}" />
+        <MenuItem Header="{x:Static shell:Strings.CmdGoToLine}" InputGestureText="{x:Static shell:Strings.KeyGoToLine}" Command="{Binding Find.GoToLineCommand}" />
         <Separator />
         <MenuItem Header="{x:Static shell:Strings.CmdTabMovesFocus}" InputGestureText="{x:Static shell:Strings.KeyTabMovesFocus}" IsCheckable="True" IsChecked="{Binding TabMovesFocus}" />
       </MenuItem>
@@ -534,6 +534,14 @@
       <!-- UI-003 editor area: document tabs (the AvalonEdit editor replaces the text boxes in TASK-064), or the UI-020 welcome page -->
       <GroupBox x:Name="EditorPanel" Grid.Column="2" Style="{StaticResource Panel.Headerless}"
                 AutomationProperties.Name="{x:Static shell:Strings.RegionEditor}" DataContext="{Binding Workspace}">
+        <GroupBox.InputBindings>
+          <!-- ui-spec section 6, TASK-065: find, replace and go to line work in the editor and in the find bar -->
+          <KeyBinding Key="F" Modifiers="Ctrl" Command="{Binding DataContext.Find.FindCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+          <KeyBinding Key="F3" Command="{Binding DataContext.Find.FindNextCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+          <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding DataContext.Find.FindPreviousCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+          <KeyBinding Key="H" Modifiers="Ctrl" Command="{Binding DataContext.Find.OpenReplaceCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+          <KeyBinding Key="G" Modifiers="Ctrl" Command="{Binding DataContext.Find.GoToLineCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        </GroupBox.InputBindings>
         <Grid>
           <!-- UI-020 welcome page: no document open -->
           <ScrollViewer x:Name="WelcomePage" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="{x:Static shell:Strings.RegionWelcome}">
@@ -629,6 +637,60 @@
                 <TextBlock x:Name="StripHalt" Text="{Binding HaltText}" Foreground="{DynamicResource Status.Error}" TextWrapping="Wrap" Margin="0,2,0,0"
                            Visibility="{Binding HaltText, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
               </StackPanel>
+            </Border>
+            <!-- UI-004 find and replace bar (TASK-065): works on the active editor; Esc closes it and returns to the editor -->
+            <Border x:Name="FindBar" DockPanel.Dock="Top" Padding="8,4" Background="{DynamicResource Surface.Raised}"
+                    BorderBrush="{DynamicResource Border.Subtle}" BorderThickness="0,0,0,1"
+                    DataContext="{Binding DataContext.Find, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Visibility="{Binding IsOpen, Converter={StaticResource VisibleWhenTrue}}"
+                    AutomationProperties.Name="{x:Static shell:Strings.FindBarName}">
+              <Border.InputBindings>
+                <KeyBinding Key="Escape" Command="{Binding CloseCommand}" />
+              </Border.InputBindings>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="260" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBox x:Name="FindBox" Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" Padding="4,1"
+                         FontFamily="{DynamicResource Font.Code}" AutomationProperties.Name="{x:Static shell:Strings.FindBoxName}">
+                  <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding FindNextCommand}" />
+                    <KeyBinding Key="Enter" Modifiers="Shift" Command="{Binding FindPreviousCommand}" />
+                  </TextBox.InputBindings>
+                </TextBox>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="6,0,0,0">
+                  <Button x:Name="FindPreviousButton" Content="&#xE70E;" FontFamily="{DynamicResource Font.Icons}" Padding="6,2" Command="{Binding FindPreviousCommand}"
+                          ToolTip="{x:Static shell:Strings.FindPreviousButton}" AutomationProperties.Name="{x:Static shell:Strings.FindPreviousButton}" />
+                  <Button x:Name="FindNextButton" Content="&#xE70D;" FontFamily="{DynamicResource Font.Icons}" Padding="6,2" Margin="2,0,0,0" Command="{Binding FindNextCommand}"
+                          ToolTip="{x:Static shell:Strings.FindNextButton}" AutomationProperties.Name="{x:Static shell:Strings.FindNextButton}" />
+                  <CheckBox x:Name="FindMatchCase" Content="{x:Static shell:Strings.FindMatchCase}" IsChecked="{Binding MatchCase}" VerticalAlignment="Center" Margin="10,0,0,0" />
+                  <CheckBox x:Name="FindWholeWord" Content="{x:Static shell:Strings.FindWholeWord}" IsChecked="{Binding WholeWord}" VerticalAlignment="Center" Margin="10,0,0,0" />
+                </StackPanel>
+                <DockPanel Grid.Column="2" Margin="10,0,0,0" LastChildFill="True">
+                  <Button x:Name="FindCloseButton" DockPanel.Dock="Right" Content="&#xE711;" FontFamily="{DynamicResource Font.Icons}" FontSize="10" Padding="6,2"
+                          Command="{Binding CloseCommand}" ToolTip="{x:Static shell:Strings.FindClose}" AutomationProperties.Name="{x:Static shell:Strings.FindClose}" />
+                  <TextBlock x:Name="FindStatus" Text="{Binding Status}" VerticalAlignment="Center" Foreground="{DynamicResource Text.Secondary}"
+                             TextTrimming="CharacterEllipsis" AutomationProperties.LiveSetting="Polite" />
+                </DockPanel>
+                <TextBox x:Name="ReplaceBox" Grid.Row="1" Margin="0,4,0,0" Text="{Binding Replacement, UpdateSourceTrigger=PropertyChanged}" Padding="4,1"
+                         FontFamily="{DynamicResource Font.Code}" AutomationProperties.Name="{x:Static shell:Strings.FindReplaceBoxName}"
+                         Visibility="{Binding IsReplaceShown, Converter={StaticResource VisibleWhenTrue}}">
+                  <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ReplaceCommand}" />
+                  </TextBox.InputBindings>
+                </TextBox>
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="6,4,0,0"
+                            Visibility="{Binding IsReplaceShown, Converter={StaticResource VisibleWhenTrue}}">
+                  <Button x:Name="ReplaceButton" Content="{x:Static shell:Strings.FindReplaceOne}" Padding="10,1" Command="{Binding ReplaceCommand}" />
+                  <Button x:Name="ReplaceAllButton" Content="{x:Static shell:Strings.FindReplaceAll}" Padding="10,1" Margin="6,0,0,0" Command="{Binding ReplaceAllCommand}" />
+                </StackPanel>
+              </Grid>
             </Border>
             <ItemsControl x:Name="DocumentEditors" ItemsSource="{Binding Documents}" Focusable="False">
               <ItemsControl.ItemsPanel>

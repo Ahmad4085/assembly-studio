@@ -8,7 +8,7 @@
 | Written | 2026-11-02 15:36 +0500 by Claude Code (Opus 5.5), after completing TASK-086 |
 | Current task | **None in progress. M5 complete. Next: `TASK-065` find and replace (M4)** |
 | Last completed | TASK-086 End-to-end performance check (Done 2026-11-02 15:36 +0500) |
-| Git state | HEAD `e44fdca`; TASK-086 changes **uncommitted** (waiting for the user's "commit"). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `b238255` (TASK-086 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,7 +17,7 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
-- **TASK-086** (Claude Code, Done, uncommitted):
+- **TASK-086** (Claude Code, Done, committed `b238255`):
   - Measurements: `tests/AssemblyStudio.App.Tests/Performance/EndToEndPerformanceTests.cs`, `tests/AssemblyStudio.App.UiTests/PerformanceTests.cs`, `build/bench/run-e2e.ps1` (opt-in with `ASSEMBLY_STUDIO_BENCH=1`; the script sets it). Report: `docs/07-testing/performance-report-2026-11-02.md`.
   - Fixes: DEF-017 BOM build (`NasmAssembler`), DEF-018 step latency (`MemoryViewModel` rows updated in place: `ByteCell`/`MemoryRow`/`StackRow` are observable classes now, not records), DEF-019 output flood (`ConsoleScreen.Width = 80`, wrap per **D-019**).
   - Measurement notes: waits in timing tests pump at `Input` priority (a `Background` wait starves while a program runs); render is a dispatcher round at `Loaded`.
@@ -101,7 +101,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews TASK-086 and says "commit" (then commit and record the hash here).
+1. Done: TASK-086 committed (`b238255`).
 2. `/assembly-implement TASK-065` (find and replace, M4).
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 

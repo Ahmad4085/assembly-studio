@@ -8,7 +8,7 @@
 | Written | 2026-11-02 20:28 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-02-1) |
 | Current task | **None in progress. Testing phase done with 2 failures (DEF-020, DEF-021); waiting for the user's decision on fix tasks** |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-11-02-1.md` (2026-11-02 20:28 +0500) |
-| Git state | HEAD `16814e0`; testing-phase documents **uncommitted** (report 2026-11-02-1). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `bcd9514` (testing phase committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -112,7 +112,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the test report and says "commit" (then commit and record the hash here).
+1. Done: testing phase committed (`bcd9514`).
 2. Fix tasks for DEF-020 (UI smoke test: stop the process and clean up when the window isn't found; wait longer or run after the other projects) and DEF-021 (NFR-005: profile startup, measure a cold start) need the user's approval as new backlog tasks; then `/assembly-implement`, else `/assembly-qa`.
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-011 (reopened 2026-11-02: AvalonEdit's paste check outside the retry), DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); AC-065 test status; update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 

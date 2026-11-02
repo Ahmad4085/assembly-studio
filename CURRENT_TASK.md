@@ -6,10 +6,44 @@
 
 ## Active Task
 
-None in progress. Next on the user-approved path: `TASK-082` (memory and stack panels), then `TASK-083`.
+None in progress. Next on the user-approved path: `TASK-083` (instruction strip, runtime messages, history, breakpoints panels).
 
 | Field | Value |
 |---|---|
+| Status | Idle / Ready for next task |
+| Milestone 5 progress | TASK-080, 081, 082, 084 Done; eligible: TASK-083; then TASK-085 (needs TASK-069), TASK-086 |
+| Recommended next action | `/assembly-implement TASK-083` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-082 Memory and stack panels (Done 2026-11-02 10:42 +0500, Claude Code (Opus 5.5))
+- `src/AssemblyStudio.App/Panels/Memory/`:
+  - `MemoryAddress`: `segment:offset` in hex (`h` or `0x`) or registers (CS/DS/ES/SS : AX…IP), an offset alone uses DS; registers from the latest pause.
+  - `MemoryViewModel`: 256 bytes (16 × 16, hex + ASCII) at the address, read through `WatchMemory` (default 0800:0100, the program image; an address change re-watches and the bytes come with the refresh snapshot); stack rows from the snapshot's 16 words at SS:SP with the SP marker, in the registers' number format. Change marking from the snapshots' write journals (each address written since the previous pause with its value at that pause), so a pushed word is marked even though it was outside the previous stack window; above 65,536 written addresses it falls back to comparing the previous pause's shown values. States as the registers panel; nothing invented (rows only from the snapshot's window).
+- `BuildRunViewModel`: collects the write journal on the worker thread (bounded), hands it over on each new pause; attaches/clears the memory panels with the session. **Also fixes a TASK-081 gap:** a refresh snapshot at the same pause (after a new memory watch) no longer resets the registers' change marks.
+- Main window: memory and stack contents as shared templates used docked and in the compact layout's tabs; address box with Enter and Go; Ctrl+Alt+N in both panels.
+- Tests: `MemoryTests` 20 (addresses, program image view, AC-026 with the real session incl. the address change at the same pause, invalid address, vector table window, running/pause/stop, stack format, window with UIA names and render `memory-stack.png`); every shown row checked byte for byte against the snapshot's window (NFR-018). Mutations (every refresh as a new pause; journal ignored) caught.
+- Known layout gap: at the default window width the memory panel is narrower than a 16-byte row with ASCII, so it scrolls sideways; the Go button and format box use the default (light) control look.
+- Release build 0 warnings; full solution 1484/1484 twice (10:33–10:37, 10:37–10:41).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 10:23 / 10:42 +0500 |
+
+---|---|
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 10:23 +0500 |
+| Milestone | M5 |
+| Goal | Show memory windows and the stack window with change marking |
+| Scope (in) | HexByteGrid with address entry and WatchMemory; stack view with SP marker |
+| Out of scope | Memory editing (P2) |
+| Requirements | FR-054, FR-055, FR-056, NFR-018; UI-008, UI-009; ADR-0007; AC-026 |
+
+---|---|
 | Status | Idle / Ready for next task |
 | Milestone 5 progress | TASK-080, 081, 084 Done; eligible: TASK-082, 083 |
 | Recommended next action | `/assembly-implement TASK-082` |

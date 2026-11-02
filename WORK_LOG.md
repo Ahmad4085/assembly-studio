@@ -1825,3 +1825,23 @@
 - **Git state after:** uncommitted TASK-081 changes on top of `1e4632e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** DEF-012, 014, 015, 016 Open: load or focus sensitive checks, now 4 of them. A test-phase look at running the wall-clock and UI-focus tests serially is worth proposing.
 - **Next step:** commit on request, then `/assembly-implement TASK-082`.
+
+### 2026-11-02 10:23 – 10:42 +0500 · Claude Code (Opus 5.5) · TASK-082 Memory and stack panels
+- **Summary:** Ran `/assembly-implement TASK-082` (user request; dependencies TASK-051 and TASK-061 Done). Lock was free; written after the first new files (same session).
+  - **Implemented:** address parsing; the memory view (256 bytes via `WatchMemory`, default the program image) and the stack view (snapshot words at SS:SP, SP marker, number format); shared templates for the docked and compact layouts.
+  - **Change marking design:** comparing windows would miss a pushed word (outside the previous stack window). So `BuildRunViewModel` collects the snapshots' write journals since the last pause (first old value per address, bounded at 65,536 addresses with a fallback) and marks bytes whose value differs from the value at the previous pause.
+  - **Also fixed (TASK-081 gap):** a refresh snapshot after a new watch was treated as a new pause and cleared the registers' change marks; pauses are now told apart by instruction count.
+- **Found on the way (my mistakes):** one test pushed a zero onto zero memory and expected a mark (the code was right; test fixed); a Python edit with `\n` in the search text didn't apply (redone with the Edit tool); the Go button was placed before the address box (moved after it).
+- **Files changed:** `src/AssemblyStudio.App/{Panels/Memory/MemoryAddress.cs (new), Panels/Memory/MemoryViewModel.cs (new), Commands/BuildRunViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`, `tests/AssemblyStudio.App.Tests/Panels/MemoryTests.cs (new)`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `MemoryTests` 20/20 and `CpuTests` 17/17.
+  - Mutations: refresh as new pause → 1 failed; journal ignored → 3 failed. Both restored.
+  - Render `memory-stack.png` reviewed.
+  - Release build 0 warnings; full solution **1484/1484 at 10:33–10:37 and 10:37–10:41**.
+- **Git state after:** uncommitted TASK-082 changes on top of `73f36ff`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - The memory panel is narrower than a 16-byte row at the default width (sideways scroll).
+  - Go button and format box not themed.
+  - Memory editing (FR-062, P2) not in scope.
+  - OQ-026 and the timing defects as before.
+- **Next step:** `/assembly-implement TASK-083`.

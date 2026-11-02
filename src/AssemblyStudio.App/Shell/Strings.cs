@@ -1173,4 +1173,28 @@ public static class Strings
 
     /// <summary>Flags</summary>
     public static string RegionFlags => Get(nameof(RegionFlags));
+
+    /// <summary>_Address</summary>
+    public static string MemoryAddressLabel => Get(nameof(MemoryAddressLabel));
+
+    /// <summary>_Go</summary>
+    public static string MemoryGo => Get(nameof(MemoryGo));
+
+    /// <summary>segment:offset in hex (0800:0100) or registers (DS:SI, SS:SP); Enter shows it</summary>
+    public static string MemoryAddressHelp => Get(nameof(MemoryAddressHelp));
+
+    /// <summary>Not an address. Use segment:offset in hex (0800:0100) or registers (DS:SI).</summary>
+    public static string MemoryAddressInvalid => Get(nameof(MemoryAddressInvalid));
+
+    /// <summary>top of stack (SP)</summary>
+    public static string StackTop => Get(nameof(StackTop));
+
+    /// <summary>SP ▶</summary>
+    public static string StackMarker => Get(nameof(StackMarker));
+
+    /// <summary>Memory bytes</summary>
+    public static string RegionMemoryRows => Get(nameof(RegionMemoryRows));
+
+    /// <summary>Stack words</summary>
+    public static string RegionStackRows => Get(nameof(RegionStackRows));
 }

@@ -69,6 +69,13 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
     private readonly object _gate = new();
     private readonly StringBuilder _pendingOutput = new();
     private long _droppedOutput;
+
+    // Memory written since the last pause, each address with its value at that pause (from the snapshots' write journals),
+    // for the memory and stack change marking (FR-056). Bounded: past the limit the panels compare shown values instead.
+    private const int MaxTrackedWrites = 65536;
+    private Dictionary<int, byte> _writesSincePause = [];
+    private bool _writesOverflowed;
+    private ulong? _lastPauseCount;
     private CancellationTokenSource? _buildCancel;
     private IDebugSession? _session;
     private MachineSnapshot? _pendingSnapshot;
@@ -87,6 +94,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         int consoleCapacity = Panels.Console.ConsoleScreen.DefaultCapacity, Settings.NumberFormat numberFormat = Settings.NumberFormat.Hexadecimal)
     {
         Cpu = new Panels.Machine.CpuViewModel(numberFormat);
+        Memory = new Panels.Memory.MemoryViewModel(Cpu, SessionFactory.ProgramSegment, 0x0100);
         ArgumentNullException.ThrowIfNull(workspace);
         ArgumentNullException.ThrowIfNull(assembler);
         ArgumentNullException.ThrowIfNull(createSession);
@@ -112,6 +120,9 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     /// <summary>The registers and flags panels (TASK-081).</summary>
     public Panels.Machine.CpuViewModel Cpu { get; }
+
+    /// <summary>The memory and stack panels (TASK-082).</summary>
+    public Panels.Memory.MemoryViewModel Memory { get; }
 
     /// <summary>The program console (TASK-084).</summary>
     public Panels.Console.ConsoleViewModel Console { get; }
@@ -323,6 +334,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         if (result.Outcome != BuildOutcome.Succeeded)
         {
             Cpu.Clear(buildFailed: true);
+            Memory.Clear(buildFailed: true);
             State = RunState.BuildFailed;
             return false;
         }
@@ -342,6 +354,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
 
         ShowBreakpointBinding(document);
+        Memory.Attach(session);
         document.HasSession = true;
         State = RunState.Stepping; // until the loaded snapshot arrives (Ready)
         session.SnapshotPublished += OnSnapshotPublished;
@@ -372,6 +385,14 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         ExitCode = null;
         Detail = null;
         Cpu.Clear();
+        Memory.Clear();
+        _lastPauseCount = null;
+        lock (_gate)
+        {
+            _writesSincePause = [];
+            _writesOverflowed = false;
+        }
+
         OnPropertyChanged(nameof(HasSession));
     }
 
@@ -381,6 +402,20 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         lock (_gate)
         {
             _pendingSnapshot = snapshot;
+            if (!_writesOverflowed)
+            {
+                foreach (MemoryChange change in snapshot.MemoryChanges)
+                {
+                    _writesSincePause.TryAdd(change.PhysicalAddress, change.OldValue); // the first write keeps the value at the pause
+                }
+
+                if (_writesSincePause.Count > MaxTrackedWrites)
+                {
+                    _writesOverflowed = true;
+                    _writesSincePause = [];
+                }
+            }
+
             if (!string.IsNullOrEmpty(snapshot.ConsoleDelta))
             {
                 // Bounded between two UI updates too (an output flood, AC-045): keep the newest output.
@@ -444,11 +479,28 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         if (State == RunState.Running)
         {
             Cpu.MarkRunning();
+            Memory.MarkRunning();
+            return;
         }
-        else
+
+        // A refresh (a new memory watch) at the same pause keeps the change marks; a load or reset marks nothing.
+        bool baseline = State == RunState.Ready;
+        bool newPause = baseline || _lastPauseCount != InstructionCount;
+        IReadOnlyDictionary<int, byte>? writes = null;
+        if (newPause)
         {
-            Cpu.Show(s.Cpu, s.UndefinedFlags, s.HistoryDelta.Count > 0 ? s.HistoryDelta[^1].Disassembly : null, baseline: State == RunState.Ready);
+            lock (_gate)
+            {
+                writes = _writesOverflowed ? null : _writesSincePause;
+                _writesSincePause = [];
+                _writesOverflowed = false;
+            }
+
+            Cpu.Show(s.Cpu, s.UndefinedFlags, s.HistoryDelta.Count > 0 ? s.HistoryDelta[^1].Disassembly : null, baseline);
         }
+
+        Memory.Show(s, writes, newPause, baseline);
+        _lastPauseCount = InstructionCount;
     }
 
     private static (RunState, string?) HaltState(HaltReason reason) => reason switch
@@ -589,6 +641,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         if (value is RunState.Editing or RunState.Empty)
         {
             Cpu.Clear();
+            Memory.Clear();
         }
 
         Console.IsWaiting = value == RunState.WaitingForInput;

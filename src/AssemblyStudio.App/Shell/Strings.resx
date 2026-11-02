@@ -403,4 +403,12 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="RegionNumberFormat" xml:space="preserve"><value>Number format</value><comment>UIA name of the format list</comment></data>
   <data name="RegionRegisters" xml:space="preserve"><value>Registers</value><comment>UIA name of the register list</comment></data>
   <data name="RegionFlags" xml:space="preserve"><value>Flags</value><comment>UIA name of the flag list</comment></data>
+  <data name="MemoryAddressLabel" xml:space="preserve"><value>_Address</value><comment>Memory panel label (FR-054)</comment></data>
+  <data name="MemoryGo" xml:space="preserve"><value>_Go</value><comment>Memory panel button</comment></data>
+  <data name="MemoryAddressHelp" xml:space="preserve"><value>segment:offset in hex (0800:0100) or registers (DS:SI, SS:SP); Enter shows it</value><comment>Memory address tooltip</comment></data>
+  <data name="MemoryAddressInvalid" xml:space="preserve"><value>Not an address. Use segment:offset in hex (0800:0100) or registers (DS:SI).</value><comment>Memory address error</comment></data>
+  <data name="StackTop" xml:space="preserve"><value>top of stack (SP)</value><comment>Screen-reader text of the SP row</comment></data>
+  <data name="StackMarker" xml:space="preserve"><value>SP ▶</value><comment>Stack panel SP marker</comment></data>
+  <data name="RegionMemoryRows" xml:space="preserve"><value>Memory bytes</value><comment>UIA name of the memory rows</comment></data>
+  <data name="RegionStackRows" xml:space="preserve"><value>Stack words</value><comment>UIA name of the stack rows</comment></data>
 </root>

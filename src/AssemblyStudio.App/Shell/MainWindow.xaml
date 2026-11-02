@@ -78,6 +78,57 @@
         </DataTrigger>
       </DataTemplate.Triggers>
     </DataTemplate>
+    <!-- TASK-082 HexByteGrid (UI-008): address, 16 bytes, ASCII; a changed byte = Value.Changed + bold + underline -->
+    <DataTemplate x:Key="MemoryRowTemplate">
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Left" Text="{Binding Address}" Margin="0,0,10,0" Foreground="{DynamicResource Text.Secondary}"
+                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+        <TextBlock DockPanel.Dock="Right" Text="{Binding Ascii}" Margin="10,0,0,0" Foreground="{DynamicResource Text.Secondary}"
+                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+        <ItemsControl ItemsSource="{Binding Bytes}" Focusable="False">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <TextBlock x:Name="ByteText" Text="{Binding Text}" Margin="0,0,6,0" Foreground="{DynamicResource Syntax.Number}"
+                         FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+              <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsChanged}" Value="True">
+                  <Setter TargetName="ByteText" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+                  <Setter TargetName="ByteText" Property="FontWeight" Value="{DynamicResource FontWeight.Changed}" />
+                  <Setter TargetName="ByteText" Property="TextDecorations" Value="Underline" />
+                </DataTrigger>
+              </DataTemplate.Triggers>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </DockPanel>
+    </DataTemplate>
+    <!-- UI-009 stack word: SP marker, offset in SS, the word in a box (changed as the register boxes) -->
+    <DataTemplate x:Key="StackRowTemplate">
+      <DockPanel Margin="0,1">
+        <TextBlock x:Name="Top" DockPanel.Dock="Left" Width="34" Text="" Foreground="{DynamicResource Accent.Primary}" FontWeight="SemiBold"
+                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" VerticalAlignment="Center" />
+        <TextBlock DockPanel.Dock="Left" Width="40" Text="{Binding Offset}" Foreground="{DynamicResource Text.Secondary}" VerticalAlignment="Center"
+                   FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+        <Border x:Name="Chip" HorizontalAlignment="Left" Background="{DynamicResource Surface.Raised}" BorderBrush="Transparent" BorderThickness="1" CornerRadius="3" Padding="6,0">
+          <TextBlock x:Name="WordValue" Text="{Binding Value}" Foreground="{DynamicResource Syntax.Number}" FontFamily="{DynamicResource Font.Code}" FontSize="{DynamicResource FontSize.Code}" />
+        </Border>
+      </DockPanel>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding IsTop}" Value="True">
+          <Setter TargetName="Top" Property="Text" Value="{x:Static shell:Strings.StackMarker}" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding IsChanged}" Value="True">
+          <Setter TargetName="Chip" Property="BorderBrush" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="WordValue" Property="Foreground" Value="{DynamicResource Value.Changed}" />
+          <Setter TargetName="WordValue" Property="FontWeight" Value="{DynamicResource FontWeight.Changed}" />
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
     <Style x:Key="MachineListItem" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
       <Setter Property="Padding" Value="2,0" />
       <Setter Property="AutomationProperties.Name" Value="{Binding AccessibleName}" />
@@ -89,6 +140,81 @@
       <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
       <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
     </Style>
+    <!-- TASK-082 memory panel content (UI-008), used docked and in the compact layout's tab -->
+    <DataTemplate x:Key="MemoryPanelTemplate">
+      <DockPanel>
+        <DockPanel.InputBindings>
+          <KeyBinding Key="N" Modifiers="Ctrl+Alt" Command="{Binding CycleFormatCommand}" />
+        </DockPanel.InputBindings>
+        <DockPanel DockPanel.Dock="Top" Margin="4,2,4,2" Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+          <Label DockPanel.Dock="Left" Content="{x:Static shell:Strings.MemoryAddressLabel}" Target="{Binding ElementName=MemoryAddressBox}"
+                 Padding="0,0,6,0" VerticalAlignment="Center" Foreground="{DynamicResource Text.Secondary}" />
+          <TextBox x:Name="MemoryAddressBox" DockPanel.Dock="Left" Width="110" Text="{Binding AddressText, UpdateSourceTrigger=PropertyChanged}"
+                   FontFamily="{DynamicResource Font.Code}" ToolTip="{x:Static shell:Strings.MemoryAddressHelp}"
+                   AutomationProperties.HelpText="{x:Static shell:Strings.MemoryAddressHelp}">
+            <TextBox.InputBindings>
+              <KeyBinding Key="Enter" Command="{Binding GoCommand}" />
+            </TextBox.InputBindings>
+          </TextBox>
+          <Button DockPanel.Dock="Left" Content="{x:Static shell:Strings.MemoryGo}" Command="{Binding GoCommand}" Padding="10,0" Margin="6,0,0,0" />
+          <TextBlock />
+        </DockPanel>
+        <TextBlock DockPanel.Dock="Top" Margin="6,0,6,2" Text="{Binding AddressError}" Foreground="{DynamicResource Status.Error}" TextWrapping="Wrap"
+                   AutomationProperties.LiveSetting="Assertive" Visibility="{Binding AddressError, Converter={x:Static shell:NullToCollapsedConverter.Instance}}" />
+        <Border DockPanel.Dock="Top" Padding="6,2" Background="{DynamicResource Surface.Raised}" Visibility="{Binding IsNotCurrent, Converter={StaticResource VisibleWhenTrue}}">
+          <TextBlock Text="{x:Static shell:Strings.CpuNotCurrent}" Foreground="{DynamicResource Text.Secondary}" TextWrapping="Wrap" />
+        </Border>
+        <Grid>
+          <TextBlock Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                     Visibility="{Binding HasValues, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+          <ListBox x:Name="MemoryRows" ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource MemoryRowTemplate}" Margin="4,0"
+                   AutomationProperties.Name="{x:Static shell:Strings.RegionMemoryRows}"
+                   Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+            <ListBox.Style>
+              <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                    <Setter Property="Opacity" Value="0.55" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </ListBox.Style>
+            <ListBox.ItemContainerStyle>
+              <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}" />
+            </ListBox.ItemContainerStyle>
+          </ListBox>
+        </Grid>
+      </DockPanel>
+    </DataTemplate>
+    <!-- TASK-082 stack panel content (UI-009): words from SS:SP upward, SP marked -->
+    <DataTemplate x:Key="StackPanelTemplate">
+      <Grid>
+        <Grid.InputBindings>
+          <KeyBinding Key="N" Modifiers="Ctrl+Alt" Command="{Binding CycleFormatCommand}" />
+        </Grid.InputBindings>
+        <TextBlock Style="{StaticResource EmptyState.Text}" Text="{Binding EmptyText}"
+                   Visibility="{Binding HasValues, Converter={x:Static shell:InverseVisibilityConverter.Instance}}" />
+        <ListBox x:Name="StackRows" ItemsSource="{Binding StackRows}" ItemTemplate="{StaticResource StackRowTemplate}" Margin="4,2"
+                 AutomationProperties.Name="{x:Static shell:Strings.RegionStackRows}"
+                 Visibility="{Binding HasValues, Converter={StaticResource VisibleWhenTrue}}">
+          <ListBox.Style>
+            <Style TargetType="ListBox" BasedOn="{StaticResource MachineList}">
+              <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding IsNotCurrent}" Value="True">
+                  <Setter Property="Opacity" Value="0.55" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </ListBox.Style>
+          <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MachineListItem}" />
+          </ListBox.ItemContainerStyle>
+        </ListBox>
+      </Grid>
+    </DataTemplate>
   </Window.Resources>
   <Window.CommandBindings>
     <CommandBinding Command="{x:Static shell:MainWindow.NextPaneCommand}" Executed="OnNextPane" />
@@ -728,10 +854,10 @@
             <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyBreakpoints}" />
           </TabItem>
           <TabItem x:Name="MemoryTab" Header="{x:Static shell:Strings.TabMemory}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+            <ContentControl Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource MemoryPanelTemplate}" Focusable="False" />
           </TabItem>
           <TabItem x:Name="StackTab" Header="{x:Static shell:Strings.TabStack}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+            <ContentControl Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource StackPanelTemplate}" Focusable="False" />
           </TabItem>
         </TabControl>
         <GridSplitter x:Name="MemoryStackSplitter" Grid.Column="1" Width="{DynamicResource Size.Splitter}" HorizontalAlignment="Stretch"
@@ -742,11 +868,11 @@
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
           <GroupBox x:Name="MemoryPanel" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderMemory}">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+            <ContentControl x:Name="MemoryDocked" Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource MemoryPanelTemplate}" Focusable="False" />
           </GroupBox>
           <GroupBox x:Name="StackView" Grid.Column="1" Width="180" Style="{StaticResource Panel}" Header="{x:Static shell:Strings.HeaderStack}"
                     BorderThickness="1,0,0,0">
-            <TextBlock Style="{StaticResource EmptyState.Text}" Text="{x:Static shell:Strings.EmptyMachine}" />
+            <ContentControl x:Name="StackDocked" Content="{Binding BuildRun.Memory}" ContentTemplate="{StaticResource StackPanelTemplate}" Focusable="False" />
           </GroupBox>
         </Grid>
       </Grid>

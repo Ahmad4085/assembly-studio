@@ -5,17 +5,21 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-01 17:16 +0500 by Claude Code (Opus 5.5), after completing TASK-081 (with layout D-017) |
-| Current task | **None in progress. Next (user-approved): `TASK-082` memory and stack, then TASK-083** |
-| Last completed | TASK-081 Registers and flags panels (Done 2026-11-01 17:16 +0500) |
-| Git state | HEAD `d19fe2b` (TASK-081 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 10:42 +0500 by Claude Code (Opus 5.5), after completing TASK-082 |
+| Current task | **None in progress. Next (user-approved): `TASK-083` instruction strip, runtime messages, history, breakpoints** |
+| Last completed | TASK-082 Memory and stack panels (Done 2026-11-02 10:42 +0500) |
+| Git state | HEAD `73f36ff` + uncommitted TASK-082 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-01 16:53 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1464/1464 passed**, two consecutive runs (2026-11-01 17:07–17:11 and 17:11–17:15 +0500). Earlier runs that afternoon failed once each on DEF-015 (startup time), DEF-016 (View menu popup) and DEF-012.
-- Notes: Debug runs can't judge the performance tests (unoptimized). While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 10:33 +0500).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1484/1484 passed**, two consecutive runs (2026-11-02 10:33–10:37 and 10:37–10:41 +0500).
+- Notes: Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app.
 
 ## Changes since the previous handoff
+- **TASK-082 Memory and stack** (Claude Code, uncommitted):
+  - `src/AssemblyStudio.App/Panels/Memory/{MemoryAddress, MemoryViewModel}.cs`; `MemoryPanelTemplate`/`StackPanelTemplate` in `MainWindow.xaml` (docked and compact tabs); `BuildRunViewModel.Memory` and the write-journal collection.
+  - **For TASK-083:** the history panel can use `IDebugSession.History` (or accumulate `HistoryDelta` like the write journal); breakpoints already live on `DocumentViewModel.Breakpoints` and `IDebugSession.Breakpoints`; the runtime messages come from `RunState`/`Detail`/`ExitCode` in `BuildRunViewModel`; `ApplyPendingSnapshot` now separates a new pause from a refresh (`newPause`).
+
 - **TASK-081 Registers and flags** (Claude Code, uncommitted):
   - `src/AssemblyStudio.App/Panels/Machine/{ValueFormat, CpuViewModel}.cs`; templates and panels in `MainWindow.xaml`; `BuildRunViewModel.Cpu` and `LatestSnapshot`.
   - **D-017 (user request):** register rows show AX–DX with their halves on the same row, values in boxes (`RegisterRow`, `RegisterChipTemplate`, `RegisterRowTemplate`); DECISIONS.md and ui-spec UI-005 updated. Note: the decision table in DECISIONS.md is not in numeric order; check the highest ID before adding one.
@@ -76,11 +80,11 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-081 committed. Files were:
-   - `src/AssemblyStudio.App/{Panels/Machine/*, Commands/BuildRunViewModel.cs, Commands/CommandTable.cs, App.xaml.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/Strings.cs, Shell/Strings.resx}`
-   - `tests/AssemblyStudio.App.Tests/{Panels/CpuTests.cs, Commands/CommandTableTests.cs}`
-   - `DECISIONS.md` (D-017), `docs/04-design/ui-spec.md` (UI-005), `docs/07-testing/defects.md` (DEF-014 note, DEF-015, DEF-016), `docs/05-planning/backlog.md`, shared memory files
-2. `/assembly-implement TASK-082`.
+1. When the user asks: commit TASK-082. Files:
+   - `src/AssemblyStudio.App/{Panels/Memory/*, Commands/BuildRunViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
+   - `tests/AssemblyStudio.App.Tests/Panels/MemoryTests.cs`
+   - `docs/05-planning/backlog.md`, shared memory files
+2. `/assembly-implement TASK-083`.
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate (all load or focus sensitive).
 
 ## Do not overwrite or revert

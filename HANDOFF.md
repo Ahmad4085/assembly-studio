@@ -8,7 +8,7 @@
 | Written | 2026-11-02 11:14 +0500 by Claude Code (Opus 5.5), after completing TASK-083 |
 | Current task | **None in progress. Next: `TASK-069` (editor accessibility; unblocks TASK-085) or `TASK-065` (find/replace)** |
 | Last completed | TASK-083 Instruction strip, runtime messages, history, breakpoints panels (Done 2026-11-02 11:14 +0500) |
-| Git state | HEAD `8b45846` + uncommitted TASK-083 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `6ff9450` (TASK-083 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 11:04 +0500).
@@ -85,7 +85,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-083. Files:
+1. Done: TASK-083 committed. Files were:
    - `src/AssemblyStudio.Core/{StepResult.cs, MachineSnapshot.cs}`, `src/AssemblyStudio.Runtime/Interrupts/{InterruptRouter.cs, RuntimeErrorPolicy.cs, RuntimeHaltInfo.cs}`, `src/AssemblyStudio.Debugging/Snapshots/SnapshotContent.cs`
    - `src/AssemblyStudio.App/{Panels/Session/*, Commands/BuildRunViewModel.cs, Editor/Adornments/EditorMarkers.cs, Editor/Adornments/GlyphMargin.cs, Shell/MainWindow.xaml, Shell/MainWindow.xaml.cs, Shell/ShellViewModel.cs, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/Panels/SessionPanelsTests.cs`, `tests/AssemblyStudio.Runtime.Tests/RuntimeMessageTests.cs`, `tests/AssemblyStudio.Debugging.Tests/SnapshotTests.cs`

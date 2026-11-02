@@ -8,7 +8,7 @@
 | Written | 2026-11-02 16:27 +0500 by Claude Code (Opus 5.5), after completing TASK-106 |
 | Current task | **None in progress. Next: `TASK-065` find and replace (M4)** |
 | Last completed | TASK-106 Variables panel (added by the user, D-020; Done 2026-11-02 16:27 +0500) |
-| Git state | HEAD `65901a2`; TASK-106 changes **uncommitted** (waiting for the user's "commit"). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `a40f682` (TASK-106 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,7 +17,7 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
-- **TASK-106 Variables panel** (Claude Code, Done, uncommitted; added by the user's request, D-020):
+- **TASK-106 Variables panel** (Claude Code, Done, committed `a40f682`; added by the user's request, D-020):
   - Core: `DataSymbol`, `ISourceMap.DataSymbols` (default empty). NASM: `NasmSourceMap.FindDataSymbols` (map symbols whose first bytes come from a data line; size over the following data lines).
   - App: `Panels/Memory/VariablesViewModel.cs` (up to 2 watch regions of 4 KiB; the memory view now matches only its own 256-byte window), `VariablesTab` in `MainWindow.xaml`, `BottomTab.Variables`, `ShellViewModel` tab rule (Ready → Variables; end → Console if it printed, else Variables).
   - The memory panel and the variables panel share the session's 4 watch slots (1 + up to 2).
@@ -106,7 +106,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews TASK-106 and says "commit" (then commit and record the hash here).
+1. Done: TASK-106 committed (`a40f682`).
 2. `/assembly-implement TASK-065` (find and replace, M4).
 3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-011 (reopened 2026-11-02: AvalonEdit's paste check outside the retry), DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); AC-065 test status; update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 

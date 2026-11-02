@@ -8,7 +8,7 @@
 | Written | 2026-11-02 10:42 +0500 by Claude Code (Opus 5.5), after completing TASK-082 |
 | Current task | **None in progress. Next (user-approved): `TASK-083` instruction strip, runtime messages, history, breakpoints** |
 | Last completed | TASK-082 Memory and stack panels (Done 2026-11-02 10:42 +0500) |
-| Git state | HEAD `73f36ff` + uncommitted TASK-082 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `d73b4c4` (TASK-082 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 10:33 +0500).
@@ -80,7 +80,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. When the user asks: commit TASK-082. Files:
+1. Done: TASK-082 committed. Files were:
    - `src/AssemblyStudio.App/{Panels/Memory/*, Commands/BuildRunViewModel.cs, Shell/MainWindow.xaml, Shell/Strings.cs, Shell/Strings.resx}`
    - `tests/AssemblyStudio.App.Tests/Panels/MemoryTests.cs`
    - `docs/05-planning/backlog.md`, shared memory files

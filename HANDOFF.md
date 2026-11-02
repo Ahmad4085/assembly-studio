@@ -8,7 +8,7 @@
 | Written | 2026-11-02 13:11 +0500 by Claude Code (Opus 5.5), after completing TASK-085 |
 | Current task | **None in progress. Next: `TASK-086` end-to-end performance check (last M5 task)** |
 | Last completed | TASK-085 Announcements, keyboard-only flow and UI smoke tests (Done 2026-11-02 13:11 +0500) |
-| Git state | HEAD `b6a35c8` + uncommitted TASK-085 changes (commit only when the user asks). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `fed96b8` (TASK-085 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 12:54 +0500).

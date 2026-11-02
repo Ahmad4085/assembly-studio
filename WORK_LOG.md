@@ -2003,3 +2003,15 @@
 - **Summary:** The user asked: "propose the fix tasks for DEF-020 and DEF-021". Proposed TASK-107 (UI test robustness: cleanup on a failed start, longer window wait, UI tests run apart) and TASK-108 (startup time: measure per-step timings first, then speed up the measured steps; the user's cold start after a reboot). User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)". Added to the backlog as Approved; defects link their fix tasks.
 - **Files changed:** `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** `/assembly-implement TASK-107`.
+
+### 2026-11-02 20:39 – 20:59 +0500 · Claude Code (Opus 5.5) · TASK-107 UI test robustness
+- **Summary:** Ran `/assembly-implement TASK-107` (user request; approved 20:37). UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone.
+  - Checked first that `--filter-not-namespace AssemblyStudio.App.UiTests --ignore-exit-code 8` runs 0 UI tests and exits 0.
+  - My first lock edit split the old table in `CURRENT_TASK.md`; repaired.
+- **Files changed:** `tests/AssemblyStudio.App.UiTests/{AppUnderTest.cs, AppUnderTestTests.cs (new)}`, `build/test.ps1` (new), `docs/07-testing/{test-plan.md (v0.4, TC-092), defects.md (DEF-020 fixed unverified, DEF-022 new)}`, `docs/05-planning/backlog.md`, `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (Tasks column), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `AppUnderTestTests` 2/2 (Debug). Mutation (no cleanup on a failed start): the DEF-020 test failed; restored. That mutated run left a temporary folder; I deleted it (no leftover process found).
+  - Release build 0 warnings. `powershell -File build/test.ps1 -NoBuild`: run a 20:47–20:52 → step 1: 1552 total, 1548 passed, 4 skipped; step 2 (UI tests alone): 6 total, 3 passed, 3 skipped. Run b 20:52–20:57 → step 1: 1 failed (`FindReplaceTests.UI_004_…`, "Assert.False() Failure" at the Esc check, 18.2 s), 1547 passed; step 2: 3 passed, 3 skipped.
+  - Run b's failure is in a test TASK-107 doesn't touch: DEF-022 (Open). User 2026-11-02 20:59 +0500, answering "How should I close TASK-107?" (run b's one failure was TASK-065's find bar test, DEF-022): "Done, DEF-022 separate (Recommended)".
+- **Git state after:** uncommitted TASK-107 changes on top of `6e2e768`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the user says "commit"; then `/assembly-implement TASK-108`.

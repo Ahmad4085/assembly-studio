@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-02 20:28 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-02-1) |
+| Last updated | 2026-11-02 20:59 +0500 by Claude Code (Opus 5.5) (TASK-107 done) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Testing phase run 2026-11-02-1 done: 2 failures (DEF-020, DEF-021) |
-| Next recommended action | `/assembly-implement TASK-107` (DEF-020), then `/assembly-implement TASK-108` (DEF-021; approved 2026-11-02 20:37 +0500); then `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Active task | None in progress. Next: `TASK-108` startup time (DEF-021) |
+| Next recommended action | `/assembly-implement TASK-108` (DEF-021); then `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-107 UI test robustness | 2026-11-02 20:59 +0500 | UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone. TC-092 (2 tests; mutation caught). `build/test.ps1` run a all passed; run b one unrelated failure (DEF-022) |
 | Testing phase (report 2026-11-02-1) | 2026-11-02 20:28 +0500 | Test plan v0.3 (TC-074..TC-091); 1556 tests: 1548 passed, 1 failed (TC-087 UI smoke test, DEF-020), 7 skipped (opt-in); measurement script 6 of 7 passed (NFR-005 startup median 3,005 ms > 3 s, DEF-021); coverage complete (engine 99.6%, runtime 93.8%, total 90.9%); 53 of 65 acceptance criteria pass, AC-056 fails, 11 not run; DEF-006, 009, 010, 013, 017, 018, 019 verified; traceability v2.6, AC v2.3 |
 | TASK-065 Find, replace and go to line | 2026-11-02 19:52 +0500 | Find/replace bar and Go to Line (UI-004; FR-015, FR-016, FR-017): match case, whole word (no NASM name character next to the match), find next/previous from the selection with wrap-around and a "Match 2 of 5" status (polite live region), search as you type, Replace (only a selected match, then the next), Replace All as one undo step, Esc back to the editor; Go to Line dialog with a 1–N range check. Ctrl+F, F3, Shift+F3, Ctrl+H, Ctrl+G on the editor area and in the Edit menu. 22 new tests incl. AC-011; mutation caught. Full solution 1549 passed + 7 skipped (twice) |
 | TASK-106 Variables panel (added by the user, D-020; FR-097, AC-065, UI-023) | 2026-11-02 16:27 +0500 | Variables panel (FR-097, AC-065, UI-023, D-020): a bottom tab listing the program's data labels with their address and current value (text, byte, word with decimal, or hex bytes), read through memory watches; changes marked; Enter/double-click shows the address in the memory view. Data labels and sizes come from the NASM map and listing (`ISourceMap.DataSymbols`, additive). 18 new App tests incl. AC-065 with the user's VUID program + 1 source-map test; mutation caught. Full solution 1527 passed + 7 skipped (twice) |
@@ -132,7 +133,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-02-1: **2 failures**: TC-087 UI smoke test (DEF-020, Open) and the NFR-005 startup measurement in TC-089 (DEF-021, Open; AC-056 fails). Verified: DEF-006, 009, 010, 013, 017, 018, 019. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-020, DEF-021 |
+| Failed tests / open defects | Test report 2026-11-02-1: **2 failures**: TC-087 UI smoke test (DEF-020, Fixed (unverified) in TASK-107) and the NFR-005 startup measurement in TC-089 (DEF-021, Open; AC-056 fails). Verified: DEF-006, 009, 010, 013, 017, 018, 019. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-021, DEF-022 (find bar test, TASK-107 run b) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

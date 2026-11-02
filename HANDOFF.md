@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 20:28 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-02-1) |
-| Current task | **None in progress. Testing phase done with 2 failures (DEF-020, DEF-021); waiting for the user's decision on fix tasks** |
-| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-02-1.md` (2026-11-02 20:28 +0500) |
-| Git state | HEAD after `bcd9514` (testing phase committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 20:59 +0500 by Claude Code (Opus 5.5), after completing TASK-107 |
+| Current task | **None in progress. Next: `TASK-108` startup time (DEF-021)** |
+| Last completed | TASK-107 UI test robustness (Done 2026-11-02 20:59 +0500) |
+| Git state | HEAD `6e2e768`; TASK-107 changes **uncommitted** (waiting for the user's "commit"). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-107 UI test robustness** (Claude Code, Done, uncommitted): UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone. Full-suite command: `powershell -File build/test.ps1` (add `-NoBuild`; result options after `--`). DEF-020 Fixed (unverified); DEF-022 (find bar window test, simulated Esc) Open.
+
 - **Testing phase 2026-11-02-1** (Claude Code; documents only): 1556 tests: 1548 passed, 1 failed (TC-087 UI smoke test, DEF-020), 7 skipped (opt-in); measurement script 6 of 7 passed (NFR-005 startup median 3,005 ms > 3 s, DEF-021); coverage complete (engine 99.6%, runtime 93.8%, total 90.9%); 53 of 65 acceptance criteria pass, AC-056 fails, 11 not run; DEF-006, 009, 010, 013, 017, 018, 019 verified. Test plan v0.3 (TC-074..TC-091), traceability v2.6, AC v2.3, defects DEF-020 and DEF-021 opened.
 
 - **TASK-065 Find, replace and go to line** (Claude Code, Done, committed `17313c4`):
@@ -112,9 +114,10 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: testing phase committed (`bcd9514`).
-2. Approved fix tasks (2026-11-02 20:37 +0500): `/assembly-implement TASK-107` (DEF-020, UI test robustness), then `/assembly-implement TASK-108` (DEF-021, startup time; its cold start needs the user to reboot); then `/assembly-qa`.
-3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-011 (reopened 2026-11-02: AvalonEdit's paste check outside the retry), DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); AC-065 test status; update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
+1. The user reviews TASK-107 and says "commit" (then commit and record the hash here).
+2. `/assembly-implement TASK-108` (DEF-021, startup time; its cold start needs the user to reboot).
+3. Then `/assembly-qa` (or `/assembly-test rerun DEF-020` first). DEF-022 needs its own fix task (proposed: check the Esc binding and run its command instead of simulating the key).
+4. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

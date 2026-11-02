@@ -6,14 +6,26 @@
 
 ## Active Task
 
-None in progress. M4: only TASK-070 left, and it needs TASK-006 (user action).
+None in progress. Next: `TASK-108` (startup time, DEF-021).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Milestone progress | M4: TASK-060..069 Done (TASK-061 under WVR-001); TASK-070 waits for TASK-006. M5 Done (with TASK-106) |
-| Recommended next action | `/assembly-test` (M4 and M5 implementation tasks are done apart from TASK-070) |
+| Recommended next action | `/assembly-implement TASK-108` |
 | Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-107 UI test robustness (Done 2026-11-02 20:59 +0500, Claude Code (Opus 5.5))
+- UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone.
+- `AppUnderTestTests` 2 (TC-092): a start without a window fails with the reason and leaves no process or folder (mutation without the cleanup: fails); the log in the message.
+- Release build 0 warnings. `build/test.ps1` run a (20:47–20:52): 1548 + 3 passed, 7 skipped (opt-in), 0 failed. Run b (20:52–20:57): UI tests 3 of 3 passed; one failure in an unrelated test, TASK-065's find bar window test (DEF-022, Open). User 2026-11-02 20:59 +0500, answering "How should I close TASK-107?" (run b's one failure was TASK-065's find bar test, DEF-022): "Done, DEF-022 separate (Recommended)".
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 20:39 / 20:59 +0500 |
 
 ---
 

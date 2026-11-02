@@ -13,21 +13,70 @@ namespace AssemblyStudio.App.UiTests;
 /// </summary>
 internal sealed class AppUnderTest : IDisposable
 {
+    /// <summary>How long the main window may take to appear: generous, because a full test run loads the machine (DEF-020).</summary>
+    internal static readonly TimeSpan WindowTimeout = TimeSpan.FromSeconds(60);
+
     private readonly string _folder = Directory.CreateTempSubdirectory("asmstudio-ui-").FullName;
     private bool _hadFocus;
 
     public AppUnderTest(params string[] files)
+        : this(new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")), WindowTimeout, files)
     {
-        var start = new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")) { UseShellExecute = false };
+    }
+
+    /// <summary>Starts <paramref name="start"/> with the temporary folders and waits for its main window. When the window doesn't
+    /// appear (or anything else fails), the process is stopped and the folder deleted before the exception leaves: a failed
+    /// start leaves nothing behind (DEF-020), and the message carries the application's log.</summary>
+    internal AppUnderTest(ProcessStartInfo start, TimeSpan windowTimeout, params string[] files)
+    {
+        start.UseShellExecute = false;
         foreach (string argument in new[] { "--settings", Path.Combine(_folder, "settings.json"), "--recovery", Path.Combine(_folder, "recovery"), "--log", Path.Combine(_folder, "logs") }.Concat(files))
         {
             start.ArgumentList.Add(argument);
         }
 
-        Application = Application.Launch(start);
         Automation = new UIA3Automation();
-        Window = Application.GetMainWindow(Automation, TimeSpan.FromSeconds(30))
-            ?? throw new InvalidOperationException("The main window didn't appear.");
+        try
+        {
+            var waited = Stopwatch.StartNew();
+            Application = Application.Launch(start);
+            Window = Application.GetMainWindow(Automation, windowTimeout)
+                ?? throw new InvalidOperationException(
+                    $"The main window didn't appear within {windowTimeout.TotalSeconds:F0} s ({waited.Elapsed.TotalSeconds:F1} s waited). {LogText(_folder)}");
+        }
+        catch
+        {
+            Dispose();
+            throw;
+        }
+    }
+
+    /// <summary>The temporary folder (settings, recovery, logs); deleted on dispose.</summary>
+    internal string Folder => _folder;
+
+    /// <summary>The application's log from <paramref name="folder"/>, for a failure message.</summary>
+    internal static string LogText(string folder)
+    {
+        string logs = Path.Combine(folder, "logs");
+        string[] files = Directory.Exists(logs) ? Directory.GetFiles(logs, "*.log") : [];
+        if (files.Length == 0)
+        {
+            return "The application wrote no log.";
+        }
+
+        try
+        {
+            string text = string.Join(Environment.NewLine, files.Order(StringComparer.Ordinal).Select(f =>
+            {
+                using var reader = new StreamReader(new FileStream(f, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+                return reader.ReadToEnd().TrimEnd();
+            }));
+            return $"Application log:{Environment.NewLine}{text}";
+        }
+        catch (IOException e)
+        {
+            return $"The application's log couldn't be read: {e.Message}";
+        }
     }
 
     public Application Application { get; }
@@ -86,12 +135,17 @@ internal sealed class AppUnderTest : IDisposable
     public void Dispose()
     {
         Automation.Dispose();
-        if (!Application.HasExited)
+        if (Application is { } application) // null when the launch itself failed
         {
-            Application.Kill(); // no save prompts: the test's documents are never saved
+            if (!application.HasExited)
+            {
+                application.Kill(); // no save prompts: the test's documents are never saved
+                WaitForExit(application.ProcessId); // its files are closed before the folder is deleted
+            }
+
+            application.Dispose();
         }
 
-        Application.Dispose();
         try
         {
             Directory.Delete(_folder, recursive: true);
@@ -99,6 +153,19 @@ internal sealed class AppUnderTest : IDisposable
         catch (IOException)
         {
             // the log may still be closing; the folder is under %TEMP%
+        }
+    }
+
+    private static void WaitForExit(int processId)
+    {
+        try
+        {
+            using var process = Process.GetProcessById(processId);
+            process.WaitForExit(10_000);
+        }
+        catch (ArgumentException)
+        {
+            // already gone
         }
     }
 

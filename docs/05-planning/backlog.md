@@ -96,7 +96,7 @@
 | TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Approved |
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
-| TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Approved |
+| TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
 | TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Approved |
 
 ## 3. Task details
@@ -1921,7 +1921,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M5 (added 2026-11-02, DEF-020) |
 | Requirements | FR-091, FR-092, NFR-021 |
 | Decisions / design | ADR-0008, D-018 |

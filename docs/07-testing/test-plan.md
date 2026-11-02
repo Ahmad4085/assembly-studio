@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.3 |
+| Version | 0.4 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-02-1.md` |
@@ -133,6 +133,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-089 | `App.UiTests.PerformanceTests` | UI (real process), performance (opt-in) | NFR-005, NFR-007, TASK-086, DEF-017 | 2 |
 | TC-090 | `App.Tests.Panels.VariablesTests` | UI / view model (real NASM and session) | AC-065, FR-057, FR-097, NFR-018, UI-023, TASK-106 | 18 |
 | TC-091 | `App.Tests.Editor.FindReplaceTests` | UI / view model | AC-011, FR-015, FR-016, FR-017, UI-004, TASK-065 | 22 |
+| TC-092 | `App.UiTests.AppUnderTestTests` | UI test harness | DEF-020, TASK-107 | 2 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -142,7 +143,10 @@ Recorded per run in the test report: OS, `dotnet --version`, NASM version, commi
 10.0.26200 x64, .NET SDK 10.0.403, NASM 3.02 (bundled), Release configuration.
 
 Commands:
-- Full suite: `dotnet test --solution AssemblyStudio.slnx -c Release --results-directory <dir> --report-xunit-trx --report-xunit-xml`
+- Full suite: `powershell -File build/test.ps1` (TASK-107: every project except the UI tests, then the UI tests alone, so the
+  real-application window wait doesn't compete with the other projects; add `-NoBuild` and, after `--`, the result options
+  `--results-directory <dir> --report-xunit-trx --report-xunit-xml`). `dotnet test --solution AssemblyStudio.slnx -c Release`
+  still runs everything at once.
 - Coverage: `powershell -File build/coverage.ps1 -NoBuild` → `artifacts/coverage/summary.md`
 - Installer: `build/installer/build-installer.ps1`, then `build/installer/test-installer.ps1` (see TASK-101 verification)
 
@@ -169,3 +173,4 @@ has a defect; no unexplained failure.
 - 2026-10-30 v0.1: Initial plan (testing phase, Claude Code (Opus 5.5)): inventory TC-001..TC-072 from the executed suite.
 - 2026-10-30 v0.2: TASK-087: TC-015, TC-023, TC-025, TC-032, TC-041, TC-070 retired (placeholders deleted); TC-073 `FloodPerformanceTests` (moved from TC-040); performance trait and coverage exclusion.
 - 2026-11-02 v0.3: Testing phase run 2026-11-02-1 (Claude Code (Opus 5.5)): TC-074..TC-091 added for the test classes of TASK-064..086, 065 and 106 (one per class, IDs as the classes name them); test counts refreshed from the run; scope, levels (FlaUI UI tests, opt-in end-to-end measurements) and limitations updated.
+- 2026-11-02 v0.4: TASK-107: TC-092 `AppUnderTestTests`; the full-suite command is `build/test.ps1` (UI tests run on their own).

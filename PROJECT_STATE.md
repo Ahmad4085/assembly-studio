@@ -9,7 +9,7 @@
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress. Testing phase run 2026-11-02-1 done: 2 failures (DEF-020, DEF-021) |
-| Next recommended action | User decision: approve fix tasks for DEF-020 (UI smoke test timeout and cleanup) and DEF-021 (NFR-005 startup), or accept them for QA; then `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Next recommended action | `/assembly-implement TASK-107` (DEF-020), then `/assembly-implement TASK-108` (DEF-021; approved 2026-11-02 20:37 +0500); then `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool

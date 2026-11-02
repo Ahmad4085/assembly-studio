@@ -1998,3 +1998,8 @@
 - **Files changed:** `docs/07-testing/{test-plan.md, test-report-2026-11-02-1.md (new), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `16814e0`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the user decides on fix tasks for DEF-020 and DEF-021 (they need approval: new backlog tasks), then `/assembly-qa`.
+
+### 2026-11-02 20:37 +0500 · Claude Code (Opus 5.5) · Fix tasks for DEF-020 and DEF-021 proposed and approved
+- **Summary:** The user asked: "propose the fix tasks for DEF-020 and DEF-021". Proposed TASK-107 (UI test robustness: cleanup on a failed start, longer window wait, UI tests run apart) and TASK-108 (startup time: measure per-step timings first, then speed up the measured steps; the user's cold start after a reboot). User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)". Added to the backlog as Approved; defects link their fix tasks.
+- **Files changed:** `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-implement TASK-107`.

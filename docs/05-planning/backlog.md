@@ -96,6 +96,8 @@
 | TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Approved |
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
+| TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Approved |
+| TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Approved |
 
 ## 3. Task details
 
@@ -1915,6 +1917,64 @@
 
 **Definition of Done:** standard (§4).
 
+### TASK-107 UI test robustness
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M5 (added 2026-11-02, DEF-020) |
+| Requirements | FR-091, FR-092, NFR-021 |
+| Decisions / design | ADR-0008, D-018 |
+| Depends on | TASK-085 |
+| Risk | L |
+
+**Goal:** A slow-starting app doesn't fail the UI smoke test, and a failed start leaves nothing behind (DEF-020).
+
+**Scope (in):**
+- `AppUnderTest`: when the main window isn't found, stop the process, delete the temporary folder and put the app's log in the failure message
+- A longer window wait (60 s) for a loaded machine
+- Run the UI test project after the other projects or on its own, so its window wait doesn't compete with them
+
+**Out of scope:**
+- Any product code change
+
+**Expected files / projects touched:** `tests/AssemblyStudio.App.UiTests/`, test run configuration
+
+**Test requirements:**
+- A test of the cleanup path (a launch whose window never appears leaves no process and no folder)
+- Full solution twice
+
+**Definition of Done:** standard (§4).
+
+### TASK-108 Startup time
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M7 (added 2026-11-02, DEF-021) |
+| Requirements | NFR-005, AC-056 |
+| Decisions / design | D-014, TASK-086 report |
+| Depends on | TASK-086 |
+| Risk | M |
+
+**Goal:** Startup back under 3 s with margin (DEF-021), and a real cold start measured.
+
+**Scope (in):**
+- Measure first: per-step startup timings up to the first frame (settings, themes, NASM check, recovery scan, layout, workspace, window build, first render), written to the startup log
+- Then speed up only the measured costly steps (defer work the first frame doesn't need, or do it lazily)
+- Cold-start measurement after a reboot, run by the user and recorded
+
+**Out of scope:**
+- Changing the 3 s target (a requirement change needing the user's approval)
+
+**Expected files / projects touched:** `src/AssemblyStudio.App/`, `tests/AssemblyStudio.App.UiTests/`, `docs/07-testing/`
+
+**Test requirements:**
+- The NFR-005 measurement (`build/bench/run-e2e.ps1`): median under 2.5 s on warm starts
+- Existing startup tests; full solution twice
+
+**Definition of Done:** standard (§4), plus: the user's cold-start measurement recorded.
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -1962,4 +2022,5 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-02: TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) added from test report 2026-11-02-1. User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-106 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

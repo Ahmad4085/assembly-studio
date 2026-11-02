@@ -5,17 +5,23 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 13:11 +0500 by Claude Code (Opus 5.5), after completing TASK-085 |
-| Current task | **None in progress. Next: `TASK-086` end-to-end performance check (last M5 task)** |
-| Last completed | TASK-085 Announcements, keyboard-only flow and UI smoke tests (Done 2026-11-02 13:11 +0500) |
-| Git state | HEAD `fed96b8` (TASK-085 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-02 15:36 +0500 by Claude Code (Opus 5.5), after completing TASK-086 |
+| Current task | **None in progress. M5 complete. Next: `TASK-065` find and replace (M4)** |
+| Last completed | TASK-086 End-to-end performance check (Done 2026-11-02 15:36 +0500) |
+| Git state | HEAD `e44fdca`; TASK-086 changes **uncommitted** (waiting for the user's "commit"). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
-- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02 12:54 +0500).
-- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1503 passed, 1 skipped, 0 failed**, two consecutive runs (2026-11-02 12:54–13:01 and 13:01–13:06 +0500). The skipped test is the opt-in real-key UI test (D-018); it passed separately at 12:52.
+- `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
+- `dotnet test --solution AssemblyStudio.slnx -c Release` → **1505 passed, 7 skipped, 0 failed**, two consecutive runs (2026-11-02 15:24–15:30 and 15:30–15:36 +0500). The skips are the opt-in measurement and real-key tests (D-018, `ASSEMBLY_STUDIO_BENCH`).
+- `build/bench/run-e2e.ps1` → 7/7 measurement tests passed, every NFR target met (15:02 +0500; `docs/07-testing/performance-report-2026-11-02.md`).
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-086** (Claude Code, Done, uncommitted):
+  - Measurements: `tests/AssemblyStudio.App.Tests/Performance/EndToEndPerformanceTests.cs`, `tests/AssemblyStudio.App.UiTests/PerformanceTests.cs`, `build/bench/run-e2e.ps1` (opt-in with `ASSEMBLY_STUDIO_BENCH=1`; the script sets it). Report: `docs/07-testing/performance-report-2026-11-02.md`.
+  - Fixes: DEF-017 BOM build (`NasmAssembler`), DEF-018 step latency (`MemoryViewModel` rows updated in place: `ByteCell`/`MemoryRow`/`StackRow` are observable classes now, not records), DEF-019 output flood (`ConsoleScreen.Width = 80`, wrap per **D-019**).
+  - Measurement notes: waits in timing tests pump at `Input` priority (a `Background` wait starves while a program runs); render is a dispatcher round at `Loaded`.
+
 - **TASK-085** (Claude Code, Done; Narrator check by the user):
   - Announcements: `BuildRunViewModel.Announcement`/`Announced`; `AnnouncementRegion` (polite live region) in `MainWindow.xaml`; the state badge no longer announces.
   - New project `tests/AssemblyStudio.App.UiTests` (FlaUI.UIA3 5.0.0; `Directory.Packages.props`, `AssemblyStudio.slnx`): `AppUnderTest` (temp folders, focus guard, waits for a click), `UiSmokeTests` (structure; AC-043 opt-in).
@@ -72,7 +78,7 @@
 - `WVR-001`: the AC-059 manual display check is waived until QA (BLK-002 resolved by the waiver); it must still pass before release.
 
 ## Decisions and constraints to respect
-- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-018.
+- ADR-0001..0009 (0007 v1.1, 0008 v1.2), D-001..D-019.
 - `AssemblyStudio.Runtime`, `AssemblyStudio.Os.Dos`, and `AssemblyStudio.Toolchain.Nasm` reference only `AssemblyStudio.Core` (ADR-0002 graph, enforced by architecture tests).
 - Console buffer cap is 1 MB with oldest output trimmed. Input events stamped with instruction count for replay determinism.
 - Composition for a runnable machine (as in `DosServicesTests.Rig`):
@@ -95,9 +101,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-085 committed (see Git state).
-2. `/assembly-implement TASK-086` (end-to-end performance check), the last M5 task.
-3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013; DEF-012, DEF-014, DEF-015, DEF-016 to investigate.
+1. The user reviews TASK-086 and says "commit" (then commit and record the hash here).
+2. `/assembly-implement TASK-065` (find and replace, M4).
+3. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). Test phase: `/assembly-test rerun` for DEF-006, 009, 010, 011, 013, 017, 018, 019; DEF-012, DEF-014, DEF-015, DEF-016 to investigate (DEF-014 and DEF-016 recurred on 2026-11-02); update the NFR-001..007 traceability statuses ("TASK-086 pending") and add TCs for the new measurement classes; NFR-005 cold start after a reboot still to measure.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

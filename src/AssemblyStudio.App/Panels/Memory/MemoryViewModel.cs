@@ -10,18 +10,37 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AssemblyStudio.App.Panels.Memory;
 
-/// <summary>One byte of the memory view.</summary>
-/// <param name="Text">"34".</param>
-/// <param name="IsChanged">Differs from the previous pause (FR-056).</param>
-public sealed record ByteCell(string Text, bool IsChanged);
-
-/// <summary>One row of 16 bytes (HexByteGrid, UI-008).</summary>
-/// <param name="Address">"0800:0100".</param>
-/// <param name="Bytes">The bytes of the row.</param>
-/// <param name="Ascii">The bytes as ASCII, "." for the others.</param>
-public sealed record MemoryRow(string Address, IReadOnlyList<ByteCell> Bytes, string Ascii)
+/// <summary>One byte of the memory view; updated in place (TASK-086: only changed text re-renders).</summary>
+public sealed partial class ByteCell : ObservableObject
 {
-    /// <summary>"0800:0100: B4 09 BA 0D 01 …; changed 34 12" for screen readers.</summary>
+    /// <summary>"34".</summary>
+    [ObservableProperty]
+    public partial string Text { get; internal set; } = string.Empty;
+
+    /// <summary>Differs from the previous pause (FR-056).</summary>
+    [ObservableProperty]
+    public partial bool IsChanged { get; internal set; }
+}
+
+/// <summary>One row of 16 bytes (HexByteGrid, UI-008); updated in place.</summary>
+public sealed partial class MemoryRow : ObservableObject
+{
+    internal MemoryRow() => Bytes = [.. Enumerable.Range(0, 16).Select(_ => new ByteCell())];
+
+    /// <summary>"0800:0100".</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial string Address { get; internal set; } = string.Empty;
+
+    /// <summary>The 16 bytes.</summary>
+    public IReadOnlyList<ByteCell> Bytes { get; }
+
+    /// <summary>The bytes as ASCII, "." for the others.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial string Ascii { get; internal set; } = string.Empty;
+
+    /// <summary>"0800:0100: B4 09 BA 0D 01 …; changed +0 34" for screen readers.</summary>
     public string AccessibleName
     {
         get
@@ -31,15 +50,33 @@ public sealed record MemoryRow(string Address, IReadOnlyList<ByteCell> Bytes, st
             return changed.Length == 0 ? text : $"{text}; {Strings.CellChanged}: {string.Join(", ", changed)}";
         }
     }
+
+    internal void Refresh() => OnPropertyChanged(nameof(AccessibleName));
 }
 
-/// <summary>One word of the stack view (UI-009).</summary>
-/// <param name="Offset">"FFFC" (the offset in SS).</param>
-/// <param name="Value">The word in the current number format.</param>
-/// <param name="IsTop">The word at SS:SP (the SP marker).</param>
-/// <param name="IsChanged">Differs from the previous pause at the same address (FR-056).</param>
-public sealed record StackRow(string Offset, string Value, bool IsTop, bool IsChanged)
+/// <summary>One word of the stack view (UI-009); updated in place.</summary>
+public sealed partial class StackRow : ObservableObject
 {
+    /// <summary>"FFFC" (the offset in SS).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial string Offset { get; internal set; } = string.Empty;
+
+    /// <summary>The word in the current number format.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial string Value { get; internal set; } = string.Empty;
+
+    /// <summary>The word at SS:SP (the SP marker).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial bool IsTop { get; internal set; }
+
+    /// <summary>Differs from the previous pause at the same address (FR-056).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AccessibleName))]
+    public partial bool IsChanged { get; internal set; }
+
     /// <summary>"SS:FFFC 1234, top of stack (SP), changed".</summary>
     public string AccessibleName =>
         $"SS:{Offset} {Value}{(IsTop ? ", " + Strings.StackTop : string.Empty)}{(IsChanged ? ", " + Strings.CellChanged : string.Empty)}";
@@ -178,29 +215,44 @@ public sealed partial class MemoryViewModel : ObservableObject
         }
 
         MemoryWindow? window = snapshot.MemoryWindows?.FirstOrDefault(w => w.Segment == _segment && w.Offset == _offset && w.Bytes.Count > 0);
-        Rows.Clear();
         if (window is { } w)
         {
             byte[] bytes = [.. w.Bytes];
             _shown = bytes;
-            for (int row = 0; row * 16 < bytes.Length; row++)
+            int rows = (bytes.Length + 15) / 16;
+            ResizeRows(rows);
+            for (int row = 0; row < rows; row++)
             {
                 int start = row * 16;
                 int count = Math.Min(16, bytes.Length - start);
-                var cells = new ByteCell[count];
+                MemoryRow target = Rows[row];
                 var ascii = new StringBuilder(count);
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < 16; i++)
                 {
+                    ByteCell cell = target.Bytes[i];
+                    if (i >= count)
+                    {
+                        cell.Text = string.Empty; // past the window: nothing invented
+                        cell.IsChanged = false;
+                        continue;
+                    }
+
                     byte b = bytes[start + i];
-                    bool changed = IsChanged(Linear(_segment, (ushort)(_offset + start + i)), b, _previousPause is { } p && p.Length > start + i ? p[start + i] : null);
-                    cells[i] = new ByteCell(b.ToString("X2", CultureInfo.InvariantCulture), changed);
+                    cell.Text = HexBytes[b];
+                    cell.IsChanged = IsChanged(Linear(_segment, (ushort)(_offset + start + i)), b, _previousPause is { } p && p.Length > start + i ? p[start + i] : null);
                     ascii.Append(b is >= 0x20 and < 0x7F ? (char)b : '.');
                 }
 
-                Rows.Add(new MemoryRow(MemoryAddress.Format(_segment, (ushort)(_offset + start)), cells, ascii.ToString()));
+                target.Address = MemoryAddress.Format(_segment, (ushort)(_offset + start));
+                target.Ascii = ascii.ToString();
+                target.Refresh();
             }
 
             ShownAddress = MemoryAddress.Format(_segment, _offset);
+        }
+        else
+        {
+            Rows.Clear(); // no window for this address (yet): nothing is shown
         }
 
         _stack = snapshot.Stack;
@@ -227,21 +279,17 @@ public sealed partial class MemoryViewModel : ObservableObject
             State = CpuPanelState.NotCurrent;
         }
 
-        for (int i = 0; i < Rows.Count; i++)
+        foreach (MemoryRow row in Rows)
         {
-            MemoryRow row = Rows[i];
-            if (row.Bytes.Any(b => b.IsChanged))
+            foreach (ByteCell cell in row.Bytes)
             {
-                Rows[i] = row with { Bytes = [.. row.Bytes.Select(b => b with { IsChanged = false })] };
+                cell.IsChanged = false; // no notification when it already is
             }
         }
 
-        for (int i = 0; i < StackRows.Count; i++)
+        foreach (StackRow row in StackRows)
         {
-            if (StackRows[i].IsChanged)
-            {
-                StackRows[i] = StackRows[i] with { IsChanged = false };
-            }
+            row.IsChanged = false;
         }
     }
 
@@ -279,10 +327,20 @@ public sealed partial class MemoryViewModel : ObservableObject
 
     private void ShowStack()
     {
-        StackRows.Clear();
         if (_stack is not { } s)
         {
+            StackRows.Clear();
             return;
+        }
+
+        while (StackRows.Count > s.Words.Count)
+        {
+            StackRows.RemoveAt(StackRows.Count - 1);
+        }
+
+        while (StackRows.Count < s.Words.Count)
+        {
+            StackRows.Add(new StackRow());
         }
 
         for (int i = 0; i < s.Words.Count; i++)
@@ -294,7 +352,11 @@ public sealed partial class MemoryViewModel : ObservableObject
             bool changed = _writes is not null
                 ? IsChanged(low, (byte)value, null) || IsChanged(high, (byte)(value >> 8), null)
                 : _previousStack.TryGetValue(low, out ushort before) && before != value;
-            StackRows.Add(new StackRow(offset.ToString("X4", CultureInfo.InvariantCulture), ValueFormat.Format(value, 16, _cpu.Format), i == 0, changed));
+            StackRow row = StackRows[i];
+            row.Offset = offset.ToString("X4", CultureInfo.InvariantCulture);
+            row.Value = ValueFormat.Format(value, 16, _cpu.Format);
+            row.IsTop = i == 0;
+            row.IsChanged = changed;
         }
     }
 
@@ -304,4 +366,19 @@ public sealed partial class MemoryViewModel : ObservableObject
         : previous is byte p && p != value;
 
     private static int Linear(ushort segment, ushort offset) => ((segment << 4) + offset) & 0xFFFFF;
+
+    private static readonly string[] HexBytes = [.. Enumerable.Range(0, 256).Select(b => b.ToString("X2", CultureInfo.InvariantCulture))];
+
+    private void ResizeRows(int count)
+    {
+        while (Rows.Count > count)
+        {
+            Rows.RemoveAt(Rows.Count - 1);
+        }
+
+        while (Rows.Count < count)
+        {
+            Rows.Add(new MemoryRow());
+        }
+    }
 }

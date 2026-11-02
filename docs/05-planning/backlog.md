@@ -83,7 +83,7 @@
 | TASK-083 | Instruction strip, runtime messages, history, breakpoints panels | M5 | TASK-051, TASK-052, TASK-061 | M | FR-037, FR-038, FR-040, FR-041, FR-042, FR-053, FR-058, FR-065, FR-066, FR-052 | Done |
 | TASK-084 | Console panel | M5 | TASK-053, TASK-061 | M | FR-063, FR-064, FR-096 | Done |
 | TASK-085 | Announcements, keyboard-only flow and UI smoke tests | M5 | TASK-080, TASK-081, TASK-082, TASK-083, TASK-084, TASK-069 | M | FR-091, FR-092, FR-093, NFR-022 | Done |
-| TASK-086 | End-to-end performance check | M5 | TASK-085 | L | NFR-002, NFR-004, NFR-005, NFR-007, NFR-001, NFR-006 | Approved |
+| TASK-086 | End-to-end performance check | M5 | TASK-085 | L | NFR-002, NFR-004, NFR-005, NFR-007, NFR-001, NFR-006 | Done |
 | TASK-087 | Test reliability: wall-clock tests and placeholder tests | M5 | — | L | NFR-002, NFR-003, NFR-021 | Done |
 | TASK-090 | Content catalog and Learn sidebar | M6 | TASK-062 | M | FR-069, FR-071, NFR-023 | Done |
 | TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Done |
@@ -1563,7 +1563,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M5 |
 | Requirements | NFR-002, NFR-004, NFR-005, NFR-007, NFR-001, NFR-006 |
 | Decisions / design | D-014 |

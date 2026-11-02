@@ -6,14 +6,28 @@
 
 ## Active Task
 
-None in progress. Next: `TASK-086` (end-to-end performance check), the last M5 task.
+None in progress. M5 is complete. Next: `TASK-065` (find and replace, M4).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Milestone progress | M5: TASK-080..085 Done; TASK-086 left. M4: TASK-065, 070 left (070 needs TASK-006) |
-| Recommended next action | `/assembly-implement TASK-086` |
+| Milestone progress | M5: TASK-080..086 Done (complete). M4: TASK-065, 070 left (070 needs TASK-006) |
+| Recommended next action | `/assembly-implement TASK-065` |
 | Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-086 End-to-end performance check (Done 2026-11-02 15:36 +0500, Claude Code (Opus 5.5))
+- `build/bench/run-e2e.ps1` (Release, `ASSEMBLY_STUDIO_BENCH=1`) runs `App.Tests.Performance.EndToEndPerformanceTests` (NFR-002, NFR-004 running/Pause/Stop/hanging build, NFR-006), `EditorLatencyTests` (NFR-001) and `App.UiTests.PerformanceTests` (NFR-005, NFR-007); all skip in normal runs.
+- Final Release run 2026-11-02 15:02 +0500, every target met: NFR-002 p95 36.1 ms; NFR-004 max UI delay 30.3 ms running, 2.6 ms building, Pause ≤ 26.6 ms, Stop 22.7 ms; NFR-005 median 2,344 ms (warm starts; cold start after reboot not measured); NFR-006 max 522 ms; NFR-007 peak 193.8 MB; NFR-001 p95 ≤ 24.3 ms. Report: `docs/07-testing/performance-report-2026-11-02.md`.
+- Defects found and fixed: DEF-017 (UTF-8 BOM files didn't build), DEF-018 (step latency p95 329 ms → 36.1 ms), DEF-019 (output flood starved input; console wraps at column 80, D-019). All three stay "Fixed (unverified)" until `/assembly-test` reruns them.
+- AC-045 test assertion updated for the wrap. Full solution: 1505 passed + 7 skipped (opt-in) twice (15:24–15:30, 15:30–15:36); earlier runs had DEF-014 and DEF-016 recurrences (recorded).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-02 13:15 / 15:36 +0500 |
 
 ---
 

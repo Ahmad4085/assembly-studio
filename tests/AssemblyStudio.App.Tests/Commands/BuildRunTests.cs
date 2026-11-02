@@ -313,7 +313,7 @@ public sealed class BuildRunTests
     }
 
     /// <summary>An assembler that runs until it is cancelled (to hold the Assembling state).</summary>
-    private sealed class WaitingAssembler : IAssembler
+    internal sealed class WaitingAssembler : IAssembler
     {
         public volatile bool Started;
 

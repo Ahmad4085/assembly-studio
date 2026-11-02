@@ -29,6 +29,14 @@ public sealed partial class NasmAssembler : IAssembler
     private const string UntitledFileName = "untitled.asm";
     private static readonly UTF8Encoding Utf8NoBom = new(encoderShouldEmitUTF8Identifier: false);
 
+    private static async Task<bool> StartsWithUtf8BomAsync(string path, CancellationToken cancellationToken)
+    {
+        var head = new byte[3];
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, useAsync: true);
+        int read = await stream.ReadAtLeastAsync(head, head.Length, throwOnEndOfStream: false, cancellationToken).ConfigureAwait(false);
+        return read == 3 && head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF;
+    }
+
     private readonly NasmOptions _options;
     private readonly Lock _cacheLock = new();
     private (string Path, DateTime Written, long Length, AssemblerInfo Info)? _checked;
@@ -162,12 +170,21 @@ public sealed partial class NasmAssembler : IAssembler
         {
             string source = request.SourcePath is null ? string.Empty : Path.GetFullPath(request.SourcePath);
             string workingDirectory = request.SourcePath is null ? work : Path.GetDirectoryName(source)!;
-            if (request.UnsavedText is not null)
+
+            // DEF-017: NASM reads a UTF-8 byte order mark as text ("instruction expected"), and the editor keeps a file's BOM
+            // when it saves (FR-019). A saved file with a BOM is assembled from a copy without it, like unsaved text.
+            string? text = request.UnsavedText;
+            if (text is null && request.SourcePath is not null && await StartsWithUtf8BomAsync(source, cancellationToken).ConfigureAwait(false))
+            {
+                text = await File.ReadAllTextAsync(source, Encoding.UTF8, cancellationToken).ConfigureAwait(false); // the BOM is dropped
+            }
+
+            if (text is not null)
             {
                 string copyFolder = Path.Combine(work, "src");
                 Directory.CreateDirectory(copyFolder);
                 source = Path.Combine(copyFolder, request.SourcePath is null ? UntitledFileName : Path.GetFileName(source));
-                await File.WriteAllTextAsync(source, request.UnsavedText, Utf8NoBom, cancellationToken).ConfigureAwait(false);
+                await File.WriteAllTextAsync(source, text, Utf8NoBom, cancellationToken).ConfigureAwait(false);
             }
 
             ProcessRun preprocess = await ProcessRunner.RunAsync(

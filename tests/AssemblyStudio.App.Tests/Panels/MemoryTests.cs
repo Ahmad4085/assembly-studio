@@ -123,7 +123,7 @@ public sealed class MemoryTests
             Assert.Equal("FFFC", run.Cpu.Registers.Single(r => r.Name == "SP").Text);
             Assert.True(run.Cpu.Registers.Single(r => r.Name == "SP").IsChanged);
             StackRow top = run.Memory.StackRows[0];
-            Assert.Equal(new StackRow("FFFC", "1234", IsTop: true, IsChanged: true), top);
+            Assert.Equal(("FFFC", "1234", true, true), (top.Offset, top.Value, top.IsTop, top.IsChanged));
             Assert.Equal($"SS:FFFC 1234, {Strings.StackTop}, {Strings.CellChanged}", top.AccessibleName);
             Assert.False(run.Memory.StackRows[1].IsChanged); // FFFE wasn't written
 

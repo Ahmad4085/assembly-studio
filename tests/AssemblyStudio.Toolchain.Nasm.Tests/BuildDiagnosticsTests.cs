@@ -42,6 +42,25 @@ public sealed class BuildDiagnosticsTests : IDisposable
     private static Task<BuildResult> Build(NasmAssembler assembler, string? path, string? text) =>
         assembler.BuildAsync(new BuildRequest(path, text), TestContext.Current.CancellationToken);
 
+    // ---- DEF-017: a saved file with a UTF-8 byte order mark ----
+
+    [Fact]
+    public async Task DEF_017_a_saved_file_with_a_UTF8_BOM_builds_and_its_messages_point_at_the_file()
+    {
+        string path = Path.Combine(_root, "bom.asm");
+        File.WriteAllText(path, "org 100h\r\nmov ax, 1\r\nint 20h\r\n", new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+        Assert.Equal(new byte[] { 0xEF, 0xBB, 0xBF }, File.ReadAllBytes(path)[..3]);
+
+        BuildResult ok = await Build(Assembler(), path, null);
+        Assert.Equal(BuildOutcome.Succeeded, ok.Outcome);
+        Assert.Equal(new byte[] { 0xB8, 0x01, 0x00, 0xCD, 0x20 }, ok.Image.ToArray());
+
+        File.WriteAllText(path, "org 100h\r\nmov ax,\r\n", new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
+        BuildResult failed = await Build(Assembler(), path, null);
+        Diagnostic error = Assert.Single(failed.Diagnostics, d => d.Severity == DiagnosticSeverity.Error);
+        Assert.Equal((path, 2), (error.File, error.Line!.Value)); // the real file and line, not the copy
+    }
+
     // ---- Parser (FR-029) ----
 
     [Fact]

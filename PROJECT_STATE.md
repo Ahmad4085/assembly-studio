@@ -5,12 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-02 13:11 +0500 by Claude Code (Opus 5.5) (TASK-085 done) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 070 left); M5 in progress (TASK-080..085 done; TASK-086 left); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
+| Last updated | 2026-11-02 15:36 +0500 by Claude Code (Opus 5.5) (TASK-086 done, M5 complete) |
+| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (TASK-065, 070 left); M5 complete (TASK-080..086 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next: `TASK-086` end-to-end performance check |
-
-| Next recommended action | `/assembly-implement TASK-086`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Active task | None in progress. Next: `TASK-065` find and replace |
+| Next recommended action | `/assembly-implement TASK-065`. Test phase: rerun DEF-017/018/019 (and the other Fixed (unverified) defects). User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -27,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-086 End-to-end performance check | 2026-11-02 15:36 +0500 | `build/bench/run-e2e.ps1`, Release, reference machine: NFR-002 p95 36.1 ms; NFR-004 max UI delay 30.3 ms running / 2.6 ms building, Pause ≤ 26.6 ms, Stop 22.7 ms; NFR-005 median 2,344 ms (warm starts); NFR-006 max 522 ms; NFR-007 peak 193.8 MB; NFR-001 p95 ≤ 24.3 ms. Found and fixed DEF-017 (BOM build), DEF-018 (step latency), DEF-019 (output flood; D-019 wrap at 80). `docs/07-testing/performance-report-2026-11-02.md`. Full solution 1505 passed + 7 skipped (twice) |
 | TASK-085 Announcements, keyboard-only flow and UI smoke tests | 2026-11-02 13:11 +0500 | Step announcements through a live region; FlaUI UI tests (structure always; AC-043 keyboard-only workflow opt-in, passed with real keys 12:52); user's Narrator check: "i check narrator says paused and changed, commit". D-018. Full solution 1503 passed + 1 skipped (twice) |
 | TASK-069 Editor accessibility verification | 2026-11-02 12:24 +0500 | UIA structure measured (named Document, Text pattern, selection events out of process); TextArea name gap fixed; manual Narrator walkthrough run by the user ("i check narrates its work and commit", overall pass). ADR-0006 Narrator item closed. Full solution 1499/1499 (twice) |
 | TASK-083 Instruction strip, runtime messages, history, breakpoints panels | 2026-11-02 11:14 +0500 | Current-instruction strip; runtime messages with the runtime's code/what/where/next (StepResult.Message, additive; RTE010/011/090 added); budget Continue/Stop; history of the last 1,000 instructions with source lines; breakpoints panel with enable/disable. 13 new tests (AC-024, 028, 029, 031, 048, 049); full solution 1497/1497 (twice) |

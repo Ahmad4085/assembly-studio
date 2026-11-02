@@ -1918,3 +1918,29 @@
 - **Files changed:** `docs/06-implementation/accessibility-findings.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** committed on the user's request (see HANDOFF).
 - **Next step:** `/assembly-implement TASK-086`.
+
+### 2026-11-02 13:15 – 15:36 +0500 · Claude Code (Opus 5.5) · TASK-086 End-to-end performance check
+- **Summary:** Ran `/assembly-implement TASK-086` (user request; TASK-085 Done). Lock taken at 13:15.
+  - New measurement tests (skip unless `ASSEMBLY_STUDIO_BENCH=1`): `App.Tests.Performance.EndToEndPerformanceTests` (NFR-002 step latency, NFR-004 running/Pause/Stop and hanging assembler, NFR-006 build turnaround) and `App.UiTests.PerformanceTests` (NFR-005 startup, NFR-007 memory). Script `build/bench/run-e2e.ps1` (Release) writes `artifacts/perf/e2e-<stamp>.txt`. Nothing presses keys (D-018).
+  - The measurements found three real defects, each fixed with a test:
+    - DEF-017 (High): UTF-8 BOM files didn't build (NASM reads the BOM as text). `NasmAssembler` assembles a BOM-less temporary copy.
+    - DEF-018 (Medium): step p95 329 ms. Memory and stack rows are now updated in place.
+    - DEF-019 (High): endless output without line breaks starved input. **User decision D-019** (AskUserQuestion: "Wrap at 80 (Recommended)"): the console wraps at column 80.
+  - The first Release run (13:21) was before the fixes. Release was then locked by the user's running app (pid 13072) until about 15:00, so intermediate checks ran in Debug. The user closed the app themselves at my request.
+  - **Final Release measurement 2026-11-02 15:02, every target met:** NFR-002 p95 36.1 ms; NFR-004 max UI delay 30.3 ms (running) / 2.6 ms (hanging build), Pause ≤ 26.6 ms, Stop 22.7 ms; NFR-005 median 2,344 ms (warm starts only); NFR-006 max 522 ms; NFR-007 peak 193.8 MB; NFR-001 p95 ≤ 24.3 ms.
+  - Full run 1 failed AC-045: the console flood test asserted the text ends with `AAAA`, which the 80-column wrap breaks when Stop lands in columns 0–3. It passed 6/6 alone. The assertion was updated for the wrap; `ConsoleTests` 4/4 afterwards.
+- **Files changed:**
+  - `src/AssemblyStudio.Toolchain.Nasm/NasmAssembler.cs`, `src/AssemblyStudio.App/Panels/Memory/MemoryViewModel.cs`, `src/AssemblyStudio.App/Panels/Console/ConsoleScreen.cs`.
+  - `tests/AssemblyStudio.App.Tests/{Performance/EndToEndPerformanceTests.cs (new), Panels/MemoryTests.cs, Panels/ConsoleTests.cs, Commands/BuildRunTests.cs}`, `tests/AssemblyStudio.App.UiTests/PerformanceTests.cs` (new), `tests/AssemblyStudio.Toolchain.Nasm.Tests/BuildDiagnosticsTests.cs`, `build/bench/run-e2e.ps1` (new).
+  - `docs/07-testing/performance-report-2026-11-02.md` (new), `docs/07-testing/defects.md` (DEF-017..019; DEF-014, DEF-016 recurrences), `DECISIONS.md` (D-019), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `ROADMAP.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - DEF-017 regression test fails on the old code and passes on the fix.
+  - Measurement script 15:02–15:05: 7/7 measurement tests passed.
+  - Release full solution: run 1 1503 passed / 2 failed (AC-045, cause above; AC-015 = DEF-014); run 2 1505 passed; run 3 1504 passed / 1 failed (View menu = DEF-016). Times of runs 1–3 not recorded.
+  - After the AC-045 test fix: **1505 passed + 7 skipped (opt-in), 0 failed, at 15:24–15:30 and 15:30–15:36**.
+- **Git state after:** uncommitted TASK-086 changes on top of `e44fdca`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:**
+  - NFR-005 says "cold start". A first start after a reboot was not measured (headroom 0.5 s on warm starts).
+  - DEF-017/018/019 stay Fixed (unverified) until `/assembly-test` reruns them.
+  - The traceability test statuses ("TASK-086 pending") and test-plan TC entries for the new classes are left to the testing phase.
+- **Next step:** user review / "commit"; then `/assembly-implement TASK-065`.

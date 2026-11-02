@@ -61,6 +61,19 @@ public sealed class ConsoleTests
     }
 
     [Fact]
+    public void D_019_a_line_wraps_after_column_80_as_on_the_DOS_screen()
+    {
+        var screen = new ConsoleScreen();
+        screen.Write(new string('x', 200));
+        Assert.Equal([80, 80, 40], screen.Text.Split('\n').Select(l => l.Length));
+        Assert.Equal(40, screen.Column);
+
+        var exact = new ConsoleScreen();
+        exact.Write(new string('y', 80) + "\r\nz");
+        Assert.Equal([new string('y', 80), string.Empty, "z"], exact.Text.Split('\n')); // 80 characters then CR LF: an empty line, as in DOS
+    }
+
+    [Fact]
     public void Control_codes_show_as_their_code_page_437_symbols()
     {
         var screen = new ConsoleScreen();
@@ -280,7 +293,9 @@ public sealed class ConsoleTests
             Assert.True(window.TryRunShortcut(Key.F5, ModifierKeys.Shift)); // Stop
             Assert.Equal(RunState.Editing, shell.BuildRun.State);
             Assert.Contains("4,096", console.TrimmedNotice!, StringComparison.Ordinal);
-            Assert.EndsWith("AAAA", console.Screen.Text, StringComparison.Ordinal);
+            string[] lines = console.Screen.Text.Split('\n');
+            Assert.All(lines, line => Assert.True(line.TrimEnd('\r').Length <= ConsoleScreen.Width)); // wrapped at 80 (D-019)
+            Assert.EndsWith("AAAA", string.Concat(lines.Select(line => line.TrimEnd('\r'))), StringComparison.Ordinal); // Stop may land at any column
         }, consoleCapacity: 4096);
     }
 

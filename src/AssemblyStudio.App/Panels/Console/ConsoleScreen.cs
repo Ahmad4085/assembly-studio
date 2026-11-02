@@ -12,11 +12,15 @@ public readonly record struct ConsoleChange(int RemovedLines, int FirstChangedLi
 /// The program console's text as a DOS teletype shows it (UI-010, FR-063): printable characters overwrite at the cursor,
 /// CR returns to the start of the line, LF moves down one line (keeping the column, as the BIOS does), BS moves left one
 /// column without erasing, TAB moves to the next multiple of 8, and BEL is counted for a visual signal instead of being
-/// shown. Other control codes are shown as their code page 437 symbols. The cursor is always on the last line (the MVP DOS
-/// services have no cursor positioning). The text is capped (NFR-015, AC-045): the oldest output is trimmed and counted.
+/// shown. Other control codes are shown as their code page 437 symbols. A line wraps after column 80, as on the DOS text
+/// screen (80 × 25; D-019). The cursor is always on the last line (the MVP DOS services have no cursor positioning). The text
+/// is capped (NFR-015, AC-045): the oldest output is trimmed and counted.
 /// </summary>
 public sealed class ConsoleScreen
 {
+    /// <summary>The screen width: after column 80 the BIOS continues on the next line (D-019).</summary>
+    public const int Width = 80;
+
     /// <summary>The default cap: 1,048,576 characters, the size of the console device's buffer (NFR-015).</summary>
     public const int DefaultCapacity = 1024 * 1024;
 
@@ -138,6 +142,12 @@ public sealed class ConsoleScreen
         }
 
         _column++;
+        if (_column == Width)
+        {
+            _lines.Add(new StringBuilder()); // the BIOS wraps to the start of the next line (D-019)
+            _length++;
+            _column = 0;
+        }
     }
 
     private int Trim()

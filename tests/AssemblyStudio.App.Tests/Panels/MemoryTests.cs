@@ -89,6 +89,23 @@ public sealed class MemoryTests
     }
 
     [Fact]
+    public void DEF_025_a_snapshot_without_the_memory_window_shows_nothing_instead_of_throwing()
+    {
+        WithRun(PushProgram, run =>
+        {
+            run.BuildCommand.Execute(null);
+            BuildRunTests.WaitUntil(() => run.State == RunState.Ready && run.Memory.Rows.Count > 0, "the program bytes");
+            MachineSnapshot snapshot = run.LatestSnapshot!.Value;
+
+            run.Memory.Show(snapshot with { MemoryWindows = [] }, null, newPause: false, baseline: false); // MemoryWindow is a struct
+
+            Assert.Empty(run.Memory.Rows); // nothing invented for an address without a window
+            run.Memory.Show(snapshot, null, newPause: false, baseline: false);
+            AssertRowsEqualSnapshot(run, 0x0800, 0x0100); // and shown again once the window is there
+        });
+    }
+
+    [Fact]
     public void FR_054_the_memory_view_starts_at_the_program_image()
     {
         WithRun(PushProgram, run =>

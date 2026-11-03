@@ -215,8 +215,7 @@ public sealed partial class MemoryViewModel : ObservableObject
         }
 
         // Its own watch: the variables panel (TASK-106) watches other regions, possibly at the same address.
-        MemoryWindow? window = snapshot.MemoryWindows?.FirstOrDefault(w => w.Segment == _segment && w.Offset == _offset && w.Bytes.Count == WindowLength);
-        if (window is { } w)
+        if (FindWindow(snapshot, _segment, _offset, WindowLength) is { } w)
         {
             byte[] bytes = [.. w.Bytes];
             _shown = bytes;
@@ -375,6 +374,22 @@ public sealed partial class MemoryViewModel : ObservableObject
         : previous is byte p && p != value;
 
     private static int Linear(ushort segment, ushort offset) => ((segment << 4) + offset) & 0xFFFFF;
+
+    /// <summary>The snapshot's copy of the region watched at <paramref name="segment"/>:<paramref name="offset"/> with
+    /// <paramref name="length"/> bytes, or <see langword="null"/> when the snapshot has none (yet). <see cref="MemoryWindow"/> is
+    /// a struct: <c>FirstOrDefault</c> would give an empty window instead of "none" (DEF-025, TASK-111).</summary>
+    internal static MemoryWindow? FindWindow(MachineSnapshot snapshot, ushort segment, ushort offset, int length)
+    {
+        foreach (MemoryWindow window in snapshot.MemoryWindows ?? [])
+        {
+            if (window.Segment == segment && window.Offset == offset && window.Bytes is { } bytes && bytes.Count == length)
+            {
+                return window;
+            }
+        }
+
+        return null;
+    }
 
     private static readonly string[] HexBytes = [.. Enumerable.Range(0, 256).Select(b => b.ToString("X2", CultureInfo.InvariantCulture))];
 

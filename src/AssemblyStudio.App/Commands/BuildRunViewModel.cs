@@ -435,6 +435,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         Breakpoints.SetHit(null, null);
         Messages.OffersBudgetChoice = false;
         _lastEvent = null;
+        _lastAnnounced = null; // the next session's first state is announced
         _lastPauseCount = null;
         lock (_gate)
         {
@@ -571,9 +572,12 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
 
         LogEvent(s, session, halt);
-        if (newPause || _lastAnnouncedState != State)
+        // One announcement per state and instruction count (DEF-026): a refresh snapshot (a memory watch added at the same
+        // pause) is the same state and count, so it announces nothing again.
+        (RunState, ulong) announced = (State, InstructionCount);
+        if (_lastAnnounced != announced)
         {
-            _lastAnnouncedState = State;
+            _lastAnnounced = announced;
             Announce(State switch
             {
                 RunState.WaitingForInput => Strings.AnnounceWaiting,
@@ -584,7 +588,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
         }
     }
 
-    private RunState? _lastAnnouncedState;
+    private (RunState State, ulong Count)? _lastAnnounced;
 
     // UI-012: one message per session event (a step is shown by the badge and strip, not logged).
     private (RunState, PauseReason, ulong)? _lastEvent;
@@ -809,7 +813,7 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
                 Announce(StatusText);
                 break;
             case RunState.Running:
-                _lastAnnouncedState = value;
+                _lastAnnounced = (value, InstructionCount);
                 Announce(Strings.AnnounceRunning);
                 break;
         }

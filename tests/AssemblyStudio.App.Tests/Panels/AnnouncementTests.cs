@@ -45,6 +45,23 @@ public sealed class AnnouncementTests
     }
 
     [Fact]
+    public void DEF_026_a_refresh_at_the_same_pause_announces_nothing_again()
+    {
+        WithRun(Program, (run, heard) =>
+        {
+            run.BuildCommand.Execute(null);
+            BuildRunTests.WaitUntil(() => run.State == RunState.Ready && heard.Count >= 2, "Ready");
+
+            run.Memory.ShowAddress(0x0800, 0x0200); // a new memory watch: the session publishes a refresh snapshot at the same pause
+            BuildRunTests.WaitUntil(() => run.Memory.ShownAddress == "0800:0200", "the refresh");
+
+            Assert.Equal([Strings.AnnounceBuilding, "Ready at line 2."], heard);
+            Step(run, heard); // a step is still announced
+            Assert.Equal("Paused at line 3. Changed: AX, IP.", heard[^1]);
+        });
+    }
+
+    [Fact]
     public void FR_093_each_step_announces_the_line_and_the_changed_registers_and_flags()
     {
         WithRun(Program, (run, heard) =>

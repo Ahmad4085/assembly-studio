@@ -192,8 +192,7 @@ public sealed partial class VariablesViewModel : ObservableObject
             }
 
             (ushort start, int length) = _windows[index];
-            MemoryWindow? window = snapshot.MemoryWindows?.FirstOrDefault(w => w.Segment == _segment && w.Offset == start && w.Bytes.Count == length);
-            if (window is not { } w)
+            if (MemoryViewModel.FindWindow(snapshot, _segment, start, length) is not { } w)
             {
                 continue; // not in this snapshot yet: the row keeps what it showed
             }

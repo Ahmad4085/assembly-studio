@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 13:42 +0500 by Claude Code (Opus 5.5), after TASK-109 |
-| Current task | **None in progress. Next: `TASK-111` (DEF-025 crash, DEF-026), then `TASK-110`** |
-| Last completed | TASK-109 Find bar test without a simulated Esc (Done 2026-11-03 13:42 +0500) |
-| Git state | HEAD after `362dad6` (TASK-109 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 14:07 +0500 by Claude Code (Opus 5.5), after TASK-111 |
+| Current task | **None in progress. Next: `TASK-110` (test script options)** |
+| Last completed | TASK-111 Missing memory windows and repeated announcements (Done 2026-11-03 14:07 +0500) |
+| Git state | HEAD `874bb6f`; TASK-111 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-111** (Claude Code, Done, uncommitted): Missing memory windows and repeated announcements: both panels look their window up with `MemoryViewModel.FindWindow` (null when the snapshot has none; `MemoryWindow` is a struct, DEF-025); announcements are made once per (state, instruction count) and reset when a session ends (DEF-026). Use `MemoryViewModel.FindWindow` for any new memory-window lookup.
+
 - **TASK-109** (Claude Code, Done, committed `362dad6`): The find bar window test checks the Enter, F3 and Esc key bindings (found as WPF routes the key, from the target up) and runs their commands instead of simulating key presses (DEF-022). Full runs found **DEF-025 (High)**: `VariablesViewModel.Show` (and the same pattern in `MemoryViewModel.Show`) treats a missing `MemoryWindow` (a struct) as present and throws; DEF-026 duplicate "Ready" announcement; DEF-027 load. Fix task TASK-111 approved.
 
 - **QA 2026-11-03-2** (Claude Code; documents only): QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024.
@@ -126,8 +128,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-109 committed (`362dad6`).
-2. `/assembly-implement TASK-111` (DEF-025 crash, DEF-026), then `/assembly-implement TASK-110` (DEF-024).
+1. The user says "commit" for TASK-111 (then commit and record the hash here).
+2. `/assembly-implement TASK-110` (DEF-024).
 3. The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; the known-limitations text; then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert

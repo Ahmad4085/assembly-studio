@@ -167,6 +167,23 @@ public sealed class VariablesTests
     }
 
     [Fact]
+    public void DEF_025_a_snapshot_without_the_variables_window_keeps_the_values_instead_of_throwing()
+    {
+        WithRun(VuidProgram, run =>
+        {
+            BuildAndRunToEnd(run);
+            string[] before = [.. run.Variables.Rows.Select(r => r.Value)];
+            MachineSnapshot snapshot = run.LatestSnapshot!.Value;
+
+            // No windows at all, and only another panel's window: MemoryWindow is a struct, so "none" must not become an empty window.
+            run.Variables.Show(snapshot with { MemoryWindows = [] }, newPause: true, baseline: false);
+            run.Variables.Show(snapshot with { MemoryWindows = [.. snapshot.MemoryWindows!.Where(w => w.Bytes.Count == MemoryViewModel.WindowLength)] }, newPause: true, baseline: false);
+
+            Assert.Equal(before, run.Variables.Rows.Select(r => r.Value));
+        });
+    }
+
+    [Fact]
     public void Loaded_values_are_the_program_image_and_nothing_is_marked()
     {
         WithRun(VuidProgram, run =>

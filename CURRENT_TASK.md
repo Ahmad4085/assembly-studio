@@ -6,13 +6,26 @@
 
 ## Active Task
 
-None in progress. Next: `TASK-111` (DEF-025 crash, DEF-026), then `TASK-110`.
+None in progress. Next: `TASK-110` (test script options, DEF-024).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | `/assembly-implement TASK-111` |
+| Recommended next action | `/assembly-implement TASK-110` |
 | Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-111 Missing memory windows and repeated announcements (Done 2026-11-03 14:07 +0500, Claude Code (Opus 5.5))
+- Missing memory windows and repeated announcements: both panels look their window up with `MemoryViewModel.FindWindow` (null when the snapshot has none; `MemoryWindow` is a struct, DEF-025); announcements are made once per (state, instruction count) and reset when a session ends (DEF-026).
+- Regression tests (3) fail on the old code (checked by putting the old source files back from `git show HEAD:…`, then restoring) and pass on the fix. `VariablesTests` 19, `MemoryTests` 21, `AnnouncementTests` 4 (Debug).
+- Release build 0 warnings. `build/test.ps1`: run a (13:56–14:02) 1553 + 3 passed, 7 skipped, 0 failed; run b (14:02–14:06) one failure in a test this task doesn't touch: the View menu smoke test (DEF-016, known focus-sensitive flake).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 13:50 / 14:07 +0500 |
 
 ---
 

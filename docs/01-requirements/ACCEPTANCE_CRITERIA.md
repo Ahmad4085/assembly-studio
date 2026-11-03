@@ -344,7 +344,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** Windows Narrator is running and a high-contrast theme is active
 - **When** the user steps a program
 - **Then** Narrator reads register names and values and announces the new paused location, and all text and controls remain readable
-- Verifies: FR-093, FR-094, NFR-022 · Priority: P0 · Test status: PASS (user-reported manual checks, not automated): high contrast: the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working"; the application log (`%LOCALAPPDATA%\AssemblyStudio\logs`) shows one session of the build-folder app at 12:37 (the user: "From the build folder"); the scale settings and contrast theme used were not logged. Narrator: the user's checks of 2026-11-02 (editor, TASK-069; step announcement, TASK-085)
+- Verifies: FR-093, FR-094, NFR-022 · Priority: P0 · Test status: PASS (user-reported manual checks, not automated): high contrast: the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working"; the application log (`%LOCALAPPDATA%\AssemblyStudio\logs`) shows one session of the build-folder app at 12:37 (the user: "From the build folder"); the scale settings and contrast theme used were not logged. Narrator: the user's checks of 2026-11-02 (editor, TASK-069; step announcement, TASK-085). High contrast rechecked after TASK-112 (user-reported, corroborated): asked to turn on a contrast theme and open Settings, the find bar and Go to Line, the user reported "done, high contrast check passed" (2026-11-03 about 19:01). The application log shows a session started 18:59:12 (`assemblystudio-20261103-185913-14192-000.log`) of `bin\Release\net10.0-windows`, built at 18:32 from the current code (includes TASK-112). Windows keeps no record of the contrast switch; at 19:01 the contrast theme was off again, so the theme used is not recorded.
 
 ### AC-045 Output flood
 - **Given** a program printing in an endless loop
@@ -428,3 +428,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-03 v2.6: Minor (testing phase). "Test status" updated from test run 2026-11-03-2 (manual and record-based results kept). No criterion changed.
 - 2026-11-03 v2.7: Minor (testing phase). "Test status" updated from test run 2026-11-03-3 (manual and record-based results kept). No criterion changed.
 - 2026-11-03: AC-043 status updated from the real-key rerun at 18:52 (user request). No criterion changed.
+- 2026-11-03: AC-044 status adds the user-reported high-contrast recheck after TASK-112 (QA 2026-11-03-3 condition 4). No criterion changed.

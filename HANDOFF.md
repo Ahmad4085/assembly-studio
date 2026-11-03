@@ -8,7 +8,7 @@
 | Written | 2026-11-03 15:30 +0500 by Claude Code (Opus 5.5), after the design v1.1 approval |
 | Current task | **None in progress. Design v1.1 approved; next: a task to implement the themed control styles** |
 | Last completed | TASK-110 Test script options (Done 2026-11-03 14:27 +0500) |
-| Git state | HEAD after `05514e8` (design v1.1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `231e093`; TASK-112 backlog entry **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -133,7 +133,7 @@
 
 ## Exact next action
 1. Done: UI spec v1.1 and design tokens v1.1 approved (2026-11-03 15:30 +0500).
-2. After approval: a task implements the implicit control styles in `Themes/*.xaml` and `Shell/ShellStyles.xaml` plus the 50 contrast pairs in TC-066 (through `/assembly-plan` or a proposed task for approval).
+2. `/assembly-implement TASK-112` (themed input controls; approved 2026-11-03 15:33 +0500).
 3. `/assembly-test` to verify DEF-022/024/025/026; the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert

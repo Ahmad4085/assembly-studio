@@ -2128,3 +2128,8 @@
 - **Summary:** User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1". Both documents set `Approved` with the approval in their changelogs. Nothing is implemented yet: the styles need their own task.
 - **Files changed:** `docs/04-design/{design-tokens.md, ui-spec.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** propose the implementation task for the themed controls.
+
+### 2026-11-03 15:33 +0500 · Claude Code (Opus 5.5) · TASK-112 proposed and approved
+- **Summary:** The user asked: "propose the task for the themed controls". Proposed TASK-112 (control tokens in the three themes, implicit TextBox/Button/CheckBox/ComboBox styles, the Go to Line error border, TC-066 pairs, rendered checks). User 2026-11-03 15:33 +0500, answering "Do you approve adding TASK-112 (themed input controls, per UI spec and design tokens v1.1) to the backlog as described?": "Approve (Recommended)". Added as Approved.
+- **Files changed:** `docs/05-planning/backlog.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-implement TASK-112`.

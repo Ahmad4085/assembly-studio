@@ -101,6 +101,7 @@
 | TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Done |
 | TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Done |
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
+| TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Approved |
 
 ## 3. Task details
 
@@ -2060,6 +2061,40 @@
 
 **Definition of Done:** standard (§4).
 
+### TASK-112 Themed input controls
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M4 (added 2026-11-03, design v1.1) |
+| Requirements | NFR-022, FR-094, NFR-026 |
+| Decisions / design | UI spec v1.1 §9, design tokens v1.1 |
+| Depends on | TASK-061 |
+| Risk | M |
+
+**Goal:** Text boxes, buttons, check boxes and combo boxes match the window in the dark, light and high-contrast themes and meet the
+contrast targets.
+
+**Scope (in):**
+- The control tokens (`Control.Input`, `Control.Button`, `Control.Hover`, `Control.Pressed`, `Control.Selected`, `Accent.Primary.Hover`,
+  `Size.Control`, `Size.CheckBox`) in `Themes/Dark.xaml`, `Themes/Light.xaml`, `Themes/HighContrast.xaml` (system colors)
+- Implicit `TextBox`, `Button`, `CheckBox`, `ComboBox` styles in `Shell/ShellStyles.xaml` with every state of UI spec §9 (rest, hover,
+  pressed, focused 2 px ring, disabled, invalid, checked; the default button in the accent); the command bar keeps `CommandButton`
+- Go to Line: an invalid entry also shows the error border
+
+**Out of scope:**
+- New controls, layout changes, scrollbars, menus
+
+**Expected files / projects touched:** `src/AssemblyStudio.App/Themes/`, `src/AssemblyStudio.App/Shell/ShellStyles.xaml`, `src/AssemblyStudio.App/Editor/Search/GoToLineDialog.*`, tests
+
+**Test requirements:**
+- TC-066: the new tokens per theme and the 50 control contrast pairs (and the high-contrast mapping)
+- Each control type takes its themed style in a real window
+- Rendered views (find bar, Go to Line, Settings, the memory address box; dark and light) checked
+- Full solution twice
+
+**Definition of Done:** standard (§4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2107,6 +2142,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03: TASK-112 (themed input controls, design v1.1) added. User 2026-11-03 15:33 +0500, answering "Do you approve adding TASK-112 (themed input controls, per UI spec and design tokens v1.1) to the backlog as described?": "Approve (Recommended)".
 - 2026-11-03: TASK-111 (DEF-025, DEF-026) added. User 2026-11-03 13:42 +0500, answering "How should I close TASK-109?": "Done, defects separate (Recommended)"; and "Should I add a fix task (TASK-111) for DEF-025 and DEF-026 …?": "Approve TASK-111, next (Recommended)".
 - 2026-11-03: TASK-109 (find bar test, DEF-022) and TASK-110 (test script options, DEF-024) added. User 2026-11-03 13:24 +0500, answering "Do you approve adding TASK-109 (find bar test without a simulated Esc, DEF-022) and TASK-110 (build/test.ps1 -ResultsDirectory, DEF-024) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) added from test report 2026-11-02-1. User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)".

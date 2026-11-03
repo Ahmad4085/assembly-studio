@@ -9,7 +9,7 @@
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | A task to implement the themed control styles (design v1.1), proposed for approval; `/assembly-test` (DEF-022/024/025/026); the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). DEF-003 decision, OQ-026 |
+| Next recommended action | `/assembly-implement TASK-112` (themed input controls, approved 2026-11-03 15:33 +0500); `/assembly-test` (DEF-022/024/025/026); the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). DEF-003 decision, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool

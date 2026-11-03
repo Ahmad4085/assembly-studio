@@ -8,7 +8,7 @@
 | Written | 2026-11-03 12:55 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-2 |
 | Current task | **None in progress. QA: Pass with conditions; next: the conditions (release tasks)** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-2.md` (2026-11-03 12:55 +0500): Pass with conditions |
-| Git state | HEAD `668fed3`; TASK-109/110 backlog entries **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `1e14281` (TASK-109/110 backlog entries committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).

@@ -37,3 +37,11 @@ Running
 Assembler
   NASM, version 3.02 or later; one is installed with Assembly Studio. The help page "Building with NASM" describes
   the options used. MASM and TASM syntax is not accepted; see "NASM and MASM".
+
+Known limitations
+  First start: the first start after Windows starts can take several seconds (about 8 seconds was measured on an
+  Intel Core i5-8265U), because Windows reads the application's files from disk; later starts take under 2 seconds.
+  Variables panel: NASM doesn't record what a label's data means, so a 1-byte variable is shown as a byte and a
+  2-byte one as a word, even a text such as db 'OK'. At most 64 bytes of a variable are shown; a longer one shows
+  its first 64 bytes in hex followed by "…". Variables are read in at most 2 regions of 4,096 bytes each; a
+  variable outside them shows "(not shown: too far from the other variables)".

@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 16:37 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-2) |
-| Current task | **None in progress. Next: the QA conditions (release tasks)** |
-| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-2.md` (2026-11-03 16:37 +0500): no failed test |
-| Git state | HEAD after `bba72db` (TASK-113 backlog entry committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 17:11 +0500 by Claude Code (Opus 5.5), after TASK-113 |
+| Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
+| Last completed | TASK-113 Known limitations (Done 2026-11-03 17:11 +0500) |
+| Git state | HEAD `0e913be`; TASK-113 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-113** (Claude Code, Done, uncommitted): A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources). Requirements citation corrected FR-073 → NFR-033, FR-045. `/assembly-release` copies `docs/09-release/known-limitations.md` §2 into the release notes.
+
 - **Testing phase 2026-11-03-2** (Claude Code; documents only): 1566 tests: 1559 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,562 ms); coverage engine 99.6%, runtime 93.8% (run incomplete: DEF-011 clipboard under coverage); 54 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 6 not run; DEF-022, 024, 025, 026 verified.
 
 - **TASK-112** (Claude Code, Done, committed `de42bf2`): Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one. A window-level implicit style of these four types must be `BasedOn` the themed one, or it replaces it.
@@ -136,8 +138,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: testing phase 2026-11-03-2 committed (`56a70fd`).
-2. `/assembly-implement TASK-113` (known limitations; approved 2026-11-03 16:52 +0500). The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105 (user-run); the known-limitations text for the help and release notes (needs a task); then `/assembly-qa` and `/assembly-release <version>`.
+1. The user says "commit" for TASK-113 (then commit and record the hash here).
+2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105 (user-run); then `/assembly-qa` and `/assembly-release <version>`.
 3. User: DEF-003 decision, OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
 
 ## Do not overwrite or revert

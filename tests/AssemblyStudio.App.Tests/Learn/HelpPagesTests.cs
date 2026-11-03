@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using AssemblyStudio.App.Panels.Memory;
 using AssemblyStudio.App.Settings;
 using AssemblyStudio.App.Shell;
 using AssemblyStudio.Content;
@@ -39,6 +40,19 @@ public sealed class HelpPagesTests
 
         Assert.Contains($"at most {budget} instructions by default", Help("scope"), StringComparison.Ordinal);
         Assert.Contains($"({budget} instructions by default", Help("differences"), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void TASK_113_the_known_limitations_match_the_application()
+    {
+        string scope = Help("scope");
+        string limits = scope[scope.IndexOf("\nKnown limitations", StringComparison.Ordinal)..];
+
+        Assert.Contains("first start after Windows starts", limits, StringComparison.Ordinal);
+        Assert.Contains("1-byte variable is shown as a byte and a\n  2-byte one as a word", limits.ReplaceLineEndings("\n"), StringComparison.Ordinal);
+        Assert.Contains($"At most {VariablesViewModel.MaxShownBytes} bytes of a variable are shown", limits, StringComparison.Ordinal);
+        Assert.Contains($"at most {VariablesViewModel.MaxWindows} regions of {VariablesViewModel.MaxWindowLength.ToString("N0", CultureInfo.InvariantCulture)} bytes", limits, StringComparison.Ordinal);
+        Assert.Contains($"\"{Strings.VariableNotWatched}\"", limits, StringComparison.Ordinal);
     }
 
     [Fact]

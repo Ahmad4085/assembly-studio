@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.9 |
+| Version | 0.10 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-2.md` |
@@ -97,7 +97,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-053 | `App.Tests.Documents.TextFileCodecTests` | UI / view model / process | FR-019, FR-020, TASK-062 | 12 |
 | TC-054 | `App.Tests.Documents.WorkspaceViewModelTests` | UI / view model / process | AC-002, AC-003, AC-004, AC-005, AC-006, AC-007, AC-008, AC-012, TASK-062 | 19 |
 | TC-055 | `App.Tests.JsonLayoutStoreTests` | UI / view model / process | TASK-060 | 6 |
-| TC-056 | `App.Tests.Learn.HelpPagesTests` | UI / view model / process | AC-051, NFR-033, TASK-093 | 49 |
+| TC-056 | `App.Tests.Learn.HelpPagesTests` | UI / view model / process | AC-051, NFR-033, TASK-093, TASK-113 | 50 |
 | TC-057 | `App.Tests.Learn.LearnTests` | UI / view model / process | AC-035, AC-036, FR-069, FR-070, TASK-090, TASK-091, TASK-092, TASK-093 | 12 |
 | TC-058 | `App.Tests.Logging.LoggingTests` | UI / view model / process | AC-063, NFR-009, NFR-012, TASK-068 | 10 |
 | TC-059 | `App.Tests.MainWindowSmokeTests` | UI / view model / process | NFR-026, TASK-060 | 8 |
@@ -180,3 +180,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.7: TASK-110: `build/test.ps1 -ResultsDirectory` replaces the `--` pass-through (DEF-024).
 - 2026-11-03 v0.8: TASK-112: TC-066 covers the control tokens, 120 contrast pairs per theme and the themed controls in a real window (22 tests).
 - 2026-11-03 v0.9: Test run 2026-11-03-2: counts refreshed.
+- 2026-11-03 v0.10: TASK-113: TC-056 also checks the help page's known limitations against the code (50 tests).

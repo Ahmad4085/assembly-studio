@@ -2155,3 +2155,13 @@
 - **Summary:** The user asked: "propose the task for the known-limitations text". Proposed TASK-113 (a "Known limitations" section in the help page "What Assembly Studio supports"; `docs/09-release/known-limitations.md` for the release notes; `RELEASE-NOTES.md` itself stays with `/assembly-release`). User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)". Added as Approved.
 - **Files changed:** `docs/05-planning/backlog.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** `/assembly-implement TASK-113`.
+
+### 2026-11-03 16:54 – 17:11 +0500 · Claude Code (Opus 5.5) · TASK-113 Known limitations
+- **Summary:** Ran `/assembly-implement TASK-113` (user request). A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources).
+  - Checked each claim before writing it: the constants and the "not shown" string in the code, the reference machine (D-014), the measured starts. Dropped "2019 laptop" from my first draft (not recorded anywhere).
+  - Found my own citation error in the approved task: FR-073 is "exercises with automatic checking", not help. Corrected to NFR-033 and FR-045 (scope unchanged), recorded in the backlog change log; to be confirmed by the user.
+  - The help page now has one non-ASCII character ("…", as the panel shows it); the catalog reads UTF-8.
+- **Files changed:** `src/AssemblyStudio.Content/Content/Help/scope.txt`, `tests/AssemblyStudio.App.Tests/Learn/HelpPagesTests.cs`, `docs/09-release/known-limitations.md` (new), `docs/05-planning/backlog.md`, `docs/07-testing/test-plan.md` (v0.10), `docs/07-testing/defects.md` (DEF-012 recurrence), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (Tasks column), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** TC-056 50/50; mutation caught; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice: three runs: a (16:58–17:03) 1557 + 3 passed, 7 skipped, 0 failed; b (17:03–17:07) 1 failed, AC-050 crash-recovery timeout (DEF-012 recurrence, recorded), 1556 + 3 passed; then the test alone 3 of 3 and run c (17:07–17:11) 1557 + 3 passed, 7 skipped, 0 failed.
+- **Git state after:** uncommitted TASK-113 changes on top of `0e913be`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006 and TASK-100.

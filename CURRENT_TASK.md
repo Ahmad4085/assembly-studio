@@ -11,8 +11,21 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | `/assembly-test` (DEF-022/024/025/026); the QA conditions: TASK-006 and TASK-100 by the user, then TASK-070, 102, 103, 104, 105; the known-limitations text |
+| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first), 104, 105; then `/assembly-qa` and `/assembly-release <version>` |
 | Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-113 Known limitations in the help and for the release notes (Done 2026-11-03 17:11 +0500, Claude Code (Opus 5.5))
+- A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources).
+- Every number checked against the code (`VariablesViewModel.MaxShownBytes`, `MaxWindows`, `MaxWindowLength`, `Describe`, `Strings.VariableNotWatched`) and the records (D-014 reference machine, DEF-023 7,752 ms, warm median 1,562 ms). Requirements citation corrected: FR-073 → NFR-033, FR-045 (recorded in the backlog).
+- Tests: `HelpPagesTests.TASK_113_the_known_limitations_match_the_application` (reads the numbers from the code); mutation (64 → 32 in the page) failed; TC-056 50/50. Full solution: three runs: a (16:58–17:03) 1557 + 3 passed, 7 skipped, 0 failed; b (17:03–17:07) 1 failed, AC-050 crash-recovery timeout (DEF-012 recurrence, recorded), 1556 + 3 passed; then the test alone 3 of 3 and run c (17:07–17:11) 1557 + 3 passed, 7 skipped, 0 failed.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 16:54 / 17:11 +0500 |
 
 ---
 

@@ -102,7 +102,7 @@
 | TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Done |
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
 | TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
-| TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | FR-073, NFR-005, FR-097 | Approved |
+| TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
 
 ## 3. Task details
 
@@ -2100,9 +2100,9 @@ contrast targets.
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 (added 2026-11-03, QA 2026-11-03-2 condition 4) |
-| Requirements | FR-073, NFR-005, FR-097 |
+| Requirements | NFR-033, FR-045, NFR-005, FR-097 (corrected 2026-11-03 17:11 +0500: FR-073 was cited by mistake; it is exercises, not help) |
 | Decisions / design | D-022, TASK-106 |
 | Depends on | — |
 | Risk | L |
@@ -2172,6 +2172,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03 17:11 +0500: TASK-113 requirements corrected from "FR-073, NFR-005, FR-097" to "NFR-033, FR-045, NFR-005, FR-097": FR-073 (exercises with automatic checking) was a citation error; NFR-033 (offline guide: scope and limitations) and FR-045 (help: known deviations) are the help requirements. Scope unchanged.
 - 2026-11-03: TASK-113 (known limitations) added. User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)".
 - 2026-11-03: TASK-112 (themed input controls, design v1.1) added. User 2026-11-03 15:33 +0500, answering "Do you approve adding TASK-112 (themed input controls, per UI spec and design tokens v1.1) to the backlog as described?": "Approve (Recommended)".
 - 2026-11-03: TASK-111 (DEF-025, DEF-026) added. User 2026-11-03 13:42 +0500, answering "How should I close TASK-109?": "Done, defects separate (Recommended)"; and "Should I add a fix task (TASK-111) for DEF-025 and DEF-026 …?": "Approve TASK-111, next (Recommended)".

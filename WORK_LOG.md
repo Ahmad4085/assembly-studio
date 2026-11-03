@@ -2175,3 +2175,8 @@
 - **Tests executed:** Runtime.Tests 86/86, Os.Dos.Tests 72/72, Toolchain.Nasm.Tests 146/146, ArchitectureTests 53/53 (Debug); three mutations caught; Release build 0 warnings; runs a and b (17:29–17:38) not counted: the Release build had failed on my new runtime test (CS9176), so they used an old Runtime.Tests binary; fixed and rebuilt (0 warnings). Run c (17:40–17:44): 1574 + 3 passed, 7 skipped, 0 failed. Run d (17:44–17:48): 1 failed, the AC-010 clipboard test (DEF-011, recorded); then 3 of 3 alone and run e (17:49–17:53): 1574 + 3 passed, 7 skipped, 0 failed.
 - **Git state after:** uncommitted TASK-104 changes on top of `c4979c6`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006 and TASK-100.
+
+### 2026-11-03 18:12 +0500 · Claude Code (Opus 5.5) · TASK-114 proposed and approved
+- **Summary:** The user asked: "propose the fix task for DEF-028". Proposed TASK-114 (new `RTE021_Next` wording without "(NFR-013)" and with 00h; a test tying RTE021's function list to the help page's). User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)". Added as Approved; DEF-028 notes the task.
+- **Files changed:** `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-implement TASK-114`.

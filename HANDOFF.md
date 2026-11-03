@@ -8,7 +8,7 @@
 | Written | 2026-11-03 17:54 +0500 by Claude Code (Opus 5.5), after TASK-104 |
 | Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
 | Last completed | TASK-104 Localizability and message review (Done 2026-11-03 17:54 +0500) |
-| Git state | HEAD after `a9f59df` (TASK-104 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `b71a86b`; TASK-114 backlog entry **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -141,8 +141,8 @@
 
 ## Exact next action
 1. Done: TASK-104 committed (`a9f59df`).
-2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>`.
-3. User: DEF-003 decision, DEF-028 wording (RTE021 next step), OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
+2. `/assembly-implement TASK-114` (DEF-028; approved 2026-11-03 18:12 +0500). The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>`.
+3. User: DEF-003 decision, OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

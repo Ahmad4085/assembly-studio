@@ -103,6 +103,7 @@
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
 | TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
 | TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
+| TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Approved |
 
 ## 3. Task details
 
@@ -2127,6 +2128,32 @@ contrast targets.
 
 **Definition of Done:** standard (§4).
 
+### TASK-114 Fix the RTE021 next step (DEF-028)
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M7 (added 2026-11-03, DEF-028) |
+| Requirements | NFR-024, FR-040 |
+| Decisions / design | — |
+| Depends on | TASK-104 |
+| Risk | L |
+
+**Goal:** RTE021's next step names no requirement ID and lists every supported DOS function.
+
+**Scope (in):**
+- `RuntimeMessages.resx` `RTE021_Next` becomes: "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services."
+
+**Out of scope:**
+- Any other message; the help pages (they don't quote this sentence)
+
+**Expected files / projects touched:** `src/AssemblyStudio.Runtime/Interrupts/RuntimeMessages.resx`, `tests/`
+
+**Test requirements:**
+- `RuntimeMessageTests` exact text updated; a test that the functions RTE021 lists equal the help page's list (itself checked against execution by `HelpTests`); full solution twice
+
+**Definition of Done:** standard (§4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2174,6 +2201,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03 18:12 +0500: TASK-114 (DEF-028 fix) added. User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)".
 - 2026-11-03 17:17 +0500: TASK-104 scope widened (moving the hard-coded user-facing messages into resource files; expected files widened to four src projects). The user, answering "TASK-104 needs about 26 messages moved into resource files across Runtime, Os.Dos, Toolchain.Nasm and the App (identical English text, two new .resx files), not only a test. Should I widen the task to include that?": "Widen and fix (Recommended)".
 - 2026-11-03 17:11 +0500: TASK-113 requirements corrected from "FR-073, NFR-005, FR-097" to "NFR-033, FR-045, NFR-005, FR-097": FR-073 (exercises with automatic checking) was a citation error; NFR-033 (offline guide: scope and limitations) and FR-045 (help: known deviations) are the help requirements. Scope unchanged.
 - 2026-11-03: TASK-113 (known limitations) added. User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)".

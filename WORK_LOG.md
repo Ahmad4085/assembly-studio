@@ -2150,3 +2150,8 @@
 - **Files changed:** `docs/07-testing/{test-report-2026-11-03-2.md (new), test-plan.md, defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `813137e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the QA conditions (release tasks).
+
+### 2026-11-03 16:52 +0500 · Claude Code (Opus 5.5) · TASK-113 proposed and approved
+- **Summary:** The user asked: "propose the task for the known-limitations text". Proposed TASK-113 (a "Known limitations" section in the help page "What Assembly Studio supports"; `docs/09-release/known-limitations.md` for the release notes; `RELEASE-NOTES.md` itself stays with `/assembly-release`). User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)". Added as Approved.
+- **Files changed:** `docs/05-planning/backlog.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-implement TASK-113`.

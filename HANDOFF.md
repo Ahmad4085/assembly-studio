@@ -8,7 +8,7 @@
 | Written | 2026-11-03 17:54 +0500 by Claude Code (Opus 5.5), after TASK-104 |
 | Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
 | Last completed | TASK-104 Localizability and message review (Done 2026-11-03 17:54 +0500) |
-| Git state | HEAD `c4979c6`; TASK-104 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `a9f59df` (TASK-104 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,7 +17,7 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
-- **TASK-104** (Claude Code, Done, uncommitted; scope widened with the user's approval): 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). New user-facing text must go into a `.resx`; `LocalizableStringTests` fails otherwise (add an allow-list entry with a reason only for text no user reads).
+- **TASK-104** (Claude Code, Done, committed `a9f59df`; scope widened with the user's approval): 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). New user-facing text must go into a `.resx`; `LocalizableStringTests` fails otherwise (add an allow-list entry with a reason only for text no user reads).
 
 - **TASK-113** (Claude Code, Done, committed `26a64a7`): A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources). Requirements citation corrected FR-073 → NFR-033, FR-045. `/assembly-release` copies `docs/09-release/known-limitations.md` §2 into the release notes.
 
@@ -140,7 +140,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user says "commit" for TASK-104 (then commit and record the hash here).
+1. Done: TASK-104 committed (`a9f59df`).
 2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>`.
 3. User: DEF-003 decision, DEF-028 wording (RTE021 next step), OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
 

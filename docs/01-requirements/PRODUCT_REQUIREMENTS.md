@@ -97,7 +97,7 @@ ADR, after verifying compatibility, licensing and tooling (no .NET SDK is instal
 ## 8. Supported-scope statement (MVP, proposed)
 - **CPU:** 8086 real mode, documented instruction set without 8087 (final list FR-036 after research). 1 MiB address space. No 80186+, protected mode, 32-bit or 64-bit.
 - **Assembler and syntax:** NASM syntax, 16-bit flat binary output (`-f bin`, `org 100h`), single source file.
-- **Executable format:** .COM only (≤ 65,280 bytes). MZ .EXE is Post-MVP (FR-043).
+- **Executable format:** .COM only (≤ 65,278 bytes; D-023). MZ .EXE is Post-MVP (FR-043).
 - **Platform:** Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2, x64 (D-011). Windows 10 22H2 Home/Pro is not supported.
 - **Operating-system services:** text output, keyboard input and termination (INT 21h 00h/01h/02h/07h/08h/09h/0Ah/4Ch, INT 20h; D-008, D-012), DOS 3.3/4.0 semantics with documented deviations. Anything else halts with an explicit message (FR-040).
 - **Execution:** always emulated, never native. Deterministic, budgeted and pausable.
@@ -176,3 +176,4 @@ Approved by the user on 2026-10-26 17:11 +0500 ("approve requirements v0.1 and D
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
+- 2026-11-03: Executable-format limit follows FR-031 v2.2 (65,278 bytes, D-023, approved by the user 2026-11-03 19:07 +0500). No other change.

@@ -48,7 +48,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | ID | Assumption | Risk if false | Validation |
 |---|---|---|---|
 | ASM-001 | Users run Windows 11 24H2+ or Windows 10 Enterprise LTSC 21H2 on x64 hardware (D-011). | Windows 10 22H2 Home/Pro users are unsupported and need to upgrade. ARM64-only users need the optional Arm64 build. | D-011 (decided). Monitor user feedback |
-| ASM-002 | Programs are small educational programs: one source file, .COM image <= 65,280 bytes. | Larger multi-file programs are out of MVP scope (FR-010, FR-043). | Review with sample set during research |
+| ASM-002 | Programs are small educational programs: one source file, .COM image <= 65,278 bytes (D-023; was 65,280). | Larger multi-file programs are out of MVP scope (FR-010, FR-043). | Review with sample set during research |
 | ASM-003 | A redistributable assembler that accepts NASM syntax and emits 8086 flat binaries exists (NASM is believed to be BSD-2-Clause, unverified). | If bundling is not allowed, users must install the assembler themselves (FR-023). | OQ-002 |
 | ASM-004 | An 8086 execution engine with full state access exists, or a custom engine is feasible within the MVP. | MVP debugging scope or schedule changes. | OQ-001, OQ-008 |
 | ASM-005 | One program executing at a time is sufficient. | Multi-session debugging needs redesign. | User review |
@@ -68,3 +68,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-11-01: OQ-026 added (TASK-080 found AC-013 and the ui-spec §4 matrix disagree on Run after a failed build). No answer recorded.
 - 2026-11-03: OQ-027 added (TASK-108: the cold start after a restart took 7.75 s; NFR-005's 3 s target). No answer recorded.
 - 2026-11-03: OQ-027 answered by the user: "revise NFR-005 for warm start" (D-022).
+- 2026-11-03: ASM-002 follows FR-031 v2.2 (65,278 bytes, D-023).

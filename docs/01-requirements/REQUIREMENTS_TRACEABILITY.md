@@ -47,7 +47,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-2 | US-007 | FR-028 | P0 | APPROVED | AC-017 | ADR-0005 | UI-016 | TASK-043, TASK-080 | TC-044, TC-078, TC-079 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
 | PG-2 | US-005 | FR-029 | P0 | APPROVED | AC-013 | ADR-0005 | UI-011 | TASK-041 | TC-026, TC-077, TC-078, TC-079 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
 | PG-2, PG-4 | US-015, US-016 | FR-030 | P0 | APPROVED | AC-016, AC-019 | ADR-0005 | UI-011 | TASK-040, TASK-041 | TC-030 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
-| PG-2 | US-007 | FR-031 | P0 | APPROVED | AC-020 | ADR-0005 | UI-011 | TASK-041 | TC-026 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
+| PG-2 | US-007 | FR-031 | P0 | APPROVED | AC-020 | ADR-0005 | UI-011 | TASK-041, TASK-115 | TC-026 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
 | PG-4 | US-010 | FR-032 | P1 | APPROVED | AC-051 | ADR-0002, ADR-0005 | UI-015 | TASK-093 | TC-029, TC-043, TC-056 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
 | PG-3, PG-6 | US-002 | FR-033 | P0 | NEEDS_RESEARCH | AC-021 | ADR-0002, ADR-0003, ADR-0004 | — | TASK-010, TASK-011, TASK-030 | TC-018, TC-044 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
 | PG-3, PG-6 | US-002 | FR-034 | P0 | NEEDS_RESEARCH | AC-021 | ADR-0004 | UI-005 | TASK-031 | TC-018, TC-044 | PASS 2026-11-03-3 | QA 2026-11-03-3: Verified |
@@ -173,3 +173,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-11-03 v2.11: Minor (testing phase, `docs/07-testing/test-report-2026-11-03-2.md`). "Test cases" and "Test status" refreshed from test run 2026-11-03-2 (no failed test). No requirement changed.
 - 2026-11-03 v2.12: Minor (testing phase, `docs/07-testing/test-report-2026-11-03-3.md`). "Test cases" and "Test status" refreshed from test run 2026-11-03-3 (no failed test). No requirement changed.
 - 2026-11-03 v2.13: Minor (QA, `docs/08-qa/qa-report-2026-11-03-3.md`). "QA status" set from QA 2026-11-03-3. No requirement changed.
+- 2026-11-03: FR-031 (v2.2, D-023) gains TASK-115. No other change.

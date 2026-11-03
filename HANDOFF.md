@@ -8,7 +8,7 @@
 | Written | 2026-11-03 18:55 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-3 |
 | Current task | **None in progress. Next: the QA conditions (user actions first)** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-3.md` (2026-11-03 18:55 +0500): Pass with conditions |
-| Git state | HEAD after `cbe638b` (high-contrast recheck committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `23c0752`; D-023 and the TASK-115 backlog entry **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -147,8 +147,8 @@
 
 ## Exact next action
 1. Done: QA 2026-11-03-3 committed (`1d357cf`).
-2. The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first); the user's TASK-105. (Condition 4, the high-contrast recheck, met 2026-11-03 19:02 +0500, user-reported.)
-3. Then `/assembly-release <version>`. User decisions: DEF-003, OQ-026.
+2. `/assembly-implement TASK-115` (DEF-003, D-023; approved 2026-11-03 19:07 +0500). The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first); the user's TASK-105. (Condition 4, the high-contrast recheck, met 2026-11-03 19:02 +0500, user-reported.)
+3. Then `/assembly-release <version>`. User decision: OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -4,8 +4,8 @@
 |---|---|
 | Document | Functional requirements |
 | Status | Approved |
-| Version | 2.1 |
-| Last updated | 2026-11-02 |
+| Version | 2.2 |
+| Last updated | 2026-11-03 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
 
@@ -52,7 +52,7 @@ Definitions of priority and status: `PRODUCT_REQUIREMENTS.md` §2. Every require
 | FR-028 | A successful build shall report success, image size in bytes, build duration and warning count, and produce the address-to-source mapping data used by the debugger. | P0 | APPROVED | US-007 | AC-017 | OQ-009 |
 | FR-029 | Assembler output shall be parsed into diagnostics (file, line, severity, message) mapped to source lines. Output that cannot be parsed is shown unmodified. | P0 | APPROVED | US-005 | AC-013 | — |
 | FR-030 | Build failures shall be reported distinctly: assembler missing (message plus link to Settings), timeout (build cancelled), non-zero exit without diagnostics (raw output), assembler crash. The application remains usable in every case. | P0 | APPROVED | US-015, US-016 | AC-016, AC-019 | — |
-| FR-031 | A build whose .COM image exceeds 65,280 bytes (64 KiB minus the 256-byte PSP) shall fail with a message stating the .COM size limit. | P0 | APPROVED | US-007 | AC-020 | — |
+| FR-031 | A build whose .COM image exceeds 65,278 bytes (64 KiB minus the 256-byte PSP and the 2-byte initial stack word) shall fail with a message stating the .COM size limit. | P0 | APPROVED | US-007 | AC-020 | — |
 | FR-032 | The built-in help shall document the supported assembler, syntax, output format and the options the application passes to the assembler. | P1 | APPROVED | US-010 | AC-051 | — |
 
 ## D. Program execution
@@ -154,3 +154,4 @@ Definitions of priority and status: `PRODUCT_REQUIREMENTS.md` §2. Every require
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
 - 2026-11-02 v2.1: FR-097 (Variables panel) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".
+- 2026-11-03 v2.2: **Substantive change, approved** (D-023, DEF-003): FR-031's limit changes from 65,280 to 65,278 bytes, so the build matches the loader, which keeps FFFEh for the return word. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).

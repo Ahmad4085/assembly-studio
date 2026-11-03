@@ -104,6 +104,7 @@
 | TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
 | TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
 | TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Done |
+| TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Approved |
 
 ## 3. Task details
 
@@ -2154,6 +2155,35 @@ contrast targets.
 
 **Definition of Done:** standard (§4).
 
+### TASK-115 One .COM size limit: 65,278 bytes (DEF-003)
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M7 (added 2026-11-03, DEF-003) |
+| Requirements | FR-031 (v2.2), AC-020 |
+| Decisions / design | D-023, ADR-0005 |
+| Depends on | — |
+| Risk | L |
+
+**Goal:** A program the build accepts always loads: the build and the loader share one limit, 65,278 bytes.
+
+**Scope (in):**
+- `BuildMessages.MaxComImageSize` and the BLD006 text (`BuildMessages.resx`) say 65,278 (64 KiB minus the 256-byte PSP and the 2-byte stack word); the build and the loader take the limit from one place or a test ties them
+- `ComLoader`'s exception message states its real limit
+- Help: "What Assembly Studio supports" (the DEF-003 known-issue text goes; the limit is stated plainly) and "Building with NASM" (BLD006); `docs/09-release/known-limitations.md`
+- ADR-0005 and the architecture's error table: the limit, with a change note citing D-023
+
+**Out of scope:**
+- Any other loader or build behavior
+
+**Expected files / projects touched:** `src/AssemblyStudio.Toolchain.Nasm/`, `src/AssemblyStudio.Runtime/Loading/ComLoader.cs`, `src/AssemblyStudio.Content/Content/Help/`, `docs/09-release/`, `docs/decisions/ADR-0005-*.md`, `docs/03-architecture/architecture.md`, tests
+
+**Test requirements:**
+- AC-020 at the new boundary: 65,278 bytes builds and loads, 65,279 fails with BLD006; the help consistency tests at 65,278; full solution twice
+
+**Definition of Done:** standard (§4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2202,6 +2232,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
 - 2026-11-03 18:12 +0500: TASK-114 (DEF-028 fix) added. User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)".
+- 2026-11-03 19:07 +0500: TASK-115 (DEF-003 fix, D-023) added. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).
 - 2026-11-03 17:17 +0500: TASK-104 scope widened (moving the hard-coded user-facing messages into resource files; expected files widened to four src projects). The user, answering "TASK-104 needs about 26 messages moved into resource files across Runtime, Os.Dos, Toolchain.Nasm and the App (identical English text, two new .resx files), not only a test. Should I widen the task to include that?": "Widen and fix (Recommended)".
 - 2026-11-03 17:11 +0500: TASK-113 requirements corrected from "FR-073, NFR-005, FR-097" to "NFR-033, FR-045, NFR-005, FR-097": FR-073 (exercises with automatic checking) was a citation error; NFR-033 (offline guide: scope and limitations) and FR-045 (help: known deviations) are the help requirements. Scope unchanged.
 - 2026-11-03: TASK-113 (known limitations) added. User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)".

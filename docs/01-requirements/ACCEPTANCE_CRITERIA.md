@@ -4,7 +4,7 @@
 |---|---|
 | Document | Acceptance criteria |
 | Status | Approved |
-| Version | 2.7 |
+| Version | 2.8 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -135,7 +135,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - Verifies: FR-025, FR-030, FR-095, NFR-010, NFR-014 · Priority: P0 · Test status: PASS 2026-11-03-3 (TC-030)
 
 ### AC-020 .COM size limit
-- **Given** a source whose image exceeds 65,280 bytes
+- **Given** a source whose image exceeds 65,278 bytes
 - **When** the user builds
 - **Then** the build fails with a message stating the .COM size limit
 - Verifies: FR-031 · Priority: P0 · Test status: PASS 2026-11-03-3 (TC-026)
@@ -429,3 +429,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-03 v2.7: Minor (testing phase). "Test status" updated from test run 2026-11-03-3 (manual and record-based results kept). No criterion changed.
 - 2026-11-03: AC-043 status updated from the real-key rerun at 18:52 (user request). No criterion changed.
 - 2026-11-03: AC-044 status adds the user-reported high-contrast recheck after TASK-112 (QA 2026-11-03-3 condition 4). No criterion changed.
+- 2026-11-03 v2.8: **Substantive change, approved** (D-023, DEF-003): AC-020's limit changes from 65,280 to 65,278 bytes. Its test status stays as last run until TASK-115 and the next test run. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).

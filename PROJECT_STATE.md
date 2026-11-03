@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 12:55 +0500 by Claude Code (Opus 5.5) (QA 2026-11-03-2: Pass with conditions) |
+| Last updated | 2026-11-03 13:42 +0500 by Claude Code (Opus 5.5) (TASK-109 done; DEF-025 High found) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-implement TASK-109` and `TASK-110` (approved 2026-11-03 13:24 +0500); the QA conditions: user actions TASK-006, TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; the known-limitations text; then `/assembly-release <version>`. DEF-003 decision, OQ-026 |
+| Next recommended action | `/assembly-implement TASK-111` (DEF-025: a crash; DEF-026), then `TASK-110`; then the QA conditions (TASK-006, TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text) and `/assembly-release`. DEF-003 decision, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-109 Find bar test without a simulated Esc | 2026-11-03 13:42 +0500 | The find bar window test checks the Enter, F3 and Esc key bindings (found as WPF routes the key, from the target up) and runs their commands instead of simulating key presses (DEF-022); mutation caught. Full runs found DEF-025 (High), DEF-026, DEF-027 in other tests |
 | QA (report 2026-11-03-2) | 2026-11-03 12:55 +0500 | QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024 |
 | QA offline check | 2026-11-03 12:48 +0500 | AC-001 offline verified from Windows' and the app's records (start at 12:47:23 while Wi-Fi was off 12:47:09–12:47:40); AC-034 user-reported, partly corroborated |
 | QA manual checks (user) | 2026-11-03 12:45 +0500 | AC-043 passed with real keys (12:12); AC-059 scaling and AC-044 high contrast user-reported passed (WVR-001 ends); AC-001/AC-034 offline **not verified**: reported passed, but Windows recorded no network change |
@@ -140,7 +141,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-1: **no failed test**; AC-056 passes against the revised NFR-005 (warm start, D-022); DEF-023 Won't fix (approved). Verified: DEF-006, 009, 010, 013, 017, 018, 019, 020, 021. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-022, DEF-024 |
+| Failed tests / open defects | Test report 2026-11-03-1: **no failed test**; AC-056 passes against the revised NFR-005 (warm start, D-022); DEF-023 Won't fix (approved). Verified: DEF-006, 009, 010, 013, 017, 018, 019, 020, 021. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-022, DEF-024; **DEF-025 (High, Open): crash when a snapshot lacks the Variables panel's window (TASK-111)**; DEF-026 (Medium, Open), DEF-027 (Low, Open); DEF-022 Fixed (unverified) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

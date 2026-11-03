@@ -225,9 +225,9 @@ public sealed class FindReplaceTests
                 findBox.Text = "ax"; // typed
                 Assert.Equal((4, 2), (editor.SelectionStart, editor.SelectionLength));
 
-                Press(findBox, Key.Enter); // Enter in the find box: next match
+                RunBinding(findBox, Key.Enter); // Enter in the find box: next match
                 Assert.Equal(14, editor.SelectionStart);
-                Press(editor.TextArea, Key.F3); // F3 in the editor
+                RunBinding(editor.TextArea, Key.F3); // F3 in the editor
                 Assert.Equal(19, editor.SelectionStart);
 
                 shell.Find.WholeWord = true;
@@ -241,7 +241,7 @@ public sealed class FindReplaceTests
                 Assert.Equal(Text, editor.Text);
 
                 findBox.Focus();
-                Press(findBox, Key.Escape);
+                RunBinding(findBox, Key.Escape); // the bar's Esc, before the window's Esc (Cancel build)
                 Assert.False(shell.Find.IsOpen);
                 Assert.Same(editor.TextArea, FocusManager.GetFocusedElement(window));
 
@@ -258,10 +258,25 @@ public sealed class FindReplaceTests
         });
     }
 
-    private static void Press(IInputElement target, Key key)
+    /// <summary>
+    /// What a key press at <paramref name="target"/> runs: the first key binding for it on the way up from the target, as WPF
+    /// routes the key, which must exist and be able to run; then runs it. Not a simulated key press: WPF matches those against
+    /// the real keyboard's modifier state, so a key held on the PC made the test fail (DEF-022, TASK-109).
+    /// </summary>
+    private static void RunBinding(DependencyObject target, Key key, ModifierKeys modifiers = ModifierKeys.None)
     {
-        var args = new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual((Visual)target)!, 0, key) { RoutedEvent = Keyboard.KeyDownEvent };
-        target.RaiseEvent(args);
+        for (DependencyObject? element = target; element is not null; element = VisualTreeHelper.GetParent(element) ?? LogicalTreeHelper.GetParent(element))
+        {
+            if (element is UIElement ui && ui.InputBindings.OfType<KeyBinding>().FirstOrDefault(b => b.Key == key && b.Modifiers == modifiers) is { } binding)
+            {
+                Assert.NotNull(binding.Command);
+                Assert.True(binding.Command.CanExecute(binding.CommandParameter), $"{modifiers}+{key} can't run here");
+                binding.Command.Execute(binding.CommandParameter);
+                return;
+            }
+        }
+
+        Assert.Fail($"No key binding for {modifiers}+{key} from {target.GetType().Name} up");
     }
 
     /// <summary>An editor stand-in: text and selection, with the replace calls counted.</summary>

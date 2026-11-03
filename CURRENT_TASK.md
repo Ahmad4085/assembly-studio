@@ -6,13 +6,26 @@
 
 ## Active Task
 
-None in progress.
+None in progress. Next: `TASK-111` (DEF-025 crash, DEF-026), then `TASK-110`.
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | User decision OQ-027 (NFR-005 cold start, DEF-023); then `/assembly-qa` |
-| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026, OQ-027 |
+| Recommended next action | `/assembly-implement TASK-111` |
+| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-109 Find bar test without a simulated Esc (Done 2026-11-03 13:42 +0500, Claude Code (Opus 5.5))
+- The find bar window test checks the Enter, F3 and Esc key bindings (found as WPF routes the key, from the target up) and runs their commands instead of simulating key presses (DEF-022).
+- `FindReplaceTests` 22/22 three times (Debug); mutation (the bar's Esc binding removed from the XAML): the test failed with "None+Escape can't run here"; restored.
+- Release build 0 warnings. `build/test.ps1`: run a (13:30–13:36) 4 failed, run b (13:36–13:40) 1 failed, all in tests TASK-109 doesn't touch: **DEF-025 (High)** a crash in `VariablesViewModel.Show` when a snapshot lacks its window (from TASK-106); **DEF-026** "Ready" announced twice; **DEF-027** three timing tests under load. `FindReplaceTests` passed in both runs. User 2026-11-03 13:42 +0500, answering "How should I close TASK-109?": "Done, defects separate (Recommended)"; and "Should I add a fix task (TASK-111) for DEF-025 and DEF-026 …?": "Approve TASK-111, next (Recommended)".
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 13:26 / 13:42 +0500 |
 
 ---
 

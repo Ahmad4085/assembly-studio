@@ -98,8 +98,9 @@
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
 | TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
 | TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Done |
-| TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Approved |
+| TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Done |
 | TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Approved |
+| TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Approved |
 
 ## 3. Task details
 
@@ -1981,7 +1982,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M4 (added 2026-11-03, DEF-022) |
 | Requirements | FR-015, FR-016, FR-017 |
 | Decisions / design | UI-004 |
@@ -2028,6 +2029,34 @@
 
 **Test requirements:**
 - The script with and without `-ResultsDirectory` (result files written); full solution through the script
+
+**Definition of Done:** standard (§4).
+
+### TASK-111 Missing memory windows and repeated announcements
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M5 (added 2026-11-03, DEF-025, DEF-026) |
+| Requirements | FR-054, FR-097, FR-093, NFR-018 |
+| Decisions / design | UI-008, UI-023 |
+| Depends on | TASK-106 |
+| Risk | M |
+
+**Goal:** A snapshot without a panel's memory window never throws (DEF-025), and a state is announced once (DEF-026).
+
+**Scope (in):**
+- `VariablesViewModel.Show` and `MemoryViewModel.Show`: a missing window is treated as missing (`MemoryWindow` is a struct: no `FirstOrDefault` into a nullable)
+- `BuildRunViewModel`: announce only when the session state or the instruction count changes (a refresh snapshot announces nothing)
+- Regression tests: a snapshot without the window (both panels); a refresh snapshot at Ready (one announcement)
+
+**Out of scope:**
+- Other panel or session changes
+
+**Expected files / projects touched:** `src/AssemblyStudio.App/Panels/Memory/`, `src/AssemblyStudio.App/Commands/BuildRunViewModel.cs`, tests
+
+**Test requirements:**
+- The regression tests fail before the fix and pass after it; full solution twice
 
 **Definition of Done:** standard (§4).
 
@@ -2078,6 +2107,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03: TASK-111 (DEF-025, DEF-026) added. User 2026-11-03 13:42 +0500, answering "How should I close TASK-109?": "Done, defects separate (Recommended)"; and "Should I add a fix task (TASK-111) for DEF-025 and DEF-026 …?": "Approve TASK-111, next (Recommended)".
 - 2026-11-03: TASK-109 (find bar test, DEF-022) and TASK-110 (test script options, DEF-024) added. User 2026-11-03 13:24 +0500, answering "Do you approve adding TASK-109 (find bar test without a simulated Esc, DEF-022) and TASK-110 (build/test.ps1 -ResultsDirectory, DEF-024) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) added from test report 2026-11-02-1. User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-106 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

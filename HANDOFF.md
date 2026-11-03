@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 12:55 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-2 |
-| Current task | **None in progress. QA: Pass with conditions; next: the conditions (release tasks)** |
-| Last completed | QA, `docs/08-qa/qa-report-2026-11-03-2.md` (2026-11-03 12:55 +0500): Pass with conditions |
-| Git state | HEAD after `1e14281` (TASK-109/110 backlog entries committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 13:42 +0500 by Claude Code (Opus 5.5), after TASK-109 |
+| Current task | **None in progress. Next: `TASK-111` (DEF-025 crash, DEF-026), then `TASK-110`** |
+| Last completed | TASK-109 Find bar test without a simulated Esc (Done 2026-11-03 13:42 +0500) |
+| Git state | HEAD `9826a5b`; TASK-109 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-109** (Claude Code, Done, uncommitted): The find bar window test checks the Enter, F3 and Esc key bindings (found as WPF routes the key, from the target up) and runs their commands instead of simulating key presses (DEF-022). Full runs found **DEF-025 (High)**: `VariablesViewModel.Show` (and the same pattern in `MemoryViewModel.Show`) treats a missing `MemoryWindow` (a struct) as present and throws; DEF-026 duplicate "Ready" announcement; DEF-027 load. Fix task TASK-111 approved.
+
 - **QA 2026-11-03-2** (Claude Code; documents only): QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024.
 
 - **Requirements change (approved):** NFR-005 revised for the warm start (D-022, approved 2026-11-03 12:11 +0500; NFR v2.1, AC v2.5): OQ-027 answered, DEF-023 Won't fix (approved), AC-056 passes against the new target; AC-001 still needs its offline check; QA must run again.
@@ -124,10 +126,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: QA report 2026-11-03-2 committed (`7683de0`).
-2. The QA conditions (report §4): the user's TASK-006 and TASK-100; then `/assembly-implement` TASK-070, TASK-102, TASK-103 (rebuild the installer first: it now publishes with ReadyToRun), TASK-104, and the user-run TASK-105.
-3. Approved fix tasks (2026-11-03 13:24 +0500): `/assembly-implement TASK-109` (DEF-022) and `TASK-110` (DEF-024). Still to propose: the known-limitations text (cold start D-022, Variables panel limits) for the help and release notes.
-4. Then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
+1. The user says "commit" for TASK-109 (then commit and record the hash here).
+2. `/assembly-implement TASK-111` (DEF-025 crash, DEF-026), then `/assembly-implement TASK-110` (DEF-024).
+3. The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; the known-limitations text; then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

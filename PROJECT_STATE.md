@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 11:43 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-1) |
+| Last updated | 2026-11-03 12:03 +0500 by Claude Code (Opus 5.5) (QA 2026-11-03-1: Fail) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-qa` (the test report now covers the current build). User: OQ-027 (NFR-005 cold start, DEF-023), TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Next recommended action | User decision OQ-027 (NFR-005 cold start: deployment change, requirement revision, or keep the target); then the fix through `/assembly-plan`/`/assembly-implement` or a requirements update, then `/assembly-qa` again. User checks due now: AC-059 (WVR-001 ended at QA), AC-043, AC-044, AC-001/AC-034 offline |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| QA (report 2026-11-03-1) | 2026-11-03 12:03 +0500 | QA verdict **Fail** (`docs/08-qa/qa-report-2026-11-03-1.md`): AC-001 (FR-001, P0) fails on its NFR-005 timing (cold start 7,752 ms, DEF-023); P0 64 verified, 1 failed, 10 not verified; P1 32 verified, 1 failed (NFR-005), 7 not verified; no Critical defect; code checks clean (no network APIs, no fake data, no hard-coded colors) |
 | Testing phase (report 2026-11-03-1) | 2026-11-03 11:43 +0500 | 1560 tests: 1553 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,975 ms); coverage complete (engine 99.6%, runtime 93.8%, total 90.2%); 53 of 65 acceptance criteria pass, AC-056 fails (NFR-005 cold start 7,752 ms, DEF-023), 11 not run; DEF-020 and DEF-021 verified; DEF-024 new (`build/test.ps1` `--` options); traceability v2.7, AC v2.4, test plan v0.6 |
 | TASK-108 Startup time | 2026-11-03 11:21 +0500 | Warm starts on the published app: median 1,915 ms (target 3 s); cold start 2026-11-03 11:19 +0500 (Windows restarted at 10:49), `build/bench/cold-start.ps1` run by the user: **7,752 ms, FAIL** (target 3,000 ms): runtime and WPF 4,344 ms, content 797, settings 198, themes 214, window 1,079, show 971, JIT 860 in all (`artifacts/perf/cold-start-2026-11-03-1119.txt`); ReadyToRun (D-021, ADR-0009), editor warm-up, parallel content load; startup timeline in the log |
 | TASK-107 UI test robustness | 2026-11-02 20:59 +0500 | UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone. TC-092 (2 tests; mutation caught). `build/test.ps1` run a all passed; run b one unrelated failure (DEF-022) |

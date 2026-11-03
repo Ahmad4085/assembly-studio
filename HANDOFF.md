@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 11:43 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-1) |
-| Current task | **None in progress. Next: `/assembly-qa`** |
-| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-1.md` (2026-11-03 11:43 +0500) |
-| Git state | HEAD after `63d9616` (testing phase 2026-11-03-1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 12:03 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-1 |
+| Current task | **None in progress. QA verdict Fail (AC-001 timing, DEF-023): waiting for the user's decision OQ-027** |
+| Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
+| Git state | HEAD `9fa7904`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **QA 2026-11-03-1** (Claude Code; documents only): QA verdict **Fail** (`docs/08-qa/qa-report-2026-11-03-1.md`): AC-001 (FR-001, P0) fails on its NFR-005 timing (cold start 7,752 ms, DEF-023); P0 64 verified, 1 failed, 10 not verified; P1 32 verified, 1 failed (NFR-005), 7 not verified; no Critical defect; code checks clean (no network APIs, no fake data, no hard-coded colors). Traceability has a "QA status" column now.
+
 - **Testing phase 2026-11-03-1** (Claude Code; documents only): 1560 tests: 1553 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,975 ms); coverage complete (engine 99.6%, runtime 93.8%, total 90.2%); 53 of 65 acceptance criteria pass, AC-056 fails (NFR-005 cold start 7,752 ms, DEF-023), 11 not run; DEF-020 and DEF-021 verified; DEF-024 new (`build/test.ps1` `--` options). Full suite until DEF-024 is fixed: run the two `dotnet test` steps of `build/test.ps1` directly when result options are needed.
 
 - **TASK-108 Startup time** (Claude Code, In progress, committed `e6af964`): Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms. `docs/06-implementation/task-108-verification.md`. The startup timeline is in every startup log ("Startup … ms to the first frame: …"). `run-e2e.ps1` now publishes the app (installer configuration) to `artifacts/bench/app` and measures it.
@@ -118,9 +120,10 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: testing phase committed (`63d9616`).
-2. `/assembly-qa` (its gate is met by report 2026-11-03-1).
-3. User: OQ-027 (NFR-005 cold start, DEF-023), TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001). DEF-022 and DEF-024 need fix tasks.
+1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+2. The user decides OQ-027 (NFR-005 cold start): a deployment change (ADR-0009, new task), a requirements update of NFR-005/AC-001, or keeping the target (QA stays Fail).
+3. The user's manual checks from the QA report §5: AC-059 (due now, WVR-001), AC-043 (real keys, user away), AC-044 (Narrator, high contrast), AC-001/AC-034 offline.
+4. Then `/assembly-qa` again. Open fix tasks still to propose: DEF-022, DEF-024. User: TASK-006, TASK-100, DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

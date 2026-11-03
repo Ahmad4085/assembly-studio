@@ -2045,3 +2045,12 @@
 - **Files changed:** `docs/07-testing/{test-report-2026-11-03-1.md (new), test-plan.md, defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `d1c9577`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** `/assembly-qa`.
+
+### 2026-11-03 11:45 – 2026-11-03 12:03 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-03-1
+- **Summary:** Ran `/assembly-qa` (user request; gate met by test report 2026-11-03-1). QA verdict **Fail** (`docs/08-qa/qa-report-2026-11-03-1.md`): AC-001 (FR-001, P0) fails on its NFR-005 timing (cold start 7,752 ms, DEF-023); P0 64 verified, 1 failed, 10 not verified; P1 32 verified, 1 failed (NFR-005), 7 not verified; no Critical defect; code checks clean (no network APIs, no fake data, no hard-coded colors).
+  - Checks performed now: code search of `src` for network APIs and URLs (none; only XAML namespace URIs), for fake/mock/demo/sample data (none; the design-time context is a type only), for hard-coded colors (none in XAML; two drawing fallbacks to `Brushes.Gray`/`Red` when a token is missing).
+  - Traceability v2.8: the planned "QA status" column added for all 130 requirements.
+  - Not verified, with steps for the user: AC-059 (due now: WVR-001 waived it until QA), AC-043, AC-044, AC-001/AC-034 offline; and the criteria of tasks not built (TASK-102..105, TASK-103).
+- **Files changed:** `docs/08-qa/qa-report-2026-11-03-1.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted QA documents on top of `9fa7904`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the user decides OQ-027; the user's manual checks (QA report §5).

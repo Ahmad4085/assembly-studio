@@ -106,14 +106,22 @@ public static class ProgramHarness
     /// build fails.</summary>
     public static Task<BuildResult> BuildTextAsync(string name, string text) => BuildAsync(new BuildRequest(null, text), name);
 
-    private static async Task<BuildResult> BuildAsync(BuildRequest request, string name)
+    /// <summary>Builds unsaved source <paramref name="text"/> and returns the result, whether or not the build succeeded.</summary>
+    public static Task<BuildResult> TryBuildTextAsync(string text) => AssembleAsync(new BuildRequest(null, text));
+
+    private static async Task<BuildResult> AssembleAsync(BuildRequest request)
     {
         var assembler = new NasmAssembler(new NasmOptions
         {
             BundledPath = Path.Combine(RepositoryRoot.Value, "tools", "nasm", "nasm.exe"),
             TempRoot = Path.Combine(Path.GetTempPath(), "asmstudio-programtests"),
         });
-        BuildResult build = await assembler.BuildAsync(request, TestContext.Current.CancellationToken);
+        return await assembler.BuildAsync(request, TestContext.Current.CancellationToken);
+    }
+
+    private static async Task<BuildResult> BuildAsync(BuildRequest request, string name)
+    {
+        BuildResult build = await AssembleAsync(request);
         Assert.True(build.Outcome == BuildOutcome.Succeeded,
             $"{name} did not build: {build.Outcome}\n{string.Join("\n", build.Diagnostics.Select(d => $"{d.Code} line {d.Line}: {d.What}"))}\n{build.Output}");
         return build;

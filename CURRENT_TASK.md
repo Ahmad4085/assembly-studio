@@ -11,8 +11,21 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>` |
-| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-test` (verifies DEF-003), `/assembly-qa`, `/assembly-release <version>` |
+| Parallel user actions | TASK-006, TASK-100, TASK-105, OQ-026 |
+
+---
+
+## Completed: TASK-115 One .COM size limit: 65,278 bytes (Done 2026-11-03 19:25 +0500, Claude Code (Opus 5.5))
+- The build's .COM limit and its BLD006 message now say 65,278 bytes, matching the loader (FR-031 v2.2, D-023); the loader's message lost its wrong "(65,280 bytes)"; the help pages state the limit plainly (the DEF-003 note is gone); ADR-0005, the architecture's error table and `known-limitations.md` follow; new `ProgramTests.ComSizeLimitTests` builds, loads and runs an image of exactly `ComLoader.MaxComImageSize` bytes and checks one byte more fails with BLD006.
+- The two constants stay in their projects (Toolchain.Nasm may not reference Runtime, ADR-0002); the test ties them. The program harness gained `TryBuildTextAsync` (a build that may fail).
+- Tests: TC-095 (2); TC-026 and TC-043 at 65,278; mutation (build limit back to 65,280) fails TC-095. Full solution: 1577 + 3 passed, 7 skipped, 0 failed twice (19:16–19:20, 19:20–19:24; the first build attempt at about 19:11 failed because the user's Assembly Studio locked bin\Release; the user closed it, no run was made before).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 19:09 / 19:25 +0500 |
 
 ---
 

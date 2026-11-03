@@ -104,7 +104,7 @@
 | TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
 | TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
 | TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Done |
-| TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Approved |
+| TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Done |
 
 ## 3. Task details
 
@@ -2159,7 +2159,7 @@ contrast targets.
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 (added 2026-11-03, DEF-003) |
 | Requirements | FR-031 (v2.2), AC-020 |
 | Decisions / design | D-023, ADR-0005 |

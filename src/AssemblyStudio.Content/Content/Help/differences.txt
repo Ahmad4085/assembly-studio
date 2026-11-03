@@ -36,5 +36,6 @@ Input
 Limits
   - A run stops after the instruction budget (10,000,000 instructions by default; Settings, Execution) and can be
     continued.
-  - Programs are .COM programs of at most 65,278 bytes (see "What Assembly Studio supports" about DEF-003).
+  - Programs are .COM programs of at most 65,278 bytes. Real DOS loads up to 65,280 and lets the stack word cover the
+    program's last 2 bytes; Assembly Studio keeps them apart.
   - Console output is kept up to a limit; a program that prints without end is still stopped by the budget.

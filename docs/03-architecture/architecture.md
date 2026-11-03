@@ -132,7 +132,7 @@ The complete requirement → component → ADR allocation is in **Appendix A** (
 | Assembler timeout or crash | C03 process supervision | Build fails with a specific reason. Next build works (FR-095, AC-019) |
 | Source errors | C03 diagnostics parser | Diagnostics pane + editor markers. Debug disabled (FR-018, AC-013) |
 | Non-8086 CPU directive | C03 `nasm -E` guard | Build error at the directive line (FR-027) |
-| Image > 65,280 bytes | C03 | Build error stating the .COM limit (FR-031) |
+| Image > 65,278 bytes | C03 | Build error stating the .COM limit (FR-031 v2.2, D-023) |
 | Unsupported or undocumented opcode | C04 | `Halted(Unsupported)`: CS:IP, bytes, reason. State inspectable (FR-037) |
 | CPU exception, default vector | C05 router | `Halted(RuntimeError)`: divide error, overflow and so on (FR-038) |
 | Unsupported INT/function | C05/C06 | `Halted(UnsupportedService)` naming INT and AH (FR-040) |
@@ -351,3 +351,4 @@ Generated from the component allocation and the ADRs' "Requirements addressed" r
 - 2026-10-26 v0.1: Initial architecture (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
 - 2026-10-26 v1.1: Minor. Snapshot description aligned with the approved ADR-0007 v1.1 amendment (OQ-023).
+- 2026-11-03: The error table's .COM limit follows FR-031 v2.2 (65,278 bytes; D-023, approved by the user 2026-11-03 19:07 +0500; TASK-115). No other change.

@@ -54,7 +54,7 @@
     <value>Build again when you are ready.</value>
   </data>
   <data name="BLD006_What" xml:space="preserve">
-    <value>The program is {0:N0} bytes, but a .COM program can be at most 65,280 bytes (64 KiB minus the 256-byte PSP).</value>
+    <value>The program is {0:N0} bytes, but a .COM program can be at most 65,278 bytes (64 KiB minus the 256-byte PSP and the 2-byte stack word).</value>
   </data>
   <data name="BLD006_Next" xml:space="preserve">
     <value>Make the program smaller. For example, reserve large buffers with resb in a section .bss, which takes no space in the file.</value>

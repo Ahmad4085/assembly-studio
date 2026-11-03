@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.13 |
+| Version | 0.14 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-3.md` |
@@ -67,7 +67,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-023 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-024 | `Os.Dos.Tests.DosServicesTests` | Integration (DOS services on the engine) | AC-022, AC-023, AC-064, TASK-034, TASK-035, TASK-036, TASK-104 | 72 |
 | TC-025 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
-| TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041 | 28 |
+| TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041, TASK-115 | 28 |
 | TC-027 | `Toolchain.Nasm.Tests.BuildTimeTests` | Integration (NASM toolchain) | AC-056, NFR-006, TASK-086 | 1 |
 | TC-028 | `Toolchain.Nasm.Tests.CpuDirectiveGuardTests` | Integration (NASM toolchain) | FR-027, TASK-042 | 16 |
 | TC-029 | `Toolchain.Nasm.Tests.HelpConsistencyTests` | Integration (NASM toolchain) | AC-051, FR-032, TASK-093 | 16 |
@@ -84,7 +84,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-040 | `Debugging.Tests.Robustness.HostileProgramTests` | Integration (debug session) | AC-045, FR-096, NFR-015, TASK-054 | 3 |
 | TC-041 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-042 | `Debugging.Tests.SnapshotTests` | Integration (debug session) | AC-048, AC-049, FR-053, NFR-002, NFR-018, TASK-051 | 13 |
-| TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093, TASK-114 | 7 |
+| TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093, TASK-114, TASK-115 | 7 |
 | TC-044 | `ProgramTests.ProgramTests` | Program-level (assembler -> loader -> engine) | AC-017, AC-021, AC-022, AC-023, AC-029, AC-031, AC-047, AC-064, TASK-044 | 14 |
 | TC-045 | `ProgramTests.ReferenceTests` | Program-level (assembler -> loader -> engine) | AC-037, FR-071, FR-072, TASK-092 | 80 |
 | TC-046 | `ProgramTests.SampleTests` | Program-level (assembler -> loader -> engine) | AC-035, FR-068, TASK-091 | 18 |
@@ -136,6 +136,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-092 | `App.UiTests.AppUnderTestTests` | UI test harness | DEF-020, TASK-107 | 2 |
 | TC-093 | `App.Tests.Logging.StartupTimelineTests` | Unit (startup diagnostics) | NFR-005, DEF-021, TASK-108 | 2 |
 | TC-094 | `ArchitectureTests.LocalizableStringTests` | Architecture rules (source scan) | AC-060, NFR-032, TASK-104 | 14 |
+| TC-095 | `ProgramTests.ComSizeLimitTests` | Program-level (assembler -> loader -> engine) | AC-020, FR-031, TASK-115 | 2 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -185,3 +186,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.11: TASK-104: TC-094 added (no hard-coded user-facing text in C# or XAML, 14 tests); TC-024, TC-030 and TC-084 check the moved messages word for word.
 - 2026-11-03 v0.12: TASK-114: TC-043 checks that RTE021 lists the documented DOS functions (7 tests).
 - 2026-11-03 v0.13: Test run 2026-11-03-3: counts checked.
+- 2026-11-03 v0.14: TASK-115: TC-095 added (the build and the loader share the .COM limit, 2 tests); TC-026 and TC-043 at the new limit of 65,278 bytes.

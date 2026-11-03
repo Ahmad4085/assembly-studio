@@ -35,7 +35,7 @@ detects such directives, even inside macros [Measured].
 3. **CPU guard (FR-027):** before assembling, run `nasm -E`. Any `[cpu X]` with X ≠ 8086 is a **build error** at that line
    ("only 8086 is supported"). The runtime's unsupported-opcode halt (FR-037) stays as defense in depth.
 4. **Results:** the GNU diagnostics parser (FR-029). Failures are distinguished: missing assembler, timeout, crash, non-zero exit
-   without diagnostics (FR-030). The size limit is 65,280 bytes (FR-031). The MASM-style hint comes from source heuristics (FR-021).
+   without diagnostics (FR-030). The size limit is 65,278 bytes (FR-031 v2.2; 65,280 until D-023). The MASM-style hint comes from source heuristics (FR-021).
 5. **Source map** (`ISourceMap`): listing + map per POC-002. Macro bytes go to the invoking line (flagged), included lines to their
    file, sections via map `Vstart`. **After a failed build no map exists** (measured: an empty file), so the debugger requires a
    successful build.
@@ -56,3 +56,4 @@ detects such directives, even inside macros [Measured].
 - 2026-10-26 v0.1: Proposed (SDLC-006).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 18:54 +0500: "approve architecture v0.1 and ADR-0001..0009; reference machine OK").
 - 2026-11-02: Additive contract change for TASK-106 (FR-097, D-020): `ISourceMap.DataSymbols` (default: none) lists the labels on data with their size, read from the `[map all]` symbols and the listing (a symbol whose first bytes come from a `db`/`dw`/…/`times`/`res*`/`incbin` line; its size runs over the following data lines up to the next symbol). No change to the NASM command line or the decision.
+- 2026-11-03: The .COM size limit follows FR-031 v2.2: 65,278 bytes instead of 65,280, so the build matches the loader (D-023, approved by the user 2026-11-03 19:07 +0500; TASK-115). No other change.

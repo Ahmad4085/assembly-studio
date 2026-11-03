@@ -50,8 +50,10 @@ internal static class BuildMessages
     /// <summary>The build succeeded but its listing or map could not be read, so there is no source mapping (FR-053).</summary>
     public const string SourceMapUnavailable = "BLD010";
 
-    /// <summary>The largest .COM image: 64 KiB minus the 256-byte PSP (FR-031).</summary>
-    public const int MaxComImageSize = 65_280;
+    /// <summary>The largest .COM image (FR-031 v2.2, D-023): 64 KiB minus the 256-byte PSP and the 2-byte return word the
+    /// loader places at FFFEh. It equals <c>ComLoader.MaxComImageSize</c> (Runtime), which this project can't reference;
+    /// <c>ProgramTests.ComSizeLimitTests</c> ties the two.</summary>
+    public const int MaxComImageSize = 65_278;
 
     /// <summary>Every code with its severity (the catalog the completeness test checks).</summary>
     public static readonly IReadOnlyDictionary<string, DiagnosticSeverity> Catalog = new Dictionary<string, DiagnosticSeverity>

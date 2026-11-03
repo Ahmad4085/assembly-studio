@@ -174,3 +174,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-11-03 v2.12: Minor (testing phase, `docs/07-testing/test-report-2026-11-03-3.md`). "Test cases" and "Test status" refreshed from test run 2026-11-03-3 (no failed test). No requirement changed.
 - 2026-11-03 v2.13: Minor (QA, `docs/08-qa/qa-report-2026-11-03-3.md`). "QA status" set from QA 2026-11-03-3. No requirement changed.
 - 2026-11-03: FR-031 (v2.2, D-023) gains TASK-115. No other change.
+- 2026-11-03: TC-095 (TASK-115) verifies FR-031 v2.2 and AC-020; "Test cases" and "Test status" are refreshed by the next test run.

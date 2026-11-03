@@ -13,8 +13,8 @@ Processor
 Programs
   Format: DOS .COM programs only, assembled by NASM as flat binaries starting at offset 100h (write org 100h at the
   top). .EXE programs, segments and multiple source files linked together are not supported.
-  Size: the build accepts programs up to 65,280 bytes. Known issue (DEF-003): programs of 65,279 or 65,280 bytes
-  build but don't load; keep programs at or below 65,278 bytes until this is resolved.
+  Size: programs can be up to 65,278 bytes: 64 KiB minus the 256-byte Program Segment Prefix and the 2-byte stack
+  word at FFFEh. A larger program fails to build with BLD006 (see "Building with NASM").
   Start state: CS = DS = ES = SS = 0800h, IP = 0100h, SP = FFFEh, the other general registers 0000h, and
   FLAGS 0002h. The Program Segment Prefix (the first 256 bytes) holds INT 20h at offset 0, so RET with an empty
   stack ends the program.

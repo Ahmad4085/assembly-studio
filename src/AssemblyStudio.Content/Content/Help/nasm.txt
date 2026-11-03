@@ -33,7 +33,7 @@ Build messages
   BLD003             The assembler crashed.
   BLD004             The assembler failed without saying why; its raw output is shown.
   BLD005             The build was cancelled.
-  BLD006             The program is larger than 65,280 bytes.
+  BLD006             The program is larger than 65,278 bytes.
   BLD007             The build failed and the source looks like MASM: see "NASM and MASM".
   BLD008             The assembler is older than 3.02, or its version couldn't be read.
   BLD009             A CPU directive above 8086 was used.

@@ -76,7 +76,7 @@ public static class ComLoader
         if (image.Length > MaxComImageSize)
         {
             throw new ArgumentException(
-                $"COM image size ({image.Length} bytes) exceeds maximum allowable size of {MaxComImageSize} bytes (65,280 bytes).",
+                $"COM image size ({image.Length} bytes) exceeds maximum allowable size of {MaxComImageSize} bytes.",
                 nameof(image));
         }
 

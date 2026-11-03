@@ -214,25 +214,25 @@ public sealed class BuildDiagnosticsTests : IDisposable
     // ---- AC-020: .COM size limit ----
 
     [Fact]
-    public async Task AC_020_an_image_over_65280_bytes_fails_with_the_size_limit_message()
+    public async Task AC_020_an_image_over_65278_bytes_fails_with_the_size_limit_message()
     {
-        BuildResult result = await Build(Assembler(), null, "org 100h\ntimes 65281 db 90h\n");
+        BuildResult result = await Build(Assembler(), null, "org 100h\ntimes 65279 db 90h\n");
 
         Assert.Equal(BuildOutcome.Failed, result.Outcome);
         Assert.True(result.Image.IsEmpty);
         Diagnostic limit = Assert.Single(result.Diagnostics);
         Assert.Equal(("BLD006", DiagnosticSeverity.Error), (limit.Code, limit.Severity));
-        Assert.Contains("65,281", limit.What, StringComparison.Ordinal);
-        Assert.Contains("65,280", limit.What, StringComparison.Ordinal);
+        Assert.Contains("65,279", limit.What, StringComparison.Ordinal);
+        Assert.Contains("65,278", limit.What, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task An_image_of_exactly_65280_bytes_builds()
+    public async Task An_image_of_exactly_65278_bytes_builds()
     {
-        BuildResult result = await Build(Assembler(), null, "org 100h\ntimes 65280 db 90h\n");
+        BuildResult result = await Build(Assembler(), null, "org 100h\ntimes 65278 db 90h\n");
 
         Assert.Equal(BuildOutcome.Succeeded, result.Outcome);
-        Assert.Equal(65_280, result.Image.Length);
+        Assert.Equal(65_278, result.Image.Length);
     }
 
     // ---- AC-018: CPU-directive guard and 8086-only instruction validation (FR-027, ADR-0005 §3) ----

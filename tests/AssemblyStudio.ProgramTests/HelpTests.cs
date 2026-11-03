@@ -120,7 +120,8 @@ public sealed partial class HelpTests
 
         Assert.Contains($"CS = DS = ES = SS = {ComLoader.DefaultProgramSegment:X4}h, IP = {ComLoader.DefaultEntryPoint:X4}h, SP = {ComLoader.DefaultInitialSp:X4}h", scope, StringComparison.Ordinal);
         Assert.Contains($"FLAGS {ComLoader.InitialFlags:X4}h", scope, StringComparison.Ordinal);
-        Assert.Contains($"at or below {ComLoader.MaxComImageSize.ToString("N0", CultureInfo.InvariantCulture)} bytes", scope, StringComparison.Ordinal);
+        Assert.Contains($"up to {ComLoader.MaxComImageSize.ToString("N0", CultureInfo.InvariantCulture)} bytes", scope, StringComparison.Ordinal);
+        Assert.DoesNotContain("DEF-003", scope, StringComparison.Ordinal);
         Assert.Contains($"at most {ComLoader.MaxComImageSize.ToString("N0", CultureInfo.InvariantCulture)} bytes", Help("differences"), StringComparison.Ordinal);
     }
 

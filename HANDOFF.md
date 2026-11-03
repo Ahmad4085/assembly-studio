@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 12:03 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-1 |
-| Current task | **None in progress. QA verdict Fail (AC-001 timing, DEF-023): waiting for the user's decision OQ-027** |
+| Written | 2026-11-03 12:11 +0500 by Claude Code (Opus 5.5), after the NFR-005 revision |
+| Current task | **None in progress. Next: the user's manual checks, then `/assembly-qa` again** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
-| Git state | HEAD after `5c5ee27` (QA 2026-11-03-1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `5f0b55b`; NFR-005 revision **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Requirements change (approved):** NFR-005 revised for the warm start (D-022, approved 2026-11-03 12:11 +0500; NFR v2.1, AC v2.5): OQ-027 answered, DEF-023 Won't fix (approved), AC-056 passes against the new target; AC-001 still needs its offline check; QA must run again.
+
 - **QA 2026-11-03-1** (Claude Code; documents only): QA verdict **Fail** (`docs/08-qa/qa-report-2026-11-03-1.md`): AC-001 (FR-001, P0) fails on its NFR-005 timing (cold start 7,752 ms, DEF-023); P0 64 verified, 1 failed, 10 not verified; P1 32 verified, 1 failed (NFR-005), 7 not verified; no Critical defect; code checks clean (no network APIs, no fake data, no hard-coded colors). Traceability has a "QA status" column now.
 
 - **Testing phase 2026-11-03-1** (Claude Code; documents only): 1560 tests: 1553 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,975 ms); coverage complete (engine 99.6%, runtime 93.8%, total 90.2%); 53 of 65 acceptance criteria pass, AC-056 fails (NFR-005 cold start 7,752 ms, DEF-023), 11 not run; DEF-020 and DEF-021 verified; DEF-024 new (`build/test.ps1` `--` options). Full suite until DEF-024 is fixed: run the two `dotnet test` steps of `build/test.ps1` directly when result options are needed.
@@ -120,10 +122,10 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: QA report committed (`5c5ee27`).
-2. The user decides OQ-027 (NFR-005 cold start): a deployment change (ADR-0009, new task), a requirements update of NFR-005/AC-001, or keeping the target (QA stays Fail).
-3. The user's manual checks from the QA report §5: AC-059 (due now, WVR-001), AC-043 (real keys, user away), AC-044 (Narrator, high contrast), AC-001/AC-034 offline.
-4. Then `/assembly-qa` again. Open fix tasks still to propose: DEF-022, DEF-024. User: TASK-006, TASK-100, DEF-003 decision, OQ-026.
+1. The user says "commit" for the NFR-005 revision (then commit and record the hash here).
+2. The user's manual checks from `docs/08-qa/qa-report-2026-11-03-1.md` §5: AC-059 (due now, WVR-001), AC-043 (real keys, user away), AC-044 (Narrator, high contrast), AC-001/AC-034 offline.
+3. Then `/assembly-qa` again (NFR-005 is now judged against the warm start).
+4. Propose fix tasks for DEF-022 and DEF-024; list the cold start in the help and release notes (known limitation, D-022). User: TASK-006, TASK-100, DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

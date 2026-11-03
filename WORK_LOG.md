@@ -2054,3 +2054,10 @@
 - **Files changed:** `docs/08-qa/qa-report-2026-11-03-1.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted QA documents on top of `9fa7904`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the user decides OQ-027; the user's manual checks (QA report §5).
+
+### 2026-11-03 12:11 +0500 · Claude Code (Opus 5.5) · NFR-005 revised for the warm start (approved requirements change)
+- **Summary:** The user answered OQ-027: "revise NFR-005 for warm start". Substantive change per sdlc-process §4: drafted NFR-005 and AC-001 wording, asked the gate question; the user chose "Approve as written (Recommended)". NFR-005 revised for the warm start (D-022, approved 2026-11-03 12:11 +0500; NFR v2.1, AC v2.5): OQ-027 answered, DEF-023 Won't fix (approved), AC-056 passes against the new target; AC-001 still needs its offline check; QA must run again.
+  - NFR-005 v2.1: warm start ≤ 3 s; the cold start after a restart is measured and reported without a target (known limitation). AC-001: the launch is a warm start. D-022 recorded. Impact checked: architecture, UI spec and backlog refer to NFR-005 by ID only.
+  - Still to do for the known limitation: list the cold start in the help's "Scope and limitations" and the release notes (product content: through a task or the release).
+- **Files changed:** `docs/01-requirements/{NON_FUNCTIONAL_REQUIREMENTS.md, ACCEPTANCE_CRITERIA.md, REQUIREMENTS_TRACEABILITY.md, OPEN_QUESTIONS.md}`, `DECISIONS.md` (D-022), `docs/07-testing/defects.md` (DEF-023), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the user's manual checks, then `/assembly-qa` again.

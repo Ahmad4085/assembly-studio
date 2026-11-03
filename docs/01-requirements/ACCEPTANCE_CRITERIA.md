@@ -4,7 +4,7 @@
 |---|---|
 | Document | Acceptance criteria |
 | Status | Approved |
-| Version | 2.4 |
+| Version | 2.5 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -22,7 +22,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 
 ### AC-001 Launch offline
 - **Given** the application is installed on a supported Windows version and all network adapters are disabled
-- **When** the user launches it
+- **When** the user launches it (a warm start, as defined by NFR-005)
 - **Then** the main window with an editable document appears within the NFR-005 target, and no sign-in prompt or network error is shown
 - Verifies: FR-001, NFR-005, NFR-008 · Priority: P0 · Test status: NOT RUN
 
@@ -386,7 +386,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** the reference machine (OQ-014)
 - **When** the performance suite runs
 - **Then** the measured editor latency, execution speed, startup time, build time and memory use meet the NFR targets (or the targets are revised with approval)
-- Verifies: NFR-001, NFR-003, NFR-005, NFR-006, NFR-007 · Priority: P1 · Test status: FAIL 2026-11-03-1 (NFR-005 cold start 7,752 ms after a restart, DEF-023; the warm measurements and the other targets passed: TC-008, TC-027, TC-076, TC-088, TC-089)
+- Verifies: NFR-001, NFR-003, NFR-005, NFR-006, NFR-007 · Priority: P1 · Test status: PASS 2026-11-03-1 against NFR-005 v2.1 (warm start, D-022): TC-008, TC-027, TC-076, TC-088, TC-089 (NFR-005 median 1,975 ms); the cold start (7,752 ms) is reported without a target
 
 ### AC-058 Instruction semantics coverage
 - **Given** the supported instruction list
@@ -421,3 +421,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-02 v2.2: AC-065 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".
 - 2026-11-02 v2.3: Minor (testing phase). "Test status" updated from test run 2026-11-02-1 (`docs/07-testing/test-report-2026-11-02-1.md`). No criterion changed.
 - 2026-11-03 v2.4: Minor (testing phase). "Test status" updated from test run 2026-11-03-1. No criterion changed.
+- 2026-11-03 v2.5: **Substantive change, approved** (D-022): AC-001's launch is a warm start, as NFR-005 v2.1 defines it. User 2026-11-03 12:10 +0500: "revise NFR-005 for warm start", then, answering "Do you approve this revision of NFR-005 (warm start ≤ 3 s; the cold start measured and reported without a target, a known limitation) and AC-001 ("a warm start, as defined by NFR-005"), with DEF-023 set to "Won't fix (approved)"?": "Approve as written (Recommended)".

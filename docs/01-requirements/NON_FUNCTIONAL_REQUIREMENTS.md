@@ -4,8 +4,8 @@
 |---|---|
 | Document | Non-functional requirements |
 | Status | Approved |
-| Version | 2.0 |
-| Last updated | 2026-10-26 |
+| Version | 2.1 |
+| Last updated | 2026-11-03 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
 
@@ -17,7 +17,7 @@ Targets marked `PROPOSED` are starting values, not measured results. Each one na
 | NFR-002 | Performance | Step latency | Step command to all visible debug panels updated <= 100 ms (95th percentile) | PROPOSED | Automated timing test, POC during research | P0 | APPROVED | PG-1 | AC-024 |
 | NFR-003 | Performance | Free-run execution speed | >= 1,000,000 emulated instructions per second with UI updates throttled | PROPOSED | Benchmark on the reference machine after engine selection | P1 | NEEDS_RESEARCH | PG-3 | AC-056 |
 | NFR-004 | Performance | UI responsiveness during build and run | UI thread never blocked > 100 ms. Pause/Stop take effect <= 500 ms after the command | PROPOSED | Automated test with an endless-loop program and a hanging assembler stub | P0 | APPROVED | PG-3, PG-4 | AC-030 |
-| NFR-005 | Performance | Startup time | Cold start to editable main window <= 3 s | PROPOSED | Timed launch on the reference machine | P1 | APPROVED | PG-2 | AC-001, AC-056 |
+| NFR-005 | Performance | Startup time | Warm start to editable main window <= 3 s on the reference machine. A warm start is a launch with the application's files already in the operating system's file cache (any launch after the first one since Windows started). The first start after a Windows restart (cold start) is measured and reported, without a target: a documented known limitation (7.75 s measured on 2026-11-03, DEF-023; D-022) | PROPOSED | Timed launch on the reference machine | P1 | APPROVED | PG-2 | AC-001, AC-056 |
 | NFR-006 | Performance | Build turnaround | Build result shown <= 2 s for a 1,000-line source (excluding the first assembler launch after boot) | PROPOSED | Timed build test | P1 | APPROVED | PG-2 | AC-056 |
 | NFR-007 | Resource use | Memory use | Working set <= 300 MB with one 1,000-line file and an active debug session. All history buffers bounded | PROPOSED | Measurement during the soak test | P1 | APPROVED | PG-4 | AC-056 |
 | NFR-008 | Offline | Offline operation | All P0 and P1 features work with no network connectivity. Core workflows make no network requests | FIRM | Full workflow test with networking disabled, network monitor and code review | P0 | APPROVED | PG-5 | AC-001, AC-034 |
@@ -52,3 +52,4 @@ Targets marked `PROPOSED` are starting values, not measured results. Each one na
 - 2026-10-26 v1.0: Approved by the user (2026-10-26 17:11 +0500: "approve requirements v0.1 and D-010"). Requirement statuses PROPOSED → APPROVED. NEEDS_RESEARCH unchanged. Content otherwise identical to v0.1.
 - 2026-10-26 v2.0: **Substantive change (SDLC-005)** applying user-approved decisions D-011 (supported Windows: CON-001, NFR-025, AC-040, ASM-001, OQ-010) and D-012 (INT 21h AH=00h: FR-039, FR-041, new AC-064, OQ-022). Changed requirements are `PROPOSED` until re-approval. Set status `Awaiting approval`.
 - 2026-10-26 v2.0: **Approved** by the user (2026-10-26 18:18 +0500: "approve requirements v2.0"). FR-039, FR-041, NFR-025 → APPROVED.
+- 2026-11-03 v2.1: **Substantive change, approved** (D-022, OQ-027): NFR-005 now targets the warm start; the cold start after a Windows restart is measured and reported without a target (known limitation, DEF-023). User 2026-11-03 12:10 +0500: "revise NFR-005 for warm start", then, answering "Do you approve this revision of NFR-005 (warm start ≤ 3 s; the cold start measured and reported without a target, a known limitation) and AC-001 ("a warm start, as defined by NFR-005"), with DEF-023 set to "Won't fix (approved)"?": "Approve as written (Recommended)". Impact checked: the architecture, UI spec and backlog refer to NFR-005 by ID only; no other requirement changed.

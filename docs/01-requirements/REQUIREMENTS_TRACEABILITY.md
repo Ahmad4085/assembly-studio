@@ -4,7 +4,7 @@
 |---|---|
 | Document | Requirements traceability matrix |
 | Status | Approved |
-| Version | 2.8 |
+| Version | 2.9 |
 | Last updated | 2026-10-30 |
 | Depends on | `docs/00-project-overview/project-overview.md` v0.3. `DECISIONS.md` D-006 to D-009 |
 | Requirements set | Approved as one set together with `PRODUCT_REQUIREMENTS.md` |
@@ -118,7 +118,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-1 | — | NFR-002 | P0 | APPROVED | AC-024 | ADR-0003, ADR-0007 | UI-005 | TASK-020, TASK-051, TASK-086 | TC-008, TC-034, TC-042, TC-083, TC-088 | PASS 2026-11-03-1 | QA 2026-11-03-1: Verified |
 | PG-3 | — | NFR-003 | P1 | NEEDS_RESEARCH | AC-056 | ADR-0003 | — | TASK-020 | TC-008, TC-027 | PASS 2026-11-03-1 | QA 2026-11-03-1: Verified |
 | PG-3, PG-4 | — | NFR-004 | P0 | APPROVED | AC-030 | ADR-0007 | UI-002 | TASK-050, TASK-086 | TC-036, TC-088 | PASS 2026-11-03-1 | QA 2026-11-03-1: Verified |
-| PG-2 | — | NFR-005 | P1 | APPROVED | AC-001, AC-056 | ADR-0007 | UI-020 | TASK-060, TASK-086, TASK-108 | TC-008, TC-027, TC-064, TC-065, TC-089 | FAIL (cold start): 7,752 ms after a Windows restart, 2026-11-03 11:19 (DEF-023, OQ-027). Warm starts PASS 2026-11-03-1: median 1,975 ms, max 2,010 ms on the published application (TC-089) | QA 2026-11-03-1: Failed |
+| PG-2 | — | NFR-005 | P1 | APPROVED | AC-001, AC-056 | ADR-0007 | UI-020 | TASK-060, TASK-086, TASK-108 | TC-008, TC-027, TC-064, TC-065, TC-089 | PASS 2026-11-03-1 (warm, NFR-005 v2.1: median 1,975 ms, max 2,010 ms on the published application, TC-089). Cold start 7,752 ms after a restart reported, no target (known limitation, DEF-023) | QA 2026-11-03-1: Failed |
 | PG-2 | — | NFR-006 | P1 | APPROVED | AC-056 | ADR-0005 | — | TASK-040, TASK-086 | TC-008, TC-027, TC-088 | PASS 2026-11-03-1 | QA 2026-11-03-1: Verified |
 | PG-4 | — | NFR-007 | P1 | APPROVED | AC-056 | ADR-0004, ADR-0007 | — | TASK-086 | TC-008, TC-027, TC-088, TC-089 | PASS 2026-11-03-1 | QA 2026-11-03-1: Verified |
 | PG-5 | — | NFR-008 | P0 | APPROVED | AC-001, AC-034 | ADR-0001, ADR-0005, ADR-0007, ADR-0009 | — | TASK-103 | NOT CREATED | NOT RUN | QA 2026-11-03-1: Out of scope |
@@ -168,3 +168,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-11-02 v2.6: Minor (testing phase, `docs/07-testing/test-report-2026-11-02-1.md`). "Test cases" and "Test status" refreshed from test run 2026-11-02-1 (TC IDs from test plan v0.3; TC-074..TC-091 added). FAIL: FR-091, FR-092 (TC-087, DEF-020) and NFR-005 (TC-089, DEF-021). No requirement changed.
 - 2026-11-03 v2.7: Minor (testing phase, `docs/07-testing/test-report-2026-11-03-1.md`). "Test cases" and "Test status" refreshed from test run 2026-11-03-1. NFR-005 FAIL for the cold start (DEF-023); everything else that ran passes. No requirement changed.
 - 2026-11-03 v2.8: Minor (QA phase). "QA status" column added from `docs/08-qa/qa-report-2026-11-03-1.md` (the matrix's planned QA column). No requirement changed.
+- 2026-11-03 v2.9: NFR-005 revised (warm start, D-022): its test status now reads against the warm target. The QA status column still shows QA 2026-11-03-1 (before the revision) until QA runs again.

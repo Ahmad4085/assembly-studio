@@ -24,7 +24,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** the application is installed on a supported Windows version and all network adapters are disabled
 - **When** the user launches it (a warm start, as defined by NFR-005)
 - **Then** the main window with an editable document appears within the NFR-005 target, and no sign-in prompt or network error is shown
-- Verifies: FR-001, NFR-005, NFR-008 · Priority: P0 · Test status: NOT RUN
+- Verifies: FR-001, NFR-005, NFR-008 · Priority: P0 · Test status: NOT RUN for the offline part (same as AC-034: no network change recorded); the timing part passes against NFR-005 v2.1 (warm median 1,975 ms, TC-089)
 
 ### AC-002 Create and open source files
 - **Given** the application is running
@@ -210,7 +210,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** Windows scaling at 100%, 125%, 150% and 200%, on two monitors with different DPI
 - **When** the main window is used and moved between monitors
 - **Then** layouts render without clipping or blurring at a minimum window size of 1024x768
-- Verifies: NFR-026 · Priority: P1 · Test status: NOT RUN
+- Verifies: NFR-026 · Priority: P1 · Test status: PASS (user-reported manual check, not automated): the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working"; the application log (`%LOCALAPPDATA%\AssemblyStudio\logs`) shows one session of the build-folder app at 12:37 (the user: "From the build folder"); the scale settings and contrast theme used were not logged. Waiver WVR-001 (until QA) ends with this check
 
 ### AC-060 Localizable strings
 - **Given** the source code
@@ -314,7 +314,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** networking is disabled and a network monitor is active
 - **When** the user opens a sample, builds, runs, steps and opens a tutorial
 - **Then** every action succeeds and the monitor records no network requests from the application
-- Verifies: FR-001, NFR-008, NFR-009 · Priority: P0 · Test status: NOT RUN
+- Verifies: FR-001, NFR-008, NFR-009 · Priority: P0 · Test status: NOT RUN: the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working", but Windows recorded no network change after 10:51 (Wi-Fi, the only active connection: no WLAN-AutoConfig event since 12:00, checked 12:45) although the user said Airplane mode / Wi-Fi off was used; the record conflicts, so not counted
 
 ### AC-035 Samples verified
 - **Given** the installed application
@@ -344,7 +344,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** Windows Narrator is running and a high-contrast theme is active
 - **When** the user steps a program
 - **Then** Narrator reads register names and values and announces the new paused location, and all text and controls remain readable
-- Verifies: FR-093, FR-094, NFR-022 · Priority: P0 · Test status: NOT RUN (automated). Manual: the user's Narrator checks of the editor (TASK-069) and of the step announcements (TASK-085) on 2026-11-02 passed; the high contrast part has not been checked
+- Verifies: FR-093, FR-094, NFR-022 · Priority: P0 · Test status: PASS (user-reported manual checks, not automated): high contrast: the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working"; the application log (`%LOCALAPPDATA%\AssemblyStudio\logs`) shows one session of the build-folder app at 12:37 (the user: "From the build folder"); the scale settings and contrast theme used were not logged. Narrator: the user's checks of 2026-11-02 (editor, TASK-069; step announcement, TASK-085)
 
 ### AC-045 Output flood
 - **Given** a program printing in an endless loop
@@ -423,3 +423,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-03 v2.4: Minor (testing phase). "Test status" updated from test run 2026-11-03-1. No criterion changed.
 - 2026-11-03 v2.5: **Substantive change, approved** (D-022): AC-001's launch is a warm start, as NFR-005 v2.1 defines it. User 2026-11-03 12:10 +0500: "revise NFR-005 for warm start", then, answering "Do you approve this revision of NFR-005 (warm start ≤ 3 s; the cold start measured and reported without a target, a known limitation) and AC-001 ("a warm start, as defined by NFR-005"), with DEF-023 set to "Won't fix (approved)"?": "Approve as written (Recommended)".
 - 2026-11-03: AC-043 test status: the opt-in keyboard-only test passed on the current build (12:12). No criterion changed.
+- 2026-11-03: Test status of AC-059 and AC-044 from the user's manual checks (user-reported); AC-001 and AC-034 stay not run: the user reported the offline check passed, but Windows recorded no network change. No criterion changed.

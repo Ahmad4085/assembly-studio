@@ -2066,3 +2066,11 @@
 - **Summary:** The user asked "run the keyboard test" (D-018: opt-in, with the user's agreement and away from the PC). `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release --no-build --filter-method '*AC_043_the_core_workflow_works_by_keyboard_alone*' --output Detailed` (12:12:15–12:12:33): 1 total, 1 passed. PASS 2026-11-03 12:12 +0500 (TC-087 `UiSmokeTests.AC_043_…` with real keys, opt-in run at the user's request "run the keyboard test", D-018; build of commit `42ac233`, code as of `e6af964`): Learn sidebar → Hello, World sample → editor → build, breakpoint, run, step → registers read "AX 0924, changed; AH 09; AL 24, changed"; focus in the application after every step.
 - **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md` (AC-043 status), `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** the remaining manual checks (AC-059, AC-044, AC-001/AC-034 offline), then `/assembly-qa` again.
+
+### 2026-11-03 12:45 +0500 · Claude Code (Opus 5.5) · QA manual checks reported by the user
+- **Summary:** the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working". Checked the records before recording (read-only):
+  - Application log: normal launches today at 10:31 (before the 10:49 restart) and 12:37 (build-folder app, 3,839 ms: its first start since the restart, a cold start). At the first report (about 12:20) there was no session after 10:31.
+  - Windows network logs: NetworkProfile events only 10:49–10:51; no WLAN-AutoConfig event since 12:00; Wi-Fi is the only active adapter and is up. The user said the offline check used Airplane mode / Wi-Fi off, which would have been recorded.
+  - Recorded: AC-059 and AC-044 (high contrast) as user-reported passes (WVR-001 ends); AC-001/AC-034 offline **not verified** (the report conflicts with the record).
+- **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the offline check with the network really off; then `/assembly-qa` again.

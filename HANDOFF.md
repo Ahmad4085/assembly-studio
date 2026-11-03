@@ -8,7 +8,7 @@
 | Written | 2026-11-03 12:11 +0500 by Claude Code (Opus 5.5), after the NFR-005 revision |
 | Current task | **None in progress. Next: the user's manual checks, then `/assembly-qa` again** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
-| Git state | HEAD `5f0b55b`; NFR-005 revision **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `fe5753c` (NFR-005 revision committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -122,7 +122,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user says "commit" for the NFR-005 revision (then commit and record the hash here).
+1. Done: NFR-005 revision committed (`fe5753c`).
 2. The user's manual checks from `docs/08-qa/qa-report-2026-11-03-1.md` §5: AC-059 (due now, WVR-001), AC-043 (real keys, user away), AC-044 (Narrator, high contrast), AC-001/AC-034 offline.
 3. Then `/assembly-qa` again (NFR-005 is now judged against the warm start).
 4. Propose fix tasks for DEF-022 and DEF-024; list the cold start in the help and release notes (known limitation, D-022). User: TASK-006, TASK-100, DEF-003 decision, OQ-026.

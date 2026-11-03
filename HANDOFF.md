@@ -8,7 +8,7 @@
 | Written | 2026-11-03 12:03 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-1 |
 | Current task | **None in progress. QA verdict Fail (AC-001 timing, DEF-023): waiting for the user's decision OQ-027** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
-| Git state | HEAD `9fa7904`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `5c5ee27` (QA 2026-11-03-1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -120,7 +120,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+1. Done: QA report committed (`5c5ee27`).
 2. The user decides OQ-027 (NFR-005 cold start): a deployment change (ADR-0009, new task), a requirements update of NFR-005/AC-001, or keeping the target (QA stays Fail).
 3. The user's manual checks from the QA report §5: AC-059 (due now, WVR-001), AC-043 (real keys, user away), AC-044 (Narrator, high contrast), AC-001/AC-034 offline.
 4. Then `/assembly-qa` again. Open fix tasks still to propose: DEF-022, DEF-024. User: TASK-006, TASK-100, DEF-003 decision, OQ-026.

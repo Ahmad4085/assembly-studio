@@ -2079,3 +2079,11 @@
 - **Summary:** the user: "i check offline its working and i chek install version and build version both work". Records checked (read-only): Windows recorded Wi-Fi (the only active connection) disconnected 12:47:09–12:47:40 on 2026-11-03 (WLAN-AutoConfig 8003/8001, NetworkProfile 10001/10000); the application log shows a start at 12:47:23 during that time, first frame 1,994 ms, no warning or error. Recorded AC-001 offline part as verified and AC-034 as a user-reported pass (the record covers about 17 s of offline use).
 - **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** `/assembly-qa` again.
+
+### 2026-11-03 12:53 – 2026-11-03 12:55 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-03-2
+- **Summary:** Ran `/assembly-qa` (user request; gate: no code change since test report 2026-11-03-1). QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024.
+  - Re-derived each requirement's QA status from its acceptance criteria (a recorded pass counts, automated, from the records or user-reported; user-reported ones are named). Traceability v2.10.
+  - My first patch of the derivation script failed on escaped newlines and the unpatched script ran twice, duplicating a changelog line; removed, the rule fixed with the editor (FR-094 had been left "not verified" although its only criterion passed), and rerun.
+- **Files changed:** `docs/08-qa/qa-report-2026-11-03-2.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted QA documents on top of `1b858f2`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the QA conditions; then `/assembly-release`.

@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 12:11 +0500 by Claude Code (Opus 5.5) (NFR-005 revised for the warm start, D-022) |
+| Last updated | 2026-11-03 12:55 +0500 by Claude Code (Opus 5.5) (QA 2026-11-03-2: Pass with conditions) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-qa` again (every manual check now has a result). Fix tasks to propose: DEF-022, DEF-024; the cold start in the help and release notes. User: TASK-100, TASK-006, DEF-003 decision, OQ-026 |
+| Next recommended action | The conditions of QA 2026-11-03-2: user actions TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; fix tasks for DEF-022/DEF-024 and the known-limitations text; then `/assembly-release <version>`. DEF-003 decision, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| QA (report 2026-11-03-2) | 2026-11-03 12:55 +0500 | QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024 |
 | QA offline check | 2026-11-03 12:48 +0500 | AC-001 offline verified from Windows' and the app's records (start at 12:47:23 while Wi-Fi was off 12:47:09–12:47:40); AC-034 user-reported, partly corroborated |
 | QA manual checks (user) | 2026-11-03 12:45 +0500 | AC-043 passed with real keys (12:12); AC-059 scaling and AC-044 high contrast user-reported passed (WVR-001 ends); AC-001/AC-034 offline **not verified**: reported passed, but Windows recorded no network change |
 | Requirements change: NFR-005 warm start | 2026-11-03 12:11 +0500 | NFR-005 revised for the warm start (D-022, approved 2026-11-03 12:11 +0500; NFR v2.1, AC v2.5): OQ-027 answered, DEF-023 Won't fix (approved), AC-056 passes against the new target; AC-001 still needs its offline check; QA must run again |

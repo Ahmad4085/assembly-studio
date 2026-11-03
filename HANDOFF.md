@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 12:11 +0500 by Claude Code (Opus 5.5), after the NFR-005 revision |
-| Current task | **None in progress. Next: the user's manual checks, then `/assembly-qa` again** |
-| Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
-| Git state | HEAD after `b1f9a73` (offline-check records committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 12:55 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-2 |
+| Current task | **None in progress. QA: Pass with conditions; next: the conditions (release tasks)** |
+| Last completed | QA, `docs/08-qa/qa-report-2026-11-03-2.md` (2026-11-03 12:55 +0500): Pass with conditions |
+| Git state | HEAD `1b858f2`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **QA 2026-11-03-2** (Claude Code; documents only): QA verdict **Pass with conditions** (`docs/08-qa/qa-report-2026-11-03-2.md`): no P0 acceptance criterion fails, no Critical or High defect open; P0 69 verified (some user-reported), 6 not verified, all tied to unbuilt release tasks; conditions: TASK-103 clean-machine install (rebuild the installer with ReadyToRun first), TASK-100/102 notices, TASK-104/105, known limitations in the help and release notes, user-reported evidence accepted as such, Low defects DEF-003/022/024.
+
 - **Requirements change (approved):** NFR-005 revised for the warm start (D-022, approved 2026-11-03 12:11 +0500; NFR v2.1, AC v2.5): OQ-027 answered, DEF-023 Won't fix (approved), AC-056 passes against the new target; AC-001 still needs its offline check; QA must run again.
 
 - **QA 2026-11-03-1** (Claude Code; documents only): QA verdict **Fail** (`docs/08-qa/qa-report-2026-11-03-1.md`): AC-001 (FR-001, P0) fails on its NFR-005 timing (cold start 7,752 ms, DEF-023); P0 64 verified, 1 failed, 10 not verified; P1 32 verified, 1 failed (NFR-005), 7 not verified; no Critical defect; code checks clean (no network APIs, no fake data, no hard-coded colors). Traceability has a "QA status" column now.
@@ -122,10 +124,10 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: NFR-005 revision committed (`fe5753c`).
-2. Done: every manual check has a result: AC-043 (real keys, 12:12), AC-059 and AC-044 high contrast (user-reported), AC-001 offline (verified from the records, 12:47), AC-034 (user-reported, partly corroborated).
-3. Then `/assembly-qa` again (NFR-005 is now judged against the warm start).
-4. Propose fix tasks for DEF-022 and DEF-024; list the cold start in the help and release notes (known limitation, D-022). User: TASK-006, TASK-100, DEF-003 decision, OQ-026.
+1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+2. The QA conditions (report §4): the user's TASK-006 and TASK-100; then `/assembly-implement` TASK-070, TASK-102, TASK-103 (rebuild the installer first: it now publishes with ReadyToRun), TASK-104, and the user-run TASK-105.
+3. Propose fix tasks: DEF-022, DEF-024, and the known-limitations text (cold start D-022, Variables panel limits) for the help and release notes.
+4. Then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

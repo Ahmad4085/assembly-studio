@@ -2142,3 +2142,11 @@
 - **Tests executed:** `ThemeTokenTests` 22/22 (after fixing three CA1861 analyzer errors in my test); mutation caught; `SettingsUiTests` 3/3; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice: 1560 total + 6 UI, 1556 + 3 passed, 4 + 3 skipped, 0 failed (15:45–15:50, 15:50–15:54).
 - **Git state after:** uncommitted TASK-112 changes on top of `35e0714`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then `/assembly-test`.
+
+### 2026-11-03 16:11 – 16:37 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-03-2
+- **Summary:** Ran `/assembly-test` (user request). 1566 tests: 1559 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,562 ms); coverage engine 99.6%, runtime 93.8% (run incomplete: DEF-011 clipboard under coverage); 54 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 6 not run; DEF-022, 024, 025, 026 verified.
+  - The user's Assembly Studio (pid 25200) was open; the measurement script publishes through its folder, so I asked; the user chose "I'll close the app" and closed it (checked at 16:31) before the measurements.
+- **Commands:** `dotnet build AssemblyStudio.slnx -c Release` (0 warnings); `powershell -File build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/2026-11-03-2` (16:13–16:18: 1560 + 6 total, 1556 + 3 passed, 4 + 3 skipped, 0 failed); `build/coverage.ps1 -NoBuild` (16:18–16:25, exit 1: `EditorTests.AC_010_…` clipboard, DEF-011); `build/bench/run-e2e.ps1` (16:31–16:35, exit 0, 7/7).
+- **Files changed:** `docs/07-testing/{test-report-2026-11-03-2.md (new), test-plan.md, defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `813137e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the QA conditions (release tasks).

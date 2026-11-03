@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.8 |
+| Version | 0.9 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-03-1.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-03-2.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -123,15 +123,15 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-079 | `App.Tests.Commands.CommandTableTests` | UI / view model | AC-013, AC-017, FR-091, UI-016, TASK-065, TASK-080, TASK-085 | 6 |
 | TC-080 | `App.Tests.Panels.ConsoleTests` | UI / view model (real NASM and session) | AC-022, AC-023, AC-045, FR-063, FR-064, NFR-015, UI-010, TASK-080, TASK-084 | 25 |
 | TC-081 | `App.Tests.Panels.CpuTests` | UI / view model (real NASM and session) | AC-025, AC-037, AC-052, FR-047, FR-057, NFR-018, UI-005, UI-006, TASK-081, DEF-008 | 17 |
-| TC-082 | `App.Tests.Panels.MemoryTests` | UI / view model (real NASM and session) | AC-026, FR-054, NFR-018, UI-008, UI-009, TASK-082 | 20 |
+| TC-082 | `App.Tests.Panels.MemoryTests` | UI / view model (real NASM and session) | AC-026, FR-054, NFR-018, UI-008, UI-009, TASK-082 | 21 |
 | TC-083 | `App.Tests.Panels.SessionPanelsTests` | UI / view model (real NASM and session) | AC-024, AC-028, AC-029, AC-031, AC-048, AC-049, FR-041, FR-042, FR-052, FR-058, UI-007, UI-012, UI-013, UI-014, TASK-083 | 9 |
 | TC-084 | `Runtime.Tests.RuntimeMessageTests` | Unit (runtime) | FR-038, FR-040, FR-066, TASK-083 | 3 |
 | TC-085 | `App.Tests.Accessibility.EditorAccessibilityTests` | UI / UI Automation | FR-093, NFR-022, TASK-069 | 2 |
-| TC-086 | `App.Tests.Panels.AnnouncementTests` | UI / view model | FR-093, TASK-085 | 3 |
+| TC-086 | `App.Tests.Panels.AnnouncementTests` | UI / view model | FR-093, TASK-085 | 4 |
 | TC-087 | `App.UiTests.UiSmokeTests` | UI (real process, FlaUI) | AC-043, FR-091, FR-092, TASK-085 | 2 |
 | TC-088 | `App.Tests.Performance.EndToEndPerformanceTests` | UI, performance (opt-in) | AC-030, NFR-002, NFR-004, NFR-006, NFR-007, TASK-086 | 4 |
 | TC-089 | `App.UiTests.PerformanceTests` | UI (real process), performance (opt-in) | NFR-005, NFR-007, TASK-086, DEF-017 | 2 |
-| TC-090 | `App.Tests.Panels.VariablesTests` | UI / view model (real NASM and session) | AC-065, FR-057, FR-097, NFR-018, UI-023, TASK-106 | 18 |
+| TC-090 | `App.Tests.Panels.VariablesTests` | UI / view model (real NASM and session) | AC-065, FR-057, FR-097, NFR-018, UI-023, TASK-106 | 19 |
 | TC-091 | `App.Tests.Editor.FindReplaceTests` | UI / view model | AC-011, FR-015, FR-016, FR-017, UI-004, TASK-065 | 22 |
 | TC-092 | `App.UiTests.AppUnderTestTests` | UI test harness | DEF-020, TASK-107 | 2 |
 | TC-093 | `App.Tests.Logging.StartupTimelineTests` | Unit (startup diagnostics) | NFR-005, DEF-021, TASK-108 | 2 |
@@ -179,3 +179,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.6: Test run 2026-11-03-1: counts refreshed; the full suite ran as the two steps of `build/test.ps1` (the script's `--` pass-through fails, DEF-024).
 - 2026-11-03 v0.7: TASK-110: `build/test.ps1 -ResultsDirectory` replaces the `--` pass-through (DEF-024).
 - 2026-11-03 v0.8: TASK-112: TC-066 covers the control tokens, 120 contrast pairs per theme and the themed controls in a real window (22 tests).
+- 2026-11-03 v0.9: Test run 2026-11-03-2: counts refreshed.

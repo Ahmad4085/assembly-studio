@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 15:55 +0500 by Claude Code (Opus 5.5) (TASK-112 done) |
+| Last updated | 2026-11-03 16:37 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-2) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-test` (verify DEF-022/024/025/026); the QA conditions: the user's TASK-006 and TASK-100, then TASK-070, 102, 103 (rebuild the installer first), 104, 105, the known-limitations text; then `/assembly-release <version>`. DEF-003 decision, OQ-026 |
+| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 104, 105; the known-limitations text; then `/assembly-qa` and `/assembly-release <version>`. DEF-003 decision, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Testing phase (report 2026-11-03-2) | 2026-11-03 16:37 +0500 | 1566 tests: 1559 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,562 ms); coverage engine 99.6%, runtime 93.8% (run incomplete: DEF-011 clipboard under coverage); 54 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 6 not run; DEF-022, 024, 025, 026 verified; traceability v2.11, AC v2.6, test plan v0.9 |
 | TASK-112 Themed input controls | 2026-11-03 15:55 +0500 | Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one. TC-066 22 tests, 120 contrast pairs per theme; full solution 1559 passed + 7 skipped twice |
 | Design v1.1 approved (UI spec, design tokens: themed input controls) | 2026-11-03 15:30 +0500 | User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1" |
 | Design revision v1.1 (themed input controls) | 2026-11-03 15:22 +0500 | UI spec v1.1 and design tokens v1.1 (themed input controls: `Control.Input/Button/Hover/Pressed/Selected`, `Accent.Primary.Hover`, `Size.Control`, `Size.CheckBox`; TextInput, Button, CheckBox, ComboBox conventions as implicit styles; 50 contrast pairs measured, all passing) **Awaiting approval** |
@@ -146,7 +147,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-1: **no failed test**; AC-056 passes against the revised NFR-005 (warm start, D-022); DEF-023 Won't fix (approved). Verified: DEF-006, 009, 010, 013, 017, 018, 019, 020, 021. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-022, DEF-024; DEF-025 and DEF-026 Fixed (unverified) in TASK-111, DEF-027 (Low, Open); DEF-022 Fixed (unverified); DEF-024 Fixed (unverified) in TASK-110 |
+| Failed tests / open defects | Test report 2026-11-03-2: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

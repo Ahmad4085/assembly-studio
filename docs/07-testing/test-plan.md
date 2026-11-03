@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.5 |
+| Version | 0.6 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-02-1.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-03-1.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -176,3 +176,4 @@ has a defect; no unexplained failure.
 - 2026-11-02 v0.3: Testing phase run 2026-11-02-1 (Claude Code (Opus 5.5)): TC-074..TC-091 added for the test classes of TASK-064..086, 065 and 106 (one per class, IDs as the classes name them); test counts refreshed from the run; scope, levels (FlaUI UI tests, opt-in end-to-end measurements) and limitations updated.
 - 2026-11-02 v0.4: TASK-107: TC-092 `AppUnderTestTests`; the full-suite command is `build/test.ps1` (UI tests run on their own).
 - 2026-11-03 v0.5: TASK-108: TC-093 `StartupTimelineTests`; the NFR-005 and NFR-007 process measurements (TC-089) run on the application as the installer publishes it (`run-e2e.ps1` sets `ASSEMBLY_STUDIO_APP_EXE`); the cold start after a reboot is `build/bench/cold-start.ps1` (user-run).
+- 2026-11-03 v0.6: Test run 2026-11-03-1: counts refreshed; the full suite ran as the two steps of `build/test.ps1` (the script's `--` pass-through fails, DEF-024).

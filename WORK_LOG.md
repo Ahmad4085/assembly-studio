@@ -2036,3 +2036,12 @@
   - TASK-108 closed Done on the user's request: its scope (measure, speed up, measure a cold start) is done and the cold start is recorded. NFR-005 fails for a cold start: DEF-023 (High, Open) and OQ-027 (deployment or target) for the user.
 - **Files changed:** `docs/06-implementation/task-108-verification.md`, `docs/07-testing/defects.md` (DEF-023), `docs/01-requirements/{OPEN_QUESTIONS.md (OQ-027), REQUIREMENTS_TRACEABILITY.md (NFR-005)}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** the user decides OQ-027; then `/assembly-qa`.
+
+### 2026-11-03 11:23 – 2026-11-03 11:43 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-03-1
+- **Summary:** `/assembly-qa` stopped at its gate (the last report was older than TASK-107/108); the user then ran `/assembly-test`. Result: 1560 tests: 1553 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,975 ms); coverage complete (engine 99.6%, runtime 93.8%, total 90.2%); 53 of 65 acceptance criteria pass, AC-056 fails (NFR-005 cold start 7,752 ms, DEF-023), 11 not run; DEF-020 and DEF-021 verified; DEF-024 new (`build/test.ps1` `--` options).
+  - `build/test.ps1 -NoBuild -- …` failed to start (PowerShell read `--` as a parameter): DEF-024. The run used the script's two `dotnet test` steps directly, with the result options.
+  - Inventory unchanged (TC-001..TC-093; five helper classes without tests). No test added, deleted or skipped; no code changed.
+- **Commands:** `dotnet build AssemblyStudio.slnx -c Release` (0 warnings); `build/coverage.ps1 -NoBuild` (11:25–11:34, exit 0); `build/bench/run-e2e.ps1` (11:34–11:36, exit 0); `dotnet test --solution … --filter-not-namespace AssemblyStudio.App.UiTests --ignore-exit-code 8 --results-directory artifacts/test-results/2026-11-03-1 --report-xunit-trx --report-xunit-xml` (11:36–11:41: 1554 total, 1550 passed, 4 skipped); `dotnet test --project tests/AssemblyStudio.App.UiTests …` (6 total, 3 passed, 3 skipped).
+- **Files changed:** `docs/07-testing/{test-report-2026-11-03-1.md (new), test-plan.md, defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md, ACCEPTANCE_CRITERIA.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `d1c9577`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** `/assembly-qa`.

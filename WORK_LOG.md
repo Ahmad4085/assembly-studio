@@ -2116,3 +2116,15 @@
 - **Tests executed:** Release build 0 warnings; run 1 (14:12–14:17, `-ResultsDirectory artifacts/test-results/task110-relative`): 12 TRX + 12 XML written; 1552 + 3 passed, 1 failed (`HostileProgramTests.AC_045_…`, "Only 990719 bytes written" in 30 s: a load-sensitive engine test, DEF-027); run 2 (14:17–14:21, an absolute directory): 12 TRX + 12 XML; 1553 + 3 passed, 0 failed; run 3 (14:22–14:26, no option): 1553 + 3 passed, 0 failed, no result file written. Checked the TRX timestamps: the newest is 14:21:36 (run 2), none from run 3.
 - **Git state after:** uncommitted TASK-110 changes on top of `352d5e7`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then `/assembly-test` and the QA conditions.
+
+### 2026-11-03 15:22 +0500 · Claude Code (Opus 5.5) · `/assembly-design`: themed input controls (UI spec and tokens v1.1)
+- **Summary:** Ran `/assembly-design` (user request, no argument). The approved spec had several gaps; asked the scope; the user chose "Themed input controls only". UI spec v1.1 and design tokens v1.1 (themed input controls: `Control.Input/Button/Hover/Pressed/Selected`, `Accent.Primary.Hover`, `Size.Control`, `Size.CheckBox`; TextInput, Button, CheckBox, ComboBox conventions as implicit styles; 50 contrast pairs measured, all passing) **Awaiting approval**.
+  - Contrast measured with the WCAG 2.2 formula (`scratchpad/contrast.py`): Dark 25/25, Light 25/25; dark `Control.Button` changed from `#34373D` (exactly 3.00:1 against `Border.Strong`) to `#303237` (3.23:1).
+  - Left open (out of the chosen scope): the spec's *Depends on* requirement versions, state-matrix rows for UI-004 and UI-023, OQ-026.
+- **Files changed:** `docs/04-design/{design-tokens.md, ui-spec.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the user answers the gate question.
+
+### 2026-11-03 15:30 +0500 · Claude Code (Opus 5.5) · Design v1.1 approved
+- **Summary:** User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1". Both documents set `Approved` with the approval in their changelogs. Nothing is implemented yet: the styles need their own task.
+- **Files changed:** `docs/04-design/{design-tokens.md, ui-spec.md}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** propose the implementation task for the themed controls.

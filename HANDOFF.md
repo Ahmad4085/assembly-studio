@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 14:27 +0500 by Claude Code (Opus 5.5), after TASK-110 |
-| Current task | **None in progress. The approved fix tasks are done; next: `/assembly-test`, then the QA conditions** |
+| Written | 2026-11-03 15:30 +0500 by Claude Code (Opus 5.5), after the design v1.1 approval |
+| Current task | **None in progress. Design v1.1 approved; next: a task to implement the themed control styles** |
 | Last completed | TASK-110 Test script options (Done 2026-11-03 14:27 +0500) |
-| Git state | HEAD after `99f2dd9` (TASK-110 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `38b6a49`; design v1.1 documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Design v1.1** (Claude Code; documents only): UI spec v1.1 and design tokens v1.1 (themed input controls: `Control.Input/Button/Hover/Pressed/Selected`, `Accent.Primary.Hover`, `Size.Control`, `Size.CheckBox`; TextInput, Button, CheckBox, ComboBox conventions as implicit styles; 50 contrast pairs measured, all passing) **Awaiting approval**.
+
 - **TASK-110** (Claude Code, Done, committed `99f2dd9`): `build/test.ps1 -ResultsDirectory <dir>` (relative or absolute) makes both steps write TRX and xUnit XML results; the broken `--` pass-through is gone; the script help and test plan §4 (v0.7) say so (DEF-024). A test-phase run: `powershell -File build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/<run>`.
 
 - **TASK-111** (Claude Code, Done, committed `bfdf168`): Missing memory windows and repeated announcements: both panels look their window up with `MemoryViewModel.FindWindow` (null when the snapshot has none; `MemoryWindow` is a struct, DEF-025); announcements are made once per (state, instruction count) and reset when a session ends (DEF-026). Use `MemoryViewModel.FindWindow` for any new memory-window lookup.
@@ -130,9 +132,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-110 committed (`99f2dd9`).
-2. `/assembly-test` to verify DEF-022, DEF-024, DEF-025, DEF-026 (Fixed (unverified)), with `build/test.ps1 -ResultsDirectory`.
-3. The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; the known-limitations text (cold start D-022, Variables panel limits); then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
+1. Done: UI spec v1.1 and design tokens v1.1 approved (2026-11-03 15:30 +0500).
+2. After approval: a task implements the implicit control styles in `Themes/*.xaml` and `Shell/ShellStyles.xaml` plus the 50 contrast pairs in TC-066 (through `/assembly-plan` or a proposed task for approval).
+3. `/assembly-test` to verify DEF-022/024/025/026; the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -4,9 +4,9 @@
 |---|---|
 | Document | UI/UX specification |
 | Status | Approved |
-| Version | 1.0 |
-| Last updated | 2026-10-26 |
-| Depends on | `docs/01-requirements/` set v2.0, `docs/03-architecture/architecture.md` v1.0, ADR-0006, ADR-0007 v1.1, `docs/04-design/design-tokens.md` v1.0 |
+| Version | 1.1 |
+| Last updated | 2026-11-03 |
+| Depends on | `docs/01-requirements/` set v2.0, `docs/03-architecture/architecture.md` v1.0, ADR-0006, ADR-0007 v1.1, `docs/04-design/design-tokens.md` v1.1 |
 
 This spec defines what to build. It builds nothing. All visual values come from `design-tokens.md`. Quality bar:
 `docs/sdlc/guides/desktop-ui-quality.md`.
@@ -219,8 +219,14 @@ mode overrides both. All 166 measured contrast pairs pass WCAG 2.2 AA (text ≥ 
 | EmptyState | Title, one-sentence explanation, primary action | `EmptyState.*` |
 | MessageDialog | What happened, where, next step, actions (default = safest) | `MessageDialog.*` |
 | CommandButton | Icon + text label (labels visible on the command bar ≥ 1280 px, tooltips always) | `CommandButton.*` |
+| TextInput (v1.1) | Field `Control.Input`, 1 px `Border.Strong`, text `Text.Primary`, hint `Text.Muted`. States: rest, hover (border `Text.Muted`), focused (2 px `Focus.Ring`), invalid (border `Status.Error` + the reason in text below, e.g. Go to Line), disabled (`Text.Disabled`, `Border.Subtle`). Height `Size.Control`, `Radius.Small` | implicit `TextBox` style |
+| Button (v1.1) | Secondary: `Control.Button`, 1 px `Border.Strong`, text `Text.Primary`; hover `Control.Hover`; pressed `Control.Pressed`. Default (Enter, `IsDefault`): `Accent.Primary` fill, `Text.OnAccent` text, hover `Accent.Primary.Hover`. Focused: 2 px `Focus.Ring` outside the border. Disabled: `Text.Disabled`, `Border.Subtle`. Icon-only buttons (find bar arrows, close) keep a tooltip and UIA name | implicit `Button` style (command bar keeps `CommandButton`) |
+| CheckBox (v1.1) | `Size.CheckBox` square in `Control.Input` with 1 px `Border.Strong`; check mark glyph `Text.Primary` (Segoe Fluent Icons); label `Text.Primary` with access key; hover border `Text.Muted`; focus ring around square and label | implicit `CheckBox` style |
+| ComboBox (v1.1) | Field as TextInput plus a chevron glyph (`Text.Primary`); drop-down on `Surface.Raised` with `Elevation.Popup`; item hover `Control.Hover`, selected `Control.Selected` with `Text.Primary` | implicit `ComboBox` style |
 
-Rules: views use only token resources (no literals). Design-time data (`d:DataContext`) only, never sample machine data at run time
+Rules: views use only token resources (no literals). The four standard controls get **implicit typed styles** in the shell resources,
+so every instance in every window is themed without per-use styling (v1.1; today: the find bar, Go to Line, the memory address field
+and Go, Settings, About, message dialogs, the Breakpoints panel actions, the welcome page buttons and the number format box). Design-time data (`d:DataContext`) only, never sample machine data at run time
 (NFR-018). Icons are vector (Segoe Fluent Icons / Segoe MDL2 Assets are Windows system fonts. Availability on Windows 10 LTSC
 [Unverified → shell task]).
 
@@ -248,3 +254,5 @@ publish (≤ 30/s while running) [Hypothesis: negligible, validated by the sessi
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:03 +0500: "approve" (reply to the gate question naming ui-spec v0.1, design tokens v0.1, the ADR-0007 v1.1 amendment and the Ctrl+C proposal)).
 - 2026-11-01: UI-005 changed by the user's request (D-017): the 8-bit halves are shown on the rows of AX–DX instead of on expand; register values in boxes. No other change.
 - 2026-11-02: UI-023 Variables panel added by the user's request (D-020, FR-097). No other change.
+- 2026-11-03 15:21 +0500 v1.1: **Substantive** (`/assembly-design`, scope chosen by the user: "Themed input controls only"): §9 component conventions for TextInput, Button, CheckBox and ComboBox (implicit styles, all states) using design tokens v1.1. Out of this run's scope and still open: the *Depends on* requirement versions (now FR v2.1, NFR v2.1, AC v2.5), state-matrix rows for UI-004 and UI-023, and OQ-026. Status `Awaiting approval`.
+- 2026-11-03 v1.1: **Approved** by the user (User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1"; OQ-024 and OQ-026 remain open).

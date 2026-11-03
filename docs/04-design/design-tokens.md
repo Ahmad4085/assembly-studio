@@ -4,9 +4,9 @@
 |---|---|
 | Document | Design tokens |
 | Status | Approved |
-| Version | 1.0 |
-| Last updated | 2026-10-26 |
-| Depends on | `docs/04-design/ui-spec.md` v1.0, `docs/sdlc/guides/desktop-ui-quality.md` |
+| Version | 1.1 |
+| Last updated | 2026-11-03 |
+| Depends on | `docs/04-design/ui-spec.md` v1.1, `docs/sdlc/guides/desktop-ui-quality.md` |
 
 Tokens are **semantic**: views reference token names only, never raw colors or sizes. Each theme is a WPF resource dictionary
 (`Themes/Dark.xaml`, `Themes/Light.xaml`, `Themes/HighContrast.xaml`) defining every token key. The default theme follows the Windows
@@ -39,6 +39,23 @@ app mode (dark or light). Windows high-contrast mode overrides both (§3).
 | `Status.Info` | `#79B8FF` | `#0B5CAD` | Info text and icons |
 | `Status.Success` | `#5FB870` | `#1E7B34` | Build succeeded, normal termination |
 | `Value.Changed` | `#FFD866` | `#8A4500` | Changed register/flag/memory value (always with a non-color cue) |
+
+### Control tokens (v1.1: text boxes, buttons, check boxes, combo boxes)
+Standard input controls are themed like the rest of the window (before v1.1 they kept the Windows system look: bright white boxes and
+grey buttons in the dark theme). Boundaries, focus and text reuse the tokens above; only the control surfaces are new.
+
+| Token | Dark | Light | Use |
+|---|---|---|---|
+| `Control.Input` | `#1B1C1F` | `#FFFFFF` | Text box and combo box field, check box square |
+| `Control.Button` | `#303237` | `#EEF0F3` | Button at rest (a dialog's or panel's secondary actions) |
+| `Control.Hover` | `#3D4148` | `#E2E5EA` | Button, combo box and drop-down item under the pointer |
+| `Control.Pressed` | `#474B53` | `#D3D7DD` | Button pressed |
+| `Control.Selected` | `#1D3550` | `#DCEBFF` | Selected item in a combo box drop-down |
+| `Accent.Primary.Hover` | `#7AB4FF` | `#0A4FAB` | Default button (Enter) under the pointer |
+
+Reused for controls: `Border.Strong` (1 px boundary), `Focus.Ring` (2 px when focused), `Text.Primary` (text, check mark, drop-down
+chevron), `Text.Muted` (hints), `Text.Disabled` with `Border.Subtle` (disabled), `Status.Error` (an invalid entry's border and message),
+`Accent.Primary` with `Text.OnAccent` (the default button). Text selection inside a text box uses `Accent.Primary` at 40 % opacity.
 
 ### Syntax tokens (editor, NASM 8086)
 | Token | Dark | Light | Highlights |
@@ -80,6 +97,21 @@ Targets: text ≥ 4.5:1; UI components, glyphs and squiggles ≥ 3:1. `Border.Su
 
 The full pair list (166 pairs: text and code text on every background including current, execution and selection lines; focus ring, control borders, accent, glyphs and squiggles on window, panel, editor, gutter and execution-line backgrounds) must be re-measured whenever a token changes (by that theme test).
 
+### Control pairs (v1.1) [Measured]
+Computed with the same WCAG 2.2 formula on 2026-11-03 for the control tokens: text and hints on every control surface; `Border.Strong`
+and `Focus.Ring` on every surface a control sits on and on the control's own fill; the check mark and chevron (3:1); the default button.
+**Dark: 25/25 pass. Light: 25/25 pass.** Lowest margins:
+
+| Theme | Foreground | Background | Kind | Minimum | Measured |
+|---|---|---|---|---|---|
+| Dark | `Border.Strong` | `Control.Button` | UI component | 3.0:1 | **3.23:1** |
+| Dark | `Border.Strong` | `Surface.Raised` | UI component | 3.0:1 | **3.47:1** |
+| Light | `Border.Strong` | `Control.Button` | UI component | 3.0:1 | **3.34:1** |
+| Light | `Border.Strong` | `Surface.Window` | UI component | 3.0:1 | **3.47:1** |
+
+(A first value of `#34373D` for dark `Control.Button` measured exactly 3.00:1 against `Border.Strong` and was darkened for margin.)
+The automated theme contrast test (TC-066) must add these 50 pairs when the tokens are implemented.
+
 ## 3. High-contrast mapping
 In Windows high-contrast mode, **all** color tokens map to system colors (`SystemColors.*BrushKey` dynamic resources). Meaning is carried by
 shape, glyph and weight, never by hue alone:
@@ -94,6 +126,10 @@ shape, glyph and weight, never by hue alone:
 | `Focus.Ring`, `Border.Strong` | `WindowTextBrush` (2 px) |
 | `Editor.ExecutionLine` | `HighlightBrush` outline (1 px) + arrow glyph in `WindowTextBrush` |
 | `Accent.Breakpoint`, `Accent.ExecutionArrow`, `Status.*`, `Value.Changed` | `WindowTextBrush`. Glyph shape (●, ➜, ⨯, ▲, ⓘ) and bold weight carry the meaning |
+| `Control.Input` (+ text) | `WindowBrush` / `WindowTextBrush` (v1.1) |
+| `Control.Button` (+ text) | `ControlBrush` / `ControlTextBrush` (button face, v1.1) |
+| `Control.Hover`, `Control.Pressed`, `Control.Selected` (+ text) | `HighlightBrush` / `HighlightTextBrush` (v1.1) |
+| `Accent.Primary.Hover` | `HotTrackBrush` (v1.1); the default button also has a 2 px `WindowTextBrush` border |
 
 ## 4. Typography
 | Token | Value | Notes |
@@ -120,6 +156,8 @@ and verify at 200 %, NFR-026].
 | `Size.Gutter.Breakpoint` | 16 px |
 | `Size.MinWindow` | 1024 × 768 (NFR-026) |
 | `Radius.Small` / `Radius.Medium` | 2 px (inputs, badges) / 4 px (popups, dialogs) |
+| `Size.Control` | 24 px minimum height of text boxes, buttons and combo boxes; padding `Space.2` horizontal, `Space.1` vertical (v1.1) |
+| `Size.CheckBox` | 14 px square, `Space.2` gap to its label (v1.1) |
 | `Elevation.Flat` | Panels and docked areas use 1 px `Border.Subtle` separators, no shadows |
 | `Elevation.Popup` | Menus, tooltips, dialogs: 1 px `Border.Strong` + 8 px soft shadow (disabled in high contrast) |
 | `Motion.Fast` | 120 ms ease-out (panel collapse, banners). **No motion while running or stepping** |
@@ -128,3 +166,5 @@ and verify at 200 %, NFR-026].
 ## Changelog
 - 2026-10-26 v0.1: Initial tokens (SDLC-007). All 166 contrast pairs measured, all passing.
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:03 +0500: "approve" (reply to the gate question naming ui-spec v0.1, design tokens v0.1, the ADR-0007 v1.1 amendment and the Ctrl+C proposal)).
+- 2026-11-03 15:21 +0500 v1.1: **Substantive** (`/assembly-design`, scope chosen by the user: "Themed input controls only"): control tokens `Control.Input`, `Control.Button`, `Control.Hover`, `Control.Pressed`, `Control.Selected`, `Accent.Primary.Hover`; `Size.Control`, `Size.CheckBox`; 50 new contrast pairs measured, all passing; high-contrast mapping for them. No existing token changed. Status `Awaiting approval`.
+- 2026-11-03 v1.1: **Approved** by the user (User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1"; OQ-024 and OQ-026 remain open).

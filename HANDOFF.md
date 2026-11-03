@@ -8,7 +8,7 @@
 | Written | 2026-11-03 17:54 +0500 by Claude Code (Opus 5.5), after TASK-104 |
 | Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
 | Last completed | TASK-104 Localizability and message review (Done 2026-11-03 17:54 +0500) |
-| Git state | HEAD `b71a86b`; TASK-114 backlog entry **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `03323a2` (TASK-114 backlog entry committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).

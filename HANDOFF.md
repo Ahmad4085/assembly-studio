@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 19:25 +0500 by Claude Code (Opus 5.5), after TASK-115 |
+| Written | 2026-11-03 21:53 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-4) |
 | Current task | **None in progress. Next: the user's TASK-006, TASK-100 and TASK-105, then the release tasks** |
-| Last completed | TASK-115 One .COM size limit (Done 2026-11-03 19:25 +0500) |
-| Git state | HEAD after `53fc76c` (TASK-115 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-4.md` (2026-11-03 21:53 +0500): no failed test |
+| Git state | HEAD `53c6cfc`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Testing phase 2026-11-03-4** (Claude Code; documents only): 1587 tests: 1580 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (rerun after Claude Code stopped the first attempt for low memory); measurement script 7 of 7 passed (NFR-005 warm median 1,796 ms); 55 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-003 verified. Low memory on this PC stopped one background run; long runs are safer in the foreground or with build servers shut down.
+
 - **TASK-115** (Claude Code, Done, committed `53fc76c`): The build's .COM limit and its BLD006 message now say 65,278 bytes, matching the loader (FR-031 v2.2, D-023); the loader's message lost its wrong "(65,280 bytes)"; the help pages state the limit plainly (the DEF-003 note is gone); ADR-0005, the architecture's error table and `known-limitations.md` follow; new `ProgramTests.ComSizeLimitTests` builds, loads and runs an image of exactly `ComLoader.MaxComImageSize` bytes and checks one byte more fails with BLD006. DEF-003 Fixed (unverified).
 
 - **QA 2026-11-03-3** (Claude Code; documents only): QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects.
@@ -148,9 +150,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-115 committed (`53fc76c`).
+1. The user reviews the test report and says "commit" (then commit and record the hash here).
 2. The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first); the user's TASK-105.
-3. Then `/assembly-test` (verifies DEF-003), `/assembly-qa`, `/assembly-release <version>`. User decision: OQ-026.
+3. Then `/assembly-qa` and `/assembly-release <version>`. User decision: OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

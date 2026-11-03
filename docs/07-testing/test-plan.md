@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.14 |
+| Version | 0.15 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-03-3.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-03-4.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -187,3 +187,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.12: TASK-114: TC-043 checks that RTE021 lists the documented DOS functions (7 tests).
 - 2026-11-03 v0.13: Test run 2026-11-03-3: counts checked.
 - 2026-11-03 v0.14: TASK-115: TC-095 added (the build and the loader share the .COM limit, 2 tests); TC-026 and TC-043 at the new limit of 65,278 bytes.
+- 2026-11-03 v0.15: Test run 2026-11-03-4: counts checked.

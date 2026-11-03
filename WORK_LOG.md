@@ -2226,3 +2226,11 @@
 - **Tests executed:** ProgramTests 121/121, Toolchain.Nasm.Tests 146/146, Runtime.Tests 86/86, HelpPagesTests 50/50 (Debug); mutation caught; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice: 1577 + 3 passed, 7 skipped, 0 failed twice (19:16–19:20, 19:20–19:24; the first build attempt at about 19:11 failed because the user's Assembly Studio locked bin\Release; the user closed it, no run was made before).
 - **Git state after:** uncommitted TASK-115 changes on top of `479a4c0`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006 and TASK-100.
+
+### 2026-11-03 19:27 – 21:53 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-03-4
+- **Summary:** Ran `/assembly-test` (user request). 1587 tests: 1580 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (rerun after Claude Code stopped the first attempt for low memory); measurement script 7 of 7 passed (NFR-005 warm median 1,796 ms); 55 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-003 verified.
+  - Interruption: after the suite (19:28–19:32), Claude Code stopped the background command during coverage because the PC was critically low on memory while the session was idle. I reported it and didn't restart on my own; the user chose "Rerun coverage + measurements (Recommended)". I ran `dotnet build-server shutdown` (about 3.1 GB free afterwards; one other `dotnet` process left alone, Rider may own it), then coverage (21:41–21:49) and the measurements (21:49–21:52) in the foreground on the same build.
+  - I first told the user "1,586 tests, 6 skipped" from the console summary; the TRX files give 1,587 and 7 skipped (4 + 3). Corrected.
+- **Files changed:** `docs/07-testing/{test-report-2026-11-03-4.md (new), test-plan.md (v0.15), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.14), ACCEPTANCE_CRITERIA.md (v2.9)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `53c6cfc`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006 and TASK-100.

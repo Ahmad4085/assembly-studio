@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 19:25 +0500 by Claude Code (Opus 5.5) (TASK-115 done) |
+| Last updated | 2026-11-03 21:53 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-4) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-test` (verifies DEF-003), `/assembly-qa` and `/assembly-release <version>`. User decision: OQ-026 |
+| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-qa` and `/assembly-release <version>`. User decision: OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Testing phase (report 2026-11-03-4) | 2026-11-03 21:53 +0500 | 1587 tests: 1580 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (rerun after Claude Code stopped the first attempt for low memory); measurement script 7 of 7 passed (NFR-005 warm median 1,796 ms); 55 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-003 verified; traceability v2.14, AC v2.9, test plan v0.15 |
 | TASK-115 One .COM size limit (DEF-003) | 2026-11-03 19:25 +0500 | The build's .COM limit and its BLD006 message now say 65,278 bytes, matching the loader (FR-031 v2.2, D-023); the loader's message lost its wrong "(65,280 bytes)"; the help pages state the limit plainly (the DEF-003 note is gone); ADR-0005, the architecture's error table and `known-limitations.md` follow; new `ProgramTests.ComSizeLimitTests` builds, loads and runs an image of exactly `ComLoader.MaxComImageSize` bytes and checks one byte more fails with BLD006. Full solution 1577 + 3 passed, 7 skipped, 0 failed twice (19:16–19:20, 19:20–19:24; the first build attempt at about 19:11 failed because the user's Assembly Studio locked bin\Release; the user closed it, no run was made before) |
 | QA (report 2026-11-03-3) | 2026-11-03 18:55 +0500 | QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects; traceability v2.13 |
 | Testing phase (report 2026-11-03-3) | 2026-11-03 18:48 +0500 | 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified; traceability v2.12, AC v2.7, test plan v0.13 |
@@ -153,7 +154,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-3: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026, 028. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027. Fixed (unverified): DEF-003 (TASK-115) |
+| Failed tests / open defects | Test report 2026-11-03-4: **no failed test**. Verified: DEF-003, 006, 009, 010, 013, 017..022, 024, 025, 026, 028. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low, intermittent test-run failures): DEF-001, DEF-002 (not reproduced), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

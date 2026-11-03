@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 10:18 +0500 by Claude Code (Opus 5.5), TASK-108 automated part done |
-| Current task | **TASK-108 startup time: In progress, waiting for the user's cold start after a reboot** |
-| Last completed | TASK-107 UI test robustness (Done 2026-11-02 20:59 +0500) |
-| Git state | HEAD after `e6af964` (TASK-108 work so far committed; the task stays In progress). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 11:21 +0500 by Claude Code (Opus 5.5), after closing TASK-108 |
+| Current task | **None in progress. Waiting for the user's decision OQ-027 (NFR-005 cold start, DEF-023)** |
+| Last completed | TASK-108 Startup time (Done 2026-11-03 11:21 +0500; cold start FAIL 7,752 ms) |
+| Git state | HEAD `d2dfb7c`; TASK-108 closing records **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -116,9 +116,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-108 work so far committed (`e6af964`).
-2. The user restarts Windows and runs `powershell -ExecutionPolicy Bypass -File build/bench/cold-start.ps1` (once, before other programs); record the result in `docs/06-implementation/task-108-verification.md` §4 and close TASK-108 (Done if the evidence is recorded; a cold start above 3 s stays a DEF-021 failure).
-3. Then `/assembly-test rerun DEF-020` / `DEF-021`, or `/assembly-qa`. DEF-022 needs its own fix task.
+1. The user says "commit" for the TASK-108 closing records (then commit and record the hash here).
+2. The user decides OQ-027: NFR-005 cold start (7.75 s after a restart; 4.3 s before the app's code) — change the deployment (ADR-0009), revise NFR-005, or accept a known limitation. A deployment change or requirement change goes through its own approved task or requirements update.
+3. Then `/assembly-qa` (or `/assembly-test rerun DEF-020` / `DEF-021` first). DEF-022 needs its own fix task.
 4. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001).
 
 ## Do not overwrite or revert

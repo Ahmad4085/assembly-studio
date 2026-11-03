@@ -4,19 +4,28 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Active Task: TASK-108 Startup time
+## Active Task
+
+None in progress.
 
 | Field | Value |
 |---|---|
-| Status | In progress |
+| Status | Idle / Ready for next task |
+| Recommended next action | User decision OQ-027 (NFR-005 cold start, DEF-023); then `/assembly-qa` |
+| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026, OQ-027 |
+
+---
+
+## Completed: TASK-108 Startup time (Done 2026-11-03 11:21 +0500, Claude Code (Opus 5.5) and the user)
+- Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms. Full solution (`build/test.ps1`) 1553 passed + 7 skipped twice (run a 2026-11-02 21:38–21:42, run c 2026-11-03 10:10–10:14; run b passed too but the PC slept during it). `docs/06-implementation/task-108-verification.md`
+- **Cold start** (DoD, run by the user): cold start 2026-11-03 11:19 +0500 (Windows restarted at 10:49), `build/bench/cold-start.ps1` run by the user: **7,752 ms, FAIL** (target 3,000 ms): runtime and WPF 4,344 ms, content 797, settings 198, themes 214, window 1,079, show 971, JIT 860 in all (`artifacts/perf/cold-start-2026-11-03-1119.txt`). Recorded as DEF-023 and OQ-027 (deployment or target: the user's decision).
+- Closed on the user's request ("cold start passed, close TASK-108"; the saved result shows FAIL, so the record says FAIL).
+
+| Field | Value |
+|---|---|
+| Status | Done |
 | Owner | Claude Code (Opus 5.5) |
-| Started | 2026-11-02 21:10 +0500 |
-| Milestone | M7 (added, DEF-021) |
-| Goal | Startup under 3 s with margin (NFR-005); measure per-step timings first; the user's cold start after a reboot |
-| Done so far | Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms. Full solution (`build/test.ps1`) 1553 passed + 7 skipped twice (run a 2026-11-02 21:38–21:42, run c 2026-11-03 10:10–10:14; run b passed too but the PC slept during it). `docs/06-implementation/task-108-verification.md` |
-| Waiting for | **The user's cold start**: restart Windows, then `powershell -ExecutionPolicy Bypass -File build/bench/cold-start.ps1` (DoD of TASK-108) |
-| Can commit now | Yes (the task stays In progress) |
-| Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+| Started / finished | 2026-11-02 21:10 / 2026-11-03 11:21 +0500 |
 
 ---
 

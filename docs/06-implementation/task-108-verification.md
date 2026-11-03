@@ -6,7 +6,7 @@
 | Dates | 2026-11-02 21:10 – 2026-11-03 10:16 +0500 (the PC slept from 21:44 to 10:06) |
 | Machine | The reference machine (D-014): Intel Core i5-8265U, 15.9 GB, Windows 11 Pro 10.0.26200. Rider, Chrome and a VPN client running on 2026-11-02; a quieter machine on 2026-11-03 |
 | Measured build | Self-contained win-x64 publish as the installer makes it (`build/bench/run-e2e.ps1` publishes it to `artifacts/bench/app`) |
-| Status | Automated part done; **the cold start after a reboot is run by the user** (`build/bench/cold-start.ps1`) |
+| Status | Done (2026-11-03 11:21 +0500): warm starts meet the target; **the cold start fails** (7,752 ms, DEF-023, OQ-027) |
 
 ## 1. Measure first: where the startup time went
 The application now writes one startup timeline line to its log (`StartupTimeline`): each step's time and its JIT time.
@@ -46,13 +46,25 @@ The machine was quieter on 2026-11-03 than when DEF-021 was found (2026-11-02 20
 build). For comparison on a quiet machine: the unpublished build before these changes gave a median of 2,344 ms on 2026-11-02
 at 15:02. Within one session, alternating launches, the changes saved about 0.7–1.0 s.
 
-## 4. Not yet measured: the cold start (user action)
-NFR-005 is about a cold start. The first launch of freshly published files was 8.4–12.6 s with ReadyToRun on 2026-11-02
-(new files are scanned and read cold), so a true cold start must be measured, not assumed. To run it:
-1. Run `powershell -ExecutionPolicy Bypass -File build/bench/run-e2e.ps1` once, if `artifacts/bench/app` doesn't exist.
-2. Restart Windows. Don't open other programs.
-3. Run `powershell -ExecutionPolicy Bypass -File build/bench/cold-start.ps1` once. It prints the result and saves it in
-   `artifacts/perf/cold-start-<timestamp>.txt`.
+## 4. Cold start (user action): FAIL
+Run by the user on 2026-11-03 at 11:19 +0500, 30 minutes after restarting Windows (last boot 10:49:26, read from Windows), with
+`build/bench/cold-start.ps1` on the published application (`artifacts/perf/cold-start-2026-11-03-1119.txt`):
+
+| Step | Cold | Warm (2026-11-03 10:14, median launch) |
+|---|---|---|
+| runtime and WPF (before `OnStartup`) | **4,344 ms** (JIT 186) | 562 ms |
+| log, settings, themes | 506 ms | 59 ms |
+| content (waiting for the worker thread) | 797 ms (JIT 384) | 94 ms |
+| workspace … shell | 30 ms | 33 ms |
+| window | 1,079 ms (JIT 116) | 555 ms |
+| show | 971 ms (JIT 78) | 564 ms |
+| first frame | 24 ms | 55 ms |
+| **Total** | **7,752 ms: FAIL** (target 3,000 ms) | 1,915 ms |
+
+More than half of the cold start passes before the application's own code runs: Windows reads the .NET runtime and WPF
+(self-contained, about 180 MB published) from disk after a restart. The application's code can't shorten that part;
+deployment (ADR-0009: self-contained, chosen for offline installs without prerequisites) or the target can. This is DEF-023
+and the user's decision OQ-027.
 
 ## 5. Tests
 - `App.Tests.Logging.StartupTimelineTests` (2): steps from the previous mark, the first from the process start; the log line.

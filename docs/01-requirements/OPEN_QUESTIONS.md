@@ -42,6 +42,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-024 | Floating and re-dockable panels (needs a docking library and an ADR) | Low | Post-MVP | Open | UI-001 |
 | OQ-025 | Are Cascadia Mono and Segoe Fluent Icons present on Windows 10 Enterprise LTSC 21H2? | Low | First shell task | Open (fallbacks: Consolas, Segoe MDL2 Assets) | NFR-025 |
 | OQ-026 | After a failed build, should Run be enabled? AC-013 (approved) says "Run is not enabled"; the ui-spec §4 state matrix (Build failed column) lists "Build, Run (rebuilds)". | Low | Next design or requirements review | Open. TASK-080 follows AC-013: Run is disabled after a failed build until the text changes, then Run rebuilds. Proposed: align the ui-spec matrix with AC-013 | AC-013, UI-002 |
+| OQ-027 | NFR-005 asks for a cold start ≤ 3 s; measured after a Windows restart: 7.75 s, 4.3 s of it before the application's code runs (the self-contained .NET runtime and WPF read from disk; warm starts 1.9 s). Change the deployment (framework-dependent needs the .NET Desktop Runtime installed, against ADR-0009), revise NFR-005 (e.g. ≤ 3 s warm, a separate limit for the first start after a restart), or accept a known limitation? | High | Before release (QA) | Open. Evidence: TASK-108, DEF-023, `docs/06-implementation/task-108-verification.md` | NFR-005, AC-056, ADR-0009 |
 
 ## Assumptions to validate
 | ID | Assumption | Risk if false | Validation |
@@ -65,3 +66,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-10-26 v2.4: Minor (SDLC-007). OQ-021 resolution proposed. OQ-023 to OQ-025 added. No requirement changed.
 - 2026-10-26 v2.5: Minor. OQ-021 and OQ-023 resolved (design approval). No requirement changed.
 - 2026-11-01: OQ-026 added (TASK-080 found AC-013 and the ui-spec §4 matrix disagree on Run after a failed build). No answer recorded.
+- 2026-11-03: OQ-027 added (TASK-108: the cold start after a restart took 7.75 s; NFR-005's 3 s target). No answer recorded.

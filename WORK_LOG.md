@@ -2030,3 +2030,9 @@
 - **Git state after:** uncommitted TASK-108 changes on top of `bb999f6`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Unresolved issues:** the cold start after a reboot (user action, DoD). The first launch after publishing new files was 8.4–12.6 s with ReadyToRun: a cold start after installing may be well above 3 s.
 - **Next step:** the user restarts Windows and runs `build/bench/cold-start.ps1`; then TASK-108 Done.
+
+### 2026-11-03 11:21 +0500 · Claude Code (Opus 5.5) · TASK-108 closed: cold start measured (FAIL)
+- **Summary:** The user first said "cold start passed, close TASK-108", but no result file existed and Windows' last boot was 2026-11-01 11:26, so I didn't record it; the user chose "I'll reboot and run it". After a restart (last boot 2026-11-03 10:49:26) the user ran `build/bench/cold-start.ps1` and pasted its output; the saved file `artifacts/perf/cold-start-2026-11-03-1119.txt` matches it: cold start 2026-11-03 11:19 +0500 (Windows restarted at 10:49), `build/bench/cold-start.ps1` run by the user: **7,752 ms, FAIL** (target 3,000 ms): runtime and WPF 4,344 ms, content 797, settings 198, themes 214, window 1,079, show 971, JIT 860 in all (`artifacts/perf/cold-start-2026-11-03-1119.txt`).
+  - TASK-108 closed Done on the user's request: its scope (measure, speed up, measure a cold start) is done and the cold start is recorded. NFR-005 fails for a cold start: DEF-023 (High, Open) and OQ-027 (deployment or target) for the user.
+- **Files changed:** `docs/06-implementation/task-108-verification.md`, `docs/07-testing/defects.md` (DEF-023), `docs/01-requirements/{OPEN_QUESTIONS.md (OQ-027), REQUIREMENTS_TRACEABILITY.md (NFR-005)}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the user decides OQ-027; then `/assembly-qa`.

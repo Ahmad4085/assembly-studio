@@ -97,7 +97,7 @@
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
 | TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
-| TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | In progress |
+| TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Done |
 
 ## 3. Task details
 
@@ -1950,7 +1950,7 @@
 
 | Field | Value |
 |---|---|
-| Status | In progress |
+| Status | Done |
 | Milestone | M7 (added 2026-11-02, DEF-021) |
 | Requirements | NFR-005, AC-056 |
 | Decisions / design | D-014, TASK-086 report |

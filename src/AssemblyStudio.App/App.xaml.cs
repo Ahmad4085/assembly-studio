@@ -40,6 +40,7 @@ public partial class App : Application
             return;
         }
 
+        var timeline = new StartupTimeline(); // NFR-005, TASK-108: where the startup time goes
         StartupOptions options = StartupOptions.Parse(e.Args);
         string settingsPath = options.SettingsPath ?? JsonLayoutStore.DefaultPath;
 
@@ -51,6 +52,12 @@ public partial class App : Application
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
             log.Write(LogLevel.Error, "Unhandled exception.", args.ExceptionObject as Exception);
         TaskScheduler.UnobservedTaskException += (_, args) => log.Write(LogLevel.Error, "Unobserved task exception.", args.Exception);
+        timeline.Mark("log");
+        StartEditorWarmUp(log);
+
+        // TASK-108: the built-in content reads only embedded files; it loads on a worker thread while settings, themes and the
+        // workspace load, and is collected where the Learn sidebar is built (it took 115–270 ms on the startup path).
+        Task<IContentCatalog> content = Task.Run(() => LoadContent(log));
 
         // Settings first: an unreadable settings file is set aside before the layout and recent-files stores read it (FR-081).
         var settings = new JsonSettingsService(settingsPath);
@@ -58,6 +65,8 @@ public partial class App : Application
         {
             log.Write(LogLevel.Warning, $"The settings file could not be read; defaults are used. Backup: {invalid}");
         }
+
+        timeline.Mark("settings");
         var themes = new ThemeManager(Resources, settings.Current.Theme);
         themes.Apply();
         themes.Watch();
@@ -72,6 +81,7 @@ public partial class App : Application
             themes.Preference = settings.Current.Theme;
             EditorAppearance.Apply(Resources, settings.Current, textScale, zoom);
         };
+        timeline.Mark("themes");
 
         // FR-079: the bundled NASM next to the application unless Settings names another one.
         string bundledNasm = Commands.SessionFactory.BundledAssemblerPath;
@@ -82,6 +92,7 @@ public partial class App : Application
         var dialogs = new WpfDialogService();
         var workspace = new WorkspaceViewModel(dialogs, new JsonRecentFilesStore(settingsPath), log);
         bool smoke = options.SmokeReportPath is not null;
+        timeline.Mark("workspace");
 
         // NFR-011: autosave unsaved documents; after an unexpected exit, offer what the previous instance autosaved.
         RecoveryStore? recovery = StartRecovery(options.RecoveryPath ?? RecoveryStore.DefaultRoot, log);
@@ -99,6 +110,8 @@ public partial class App : Application
             };
         }
 
+        timeline.Mark("recovery");
+
         // FR-084: files given on the command line (the .asm association, "Open with") open at startup; a file that
         // can't be opened is reported like any other open failure.
         foreach (string file in options.Files)
@@ -110,6 +123,17 @@ public partial class App : Application
         {
             workspace.New(); // FR-001: start with an editable document
         }
+
+        timeline.Mark("documents");
+        var learn = new LearnViewModel(content.GetAwaiter().GetResult(), workspace);
+        timeline.Mark("content");
+        var buildRun = new Commands.BuildRunViewModel(
+            workspace,
+            () => new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = settings.Current.AssemblerPath }),
+            build => Commands.SessionFactory.Create(build, settings.Current.InstructionBudget,
+                fault => log.Write(LogLevel.Error, "Debug session fault.", fault)),
+            numberFormat: settings.Current.NumberFormat);
+        timeline.Mark("build and run");
 
         MainWindow? window = null;
         ShellViewModel viewModel = null!;
@@ -126,13 +150,8 @@ public partial class App : Application
             {
                 Owner = window,
             }.ShowDialog(),
-            learn: new LearnViewModel(LoadContent(log), workspace),
-            buildRun: new Commands.BuildRunViewModel(
-                workspace,
-                () => new NasmAssembler(new NasmOptions { BundledPath = bundledNasm, ConfiguredPath = settings.Current.AssemblerPath }),
-                build => Commands.SessionFactory.Create(build, settings.Current.InstructionBudget,
-                    fault => log.Write(LogLevel.Error, "Debug session fault.", fault)),
-                numberFormat: settings.Current.NumberFormat));
+            learn: learn,
+            buildRun: buildRun);
         settings.Changed += (_, _) => viewModel.BuildRun.Cpu.Format = settings.Current.NumberFormat;
         Exit += (_, _) => viewModel.BuildRun.Dispose();
         // FR-022: the zoom scales the editor and the debug panels' code font.
@@ -151,7 +170,9 @@ public partial class App : Application
                 ApplyZoom();
             }
         };
+        timeline.Mark("shell");
         window = new MainWindow(viewModel, persistLayout: !smoke, log);
+        timeline.Mark("window");
         MainWindow = window;
         if (settings.InvalidFileBackup is { } backup && !smoke)
         {
@@ -167,7 +188,9 @@ public partial class App : Application
         // first rendered frame.
         window.ContentRendered += (_, _) =>
         {
-            double startupMs = (DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMilliseconds;
+            timeline.Mark("first frame");
+            double startupMs = timeline.ElapsedMs;
+            log.Write(LogLevel.Info, timeline.Describe());
             Trace.WriteLine($"Startup: {startupMs:F0} ms");
             if (options.SmokeReportPath is not null)
             {
@@ -176,6 +199,45 @@ public partial class App : Application
             }
         };
         window.Show();
+        timeline.Mark("show");
+    }
+
+    /// <summary>
+    /// TASK-108 (NFR-005): the first code editor cost 0.3–0.6 s on the UI thread, nearly all of it AvalonEdit's first use (its
+    /// assembly, types and theme styles) and the NASM highlighting, and the first menu 70–120 ms (the system control theme). A
+    /// worker thread pays that first, while the UI thread loads settings, themes and the main window. Only the highlighting
+    /// definition is kept (regexes and frozen brushes; its themed colors are looked up when drawing); the warm-up controls are
+    /// dropped with their thread. A failure only costs the time.
+    /// </summary>
+    private static void StartEditorWarmUp(FileLog log)
+    {
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                _ = Editor.NasmHighlighting.Definition;
+                var size = new Size(400, 300);
+                new ICSharpCode.AvalonEdit.TextEditor().Measure(size); // its templates too, not only its types
+                foreach (FrameworkElement control in new FrameworkElement[] { new System.Windows.Controls.Menu(), new System.Windows.Controls.TabControl(), new System.Windows.Controls.TreeView(), new System.Windows.Controls.ListBox(), new System.Windows.Controls.TextBox() })
+                {
+                    control.Measure(size); // the system control theme, loaded once for the process
+                }
+            }
+            catch (Exception ex) when (ex is not OutOfMemoryException)
+            {
+                log.Write(LogLevel.Warning, "The editor warm-up failed; the first editor is built without it.", ex);
+            }
+            finally
+            {
+                Dispatcher.CurrentDispatcher.InvokeShutdown(); // the thread's dispatcher, created with the editor, ends with it
+            }
+        })
+        {
+            IsBackground = true,
+            Name = "Editor warm-up",
+        };
+        thread.SetApartmentState(ApartmentState.STA); // WPF elements need an STA thread
+        thread.Start();
     }
 
     /// <summary>The UI-021 prompt, once the main window is up: Restore opens the documents unsaved; Discard opens an

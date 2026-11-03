@@ -6,7 +6,8 @@
 .DESCRIPTION
   Builds the solution in Release, then runs the measurement tests one project at a time with ASSEMBLY_STUDIO_BENCH=1:
   the in-process measurements (App tests: step latency, responsiveness, Pause/Stop, build time, editor latency) and the
-  process measurements (UI tests: startup, memory). Each prints BENCH lines; they are collected in
+  process measurements (UI tests: startup, memory) on the application published as the installer publishes it
+  (self-contained win-x64, ReadyToRun; TASK-108), which is what users run. Each prints BENCH lines; they are collected in
   artifacts/perf/e2e-<timestamp>.txt. Nothing presses keys. Close other heavy programs first: these are wall-clock
   measurements, and other load on the machine shows in the numbers.
 
@@ -27,6 +28,12 @@ try {
     dotnet build AssemblyStudio.slnx -c Release --nologo -v quiet
     if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 
+    # The process measurements use the application as the installer publishes it (build/installer/build-installer.ps1).
+    $app = Join-Path $root 'artifacts\bench\app'
+    if (Test-Path $app) { Remove-Item -Recurse -Force $app }
+    dotnet publish src/AssemblyStudio.App/AssemblyStudio.App.csproj -c Release -r win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=false -o $app --nologo -v quiet
+    if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
+
     $env:ASSEMBLY_STUDIO_BENCH = '1'
     $lines = @("Assembly Studio end-to-end measurements, $(Get-Date -Format 'yyyy-MM-dd HH:mm zzz')",
                "Machine: $((Get-CimInstance Win32_Processor).Name.Trim()), $([math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 1)) GB, $((Get-CimInstance Win32_OperatingSystem).Caption)",
@@ -36,7 +43,9 @@ try {
         @{ Project = 'tests/AssemblyStudio.App.Tests';   Classes = @('*EndToEndPerformanceTests*', '*EditorLatencyTests*') },
         @{ Project = 'tests/AssemblyStudio.App.UiTests'; Classes = @('*PerformanceTests*') })) {
         $filters = $run.Classes | ForEach-Object { '--filter-class'; $_ }
+        if ($run.Project -like '*UiTests') { $env:ASSEMBLY_STUDIO_APP_EXE = Join-Path $app 'AssemblyStudio.App.exe' }
         $output = dotnet test --project $run.Project -c Release --no-build --output Detailed @filters 2>&1
+        Remove-Item Env:ASSEMBLY_STUDIO_APP_EXE -ErrorAction SilentlyContinue
         if ($LASTEXITCODE -ne 0) { $failed = $true }
         $lines += $output | Where-Object { $_ -match 'BENCH |Keystroke to layout|^\s*(failed|passed|skipped) ' } | ForEach-Object { $_.Trim() }
     }

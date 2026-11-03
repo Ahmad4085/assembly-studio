@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.4 |
+| Version | 0.5 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-02-1.md` |
@@ -134,6 +134,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-090 | `App.Tests.Panels.VariablesTests` | UI / view model (real NASM and session) | AC-065, FR-057, FR-097, NFR-018, UI-023, TASK-106 | 18 |
 | TC-091 | `App.Tests.Editor.FindReplaceTests` | UI / view model | AC-011, FR-015, FR-016, FR-017, UI-004, TASK-065 | 22 |
 | TC-092 | `App.UiTests.AppUnderTestTests` | UI test harness | DEF-020, TASK-107 | 2 |
+| TC-093 | `App.Tests.Logging.StartupTimelineTests` | Unit (startup diagnostics) | NFR-005, DEF-021, TASK-108 | 2 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -174,3 +175,4 @@ has a defect; no unexplained failure.
 - 2026-10-30 v0.2: TASK-087: TC-015, TC-023, TC-025, TC-032, TC-041, TC-070 retired (placeholders deleted); TC-073 `FloodPerformanceTests` (moved from TC-040); performance trait and coverage exclusion.
 - 2026-11-02 v0.3: Testing phase run 2026-11-02-1 (Claude Code (Opus 5.5)): TC-074..TC-091 added for the test classes of TASK-064..086, 065 and 106 (one per class, IDs as the classes name them); test counts refreshed from the run; scope, levels (FlaUI UI tests, opt-in end-to-end measurements) and limitations updated.
 - 2026-11-02 v0.4: TASK-107: TC-092 `AppUnderTestTests`; the full-suite command is `build/test.ps1` (UI tests run on their own).
+- 2026-11-03 v0.5: TASK-108: TC-093 `StartupTimelineTests`; the NFR-005 and NFR-007 process measurements (TC-089) run on the application as the installer publishes it (`run-e2e.ps1` sets `ASSEMBLY_STUDIO_APP_EXE`); the cold start after a reboot is `build/bench/cold-start.ps1` (user-run).

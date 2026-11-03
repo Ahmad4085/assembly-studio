@@ -19,8 +19,13 @@ internal sealed class AppUnderTest : IDisposable
     private readonly string _folder = Directory.CreateTempSubdirectory("asmstudio-ui-").FullName;
     private bool _hadFocus;
 
+    /// <summary>The application under test: <c>ASSEMBLY_STUDIO_APP_EXE</c> when set (the end-to-end measurements use the build
+    /// as the installer publishes it, TASK-108), else the build next to the tests.</summary>
+    internal static string Executable =>
+        Environment.GetEnvironmentVariable("ASSEMBLY_STUDIO_APP_EXE") is { Length: > 0 } path ? path : Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe");
+
     public AppUnderTest(params string[] files)
-        : this(new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")), WindowTimeout, files)
+        : this(new ProcessStartInfo(Executable), WindowTimeout, files)
     {
     }
 

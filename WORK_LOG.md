@@ -2015,3 +2015,18 @@
   - Run b's failure is in a test TASK-107 doesn't touch: DEF-022 (Open). User 2026-11-02 20:59 +0500, answering "How should I close TASK-107?" (run b's one failure was TASK-065's find bar test, DEF-022): "Done, DEF-022 separate (Recommended)".
 - **Git state after:** uncommitted TASK-107 changes on top of `6e2e768`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the user says "commit"; then `/assembly-implement TASK-108`.
+
+### 2026-11-02 21:10 – 2026-11-03 10:18 +0500 · Claude Code (Opus 5.5) · TASK-108 Startup time (automated part)
+- **Summary:** Ran `/assembly-implement TASK-108` (user request; approved 2026-11-02 20:37). Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms.
+  - Measured first: `StartupTimeline` (new) writes each step and its JIT time to the log; temporary probes in `MainWindow` (removed) split the window step.
+  - **User decision D-021** (AskUserQuestion: "Both (Recommended)"): the crossgen2 download for a ReadyToRun measurement (research entry first; adopted only if it helps) and the changes that need nothing new. ReadyToRun helped (JIT halved, first launch after publish 18.8 → 8.4 s) and was adopted; ADR-0009 amended.
+  - A Python edit wrote control characters into `run-e2e.ps1` (`\b`, `\a` in a path); found by reading the file back, fixed byte-wise.
+  - The PC slept from 2026-11-02 21:44 to 2026-11-03 10:06 during full run b (Windows power events 42/1); run b passed but a clean run c was added.
+- **Files changed:** `src/AssemblyStudio.App/{App.xaml.cs, AssemblyStudio.App.csproj, Logging/StartupTimeline.cs (new)}`, `tests/AssemblyStudio.App.Tests/Logging/StartupTimelineTests.cs` (new), `tests/AssemblyStudio.App.UiTests/{AppUnderTest.cs, PerformanceTests.cs}`, `build/bench/{run-e2e.ps1, cold-start.ps1 (new)}`, `build/installer/build-installer.ps1` (comment), `docs/06-implementation/task-108-verification.md` (new), `docs/decisions/ADR-0009-packaging-and-distribution.md`, `docs/02-research/platform-and-packaging.md`, `DECISIONS.md` (D-021), `docs/07-testing/{defects.md, test-plan.md}`, `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:**
+  - `StartupTimelineTests` 2/2 and `StartupTimeTests` 1/1 (Debug).
+  - Release build 0 warnings. `powershell -File build/test.ps1 -NoBuild`: run a (2026-11-02 21:38–21:42) 1550 + 3 passed, 4 + 3 skipped, 0 failed; run b (21:42 – 10:10, slept) same counts; run c (2026-11-03 10:10–10:14) same counts.
+  - `build/bench/run-e2e.ps1` (2026-11-03 10:14–10:16): 7 of 7 passed; NFR-005 median 1,915 ms, max 2,237 ms. Earlier the same script failed NFR-005 at 2026-11-02 21:24 (median 3,318 ms, ReadyToRun only, busy machine).
+- **Git state after:** uncommitted TASK-108 changes on top of `bb999f6`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Unresolved issues:** the cold start after a reboot (user action, DoD). The first launch after publishing new files was 8.4–12.6 s with ReadyToRun: a cold start after installing may be well above 3 s.
+- **Next step:** the user restarts Windows and runs `build/bench/cold-start.ps1`; then TASK-108 Done.

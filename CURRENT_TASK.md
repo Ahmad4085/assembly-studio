@@ -4,14 +4,18 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Active Task
-
-None in progress. Next: `TASK-108` (startup time, DEF-021).
+## Active Task: TASK-108 Startup time
 
 | Field | Value |
 |---|---|
-| Status | Idle / Ready for next task |
-| Recommended next action | `/assembly-implement TASK-108` |
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-02 21:10 +0500 |
+| Milestone | M7 (added, DEF-021) |
+| Goal | Startup under 3 s with margin (NFR-005); measure per-step timings first; the user's cold start after a reboot |
+| Done so far | Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms. Full solution (`build/test.ps1`) 1553 passed + 7 skipped twice (run a 2026-11-02 21:38–21:42, run c 2026-11-03 10:10–10:14; run b passed too but the PC slept during it). `docs/06-implementation/task-108-verification.md` |
+| Waiting for | **The user's cold start**: restart Windows, then `powershell -ExecutionPolicy Bypass -File build/bench/cold-start.ps1` (DoD of TASK-108) |
+| Can commit now | Yes (the task stays In progress) |
 | Parallel user actions | AC-059 (QA, WVR-001), TASK-006, TASK-100, DEF-003 decision, OQ-026 |
 
 ---

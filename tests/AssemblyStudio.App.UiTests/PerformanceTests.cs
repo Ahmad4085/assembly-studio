@@ -25,18 +25,28 @@ public sealed class PerformanceTests
 
     private static void Report(string line) => TestContext.Current.TestOutputHelper?.WriteLine(line);
 
+    // The application's own startup timeline line from its log (TASK-108), or why it isn't there.
+    private static string StartupLine(string logFolder)
+    {
+        string? line = Directory.Exists(logFolder)
+            ? Directory.GetFiles(logFolder, "*.log").SelectMany(File.ReadLines).LastOrDefault(l => l.Contains(" ms to the first frame:", StringComparison.Ordinal))
+            : null;
+        return line is null ? "(no startup timeline in the log)" : line[(line.IndexOf("Startup ", StringComparison.Ordinal))..];
+    }
+
     [Fact]
     public void NFR_005_the_main_window_is_rendered_within_3_s_of_the_process_start()
     {
         RequireBench();
         var samples = new List<double>();
+        Report($"BENCH NFR-005 application: {AppUnderTest.Executable}");
         for (int i = 0; i < 5; i++)
         {
             string folder = Directory.CreateTempSubdirectory("asmstudio-start-").FullName;
             try
             {
                 string report = Path.Combine(folder, "startup.txt");
-                var start = new ProcessStartInfo(Path.Combine(AppContext.BaseDirectory, "AssemblyStudio.App.exe")) { UseShellExecute = false };
+                var start = new ProcessStartInfo(AppUnderTest.Executable) { UseShellExecute = false };
                 foreach (string argument in new[] { "--settings", Path.Combine(folder, "settings.json"), "--recovery", Path.Combine(folder, "recovery"), "--log", Path.Combine(folder, "logs"), "--smoke-report", report })
                 {
                     start.ArgumentList.Add(argument);
@@ -45,6 +55,7 @@ public sealed class PerformanceTests
                 using Process process = Process.Start(start)!;
                 Assert.True(process.WaitForExit(60_000), "the smoke run didn't close");
                 samples.Add(double.Parse(File.ReadAllText(report), CultureInfo.InvariantCulture)); // process start to first rendered frame
+                Report($"BENCH NFR-005 start {i + 1}: {StartupLine(Path.Combine(folder, "logs"))}"); // where the time went (TASK-108)
             }
             finally
             {
@@ -52,9 +63,10 @@ public sealed class PerformanceTests
             }
         }
 
+        double first = samples[0];
         samples.Sort();
         Report(string.Create(CultureInfo.InvariantCulture,
-            $"BENCH NFR-005 process start to rendered main window (warm starts, not after a reboot): n={samples.Count} median {samples[samples.Count / 2]:F0} ms, max {samples[^1]:F0} ms, first {samples[0]:F0} ms; target 3000 ms"));
+            $"BENCH NFR-005 process start to rendered main window (warm starts, not after a reboot): n={samples.Count} median {samples[samples.Count / 2]:F0} ms, max {samples[^1]:F0} ms, first {first:F0} ms; target 3000 ms"));
         Assert.True(samples[^1] <= 3000, $"a start took {samples[^1]:F0} ms");
     }
 

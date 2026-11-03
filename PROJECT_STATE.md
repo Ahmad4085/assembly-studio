@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-02 20:59 +0500 by Claude Code (Opus 5.5) (TASK-107 done) |
+| Last updated | 2026-11-03 10:18 +0500 by Claude Code (Opus 5.5) (TASK-108 automated part done; cold start waits for the user) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
-| Active task | None in progress. Next: `TASK-108` startup time (DEF-021) |
-| Next recommended action | `/assembly-implement TASK-108` (DEF-021); then `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
+| Active task | TASK-108 startup time: In progress, waiting for the user's cold-start measurement after a reboot |
+| Next recommended action | User: restart Windows, then `build/bench/cold-start.ps1` (TASK-108); then TASK-108 Done and `/assembly-qa`. User: TASK-100, TASK-006, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -133,7 +133,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-02-1: **2 failures**: TC-087 UI smoke test (DEF-020, Fixed (unverified) in TASK-107) and the NFR-005 startup measurement in TC-089 (DEF-021, Open; AC-056 fails). Verified: DEF-006, 009, 010, 013, 017, 018, 019. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-021, DEF-022 (find bar test, TASK-107 run b) |
+| Failed tests / open defects | Test report 2026-11-02-1: **2 failures**: TC-087 UI smoke test (DEF-020, Fixed (unverified) in TASK-107) and the NFR-005 startup measurement in TC-089 (DEF-021, Fixed (unverified) in TASK-108: median 1,915 ms on the published app). Verified: DEF-006, 009, 010, 013, 017, 018, 019. Open: DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-022 (find bar test, TASK-107 run b) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

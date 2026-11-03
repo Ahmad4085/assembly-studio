@@ -1,5 +1,5 @@
 # Builds the Assembly Studio installer (ADR-0009, TASK-101):
-#   1. dotnet publish src/AssemblyStudio.App -c Release -r win-x64 --self-contained (no trimming, no single file)
+#   1. dotnet publish src/AssemblyStudio.App -c Release -r win-x64 --self-contained (no trimming, no single file; ReadyToRun from the project, TASK-108)
 #   2. checks the publish folder holds what the installer must ship (the app, the runtime, the bundled NASM and its license)
 #   3. compiles build/installer/AssemblyStudio.iss with the pinned Inno Setup (build/fetch-innosetup.ps1)
 # Output: artifacts/installer/AssemblyStudio-<version>-setup.exe. Prints the published size and the installer size (NFR-028).

@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-02 20:59 +0500 by Claude Code (Opus 5.5), after completing TASK-107 |
-| Current task | **None in progress. Next: `TASK-108` startup time (DEF-021)** |
+| Written | 2026-11-03 10:18 +0500 by Claude Code (Opus 5.5), TASK-108 automated part done |
+| Current task | **TASK-108 startup time: In progress, waiting for the user's cold start after a reboot** |
 | Last completed | TASK-107 UI test robustness (Done 2026-11-02 20:59 +0500) |
-| Git state | HEAD after `26a7330` (TASK-107 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `bb999f6`; TASK-108 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-108 Startup time** (Claude Code, In progress, uncommitted): Startup time (DEF-021): a startup timeline in the log found the main window's XAML (1.0–1.9 s) and first layout (0.7–0.9 s) dominant, with AvalonEdit's first use 0.3–0.5 s of it; changes: ReadyToRun for the published app (D-021, ADR-0009 amendment), an editor warm-up thread, the content catalog loaded in parallel; NFR-005 on the published app 2026-11-03: median 1,915 ms, max 2,237 ms. `docs/06-implementation/task-108-verification.md`. The startup timeline is in every startup log ("Startup … ms to the first frame: …"). `run-e2e.ps1` now publishes the app (installer configuration) to `artifacts/bench/app` and measures it.
+
 - **TASK-107 UI test robustness** (Claude Code, Done, committed `26a7330`): UI test robustness (DEF-020): `AppUnderTest` waits up to 60 s for the window; when it doesn't appear, or the start fails otherwise, it stops the process, deletes its temporary folder and fails with the application's log in the message; `build/test.ps1` runs every project except the UI tests, then the UI tests alone. Full-suite command: `powershell -File build/test.ps1` (add `-NoBuild`; result options after `--`). DEF-020 Fixed (unverified); DEF-022 (find bar window test, simulated Esc) Open.
 
 - **Testing phase 2026-11-02-1** (Claude Code; documents only): 1556 tests: 1548 passed, 1 failed (TC-087 UI smoke test, DEF-020), 7 skipped (opt-in); measurement script 6 of 7 passed (NFR-005 startup median 3,005 ms > 3 s, DEF-021); coverage complete (engine 99.6%, runtime 93.8%, total 90.9%); 53 of 65 acceptance criteria pass, AC-056 fails, 11 not run; DEF-006, 009, 010, 013, 017, 018, 019 verified. Test plan v0.3 (TC-074..TC-091), traceability v2.6, AC v2.3, defects DEF-020 and DEF-021 opened.
@@ -114,9 +116,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-107 committed (`26a7330`).
-2. `/assembly-implement TASK-108` (DEF-021, startup time; its cold start needs the user to reboot).
-3. Then `/assembly-qa` (or `/assembly-test rerun DEF-020` first). DEF-022 needs its own fix task (proposed: check the Esc binding and run its command instead of simulating the key).
+1. The user says "commit" for the TASK-108 work so far (then commit and record the hash here).
+2. The user restarts Windows and runs `powershell -ExecutionPolicy Bypass -File build/bench/cold-start.ps1` (once, before other programs); record the result in `docs/06-implementation/task-108-verification.md` §4 and close TASK-108 (Done if the evidence is recorded; a cold start above 3 s stays a DEF-021 failure).
+3. Then `/assembly-test rerun DEF-020` / `DEF-021`, or `/assembly-qa`. DEF-022 needs its own fix task.
 4. User: TASK-006, TASK-100, DEF-003 decision, OQ-026; AC-059 in QA (WVR-001).
 
 ## Do not overwrite or revert

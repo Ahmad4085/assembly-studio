@@ -25,7 +25,7 @@ The runner reported step 1 `total: 1579, failed: 0, succeeded: 1575, skipped: 4`
 succeeded: 3, skipped: 3`; the 12 TRX files give the same counts, and the plan's TC counts add up to 1,585. The 7 skipped tests are
 opt-in by design:
 - TC-088 (4) and TC-089 (2) are run by the measurement script, which passed 7 of 7.
-- The AC-043 real-key test in TC-087 passed at 12:12 today on the code of `e6af964`. It hasn't been rerun since TASK-109..114.
+- The AC-043 real-key test in TC-087 was run separately at the user's request after this report: **passed** 2026-11-03 18:52 on this build (`bb87ae3`).
 
 ## Results by test project
 | Project | Passed | Failed | Skipped |
@@ -102,7 +102,7 @@ changed.
 ## Limitations
 - **Not run:** AC-040, AC-041, AC-042, AC-061 and AC-062 (TASK-070, TASK-102, TASK-103 and TASK-105; TASK-103 needs TASK-006).
 - **Installer:** not rebuilt or retested in this run (TASK-103).
-- **Real-key AC-043 test:** not rerun after TASK-109..114 (it's opt-in and needs the user away from the PC).
+- **Real-key AC-043 test:** rerun after this report at the user's request: passed 18:52 (18:52:07–18:52:24).
 
 ## Defects raised / updated
 - DEF-028: Verified.

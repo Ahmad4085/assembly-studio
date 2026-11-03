@@ -338,7 +338,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** a mouse is not used
 - **When** the user opens a sample, builds, runs, sets a breakpoint, steps and reads registers
 - **Then** every step is possible by keyboard and the focused element is always visibly indicated
-- Verifies: FR-091, FR-092, NFR-022 · Priority: P0 · Test status: PASS 2026-11-03 12:12 +0500 (TC-087 `UiSmokeTests.AC_043_…` with real keys, opt-in run at the user's request "run the keyboard test", D-018; build of commit `42ac233`, code as of `e6af964`): Learn sidebar → Hello, World sample → editor → build, breakpoint, run, step → registers read "AX 0924, changed; AH 09; AL 24, changed"; focus in the application after every step
+- Verifies: FR-091, FR-092, NFR-022 · Priority: P0 · Test status: PASS 2026-11-03 18:52 +0500 (TC-087 `UiSmokeTests.AC_043_…` with real keys, opt-in run at the user's request "run the keyboard test", D-018; Release build of `bb87ae3`, which includes TASK-109..114; the previous pass was 12:12 on `e6af964`)
 
 ### AC-044 Screen reader and high contrast
 - **Given** Windows Narrator is running and a high-contrast theme is active
@@ -427,3 +427,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-03: AC-001 (offline part, from Windows' and the application's records) and AC-034 (user-reported) test status. No criterion changed.
 - 2026-11-03 v2.6: Minor (testing phase). "Test status" updated from test run 2026-11-03-2 (manual and record-based results kept). No criterion changed.
 - 2026-11-03 v2.7: Minor (testing phase). "Test status" updated from test run 2026-11-03-3 (manual and record-based results kept). No criterion changed.
+- 2026-11-03: AC-043 status updated from the real-key rerun at 18:52 (user request). No criterion changed.

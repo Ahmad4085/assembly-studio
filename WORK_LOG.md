@@ -2194,3 +2194,8 @@
 - **Files changed:** `docs/07-testing/{test-report-2026-11-03-3.md (new), test-plan.md (v0.13), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.12), ACCEPTANCE_CRITERIA.md (v2.7)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `bb87ae3`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006 and TASK-100.
+
+### 2026-11-03 18:52 +0500 · Claude Code (Opus 5.5) · AC-043 keyboard-only test rerun (real keys, user's request)
+- **Summary:** The user asked "run the keyboard test" and answered "Start in 15 seconds" to keeping hands off (D-018). `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release --no-build --filter-method '*AC_043_the_core_workflow_works_by_keyboard_alone*' --output Detailed` (18:52:07–18:52:24): 1 total, 1 passed (11.9 s). Release build of `bb87ae3` (the code of test report 2026-11-03-3, including TASK-109..114).
+- **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md` (AC-043 status), `docs/07-testing/test-report-2026-11-03-3.md` (note), `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the user's TASK-006 and TASK-100.

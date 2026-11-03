@@ -93,7 +93,7 @@
 | TASK-101 | Self-contained publish and Inno Setup installer | M7 | TASK-005, TASK-068 | M | FR-083, FR-084, FR-085, FR-086, FR-087, FR-088, NFR-027, NFR-028 | Done |
 | TASK-102 | Third-party notices and SBOM | M7 | TASK-101, TASK-100 | L | FR-090, NFR-030, NFR-031 | Approved |
 | TASK-103 | Clean-VM install, offline and compatibility verification | M7 | TASK-101, TASK-006 | M | NFR-008, NFR-025, NFR-027, FR-083, FR-085, FR-088 | Approved |
-| TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Approved |
+| TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Done |
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
 | TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
@@ -1845,7 +1845,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 |
 | Requirements | NFR-032, NFR-024 |
 | Decisions / design | ADR-0007 |
@@ -1858,10 +1858,12 @@
 - Analyzer or test scanning XAML/C# for literals
 - Message catalog review
 
-**Out of scope:**
-- Anything not listed above
+- (Widened 2026-11-03 17:17 +0500, user-approved) Move the user-facing messages found hard-coded into resource files, with identical English text: Runtime `RuntimeErrorPolicy` (new `.resx`), Os.Dos `DosServices` (new `.resx`), Toolchain.Nasm `NasmAssembler` (`BuildMessages.resx`; done as a new `AssemblerProblems.resx`, because the build catalog test allows only catalog codes in `BuildMessages.resx`), App program-end names (`Strings.resx`)
 
-**Expected files / projects touched:** `tests/AssemblyStudio.App.Tests/`
+**Out of scope:**
+- Anything not listed above; changing message wording; the About diagnostics block (English by design, FR-076), log entries and developer-only exceptions (recorded as exemptions)
+
+**Expected files / projects touched:** `tests/`; `src/AssemblyStudio.Runtime/`, `src/AssemblyStudio.Os.Dos/`, `src/AssemblyStudio.Toolchain.Nasm/`, `src/AssemblyStudio.App/` (widened)
 
 **Test requirements:**
 - AC-055, AC-060
@@ -2172,6 +2174,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03 17:17 +0500: TASK-104 scope widened (moving the hard-coded user-facing messages into resource files; expected files widened to four src projects). The user, answering "TASK-104 needs about 26 messages moved into resource files across Runtime, Os.Dos, Toolchain.Nasm and the App (identical English text, two new .resx files), not only a test. Should I widen the task to include that?": "Widen and fix (Recommended)".
 - 2026-11-03 17:11 +0500: TASK-113 requirements corrected from "FR-073, NFR-005, FR-097" to "NFR-033, FR-045, NFR-005, FR-097": FR-073 (exercises with automatic checking) was a citation error; NFR-033 (offline guide: scope and limitations) and FR-045 (help: known deviations) are the help requirements. Scope unchanged.
 - 2026-11-03: TASK-113 (known limitations) added. User 2026-11-03 16:52 +0500, answering "Do you approve adding TASK-113 (known limitations in the help page and a known-limitations list for the release notes) to the backlog as described?": "Approve (Recommended)".
 - 2026-11-03: TASK-112 (themed input controls, design v1.1) added. User 2026-11-03 15:33 +0500, answering "Do you approve adding TASK-112 (themed input controls, per UI spec and design tokens v1.1) to the backlog as described?": "Approve (Recommended)".

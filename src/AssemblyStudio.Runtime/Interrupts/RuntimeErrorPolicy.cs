@@ -17,55 +17,55 @@ public static class RuntimeErrorPolicy
     /// <returns>A populated <see cref="RuntimeHaltInfo"/> record.</returns>
     public static RuntimeHaltInfo CreateCpuExceptionHalt(byte vector, CpuState state)
     {
-        string where = $"at {state.CS:X4}:{state.IP:X4}";
+        string where = RuntimeMessages.Text("WhereAt", state.CS, state.IP);
 
         return vector switch
         {
             0 => new RuntimeHaltInfo(
                 Code: "RTE001",
-                What: "Divide error: division by zero or quotient overflow",
+                What: RuntimeMessages.Text("RTE001_What"),
                 Where: where,
-                NextStep: "Ensure the divisor is non-zero and that the quotient fits within the destination register.",
+                NextStep: RuntimeMessages.Text("RTE001_Next"),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
 
             1 => new RuntimeHaltInfo(
                 Code: "RTE002",
-                What: "Single-step trap (INT 1)",
+                What: RuntimeMessages.Text("RTE002_What"),
                 Where: where,
-                NextStep: "Clear the Trap Flag (TF) in FLAGS or install a custom INT 01h handler.",
+                NextStep: RuntimeMessages.Text("RTE002_Next"),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
 
             2 => new RuntimeHaltInfo(
                 Code: "RTE003",
-                What: "Non-maskable interrupt (INT 2)",
+                What: RuntimeMessages.Text("RTE003_What"),
                 Where: where,
-                NextStep: "Install a custom INT 02h handler or check hardware interrupt conditions.",
+                NextStep: RuntimeMessages.Text("RTE003_Next"),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
 
             3 => new RuntimeHaltInfo(
                 Code: "RTE004",
-                What: "Breakpoint interrupt (INT 3)",
+                What: RuntimeMessages.Text("RTE004_What"),
                 Where: where,
-                NextStep: "Install a custom INT 03h handler or remove the breakpoint instruction (0xCC).",
+                NextStep: RuntimeMessages.Text("RTE004_Next"),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
 
             4 => new RuntimeHaltInfo(
                 Code: "RTE005",
-                What: "Overflow trap (INTO with OF=1)",
+                What: RuntimeMessages.Text("RTE005_What"),
                 Where: where,
-                NextStep: "Install a custom INT 04h handler or check preceding arithmetic operations for signed overflow.",
+                NextStep: RuntimeMessages.Text("RTE005_Next"),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
 
             _ => new RuntimeHaltInfo(
                 Code: "RTE000",
-                What: $"CPU exception (INT {vector:X2}h)",
+                What: RuntimeMessages.Text("RTE000_What", vector),
                 Where: where,
-                NextStep: $"Install a custom INT {vector:X2}h vector handler.",
+                NextStep: RuntimeMessages.Text("RTE000_Next", vector),
                 HaltReason: HaltReason.RuntimeError,
                 Vector: vector),
         };
@@ -81,15 +81,15 @@ public static class RuntimeErrorPolicy
     public static RuntimeHaltInfo CreateUnsupportedServiceHalt(byte vector, CpuState state)
     {
         byte ah = (byte)(state.AX >> 8);
-        string where = $"at {state.CS:X4}:{state.IP:X4}";
+        string where = RuntimeMessages.Text("WhereAt", state.CS, state.IP);
 
         if (vector == 0x21)
         {
             return new RuntimeHaltInfo(
                 Code: "RTE021",
-                What: $"INT 21h function {ah:X2}h (AH={ah:X2}h) is unsupported",
+                What: RuntimeMessages.Text("RTE021_What", ah),
                 Where: where,
-                NextStep: "Host file, device, process and network services are not available in the offline emulator (NFR-013). Use supported DOS functions (01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch).",
+                NextStep: RuntimeMessages.Text("RTE021_Next"),
                 HaltReason: HaltReason.UnsupportedService,
                 Vector: vector,
                 Function: ah);
@@ -97,9 +97,9 @@ public static class RuntimeErrorPolicy
 
         return new RuntimeHaltInfo(
             Code: "RTE020",
-            What: $"INT {vector:X2}h function {ah:X2}h (AH={ah:X2}h) is unsupported",
+            What: RuntimeMessages.Text("RTE020_What", vector, ah),
             Where: where,
-            NextStep: $"Install a program vector for INT {vector:X2}h or use supported DOS services (INT 20h, INT 21h).",
+            NextStep: RuntimeMessages.Text("RTE020_Next", vector),
             HaltReason: HaltReason.UnsupportedService,
             Vector: vector,
             Function: ah);
@@ -118,22 +118,22 @@ public static class RuntimeErrorPolicy
         string hex = string.Join(" ", bytes.Take(6).Select(b => b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture)));
         return new RuntimeMessage(
             Code: "RTE010",
-            What: $"Unsupported instruction (bytes at CS:IP: {hex})",
-            Where: $"at {cs:X4}:{ip:X4}",
-            NextStep: "This instruction is outside the supported 8086 set. See Help for the supported instructions, change the code, then Reset.");
+            What: RuntimeMessages.Text("RTE010_What", hex),
+            Where: RuntimeMessages.Text("WhereAt", cs, ip),
+            NextStep: RuntimeMessages.Text("RTE010_Next"));
     }
 
     /// <summary>The message for a HLT instruction: the program stopped the CPU (it has no hardware interrupts to wait for).</summary>
     public static RuntimeMessage Hlt(ushort cs, ushort ip) => new(
         Code: "RTE011",
-        What: "The program executed HLT and the CPU stopped",
-        Where: $"at {cs:X4}:{ip:X4}",
-        NextStep: "End the program with INT 21h function 4Ch instead of HLT, then Reset.");
+        What: RuntimeMessages.Text("RTE011_What"),
+        Where: RuntimeMessages.Text("WhereAt", cs, ip),
+        NextStep: RuntimeMessages.Text("RTE011_Next"));
 
     /// <summary>The message for an internal emulator fault (NFR-010): the session stopped; the IDE stays usable.</summary>
     public static RuntimeMessage EngineFault(string fault) => new(
         Code: "RTE090",
-        What: $"Internal emulator error ({fault})",
-        Where: "in the emulator, not in your program",
-        NextStep: "Reset to try again. The log has the details (Help ▸ About ▸ Diagnostics).");
+        What: RuntimeMessages.Text("RTE090_What", fault),
+        Where: RuntimeMessages.Text("RTE090_Where"),
+        NextStep: RuntimeMessages.Text("RTE090_Next"));
 }

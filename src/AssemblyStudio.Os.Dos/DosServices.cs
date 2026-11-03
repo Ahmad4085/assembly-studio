@@ -186,9 +186,9 @@ public sealed class DosServices : IOsServices
         {
             return Refused(state, new DosServiceError(
                 "DOS002",
-                $"INT 21h AH=09h found no '$' terminator in the 64 KiB segment starting at {state.DS:X4}:{state.DX:X4}",
+                DosMessages.Text("DOS002_What", state.DS, state.DX),
                 Where(state),
-                "End the string with '$' (for example: msg db 'Hello', 13, 10, '$') and check that DS:DX points to it."));
+                DosMessages.Text("DOS002_Next")));
         }
 
         if (CheckBreak(state, machine) is { } stop)
@@ -505,9 +505,9 @@ public sealed class DosServices : IOsServices
         {
             return Refused(state, new DosServiceError(
                 "DOS001",
-                $"{service} requires CS to be the program segment (PSP {PspSegment:X4}h), but CS is {state.CS:X4}h",
+                DosMessages.Text("DOS001_What", service, PspSegment, state.CS),
                 Where(state),
-                "Use INT 21h AH=4Ch (exit code in AL), which works from any code segment, or call this service with CS = PSP."));
+                DosMessages.Text("DOS001_Next")));
         }
 
         return Terminated(state, path, 0x00);
@@ -559,7 +559,7 @@ public sealed class DosServices : IOsServices
         return (ushort)(ip + 2);
     }
 
-    private static string Where(CpuState state) => $"at {state.CS:X4}:{state.IP:X4}";
+    private static string Where(CpuState state) => DosMessages.Text("WhereAt", state.CS, state.IP);
 
     /// <summary>A 0Ah line in progress: the characters typed so far and the cells each one's echo took.</summary>
     private sealed class LineEdit(ushort cs, ushort ip)

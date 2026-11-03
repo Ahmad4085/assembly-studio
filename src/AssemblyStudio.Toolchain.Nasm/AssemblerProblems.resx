@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Build message catalog (FR-066, NFR-024, NFR-032). Keys: <code>_What (a format string; absent when the
+       assembler supplies the text) and <code>_Next. Codes are stable: never renumber or reuse one. -->
+  <data name="PathNotFound" xml:space="preserve"><value>No file was found at {0}.</value><comment>{0} = path</comment></data>
+  <data name="PathEmpty" xml:space="preserve"><value>Enter the full path of nasm.exe.</value></data>
+  <data name="PathNotFull" xml:space="preserve"><value>The assembler path must be a full local path, such as C:\Tools\nasm\nasm.exe.</value></data>
+  <data name="PathNotExe" xml:space="preserve"><value>The assembler must be an .exe file.</value></data>
+  <data name="ConfiguredUnusable" xml:space="preserve"><value>The configured assembler can't be used: {0} Correct it in Settings.</value><comment>{0} = one of the Path* texts</comment></data>
+  <data name="NoneAvailable" xml:space="preserve"><value>No assembler is available. Set the path of nasm.exe in Settings.</value></data>
+  <data name="BundledMissing" xml:space="preserve"><value>The bundled assembler is missing ({0}). Reinstall Assembly Studio or set the path of nasm.exe in Settings.</value><comment>{0} = path</comment></data>
+  <data name="NotStarted" xml:space="preserve"><value>The assembler at {0} could not be started: {1}</value><comment>{0} = path, {1} = Windows' reason</comment></data>
+  <data name="VersionTimedOut" xml:space="preserve"><value>The assembler at {0} did not answer a version request within {1:0} s.</value><comment>{0} = path, {1} = seconds</comment></data>
+  <data name="VersionFailed" xml:space="preserve"><value>The assembler at {0} failed when asked for its version (exit code {1}).</value><comment>{0} = path, {1} = exit code</comment></data>
+  <data name="NoVersion" xml:space="preserve"><value>The assembler at {0} did not report a NASM version. Assembly Studio is tested with NASM {1}.</value><comment>{0} = path, {1} = version such as 3.02</comment></data>
+  <data name="OlderVersion" xml:space="preserve"><value>NASM {0} is older than {1}, the version Assembly Studio is tested with. Builds may fail or map source lines incorrectly.</value><comment>{0} = found version, {1} = tested version</comment></data>
+</root>

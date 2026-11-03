@@ -145,7 +145,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-2 | — | NFR-029 | P0 | APPROVED | AC-004 | ADR-0007 | UI-019 | TASK-062 | TC-048, TC-054 | PASS 2026-11-03-2 | QA 2026-11-03-2: Verified |
 | PG-5 | — | NFR-030 | P0 | APPROVED | AC-042 | ADR-0001, ADR-0005, ADR-0009 | — | TASK-005, TASK-100, TASK-102 | NOT CREATED | NOT RUN | QA 2026-11-03-2: Not verified |
 | PG-5 | — | NFR-031 | P1 | APPROVED | AC-061 | ADR-0008, ADR-0009 | — | TASK-005, TASK-102 | NOT CREATED | NOT RUN | QA 2026-11-03-2: Not verified |
-| PG-6 | — | NFR-032 | P1 | APPROVED | AC-060 | ADR-0007 | UI-001 | TASK-104 | NOT CREATED | NOT RUN | QA 2026-11-03-2: Out of scope |
+| PG-6 | — | NFR-032 | P1 | APPROVED | AC-060 | ADR-0007 | UI-001 | TASK-104 | TC-094 | NOT RUN | QA 2026-11-03-2: Out of scope |
 | PG-6 | — | NFR-033 | P1 | APPROVED | AC-051 | ADR-0002 | UI-015 | TASK-093, TASK-113 | TC-029, TC-043, TC-056 | PASS 2026-11-03-2 | QA 2026-11-03-2: Verified |
 
 ## Coverage

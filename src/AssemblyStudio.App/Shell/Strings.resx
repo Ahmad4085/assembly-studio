@@ -484,4 +484,9 @@ message db 'Hello, World!', 13, 10, '$'
   <data name="GoToLinePrompt" xml:space="preserve"><value>_Line number (1–{0}):</value><comment>Go to Line dialog. {0} = the last line</comment></data>
   <data name="GoToLineInvalid" xml:space="preserve"><value>Enter a whole number from 1 to {0}.</value><comment>Go to Line dialog error. {0} = the last line</comment></data>
   <data name="VariableShowInMemory" xml:space="preserve"><value>Show in Memory</value><comment>Variables panel action (Enter / double-click)</comment></data>
+  <data name="EndInt20h" xml:space="preserve"><value>INT 20h</value><comment>How the program ended (Runtime panel)</comment></data>
+  <data name="EndInt21h00h" xml:space="preserve"><value>INT 21h function 00h</value><comment>How the program ended (Runtime panel)</comment></data>
+  <data name="EndInt21h4Ch" xml:space="preserve"><value>INT 21h function 4Ch</value><comment>How the program ended (Runtime panel)</comment></data>
+  <data name="EndReturnToPsp" xml:space="preserve"><value>RET to PSP:0000</value><comment>How the program ended (Runtime panel)</comment></data>
+  <data name="EndCtrlC" xml:space="preserve"><value>Ctrl-C (INT 23h)</value><comment>How the program ended (Runtime panel)</comment></data>
 </root>

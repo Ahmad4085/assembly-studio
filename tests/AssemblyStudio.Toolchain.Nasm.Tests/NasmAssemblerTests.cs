@@ -199,7 +199,7 @@ public sealed class NasmAssemblerTests : IDisposable
 
         Assert.Equal(BuildOutcome.AssemblerMissing, result.Outcome);
         Assert.Equal(AssemblerStatus.Missing, result.Assembler.Status);
-        Assert.Contains("Settings", result.Assembler.Problem, StringComparison.Ordinal);
+        Assert.Equal($"The bundled assembler is missing ({Path.Combine(_root, "missing", "nasm.exe")}). Reinstall Assembly Studio or set the path of nasm.exe in Settings.", result.Assembler.Problem);
         Assert.Null(result.ExitCode);
         Assert.False(Directory.Exists(TempRoot)); // nothing was prepared
         Diagnostic missing = Assert.Single(result.Diagnostics);
@@ -222,7 +222,7 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.Equal(BuildOutcome.AssemblerMissing, result.Outcome);
         Assert.Equal(AssemblerOrigin.Configured, result.Assembler.Origin);
         Assert.Equal(status, result.Assembler.Status);
-        Assert.Contains("Settings", result.Assembler.Problem, StringComparison.Ordinal);
+        Assert.Equal($"The configured assembler can't be used: {NasmAssembler.ValidateConfiguredPath(configured)} Correct it in Settings.", result.Assembler.Problem);
     }
 
     [Fact]
@@ -231,6 +231,16 @@ public sealed class NasmAssemblerTests : IDisposable
         Assert.Null(NasmAssembler.ValidateConfiguredPath(NasmLocator.GetNasmPath()));
         Assert.NotNull(NasmAssembler.ValidateConfiguredPath(""));
         Assert.NotNull(NasmAssembler.ValidateConfiguredPath(@"C:\no\such\nasm.exe"));
+    }
+
+    /// <summary>TASK-104 (NFR-032): the texts moved to <c>AssemblerProblems.resx</c> read exactly as they did in code.</summary>
+    [Fact]
+    public void TASK_104_the_path_problems_read_as_before_from_the_resources()
+    {
+        Assert.Equal("Enter the full path of nasm.exe.", NasmAssembler.ValidateConfiguredPath(""));
+        Assert.Equal(@"The assembler path must be a full local path, such as C:\Tools\nasm\nasm.exe.", NasmAssembler.ValidateConfiguredPath("nasm.exe"));
+        Assert.Equal("The assembler must be an .exe file.", NasmAssembler.ValidateConfiguredPath(@"C:\no\such\nasm.cmd"));
+        Assert.Equal(@"No file was found at C:\no\such\nasm.exe.", NasmAssembler.ValidateConfiguredPath(@"C:\no\such\nasm.exe"));
     }
 
     [Theory]
@@ -257,7 +267,7 @@ public sealed class NasmAssemblerTests : IDisposable
 
         Assert.Equal(AssemblerStatus.OlderVersion, result.Assembler.Status);
         Assert.Equal("2.16", result.Assembler.Version);
-        Assert.Contains("3.02", result.Assembler.Problem, StringComparison.Ordinal);
+        Assert.Equal("NASM 2.16 is older than 3.02, the version Assembly Studio is tested with. Builds may fail or map source lines incorrectly.", result.Assembler.Problem);
         Assert.True(result.Assembler.IsUsable);
         Assert.Equal(BuildOutcome.Failed, result.Outcome); // the stub exits 0 without writing an image
         Assert.Equal(["BLD004", "BLD008"], result.Diagnostics.Select(d => d.Code));
@@ -273,6 +283,18 @@ public sealed class NasmAssemblerTests : IDisposable
 
         Assert.Equal(AssemblerStatus.NotRunnable, info.Status);
         Assert.False(info.IsUsable);
+        Assert.Equal($"The assembler at {stub} failed when asked for its version (exit code 3).", info.Problem); // TASK-104
+    }
+
+    [Fact]
+    public void TASK_104_a_file_that_reports_no_NASM_version_reads_as_before_from_the_resources()
+    {
+        string stub = Stub("other", "exit /b 0", version: "YASM 1.3.0");
+
+        AssemblerInfo info = Assembler(bundled: stub).Check();
+
+        Assert.Equal(AssemblerStatus.UnknownVersion, info.Status);
+        Assert.Equal($"The assembler at {stub} did not report a NASM version. Assembly Studio is tested with NASM 3.02.", info.Problem);
     }
 
     // ---- AC-019, FR-030, FR-095: hang, crash, cancel, and the next build still works ----

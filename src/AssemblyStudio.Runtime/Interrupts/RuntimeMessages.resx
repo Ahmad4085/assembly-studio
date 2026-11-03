@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Build message catalog (FR-066, NFR-024, NFR-032). Keys: <code>_What (a format string; absent when the
+       assembler supplies the text) and <code>_Next. Codes are stable: never renumber or reuse one. -->
+  <data name="WhereAt" xml:space="preserve"><value>at {0:X4}:{1:X4}</value><comment>{0} = CS, {1} = IP</comment></data>
+  <data name="RTE001_What" xml:space="preserve"><value>Divide error: division by zero or quotient overflow</value></data>
+  <data name="RTE001_Next" xml:space="preserve"><value>Ensure the divisor is non-zero and that the quotient fits within the destination register.</value></data>
+  <data name="RTE002_What" xml:space="preserve"><value>Single-step trap (INT 1)</value></data>
+  <data name="RTE002_Next" xml:space="preserve"><value>Clear the Trap Flag (TF) in FLAGS or install a custom INT 01h handler.</value></data>
+  <data name="RTE003_What" xml:space="preserve"><value>Non-maskable interrupt (INT 2)</value></data>
+  <data name="RTE003_Next" xml:space="preserve"><value>Install a custom INT 02h handler or check hardware interrupt conditions.</value></data>
+  <data name="RTE004_What" xml:space="preserve"><value>Breakpoint interrupt (INT 3)</value></data>
+  <data name="RTE004_Next" xml:space="preserve"><value>Install a custom INT 03h handler or remove the breakpoint instruction (0xCC).</value></data>
+  <data name="RTE005_What" xml:space="preserve"><value>Overflow trap (INTO with OF=1)</value></data>
+  <data name="RTE005_Next" xml:space="preserve"><value>Install a custom INT 04h handler or check preceding arithmetic operations for signed overflow.</value></data>
+  <data name="RTE000_What" xml:space="preserve"><value>CPU exception (INT {0:X2}h)</value><comment>{0} = vector</comment></data>
+  <data name="RTE000_Next" xml:space="preserve"><value>Install a custom INT {0:X2}h vector handler.</value><comment>{0} = vector</comment></data>
+  <data name="RTE021_What" xml:space="preserve"><value>INT 21h function {0:X2}h (AH={0:X2}h) is unsupported</value><comment>{0} = AH</comment></data>
+  <data name="RTE021_Next" xml:space="preserve"><value>Host file, device, process and network services are not available in the offline emulator (NFR-013). Use supported DOS functions (01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch).</value></data>
+  <data name="RTE020_What" xml:space="preserve"><value>INT {0:X2}h function {1:X2}h (AH={1:X2}h) is unsupported</value><comment>{0} = vector, {1} = AH</comment></data>
+  <data name="RTE020_Next" xml:space="preserve"><value>Install a program vector for INT {0:X2}h or use supported DOS services (INT 20h, INT 21h).</value><comment>{0} = vector</comment></data>
+  <data name="RTE010_What" xml:space="preserve"><value>Unsupported instruction (bytes at CS:IP: {0})</value><comment>{0} = up to 6 bytes in hex</comment></data>
+  <data name="RTE010_Next" xml:space="preserve"><value>This instruction is outside the supported 8086 set. See Help for the supported instructions, change the code, then Reset.</value></data>
+  <data name="RTE011_What" xml:space="preserve"><value>The program executed HLT and the CPU stopped</value></data>
+  <data name="RTE011_Next" xml:space="preserve"><value>End the program with INT 21h function 4Ch instead of HLT, then Reset.</value></data>
+  <data name="RTE090_What" xml:space="preserve"><value>Internal emulator error ({0})</value><comment>{0} = the fault (exception type and message)</comment></data>
+  <data name="RTE090_Where" xml:space="preserve"><value>in the emulator, not in your program</value></data>
+  <data name="RTE090_Next" xml:space="preserve"><value>Reset to try again. The log has the details (Help ▸ About ▸ Diagnostics).</value></data>
+</root>

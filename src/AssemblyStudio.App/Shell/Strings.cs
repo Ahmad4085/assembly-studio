@@ -1416,4 +1416,19 @@ public static class Strings
 
     /// <summary>Show in Memory</summary>
     public static string VariableShowInMemory => Get(nameof(VariableShowInMemory));
+
+    /// <summary>INT 20h</summary>
+    public static string EndInt20h => Get(nameof(EndInt20h));
+
+    /// <summary>INT 21h function 00h</summary>
+    public static string EndInt21h00h => Get(nameof(EndInt21h00h));
+
+    /// <summary>INT 21h function 4Ch</summary>
+    public static string EndInt21h4Ch => Get(nameof(EndInt21h4Ch));
+
+    /// <summary>RET to PSP:0000</summary>
+    public static string EndReturnToPsp => Get(nameof(EndReturnToPsp));
+
+    /// <summary>Ctrl-C (INT 23h)</summary>
+    public static string EndCtrlC => Get(nameof(EndCtrlC));
 }

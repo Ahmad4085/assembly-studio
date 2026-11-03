@@ -645,11 +645,11 @@ public sealed partial class BuildRunViewModel : ObservableObject, IDisposable
 
     private static string TerminationText(ProgramTermination? termination) => termination?.Path switch
     {
-        TerminationPath.Int20h => "INT 20h",
-        TerminationPath.Int21hFunction00h => "INT 21h function 00h",
-        TerminationPath.Int21hFunction4Ch => "INT 21h function 4Ch",
-        TerminationPath.ReturnToPsp => "RET to PSP:0000",
-        TerminationPath.CtrlC => "Ctrl-C (INT 23h)",
+        TerminationPath.Int20h => Strings.EndInt20h,
+        TerminationPath.Int21hFunction00h => Strings.EndInt21h00h,
+        TerminationPath.Int21hFunction4Ch => Strings.EndInt21h4Ch,
+        TerminationPath.ReturnToPsp => Strings.EndReturnToPsp,
+        TerminationPath.CtrlC => Strings.EndCtrlC,
         _ => "—",
     };
 

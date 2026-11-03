@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 17:11 +0500 by Claude Code (Opus 5.5) (TASK-113 done) |
+| Last updated | 2026-11-03 17:54 +0500 by Claude Code (Opus 5.5) (TASK-104 done) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 104, 105; then `/assembly-qa` and `/assembly-release <version>` (copies `docs/09-release/known-limitations.md` §2). DEF-003 decision, OQ-026 |
+| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-test` (AC-060 now has TC-094), `/assembly-qa` and `/assembly-release <version>`. User decisions: DEF-003, DEF-028 wording, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-104 Localizability and message review | 2026-11-03 17:54 +0500 | 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). Full solution: runs a and b (17:29–17:38) not counted: the Release build had failed on my new runtime test (CS9176), so they used an old Runtime.Tests binary; fixed and rebuilt (0 warnings). Run c (17:40–17:44): 1574 + 3 passed, 7 skipped, 0 failed. Run d (17:44–17:48): 1 failed, the AC-010 clipboard test (DEF-011, recorded); then 3 of 3 alone and run e (17:49–17:53): 1574 + 3 passed, 7 skipped, 0 failed |
 | TASK-113 Known limitations | 2026-11-03 17:11 +0500 | A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources). TC-056 50 tests; full solution three runs: a (16:58–17:03) 1557 + 3 passed, 7 skipped, 0 failed; b (17:03–17:07) 1 failed, AC-050 crash-recovery timeout (DEF-012 recurrence, recorded), 1556 + 3 passed; then the test alone 3 of 3 and run c (17:07–17:11) 1557 + 3 passed, 7 skipped, 0 failed |
 | Testing phase (report 2026-11-03-2) | 2026-11-03 16:37 +0500 | 1566 tests: 1559 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,562 ms); coverage engine 99.6%, runtime 93.8% (run incomplete: DEF-011 clipboard under coverage); 54 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 6 not run; DEF-022, 024, 025, 026 verified; traceability v2.11, AC v2.6, test plan v0.9 |
 | TASK-112 Themed input controls | 2026-11-03 15:55 +0500 | Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one. TC-066 22 tests, 120 contrast pairs per theme; full solution 1559 passed + 7 skipped twice |
@@ -148,7 +149,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-2: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
+| Failed tests / open defects | Test report 2026-11-03-2: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027, DEF-028 (RTE021 wording, 2026-11-03) |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

@@ -53,7 +53,7 @@ public sealed partial class NasmAssembler : IAssembler
     /// <c>.exe</c> file. Returns <see langword="null"/> when acceptable, else the reason. Nothing is run.
     /// </summary>
     public static string? ValidateConfiguredPath(string? path) =>
-        FormatProblem(path) ?? (File.Exists(path) ? null : $"No file was found at {path}.");
+        FormatProblem(path) ?? (File.Exists(path) ? null : AssemblerProblems.Text("PathNotFound", path));
 
     /// <summary>Checks the form of a configured path without touching the file system (a network
     /// path is rejected before any lookup).</summary>
@@ -61,17 +61,17 @@ public sealed partial class NasmAssembler : IAssembler
     {
         if (string.IsNullOrWhiteSpace(path))
         {
-            return "Enter the full path of nasm.exe.";
+            return AssemblerProblems.Text("PathEmpty");
         }
 
         if (!Path.IsPathFullyQualified(path) || path.StartsWith(@"\\", StringComparison.Ordinal))
         {
-            return "The assembler path must be a full local path, such as C:\\Tools\\nasm\\nasm.exe.";
+            return AssemblerProblems.Text("PathNotFull");
         }
 
         return string.Equals(Path.GetExtension(path), ".exe", StringComparison.OrdinalIgnoreCase)
             ? null
-            : "The assembler must be an .exe file.";
+            : AssemblerProblems.Text("PathNotExe");
     }
 
     /// <summary>The build's NASM arguments (documented in the help page "Building with NASM", TASK-093).</summary>
@@ -111,15 +111,15 @@ public sealed partial class NasmAssembler : IAssembler
         if (configured && ValidateConfiguredPath(path) is { } invalid)
         {
             return new AssemblerInfo(path, origin, null, FormatProblem(path) is null ? AssemblerStatus.Missing : AssemblerStatus.InvalidPath,
-                $"The configured assembler can't be used: {invalid} Correct it in Settings.");
+                AssemblerProblems.Text("ConfiguredUnusable", invalid));
         }
 
         if (path is null || !File.Exists(path))
         {
             return new AssemblerInfo(path, origin, null, AssemblerStatus.Missing,
                 path is null
-                    ? "No assembler is available. Set the path of nasm.exe in Settings."
-                    : $"The bundled assembler is missing ({path}). Reinstall Assembly Studio or set the path of nasm.exe in Settings.");
+                    ? AssemblerProblems.Text("NoneAvailable")
+                    : AssemblerProblems.Text("BundledMissing", path));
         }
 
         var file = new FileInfo(path);
@@ -374,28 +374,28 @@ public sealed partial class NasmAssembler : IAssembler
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            return new AssemblerInfo(path, origin, null, AssemblerStatus.NotRunnable, $"The assembler at {path} could not be started: {ex.Message}");
+            return new AssemblerInfo(path, origin, null, AssemblerStatus.NotRunnable, AssemblerProblems.Text("NotStarted", path, ex.Message));
         }
 
         if (run.ExitCode != 0)
         {
             return new AssemblerInfo(path, origin, null, AssemblerStatus.NotRunnable,
                 run.TimedOut
-                    ? $"The assembler at {path} did not answer a version request within {_options.VersionCheckTimeout.TotalSeconds:0} s."
-                    : $"The assembler at {path} failed when asked for its version (exit code {run.ExitCode}).");
+                    ? AssemblerProblems.Text("VersionTimedOut", path, _options.VersionCheckTimeout.TotalSeconds)
+                    : AssemblerProblems.Text("VersionFailed", path, run.ExitCode));
         }
 
         Version? version = ParseVersion(run.StandardOutput + run.StandardError);
         if (version is null)
         {
             return new AssemblerInfo(path, origin, null, AssemblerStatus.UnknownVersion,
-                $"The assembler at {path} did not report a NASM version. Assembly Studio is tested with NASM {MinimumVersion.Major}.{MinimumVersion.Minor:00}.");
+                AssemblerProblems.Text("NoVersion", path, $"{MinimumVersion.Major}.{MinimumVersion.Minor:00}"));
         }
 
         string text = $"{version.Major}.{version.Minor:00}";
         return version < MinimumVersion
             ? new AssemblerInfo(path, origin, text, AssemblerStatus.OlderVersion,
-                $"NASM {text} is older than {MinimumVersion.Major}.{MinimumVersion.Minor:00}, the version Assembly Studio is tested with. Builds may fail or map source lines incorrectly.")
+                AssemblerProblems.Text("OlderVersion", text, $"{MinimumVersion.Major}.{MinimumVersion.Minor:00}"))
             : new AssemblerInfo(path, origin, text, AssemblerStatus.Ready, null);
     }
 

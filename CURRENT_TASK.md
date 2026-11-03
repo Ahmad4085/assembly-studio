@@ -11,8 +11,21 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first), 104, 105; then `/assembly-qa` and `/assembly-release <version>` |
-| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>` |
+| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, DEF-028 wording, OQ-026 |
+
+---
+
+## Completed: TASK-104 Localizability and message review (Done 2026-11-03 17:54 +0500, Claude Code (Opus 5.5))
+- Scope widened with the user's approval (17:17): 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording).
+- Kept English with reasons (in the test's allow-list): the About diagnostics (FR-076), log and thread names, font names, technical notation, the command table's row names, the opcode table.
+- Tests: TC-094 `LocalizableStringTests` (14); exact-text checks in TC-024, TC-030 (9 of 12 assembler texts; 3 compared in the diff), TC-084 (all 11 runtime messages). Mutations: a literal put back in `RuntimeErrorPolicy`, a XAML `Text="Hello world"`, a changed resource value: each fails. Full solution: runs a and b (17:29–17:38) not counted: the Release build had failed on my new runtime test (CS9176), so they used an old Runtime.Tests binary; fixed and rebuilt (0 warnings). Run c (17:40–17:44): 1574 + 3 passed, 7 skipped, 0 failed. Run d (17:44–17:48): 1 failed, the AC-010 clipboard test (DEF-011, recorded); then 3 of 3 alone and run e (17:49–17:53): 1574 + 3 passed, 7 skipped, 0 failed.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 17:14 / 17:54 +0500 |
 
 ---
 

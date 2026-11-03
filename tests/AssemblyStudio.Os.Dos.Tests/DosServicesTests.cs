@@ -225,6 +225,10 @@ public class DosServicesTests
         Assert.Equal(StepOutcome.Halted, result.Outcome);
         Assert.Equal(HaltReason.RuntimeError, result.HaltReason);
         Assert.Equal("DOS002", rig.Dos.LastError?.Code);
+        // TASK-104 (NFR-032): the texts moved to DosMessages.resx read exactly as they did in code.
+        Assert.Equal("INT 21h AH=09h found no '$' terminator in the 64 KiB segment starting at 2000:0200", rig.Dos.LastError!.What);
+        Assert.Matches("^at [0-9A-F]{4}:[0-9A-F]{4}$", rig.Dos.LastError.Where);
+        Assert.Equal("End the string with '$' (for example: msg db 'Hello', 13, 10, '$') and check that DS:DX points to it.", rig.Dos.LastError.NextStep);
         Assert.Equal(string.Empty, rig.Output);
         Assert.Equal(before, rig.Cpu.State);
     }
@@ -838,6 +842,9 @@ public class DosServicesTests
         Assert.Null(result.Termination);
         Assert.Equal("DOS001", rig.Dos.LastError?.Code);
         Assert.Contains("3000", rig.Dos.LastError!.What, StringComparison.Ordinal);
+        // TASK-104 (NFR-032): the texts moved to DosMessages.resx read exactly as they did in code.
+        Assert.Equal($"{(code[1] == 0x20 ? "INT 20h" : "INT 21h AH=00h")} requires CS to be the program segment (PSP 0800h), but CS is 3000h", rig.Dos.LastError.What);
+        Assert.Equal("Use INT 21h AH=4Ch (exit code in AL), which works from any code segment, or call this service with CS = PSP.", rig.Dos.LastError.NextStep);
         Assert.Equal(before, rig.Cpu.State);
     }
 

@@ -55,4 +55,35 @@ public sealed class RuntimeMessageTests
         Assert.Equal("at 0800:0103", messages[0].Where);
         Assert.All(messages, m => Assert.False(string.IsNullOrWhiteSpace(m.What) || string.IsNullOrWhiteSpace(m.Where) || string.IsNullOrWhiteSpace(m.NextStep)));
     }
+
+    /// <summary>TASK-104 (NFR-032): the texts moved to <c>RuntimeMessages.resx</c> read exactly as they did in code.</summary>
+    [Fact]
+    public void TASK_104_every_runtime_message_reads_as_before_from_the_resources()
+    {
+        RuntimeMessage[] messages =
+        [
+            .. new byte[] { 0, 1, 2, 3, 4, 5 }.Select(v => RuntimeErrorPolicy.CreateCpuExceptionHalt(v, State).ToMessage()),
+            .. new byte[] { 0x21, 0x10 }.Select(v => RuntimeErrorPolicy.CreateUnsupportedServiceHalt(v, State).ToMessage()),
+            RuntimeErrorPolicy.UnsupportedInstruction(0x0800, 0x0103, [0x0F, 0xA2]),
+            RuntimeErrorPolicy.Hlt(0x0800, 0x0110),
+            RuntimeErrorPolicy.EngineFault("InvalidOperationException: test"),
+        ];
+
+        Assert.Equal(ExpectedTexts, messages.Select(m => $"{m.Code}|{m.What}|{m.Where}|{m.NextStep}"));
+    }
+
+    private static readonly string[] ExpectedTexts =
+    [
+        "RTE001|Divide error: division by zero or quotient overflow|at 0800:0105|Ensure the divisor is non-zero and that the quotient fits within the destination register.",
+        "RTE002|Single-step trap (INT 1)|at 0800:0105|Clear the Trap Flag (TF) in FLAGS or install a custom INT 01h handler.",
+        "RTE003|Non-maskable interrupt (INT 2)|at 0800:0105|Install a custom INT 02h handler or check hardware interrupt conditions.",
+        "RTE004|Breakpoint interrupt (INT 3)|at 0800:0105|Install a custom INT 03h handler or remove the breakpoint instruction (0xCC).",
+        "RTE005|Overflow trap (INTO with OF=1)|at 0800:0105|Install a custom INT 04h handler or check preceding arithmetic operations for signed overflow.",
+        "RTE000|CPU exception (INT 05h)|at 0800:0105|Install a custom INT 05h vector handler.",
+        "RTE021|INT 21h function 3Dh (AH=3Dh) is unsupported|at 0800:0105|Host file, device, process and network services are not available in the offline emulator (NFR-013). Use supported DOS functions (01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch).",
+        "RTE020|INT 10h function 3Dh (AH=3Dh) is unsupported|at 0800:0105|Install a program vector for INT 10h or use supported DOS services (INT 20h, INT 21h).",
+        "RTE010|Unsupported instruction (bytes at CS:IP: 0F A2)|at 0800:0103|This instruction is outside the supported 8086 set. See Help for the supported instructions, change the code, then Reset.",
+        "RTE011|The program executed HLT and the CPU stopped|at 0800:0110|End the program with INT 21h function 4Ch instead of HLT, then Reset.",
+        "RTE090|Internal emulator error (InvalidOperationException: test)|in the emulator, not in your program|Reset to try again. The log has the details (Help ▸ About ▸ Diagnostics).",
+    ];
 }

@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.10 |
+| Version | 0.11 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-2.md` |
@@ -65,13 +65,13 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-021 | `Runtime.Tests.MachineTests` | Unit (runtime) | — | 5 |
 | TC-022 | `Runtime.Tests.RealModeMemoryTests` | Unit (runtime) | — | 24 |
 | TC-023 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
-| TC-024 | `Os.Dos.Tests.DosServicesTests` | Integration (DOS services on the engine) | AC-022, AC-023, AC-064, TASK-034, TASK-035, TASK-036 | 72 |
+| TC-024 | `Os.Dos.Tests.DosServicesTests` | Integration (DOS services on the engine) | AC-022, AC-023, AC-064, TASK-034, TASK-035, TASK-036, TASK-104 | 72 |
 | TC-025 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-026 | `Toolchain.Nasm.Tests.BuildDiagnosticsTests` | Integration (NASM toolchain) | AC-013, AC-014, AC-018, AC-020, AC-055, FR-021, FR-027, FR-029, FR-031, FR-066, NFR-024, TASK-041 | 28 |
 | TC-027 | `Toolchain.Nasm.Tests.BuildTimeTests` | Integration (NASM toolchain) | AC-056, NFR-006, TASK-086 | 1 |
 | TC-028 | `Toolchain.Nasm.Tests.CpuDirectiveGuardTests` | Integration (NASM toolchain) | FR-027, TASK-042 | 16 |
 | TC-029 | `Toolchain.Nasm.Tests.HelpConsistencyTests` | Integration (NASM toolchain) | AC-051, FR-032, TASK-093 | 16 |
-| TC-030 | `Toolchain.Nasm.Tests.NasmAssemblerTests` | Integration (NASM toolchain) | AC-015, AC-016, AC-019, FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, TASK-040 | 29 |
+| TC-030 | `Toolchain.Nasm.Tests.NasmAssemblerTests` | Integration (NASM toolchain) | AC-015, AC-016, AC-019, FR-023, FR-024, FR-025, FR-026, FR-030, FR-095, NFR-014, TASK-040, TASK-104 | 31 |
 | TC-031 | `Toolchain.Nasm.Tests.NasmLocatorTests` | Integration (NASM toolchain) | — | 5 |
 | TC-032 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-033 | `Toolchain.Nasm.Tests.SourceMapTests` | Integration (NASM toolchain) | TASK-042, TASK-043 | 49 |
@@ -125,7 +125,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-081 | `App.Tests.Panels.CpuTests` | UI / view model (real NASM and session) | AC-025, AC-037, AC-052, FR-047, FR-057, NFR-018, UI-005, UI-006, TASK-081, DEF-008 | 17 |
 | TC-082 | `App.Tests.Panels.MemoryTests` | UI / view model (real NASM and session) | AC-026, FR-054, NFR-018, UI-008, UI-009, TASK-082 | 21 |
 | TC-083 | `App.Tests.Panels.SessionPanelsTests` | UI / view model (real NASM and session) | AC-024, AC-028, AC-029, AC-031, AC-048, AC-049, FR-041, FR-042, FR-052, FR-058, UI-007, UI-012, UI-013, UI-014, TASK-083 | 9 |
-| TC-084 | `Runtime.Tests.RuntimeMessageTests` | Unit (runtime) | FR-038, FR-040, FR-066, TASK-083 | 3 |
+| TC-084 | `Runtime.Tests.RuntimeMessageTests` | Unit (runtime) | AC-055, FR-038, FR-040, FR-066, TASK-083, TASK-104 | 4 |
 | TC-085 | `App.Tests.Accessibility.EditorAccessibilityTests` | UI / UI Automation | FR-093, NFR-022, TASK-069 | 2 |
 | TC-086 | `App.Tests.Panels.AnnouncementTests` | UI / view model | FR-093, TASK-085 | 4 |
 | TC-087 | `App.UiTests.UiSmokeTests` | UI (real process, FlaUI) | AC-043, FR-091, FR-092, TASK-085 | 2 |
@@ -135,6 +135,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-091 | `App.Tests.Editor.FindReplaceTests` | UI / view model | AC-011, FR-015, FR-016, FR-017, UI-004, TASK-065 | 22 |
 | TC-092 | `App.UiTests.AppUnderTestTests` | UI test harness | DEF-020, TASK-107 | 2 |
 | TC-093 | `App.Tests.Logging.StartupTimelineTests` | Unit (startup diagnostics) | NFR-005, DEF-021, TASK-108 | 2 |
+| TC-094 | `ArchitectureTests.LocalizableStringTests` | Architecture rules (source scan) | AC-060, NFR-032, TASK-104 | 14 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -181,3 +182,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.8: TASK-112: TC-066 covers the control tokens, 120 contrast pairs per theme and the themed controls in a real window (22 tests).
 - 2026-11-03 v0.9: Test run 2026-11-03-2: counts refreshed.
 - 2026-11-03 v0.10: TASK-113: TC-056 also checks the help page's known limitations against the code (50 tests).
+- 2026-11-03 v0.11: TASK-104: TC-094 added (no hard-coded user-facing text in C# or XAML, 14 tests); TC-024, TC-030 and TC-084 check the moved messages word for word.

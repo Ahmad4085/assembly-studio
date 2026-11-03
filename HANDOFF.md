@@ -8,7 +8,7 @@
 | Written | 2026-11-03 18:48 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-3) |
 | Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-3.md` (2026-11-03 18:48 +0500): no failed test |
-| Git state | HEAD `bb87ae3`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `c69a137` (testing phase 2026-11-03-3 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -144,7 +144,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the test report and says "commit" (then commit and record the hash here).
+1. Done: testing phase 2026-11-03-3 committed (`c69a137`).
 2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-qa` and `/assembly-release <version>`.
 3. User: DEF-003 decision, OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
 

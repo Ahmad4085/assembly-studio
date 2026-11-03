@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 18:27 +0500 by Claude Code (Opus 5.5) (TASK-114 done) |
+| Last updated | 2026-11-03 18:48 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-3) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-test` (verifies DEF-028; AC-060 has TC-094), `/assembly-qa` and `/assembly-release <version>`. User decisions: DEF-003, OQ-026 |
+| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-qa` and `/assembly-release <version>`. User decisions: DEF-003, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Testing phase (report 2026-11-03-3) | 2026-11-03 18:48 +0500 | 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified; traceability v2.12, AC v2.7, test plan v0.13 |
 | TASK-114 Fix the RTE021 next step (DEF-028) | 2026-11-03 18:27 +0500 | RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page. Full solution 1575 + 3 passed, 7 skipped, 0 failed twice (18:17–18:22, 18:22–18:26) |
 | TASK-104 Localizability and message review | 2026-11-03 17:54 +0500 | 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). Full solution: runs a and b (17:29–17:38) not counted: the Release build had failed on my new runtime test (CS9176), so they used an old Runtime.Tests binary; fixed and rebuilt (0 warnings). Run c (17:40–17:44): 1574 + 3 passed, 7 skipped, 0 failed. Run d (17:44–17:48): 1 failed, the AC-010 clipboard test (DEF-011, recorded); then 3 of 3 alone and run e (17:49–17:53): 1574 + 3 passed, 7 skipped, 0 failed |
 | TASK-113 Known limitations | 2026-11-03 17:11 +0500 | A "Known limitations" section in the help page "What Assembly Studio supports" (the first start after a Windows restart; the Variables panel: 1- and 2-byte variables shown as numbers, at most 64 bytes, 2 regions of 4,096 bytes, "not shown") and `docs/09-release/known-limitations.md` v0.1 (the release-notes text with its sources). TC-056 50 tests; full solution three runs: a (16:58–17:03) 1557 + 3 passed, 7 skipped, 0 failed; b (17:03–17:07) 1 failed, AC-050 crash-recovery timeout (DEF-012 recurrence, recorded), 1556 + 3 passed; then the test alone 3 of 3 and run c (17:07–17:11) 1557 + 3 passed, 7 skipped, 0 failed |
@@ -150,7 +151,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-2: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027. Fixed (unverified): DEF-028 (TASK-114) |
+| Failed tests / open defects | Test report 2026-11-03-3: **no failed test**. Verified: DEF-006, 009, 010, 013, 017..022, 024, 025, 026, 028. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low): DEF-001, DEF-002 (not reproduced), DEF-003 (decision), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

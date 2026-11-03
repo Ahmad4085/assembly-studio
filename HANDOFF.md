@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 18:27 +0500 by Claude Code (Opus 5.5), after TASK-114 |
+| Written | 2026-11-03 18:48 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-3) |
 | Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
-| Last completed | TASK-114 Fix the RTE021 next step (Done 2026-11-03 18:27 +0500) |
-| Git state | HEAD after `745b3a2` (TASK-114 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-3.md` (2026-11-03 18:48 +0500): no failed test |
+| Git state | HEAD `bb87ae3`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Testing phase 2026-11-03-3** (Claude Code; documents only): 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified.
+
 - **TASK-114** (Claude Code, Done, committed `745b3a2`): RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page. DEF-028 Fixed (unverified).
 
 - **TASK-104** (Claude Code, Done, committed `a9f59df`; scope widened with the user's approval): 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). New user-facing text must go into a `.resx`; `LocalizableStringTests` fails otherwise (add an allow-list entry with a reason only for text no user reads).
@@ -142,8 +144,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: TASK-114 committed (`745b3a2`).
-2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-test` (verifies DEF-028), `/assembly-qa` and `/assembly-release <version>`.
+1. The user reviews the test report and says "commit" (then commit and record the hash here).
+2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-qa` and `/assembly-release <version>`.
 3. User: DEF-003 decision, OQ-026. Optional: rerun the real-key AC-043 test on the current code (user away).
 
 ## Do not overwrite or revert

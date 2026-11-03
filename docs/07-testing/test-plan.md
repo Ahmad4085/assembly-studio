@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.12 |
+| Version | 0.13 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-03-2.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-03-3.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -184,3 +184,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.10: TASK-113: TC-056 also checks the help page's known limitations against the code (50 tests).
 - 2026-11-03 v0.11: TASK-104: TC-094 added (no hard-coded user-facing text in C# or XAML, 14 tests); TC-024, TC-030 and TC-084 check the moved messages word for word.
 - 2026-11-03 v0.12: TASK-114: TC-043 checks that RTE021 lists the documented DOS functions (7 tests).
+- 2026-11-03 v0.13: Test run 2026-11-03-3: counts checked.

@@ -2187,3 +2187,10 @@
 - **Tests executed:** HelpTests 7/7, Runtime.Tests 86/86 (Debug); mutation (old wording) failed the new test; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice: 1575 + 3 passed, 7 skipped, 0 failed twice (18:17–18:22, 18:22–18:26).
 - **Git state after:** uncommitted TASK-114 changes on top of `f6da2d4`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006 and TASK-100.
+
+### 2026-11-03 18:31 – 18:48 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-03-3
+- **Summary:** Ran `/assembly-test` (user request). 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified.
+- **Commands:** `dotnet build AssemblyStudio.slnx -c Release` (0 warnings); `powershell -File build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/2026-11-03-3` (18:32–18:37: 1579 + 6 total, 1575 + 3 passed, 4 + 3 skipped, 0 failed); `build/coverage.ps1 -NoBuild` (18:37–18:44, exit 0); `build/bench/run-e2e.ps1` (18:44–18:47, exit 0, 7/7). The user's app was closed throughout.
+- **Files changed:** `docs/07-testing/{test-report-2026-11-03-3.md (new), test-plan.md (v0.13), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.12), ACCEPTANCE_CRITERIA.md (v2.7)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `bb87ae3`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006 and TASK-100.

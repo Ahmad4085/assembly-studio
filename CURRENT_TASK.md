@@ -12,7 +12,19 @@ None in progress.
 |---|---|
 | Status | Idle / Ready for next task |
 | Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-test`, `/assembly-qa` and `/assembly-release <version>` |
-| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, DEF-028 wording, OQ-026 |
+| Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-114 Fix the RTE021 next step (Done 2026-11-03 18:27 +0500, Claude Code (Opus 5.5))
+- RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page.
+- Tests: `HelpTests.TASK_114_…` (the listed functions equal the help page's, which `HelpTests` checks against execution; the named help title exists; no requirement ID); mutation (old wording) fails it; `RuntimeMessageTests` exact text updated. Full solution: 1575 + 3 passed, 7 skipped, 0 failed twice (18:17–18:22, 18:22–18:26).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 18:15 / 18:27 +0500 |
 
 ---
 

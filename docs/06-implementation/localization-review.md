@@ -70,4 +70,4 @@ Mutation [Measured]:
 
 **Finding: DEF-028 (Low).** RTE021's next step shows a requirement ID ("(NFR-013)") to the user. Its list of supported DOS
 functions also leaves out 00h, which is supported (`DosServices`, help page "What Assembly Studio supports"). The wording is
-outside this task, which moves text without changing it.
+outside this task, which moves text without changing it. Fixed by TASK-114 (2026-11-03).

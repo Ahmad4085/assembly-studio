@@ -2180,3 +2180,10 @@
 - **Summary:** The user asked: "propose the fix task for DEF-028". Proposed TASK-114 (new `RTE021_Next` wording without "(NFR-013)" and with 00h; a test tying RTE021's function list to the help page's). User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)". Added as Approved; DEF-028 notes the task.
 - **Files changed:** `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** `/assembly-implement TASK-114`.
+
+### 2026-11-03 18:15 – 18:27 +0500 · Claude Code (Opus 5.5) · TASK-114 Fix the RTE021 next step (DEF-028)
+- **Summary:** Ran `/assembly-implement TASK-114` (user request). RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page. DEF-028 Fixed (unverified).
+- **Files changed:** `src/AssemblyStudio.Runtime/Interrupts/RuntimeMessages.resx`, `tests/AssemblyStudio.ProgramTests/HelpTests.cs`, `tests/AssemblyStudio.Runtime.Tests/RuntimeMessageTests.cs`, `docs/06-implementation/localization-review.md`, `docs/07-testing/{test-plan.md (v0.12), defects.md}`, `docs/05-planning/backlog.md`, `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** HelpTests 7/7, Runtime.Tests 86/86 (Debug); mutation (old wording) failed the new test; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice: 1575 + 3 passed, 7 skipped, 0 failed twice (18:17–18:22, 18:22–18:26).
+- **Git state after:** uncommitted TASK-114 changes on top of `f6da2d4`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006 and TASK-100.

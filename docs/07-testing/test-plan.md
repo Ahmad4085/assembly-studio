@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.11 |
+| Version | 0.12 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-2.md` |
@@ -84,7 +84,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-040 | `Debugging.Tests.Robustness.HostileProgramTests` | Integration (debug session) | AC-045, FR-096, NFR-015, TASK-054 | 3 |
 | TC-041 | Retired 2026-10-30 (placeholder `SkeletonTests` deleted in TASK-087, user-approved) | — | — | 0 |
 | TC-042 | `Debugging.Tests.SnapshotTests` | Integration (debug session) | AC-048, AC-049, FR-053, NFR-002, NFR-018, TASK-051 | 13 |
-| TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093 | 6 |
+| TC-043 | `ProgramTests.HelpTests` | Program-level (assembler -> loader -> engine) | AC-051, FR-045, NFR-033, TASK-093, TASK-114 | 7 |
 | TC-044 | `ProgramTests.ProgramTests` | Program-level (assembler -> loader -> engine) | AC-017, AC-021, AC-022, AC-023, AC-029, AC-031, AC-047, AC-064, TASK-044 | 14 |
 | TC-045 | `ProgramTests.ReferenceTests` | Program-level (assembler -> loader -> engine) | AC-037, FR-071, FR-072, TASK-092 | 80 |
 | TC-046 | `ProgramTests.SampleTests` | Program-level (assembler -> loader -> engine) | AC-035, FR-068, TASK-091 | 18 |
@@ -183,3 +183,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.9: Test run 2026-11-03-2: counts refreshed.
 - 2026-11-03 v0.10: TASK-113: TC-056 also checks the help page's known limitations against the code (50 tests).
 - 2026-11-03 v0.11: TASK-104: TC-094 added (no hard-coded user-facing text in C# or XAML, 14 tests); TC-024, TC-030 and TC-084 check the moved messages word for word.
+- 2026-11-03 v0.12: TASK-114: TC-043 checks that RTE021 lists the documented DOS functions (7 tests).

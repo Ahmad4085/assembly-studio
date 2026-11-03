@@ -84,6 +84,22 @@ public sealed partial class HelpTests
         Assert.Equal([0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0A, 0x4C], handled.Order().ToArray());
     }
 
+    /// <summary>TASK-114 (DEF-028): RTE021's next step lists the documented functions (checked against execution above),
+    /// names the help page by its title, and shows no requirement ID.</summary>
+    [Fact]
+    public void TASK_114_the_unsupported_DOS_function_message_lists_the_documented_functions()
+    {
+        string next = Runtime.Interrupts.RuntimeErrorPolicy.CreateUnsupportedServiceHalt(0x21, new CpuState(0x3D00, 0, 0, 0, 0xFFFE, 0, 0, 0, 0x0800, 0x0800, 0x0800, 0x0800, 0x0100, 0x0002)).NextStep;
+        string list = next[(next.IndexOf('(', StringComparison.Ordinal) + 1)..next.IndexOf(')', StringComparison.Ordinal)];
+        byte[] listed = [.. list.Split(", ").Select(f => byte.Parse(f.TrimEnd('h'), NumberStyles.HexNumber, CultureInfo.InvariantCulture))];
+        byte[] documented = [.. DocumentedFunction().Matches(Help("dos-services")).Select(m => byte.Parse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture)).Distinct().Order()];
+
+        Assert.Equal(documented, listed);
+        Assert.Contains("see Help, DOS services.", next, StringComparison.Ordinal);
+        Assert.Equal("DOS services", Catalog.Items.Single(i => i.Id == "help-dos-services").Title);
+        Assert.DoesNotMatch(@"\b(?:FR|NFR|AC)-\d{3}\b", next);
+    }
+
     [Fact]
     public async Task INT_20h_is_documented_and_other_interrupts_are_unsupported_as_documented()
     {

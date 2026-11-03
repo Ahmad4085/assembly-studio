@@ -80,7 +80,7 @@ public sealed class RuntimeMessageTests
         "RTE004|Breakpoint interrupt (INT 3)|at 0800:0105|Install a custom INT 03h handler or remove the breakpoint instruction (0xCC).",
         "RTE005|Overflow trap (INTO with OF=1)|at 0800:0105|Install a custom INT 04h handler or check preceding arithmetic operations for signed overflow.",
         "RTE000|CPU exception (INT 05h)|at 0800:0105|Install a custom INT 05h vector handler.",
-        "RTE021|INT 21h function 3Dh (AH=3Dh) is unsupported|at 0800:0105|Host file, device, process and network services are not available in the offline emulator (NFR-013). Use supported DOS functions (01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch).",
+        "RTE021|INT 21h function 3Dh (AH=3Dh) is unsupported|at 0800:0105|Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services.",
         "RTE020|INT 10h function 3Dh (AH=3Dh) is unsupported|at 0800:0105|Install a program vector for INT 10h or use supported DOS services (INT 20h, INT 21h).",
         "RTE010|Unsupported instruction (bytes at CS:IP: 0F A2)|at 0800:0103|This instruction is outside the supported 8086 set. See Help for the supported instructions, change the code, then Reset.",
         "RTE011|The program executed HLT and the CPU stopped|at 0800:0110|End the program with INT 21h function 4Ch instead of HLT, then Reset.",

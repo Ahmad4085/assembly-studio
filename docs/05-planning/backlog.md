@@ -103,7 +103,7 @@
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
 | TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
 | TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
-| TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Approved |
+| TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Done |
 
 ## 3. Task details
 
@@ -2132,7 +2132,7 @@ contrast targets.
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 (added 2026-11-03, DEF-028) |
 | Requirements | NFR-024, FR-040 |
 | Decisions / design | — |

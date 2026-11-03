@@ -8,7 +8,7 @@
 | Written | 2026-11-03 21:53 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-4) |
 | Current task | **None in progress. Next: the user's TASK-006, TASK-100 and TASK-105, then the release tasks** |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-4.md` (2026-11-03 21:53 +0500): no failed test |
-| Git state | HEAD `53c6cfc`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `1d6a94a` (testing phase 2026-11-03-4 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -150,7 +150,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the test report and says "commit" (then commit and record the hash here).
+1. Done: testing phase 2026-11-03-4 committed (`1d6a94a`).
 2. The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first); the user's TASK-105.
 3. Then `/assembly-qa` and `/assembly-release <version>`. User decision: OQ-026.
 

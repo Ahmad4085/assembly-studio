@@ -24,7 +24,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** the application is installed on a supported Windows version and all network adapters are disabled
 - **When** the user launches it (a warm start, as defined by NFR-005)
 - **Then** the main window with an editable document appears within the NFR-005 target, and no sign-in prompt or network error is shown
-- Verifies: FR-001, NFR-005, NFR-008 · Priority: P0 · Test status: NOT RUN for the offline part (same as AC-034: no network change recorded); the timing part passes against NFR-005 v2.1 (warm median 1,975 ms, TC-089)
+- Verifies: FR-001, NFR-005, NFR-008 · Priority: P0 · Test status: PASS 2026-11-03: offline part verified from the records: Windows recorded Wi-Fi (the only active connection) disconnected 12:47:09–12:47:40 on 2026-11-03 (WLAN-AutoConfig 8003/8001, NetworkProfile 10001/10000); the application log shows a start at 12:47:23 during that time, first frame 1,994 ms, no warning or error (no sign-in prompt, no network error); timing against NFR-005 v2.1 (warm median 1,975 ms, TC-089)
 
 ### AC-002 Create and open source files
 - **Given** the application is running
@@ -314,7 +314,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** networking is disabled and a network monitor is active
 - **When** the user opens a sample, builds, runs, steps and opens a tutorial
 - **Then** every action succeeds and the monitor records no network requests from the application
-- Verifies: FR-001, NFR-008, NFR-009 · Priority: P0 · Test status: NOT RUN: the user reported on 2026-11-03: "scaling, high contrast and offline checks all passed", then "yes i check all thing which you tell me its working", but Windows recorded no network change after 10:51 (Wi-Fi, the only active connection: no WLAN-AutoConfig event since 12:00, checked 12:45) although the user said Airplane mode / Wi-Fi off was used; the record conflicts, so not counted
+- Verifies: FR-001, NFR-008, NFR-009 · Priority: P0 · Test status: PASS (user-reported manual check, partly corroborated): the user: "i check offline its working and i chek install version and build version both work"; Windows recorded Wi-Fi (the only active connection) disconnected 12:47:09–12:47:40 on 2026-11-03 (WLAN-AutoConfig 8003/8001, NetworkProfile 10001/10000); the application log shows a start at 12:47:23 during that time, first frame 1,994 ms, no warning or error; the application was used offline for about 17 s of it, so the whole workflow isn't shown by the record; static evidence: no network API or URL in `src` (QA 2026-11-03-1 code search) and TC-058 (no networking assembly)
 
 ### AC-035 Samples verified
 - **Given** the installed application
@@ -424,3 +424,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-03 v2.5: **Substantive change, approved** (D-022): AC-001's launch is a warm start, as NFR-005 v2.1 defines it. User 2026-11-03 12:10 +0500: "revise NFR-005 for warm start", then, answering "Do you approve this revision of NFR-005 (warm start ≤ 3 s; the cold start measured and reported without a target, a known limitation) and AC-001 ("a warm start, as defined by NFR-005"), with DEF-023 set to "Won't fix (approved)"?": "Approve as written (Recommended)".
 - 2026-11-03: AC-043 test status: the opt-in keyboard-only test passed on the current build (12:12). No criterion changed.
 - 2026-11-03: Test status of AC-059 and AC-044 from the user's manual checks (user-reported); AC-001 and AC-034 stay not run: the user reported the offline check passed, but Windows recorded no network change. No criterion changed.
+- 2026-11-03: AC-001 (offline part, from Windows' and the application's records) and AC-034 (user-reported) test status. No criterion changed.

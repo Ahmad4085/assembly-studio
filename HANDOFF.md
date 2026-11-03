@@ -8,7 +8,7 @@
 | Written | 2026-11-03 12:11 +0500 by Claude Code (Opus 5.5), after the NFR-005 revision |
 | Current task | **None in progress. Next: the user's manual checks, then `/assembly-qa` again** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-03-1.md` (2026-11-03 12:03 +0500) |
-| Git state | HEAD after `0c464b0` (manual-check records committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `2aa02c0`; offline-check records **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -123,7 +123,7 @@
 
 ## Exact next action
 1. Done: NFR-005 revision committed (`fe5753c`).
-2. Done: AC-043 (real keys, 12:12), AC-059 and AC-044 high contrast (user-reported). Still open: AC-001/AC-034 offline: the user reported it passed, but Windows recorded no network change; repeat with Airplane mode on (Windows logs it).
+2. Done: every manual check has a result: AC-043 (real keys, 12:12), AC-059 and AC-044 high contrast (user-reported), AC-001 offline (verified from the records, 12:47), AC-034 (user-reported, partly corroborated).
 3. Then `/assembly-qa` again (NFR-005 is now judged against the warm start).
 4. Propose fix tasks for DEF-022 and DEF-024; list the cold start in the help and release notes (known limitation, D-022). User: TASK-006, TASK-100, DEF-003 decision, OQ-026.
 

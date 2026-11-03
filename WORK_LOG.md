@@ -2074,3 +2074,8 @@
   - Recorded: AC-059 and AC-044 (high contrast) as user-reported passes (WVR-001 ends); AC-001/AC-034 offline **not verified** (the report conflicts with the record).
 - **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** the offline check with the network really off; then `/assembly-qa` again.
+
+### 2026-11-03 12:48 +0500 · Claude Code (Opus 5.5) · QA offline check
+- **Summary:** the user: "i check offline its working and i chek install version and build version both work". Records checked (read-only): Windows recorded Wi-Fi (the only active connection) disconnected 12:47:09–12:47:40 on 2026-11-03 (WLAN-AutoConfig 8003/8001, NetworkProfile 10001/10000); the application log shows a start at 12:47:23 during that time, first frame 1,994 ms, no warning or error. Recorded AC-001 offline part as verified and AC-034 as a user-reported pass (the record covers about 17 s of offline use).
+- **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-qa` again.

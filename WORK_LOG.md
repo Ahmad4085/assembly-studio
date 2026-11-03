@@ -2061,3 +2061,8 @@
   - Still to do for the known limitation: list the cold start in the help's "Scope and limitations" and the release notes (product content: through a task or the release).
 - **Files changed:** `docs/01-requirements/{NON_FUNCTIONAL_REQUIREMENTS.md, ACCEPTANCE_CRITERIA.md, REQUIREMENTS_TRACEABILITY.md, OPEN_QUESTIONS.md}`, `DECISIONS.md` (D-022), `docs/07-testing/defects.md` (DEF-023), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** the user's manual checks, then `/assembly-qa` again.
+
+### 2026-11-03 12:12 +0500 · Claude Code (Opus 5.5) · AC-043 keyboard-only test (real keys, user's request)
+- **Summary:** The user asked "run the keyboard test" (D-018: opt-in, with the user's agreement and away from the PC). `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release --no-build --filter-method '*AC_043_the_core_workflow_works_by_keyboard_alone*' --output Detailed` (12:12:15–12:12:33): 1 total, 1 passed. PASS 2026-11-03 12:12 +0500 (TC-087 `UiSmokeTests.AC_043_…` with real keys, opt-in run at the user's request "run the keyboard test", D-018; build of commit `42ac233`, code as of `e6af964`): Learn sidebar → Hello, World sample → editor → build, breakpoint, run, step → registers read "AX 0924, changed; AH 09; AL 24, changed"; focus in the application after every step.
+- **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md` (AC-043 status), `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** the remaining manual checks (AC-059, AC-044, AC-001/AC-034 offline), then `/assembly-qa` again.

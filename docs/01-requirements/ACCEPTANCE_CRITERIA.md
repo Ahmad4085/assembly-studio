@@ -338,7 +338,7 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - **Given** a mouse is not used
 - **When** the user opens a sample, builds, runs, sets a breakpoint, steps and reads registers
 - **Then** every step is possible by keyboard and the focused element is always visibly indicated
-- Verifies: FR-091, FR-092, NFR-022 · Priority: P0 · Test status: NOT RUN in 2026-11-03-1: the keyboard-only workflow in TC-087 presses real keys and is opt-in (D-018); it passed on 2026-11-02 12:52 +0500 (TASK-085). TC-087's structure test failed in this run (DEF-020)
+- Verifies: FR-091, FR-092, NFR-022 · Priority: P0 · Test status: PASS 2026-11-03 12:12 +0500 (TC-087 `UiSmokeTests.AC_043_…` with real keys, opt-in run at the user's request "run the keyboard test", D-018; build of commit `42ac233`, code as of `e6af964`): Learn sidebar → Hello, World sample → editor → build, breakpoint, run, step → registers read "AX 0924, changed; AH 09; AL 24, changed"; focus in the application after every step
 
 ### AC-044 Screen reader and high contrast
 - **Given** Windows Narrator is running and a high-contrast theme is active
@@ -422,3 +422,4 @@ Each criterion has a test status of `NOT RUN`. Test cases (`TC-###`) are created
 - 2026-11-02 v2.3: Minor (testing phase). "Test status" updated from test run 2026-11-02-1 (`docs/07-testing/test-report-2026-11-02-1.md`). No criterion changed.
 - 2026-11-03 v2.4: Minor (testing phase). "Test status" updated from test run 2026-11-03-1. No criterion changed.
 - 2026-11-03 v2.5: **Substantive change, approved** (D-022): AC-001's launch is a warm start, as NFR-005 v2.1 defines it. User 2026-11-03 12:10 +0500: "revise NFR-005 for warm start", then, answering "Do you approve this revision of NFR-005 (warm start ≤ 3 s; the cold start measured and reported without a target, a known limitation) and AC-001 ("a warm start, as defined by NFR-005"), with DEF-023 set to "Won't fix (approved)"?": "Approve as written (Recommended)".
+- 2026-11-03: AC-043 test status: the opt-in keyboard-only test passed on the current build (12:12). No criterion changed.

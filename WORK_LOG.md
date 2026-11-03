@@ -2109,3 +2109,10 @@
 - **Tests executed:** the three regression tests against the old source files: 3 failed; on the fix: Variables 19/19, Memory 21/21, Announcements 4/4 (Debug). Release build 0 warnings. `powershell -File build/test.ps1 -NoBuild`: run a 13:56–14:02: 1557 total, 1553 passed, 4 skipped; UI tests 3 passed, 3 skipped; 0 failed. Run b 14:02–14:06: 1 failed (`MainWindowSmokeTests.View_menu_opens_with_shortcuts_and_reset_layout`, DEF-016 recurrence), 1552 passed; UI tests 3 passed.
 - **Git state after:** uncommitted TASK-111 changes on top of `874bb6f`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then `/assembly-implement TASK-110`.
+
+### 2026-11-03 14:11 – 14:27 +0500 · Claude Code (Opus 5.5) · TASK-110 Test script options
+- **Summary:** Ran `/assembly-implement TASK-110` (user request; approved 13:24). `build/test.ps1 -ResultsDirectory <dir>` (relative or absolute) makes both steps write TRX and xUnit XML results; the broken `--` pass-through is gone; the script help and test plan §4 (v0.7) say so (DEF-024).
+- **Files changed:** `build/test.ps1`, `docs/07-testing/{test-plan.md (v0.7), defects.md}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** Release build 0 warnings; run 1 (14:12–14:17, `-ResultsDirectory artifacts/test-results/task110-relative`): 12 TRX + 12 XML written; 1552 + 3 passed, 1 failed (`HostileProgramTests.AC_045_…`, "Only 990719 bytes written" in 30 s: a load-sensitive engine test, DEF-027); run 2 (14:17–14:21, an absolute directory): 12 TRX + 12 XML; 1553 + 3 passed, 0 failed; run 3 (14:22–14:26, no option): 1553 + 3 passed, 0 failed, no result file written. Checked the TRX timestamps: the newest is 14:21:36 (run 2), none from run 3.
+- **Git state after:** uncommitted TASK-110 changes on top of `352d5e7`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then `/assembly-test` and the QA conditions.

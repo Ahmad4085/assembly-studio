@@ -6,13 +6,25 @@
 
 ## Active Task
 
-None in progress. Next: `TASK-110` (test script options, DEF-024).
+None in progress. The approved fix tasks are done; next: the QA conditions (release tasks).
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | `/assembly-implement TASK-110` |
+| Recommended next action | The user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103, TASK-104, TASK-105; the known-limitations text; `/assembly-test` to verify the Fixed (unverified) defects |
 | Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-110 Test script options (Done 2026-11-03 14:27 +0500, Claude Code (Opus 5.5))
+- `build/test.ps1 -ResultsDirectory <dir>` (relative or absolute) makes both steps write TRX and xUnit XML results; the broken `--` pass-through is gone; the script help and test plan §4 (v0.7) say so (DEF-024).
+- Release build 0 warnings. run 1 (14:12–14:17, `-ResultsDirectory artifacts/test-results/task110-relative`): 12 TRX + 12 XML written; 1552 + 3 passed, 1 failed (`HostileProgramTests.AC_045_…`, "Only 990719 bytes written" in 30 s: a load-sensitive engine test, DEF-027); run 2 (14:17–14:21, an absolute directory): 12 TRX + 12 XML; 1553 + 3 passed, 0 failed; run 3 (14:22–14:26, no option): 1553 + 3 passed, 0 failed, no result file written.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 14:11 / 14:27 +0500 |
 
 ---
 

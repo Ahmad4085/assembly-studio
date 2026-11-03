@@ -99,7 +99,7 @@
 | TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
 | TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Done |
 | TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Done |
-| TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Approved |
+| TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Done |
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
 
 ## 3. Task details
@@ -2009,7 +2009,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M5 (added 2026-11-03, DEF-024) |
 | Requirements | NFR-021 |
 | Decisions / design | TASK-107 |

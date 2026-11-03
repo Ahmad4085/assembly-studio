@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.6 |
+| Version | 0.7 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-1.md` |
@@ -145,8 +145,8 @@ Recorded per run in the test report: OS, `dotnet --version`, NASM version, commi
 
 Commands:
 - Full suite: `powershell -File build/test.ps1` (TASK-107: every project except the UI tests, then the UI tests alone, so the
-  real-application window wait doesn't compete with the other projects; add `-NoBuild` and, after `--`, the result options
-  `--results-directory <dir> --report-xunit-trx --report-xunit-xml`). `dotnet test --solution AssemblyStudio.slnx -c Release`
+  real-application window wait doesn't compete with the other projects). Options: `-NoBuild`, and `-ResultsDirectory <dir>`
+  for TRX and xUnit XML results from both steps (TASK-110, DEF-024). `dotnet test --solution AssemblyStudio.slnx -c Release`
   still runs everything at once.
 - Coverage: `powershell -File build/coverage.ps1 -NoBuild` → `artifacts/coverage/summary.md`
 - Installer: `build/installer/build-installer.ps1`, then `build/installer/test-installer.ps1` (see TASK-101 verification)
@@ -177,3 +177,4 @@ has a defect; no unexplained failure.
 - 2026-11-02 v0.4: TASK-107: TC-092 `AppUnderTestTests`; the full-suite command is `build/test.ps1` (UI tests run on their own).
 - 2026-11-03 v0.5: TASK-108: TC-093 `StartupTimelineTests`; the NFR-005 and NFR-007 process measurements (TC-089) run on the application as the installer publishes it (`run-e2e.ps1` sets `ASSEMBLY_STUDIO_APP_EXE`); the cold start after a reboot is `build/bench/cold-start.ps1` (user-run).
 - 2026-11-03 v0.6: Test run 2026-11-03-1: counts refreshed; the full suite ran as the two steps of `build/test.ps1` (the script's `--` pass-through fails, DEF-024).
+- 2026-11-03 v0.7: TASK-110: `build/test.ps1 -ResultsDirectory` replaces the `--` pass-through (DEF-024).

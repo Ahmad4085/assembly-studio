@@ -98,6 +98,8 @@
 | TASK-106 | Variables panel | M5 | TASK-082 | M | FR-097 | Done |
 | TASK-107 | UI test robustness | M5 | TASK-085 | L | FR-091, FR-092, NFR-021 | Done |
 | TASK-108 | Startup time | M7 | TASK-086 | M | NFR-005 | Done |
+| TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Approved |
+| TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Approved |
 
 ## 3. Task details
 
@@ -1975,6 +1977,60 @@
 
 **Definition of Done:** standard (§4), plus: the user's cold-start measurement recorded.
 
+### TASK-109 Find bar test without a simulated Esc
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M4 (added 2026-11-03, DEF-022) |
+| Requirements | FR-015, FR-016, FR-017 |
+| Decisions / design | UI-004 |
+| Depends on | TASK-065 |
+| Risk | L |
+
+**Goal:** The find bar window test no longer depends on a real modifier key being held during the run (DEF-022).
+
+**Scope (in):**
+- `FindReplaceTests.UI_004_…`: check the bar's Esc binding (key and command) and run the command, instead of simulating the key; the same for Enter (find next) and F3
+- The checks that Esc closes the bar and returns the focus to the editor stay
+
+**Out of scope:**
+- Any product change
+
+**Expected files / projects touched:** `tests/AssemblyStudio.App.Tests/Editor/FindReplaceTests.cs`
+
+**Test requirements:**
+- `FindReplaceTests`; full solution twice
+
+**Definition of Done:** standard (§4).
+
+### TASK-110 Test script options
+
+| Field | Value |
+|---|---|
+| Status | Approved |
+| Milestone | M5 (added 2026-11-03, DEF-024) |
+| Requirements | NFR-021 |
+| Decisions / design | TASK-107 |
+| Depends on | TASK-107 |
+| Risk | L |
+
+**Goal:** `build/test.ps1` takes the result options, so a test-phase run can use it as documented (DEF-024).
+
+**Scope (in):**
+- A `-ResultsDirectory` parameter: both steps write TRX and xUnit XML results there
+- The broken `--` pass-through removed; the script's help and test plan §4 corrected
+
+**Out of scope:**
+- Any change to which tests run
+
+**Expected files / projects touched:** `build/test.ps1`, `docs/07-testing/test-plan.md`
+
+**Test requirements:**
+- The script with and without `-ResultsDirectory` (result files written); full solution through the script
+
+**Definition of Done:** standard (§4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2022,5 +2078,6 @@ Every task that builds on these items depends on the verifying task (checked by 
 ## Changelog
 - 2026-10-26 v0.1: Initial backlog (SDLC-008).
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
+- 2026-11-03: TASK-109 (find bar test, DEF-022) and TASK-110 (test script options, DEF-024) added. User 2026-11-03 13:24 +0500, answering "Do you approve adding TASK-109 (find bar test without a simulated Esc, DEF-022) and TASK-110 (build/test.ps1 -ResultsDirectory, DEF-024) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) added from test report 2026-11-02-1. User 2026-11-02 20:37 +0500, answering "Do you approve adding TASK-107 (UI test robustness, DEF-020) and TASK-108 (startup time, DEF-021) to the backlog as described?": "Approve both (Recommended)".
 - 2026-11-02: TASK-106 (Variables panel, FR-097) added by the user's request (D-020). User 2026-11-02 15:50 +0500, answering "Do you approve adding FR-097, AC-065, UI-023 and TASK-106 (the Variables panel, as described above) to the plan, and should I implement TASK-106 now?": "Approve and implement now (Recommended)".

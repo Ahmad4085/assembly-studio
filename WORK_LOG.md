@@ -2087,3 +2087,8 @@
 - **Files changed:** `docs/08-qa/qa-report-2026-11-03-2.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted QA documents on top of `1b858f2`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the QA conditions; then `/assembly-release`.
+
+### 2026-11-03 13:24 +0500 · Claude Code (Opus 5.5) · Fix tasks for DEF-022 and DEF-024 proposed and approved
+- **Summary:** The user asked: "propose the fix tasks for DEF-022 and DEF-024". Proposed TASK-109 (the find bar window test checks the Esc/Enter/F3 bindings and runs their commands instead of simulating keys) and TASK-110 (`build/test.ps1 -ResultsDirectory`; the `--` pass-through removed). User 2026-11-03 13:24 +0500, answering "Do you approve adding TASK-109 (find bar test without a simulated Esc, DEF-022) and TASK-110 (build/test.ps1 -ResultsDirectory, DEF-024) to the backlog as described?": "Approve both (Recommended)". Added as Approved; the defects link their fix tasks.
+- **Files changed:** `docs/05-planning/backlog.md`, `docs/07-testing/defects.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-implement TASK-109`.

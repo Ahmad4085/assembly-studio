@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 18:48 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-3) |
-| Current task | **None in progress. Next: the user's TASK-006 and TASK-100, then the release tasks** |
-| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-3.md` (2026-11-03 18:48 +0500): no failed test |
-| Git state | HEAD after `b63034b` (AC-043 rerun committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 18:55 +0500 by Claude Code (Opus 5.5), after QA 2026-11-03-3 |
+| Current task | **None in progress. Next: the QA conditions (user actions first)** |
+| Last completed | QA, `docs/08-qa/qa-report-2026-11-03-3.md` (2026-11-03 18:55 +0500): Pass with conditions |
+| Git state | HEAD `9e207a2`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **QA 2026-11-03-3** (Claude Code; documents only): QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects.
+
 - **Testing phase 2026-11-03-3** (Claude Code; documents only): 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified.
 
 - **TASK-114** (Claude Code, Done, committed `745b3a2`): RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page. DEF-028 Fixed (unverified).
@@ -144,9 +146,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: testing phase 2026-11-03-3 committed (`c69a137`).
-2. The QA conditions: the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-105 (user-run); then `/assembly-qa` and `/assembly-release <version>`.
-3. User: DEF-003 decision, OQ-026. (AC-043 real keys rerun and passed 2026-11-03 18:52.)
+1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+2. The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, TASK-102, TASK-103 (rebuild the installer first); the user's TASK-105; an on-screen high-contrast recheck of Settings, the find bar and Go to Line.
+3. Then `/assembly-release <version>`. User decisions: DEF-003, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

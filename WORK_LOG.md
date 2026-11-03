@@ -2199,3 +2199,12 @@
 - **Summary:** The user asked "run the keyboard test" and answered "Start in 15 seconds" to keeping hands off (D-018). `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release --no-build --filter-method '*AC_043_the_core_workflow_works_by_keyboard_alone*' --output Detailed` (18:52:07–18:52:24): 1 total, 1 passed (11.9 s). Release build of `bb87ae3` (the code of test report 2026-11-03-3, including TASK-109..114).
 - **Files changed:** `docs/01-requirements/ACCEPTANCE_CRITERIA.md` (AC-043 status), `docs/07-testing/test-report-2026-11-03-3.md` (note), `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** the user's TASK-006 and TASK-100.
+
+### 2026-11-03 18:55 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-03-3
+- **Summary:** Ran `/assembly-qa` (user request). Gate: test report 2026-11-03-3 covers the current code (only documents changed since). QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects.
+  - Each requirement judged by its acceptance criteria, not by the traceability test status alone: FR-084 and FR-090 show passing tests there but their criteria (AC-040, AC-042) were not run, so they stay Not verified.
+  - The user's on-screen high-contrast check (about 12:37) predates TASK-112's control restyling; kept as user-reported evidence and added an on-screen recheck as condition 4.
+  - Code searches run now: no network API or URL in `src`; no fake/mock/dummy/demo data.
+- **Files changed:** `docs/08-qa/qa-report-2026-11-03-3.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.13, QA column), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted QA documents on top of `9e207a2`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the QA conditions.

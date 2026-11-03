@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 18:48 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-3) |
+| Last updated | 2026-11-03 18:55 +0500 by Claude Code (Opus 5.5) (QA 2026-11-03-3) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first), 105; then `/assembly-qa` and `/assembly-release <version>`. User decisions: DEF-003, OQ-026 |
+| Next recommended action | The QA conditions (`docs/08-qa/qa-report-2026-11-03-3.md` §4): the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; a high-contrast recheck of the input controls; then `/assembly-release <version>`. User decisions: DEF-003, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| QA (report 2026-11-03-3) | 2026-11-03 18:55 +0500 | QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects; traceability v2.13 |
 | Testing phase (report 2026-11-03-3) | 2026-11-03 18:48 +0500 | 1585 tests: 1578 passed, 0 failed, 7 skipped (opt-in); measurement script 7 of 7 passed (NFR-005 warm median 1,861 ms); coverage engine 99.6%, runtime 95.3% (run complete); 55 of 65 acceptance criteria pass in the run (AC-060 first time), 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-028 verified; traceability v2.12, AC v2.7, test plan v0.13 |
 | TASK-114 Fix the RTE021 next step (DEF-028) | 2026-11-03 18:27 +0500 | RTE021's next step now reads "Host file, device, process and network services are not available in the offline emulator. Use supported DOS functions (00h, 01h, 02h, 07h, 08h, 09h, 0Ah, 4Ch); see Help, DOS services." (no requirement ID; 00h added); `HelpTests.TASK_114_…` ties its list to the help page. Full solution 1575 + 3 passed, 7 skipped, 0 failed twice (18:17–18:22, 18:22–18:26) |
 | TASK-104 Localizability and message review | 2026-11-03 17:54 +0500 | 46 user-facing texts moved into resource files with identical English: Runtime run-time messages (new `RuntimeMessages.resx`, 24), DOS service errors (new `DosMessages.resx`, 5), assembler problems (new `AssemblerProblems.resx`, 12), program-end names (`Strings.resx`, 5); `ArchitectureTests.LocalizableStringTests` scans all C# and XAML under `src` (allow-list with reasons); review record `docs/06-implementation/localization-review.md`; DEF-028 raised (RTE021 wording). Full solution: runs a and b (17:29–17:38) not counted: the Release build had failed on my new runtime test (CS9176), so they used an old Runtime.Tests binary; fixed and rebuilt (0 warnings). Run c (17:40–17:44): 1574 + 3 passed, 7 skipped, 0 failed. Run d (17:44–17:48): 1 failed, the AC-010 clipboard test (DEF-011, recorded); then 3 of 3 alone and run e (17:49–17:53): 1574 + 3 passed, 7 skipped, 0 failed |

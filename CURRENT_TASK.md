@@ -6,13 +6,27 @@
 
 ## Active Task
 
-None in progress. The approved fix tasks are done; next: the QA conditions (release tasks).
+None in progress.
 
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103, TASK-104, TASK-105; the known-limitations text; `/assembly-test` to verify the Fixed (unverified) defects |
+| Recommended next action | `/assembly-test` (DEF-022/024/025/026); the QA conditions: TASK-006 and TASK-100 by the user, then TASK-070, 102, 103, 104, 105; the known-limitations text |
 | Parallel user actions | TASK-006, TASK-100, DEF-003 decision, OQ-026 |
+
+---
+
+## Completed: TASK-112 Themed input controls (Done 2026-11-03 15:55 +0500, Claude Code (Opus 5.5))
+- Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one.
+- Design tokens: `Control.Text` and `Control.Text.Selected` named for the approved "(+ text)" high-contrast rows (minor clarification; equal to `Text.Primary` in dark and light).
+- Tests: TC-066 (22): 40 tokens, 120 contrast pairs per theme (all pass; lowest Dark `Border.Strong` on `Control.Button` 3.23:1, Light 3.34:1), the high-contrast mapping, and the four controls themed in a real window plus the Go to Line error border; mutation (no text box background): failed with #FFFFFFFF. Rendered and checked: `artifacts/ui/controls-dark.png`, `controls-light.png`, `goto-line-invalid-dark.png` (pixel scan: 2 px blue ring, 1 px red border inside), `settings.png`.
+- Release build 0 warnings; `build/test.ps1`: 1556 + 3 passed, 7 skipped, 0 failed twice (15:45–15:50, 15:50–15:54), with the user's Assembly Studio open.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-03 15:35 / 15:55 +0500 |
 
 ---
 

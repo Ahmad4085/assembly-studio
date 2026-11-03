@@ -101,7 +101,7 @@
 | TASK-109 | Find bar test without a simulated Esc | M4 | TASK-065 | L | FR-015, FR-016, FR-017 | Done |
 | TASK-110 | Test script options | M5 | TASK-107 | L | NFR-021 | Done |
 | TASK-111 | Missing memory windows and repeated announcements | M5 | TASK-106 | M | FR-054, FR-097, FR-093, NFR-018 | Done |
-| TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Approved |
+| TASK-112 | Themed input controls | M4 | TASK-061 | M | NFR-022, FR-094, NFR-026 | Done |
 
 ## 3. Task details
 
@@ -2065,7 +2065,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M4 (added 2026-11-03, design v1.1) |
 | Requirements | NFR-022, FR-094, NFR-026 |
 | Decisions / design | UI spec v1.1 §9, design tokens v1.1 |

@@ -30,6 +30,9 @@
   <sys:Double x:Key="Size.CommandBar">36</sys:Double>
   <sys:Double x:Key="Size.Gutter.Breakpoint">16</sys:Double>
   <sys:Double x:Key="Size.Splitter">4</sys:Double>
+  <sys:Double x:Key="Size.Control">24</sys:Double> <!-- design tokens v1.1: minimum height of text boxes, buttons, combo boxes -->
+  <sys:Double x:Key="Size.CheckBox">14</sys:Double>
+  <Thickness x:Key="Space.Pad.Control">8,2,8,2</Thickness>
   <CornerRadius x:Key="Radius.Small">2</CornerRadius>
   <CornerRadius x:Key="Radius.Medium">4</CornerRadius>
 </ResourceDictionary>

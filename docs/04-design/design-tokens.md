@@ -52,6 +52,8 @@ grey buttons in the dark theme). Boundaries, focus and text reuse the tokens abo
 | `Control.Pressed` | `#474B53` | `#D3D7DD` | Button pressed |
 | `Control.Selected` | `#1D3550` | `#DCEBFF` | Selected item in a combo box drop-down |
 | `Accent.Primary.Hover` | `#7AB4FF` | `#0A4FAB` | Default button (Enter) under the pointer |
+| `Control.Text` | `#E8E9EB` | `#1D2125` | Text on `Control.Button` (same as `Text.Primary`; button text in high contrast) |
+| `Control.Text.Selected` | `#E8E9EB` | `#1D2125` | Text on `Control.Hover`, `Control.Pressed`, `Control.Selected` (same as `Text.Primary`; highlight text in high contrast) |
 
 Reused for controls: `Border.Strong` (1 px boundary), `Focus.Ring` (2 px when focused), `Text.Primary` (text, check mark, drop-down
 chevron), `Text.Muted` (hints), `Text.Disabled` with `Border.Subtle` (disabled), `Status.Error` (an invalid entry's border and message),
@@ -127,8 +129,8 @@ shape, glyph and weight, never by hue alone:
 | `Editor.ExecutionLine` | `HighlightBrush` outline (1 px) + arrow glyph in `WindowTextBrush` |
 | `Accent.Breakpoint`, `Accent.ExecutionArrow`, `Status.*`, `Value.Changed` | `WindowTextBrush`. Glyph shape (●, ➜, ⨯, ▲, ⓘ) and bold weight carry the meaning |
 | `Control.Input` (+ text) | `WindowBrush` / `WindowTextBrush` (v1.1) |
-| `Control.Button` (+ text) | `ControlBrush` / `ControlTextBrush` (button face, v1.1) |
-| `Control.Hover`, `Control.Pressed`, `Control.Selected` (+ text) | `HighlightBrush` / `HighlightTextBrush` (v1.1) |
+| `Control.Button` / `Control.Text` | `ControlBrush` / `ControlTextBrush` (button face, v1.1) |
+| `Control.Hover`, `Control.Pressed`, `Control.Selected` / `Control.Text.Selected` | `HighlightBrush` / `HighlightTextBrush` (v1.1) |
 | `Accent.Primary.Hover` | `HotTrackBrush` (v1.1); the default button also has a 2 px `WindowTextBrush` border |
 
 ## 4. Typography
@@ -168,3 +170,4 @@ and verify at 200 %, NFR-026].
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:03 +0500: "approve" (reply to the gate question naming ui-spec v0.1, design tokens v0.1, the ADR-0007 v1.1 amendment and the Ctrl+C proposal)).
 - 2026-11-03 15:21 +0500 v1.1: **Substantive** (`/assembly-design`, scope chosen by the user: "Themed input controls only"): control tokens `Control.Input`, `Control.Button`, `Control.Hover`, `Control.Pressed`, `Control.Selected`, `Accent.Primary.Hover`; `Size.Control`, `Size.CheckBox`; 50 new contrast pairs measured, all passing; high-contrast mapping for them. No existing token changed. Status `Awaiting approval`.
 - 2026-11-03 v1.1: **Approved** by the user (User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1"; OQ-024 and OQ-026 remain open).
+- 2026-11-03 15:36 +0500 v1.1: Minor (TASK-112, clarification, no change in meaning): the approved "(+ text)" rows of §3 are given token names, `Control.Text` and `Control.Text.Selected`; in dark and light they equal `Text.Primary`, so no color and no contrast pair changes; in high contrast they are `ControlText` and `HighlightText` as approved.

@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.7 |
+| Version | 0.8 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-1.md` |
@@ -107,7 +107,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-063 | `App.Tests.ShellViewModelTests` | UI / view model / process | TASK-060 | 17 |
 | TC-064 | `App.Tests.StartupAndScalingTests` | UI / view model / process | FR-084, NFR-005, NFR-026 | 10 |
 | TC-065 | `App.Tests.StartupTimeTests` | UI / view model / process | NFR-005, TASK-060 | 1 |
-| TC-066 | `App.Tests.ThemeTokenTests` | UI / view model / process | NFR-022, TASK-061 | 19 |
+| TC-066 | `App.Tests.ThemeTokenTests` | UI / view model / process | NFR-022, TASK-061, TASK-112 | 22 |
 | TC-067 | `Content.Tests.ContentCatalogTests` | Unit (content catalog) | FR-068, FR-069, TASK-090 | 13 |
 | TC-068 | `Core.Tests.CpuStateTests` | Unit (core) | — | 4 |
 | TC-069 | `Core.Tests.MachineSnapshotTests` | Unit (core) | — | 4 |
@@ -178,3 +178,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.5: TASK-108: TC-093 `StartupTimelineTests`; the NFR-005 and NFR-007 process measurements (TC-089) run on the application as the installer publishes it (`run-e2e.ps1` sets `ASSEMBLY_STUDIO_APP_EXE`); the cold start after a reboot is `build/bench/cold-start.ps1` (user-run).
 - 2026-11-03 v0.6: Test run 2026-11-03-1: counts refreshed; the full suite ran as the two steps of `build/test.ps1` (the script's `--` pass-through fails, DEF-024).
 - 2026-11-03 v0.7: TASK-110: `build/test.ps1 -ResultsDirectory` replaces the `--` pass-through (DEF-024).
+- 2026-11-03 v0.8: TASK-112: TC-066 covers the control tokens, 120 contrast pairs per theme and the themed controls in a real window (22 tests).

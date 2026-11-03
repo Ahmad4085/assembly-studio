@@ -32,6 +32,16 @@
   <SolidColorBrush x:Key="Status.Success" Color="#5FB870" />
   <SolidColorBrush x:Key="Value.Changed" Color="#FFD866" />
 
+  <!-- Control tokens (design tokens v1.1, TASK-112) -->
+  <SolidColorBrush x:Key="Control.Input" Color="#1B1C1F" />
+  <SolidColorBrush x:Key="Control.Button" Color="#303237" />
+  <SolidColorBrush x:Key="Control.Hover" Color="#3D4148" />
+  <SolidColorBrush x:Key="Control.Pressed" Color="#474B53" />
+  <SolidColorBrush x:Key="Control.Selected" Color="#1D3550" />
+  <SolidColorBrush x:Key="Accent.Primary.Hover" Color="#7AB4FF" />
+  <SolidColorBrush x:Key="Control.Text" Color="#E8E9EB" />
+  <SolidColorBrush x:Key="Control.Text.Selected" Color="#E8E9EB" />
+
   <!-- Syntax tokens (editor, NASM 8086) -->
   <SolidColorBrush x:Key="Syntax.Mnemonic" Color="#82AAFF" />
   <SolidColorBrush x:Key="Syntax.Register" Color="#F7A072" />

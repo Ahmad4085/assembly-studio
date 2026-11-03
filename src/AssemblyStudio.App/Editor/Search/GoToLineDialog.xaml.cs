@@ -42,6 +42,9 @@ public partial class GoToLineDialog : Window
     /// <summary>The error shown, or empty.</summary>
     internal string ErrorText => Error.Visibility == Visibility.Visible ? Error.Text : string.Empty;
 
+    /// <summary>The entry field's border (tests: red for an invalid entry).</summary>
+    internal System.Windows.Media.Brush EntryBorder => LineBox.BorderBrush;
+
     /// <summary>Shows the dialog over <paramref name="owner"/>: the line, or <see langword="null"/> when cancelled.</summary>
     public static int? Ask(Window? owner, int lineCount, int currentLine)
     {
@@ -65,6 +68,7 @@ public partial class GoToLineDialog : Window
         {
             Error.Text = Format(Strings.GoToLineInvalid, _lineCount);
             Error.Visibility = Visibility.Visible;
+            LineBox.SetResourceReference(BorderBrushProperty, "Status.Error"); // ui-spec v1.1 §9: an invalid entry's border (TASK-112)
             LineBox.Focus();
             LineBox.SelectAll();
             return false;

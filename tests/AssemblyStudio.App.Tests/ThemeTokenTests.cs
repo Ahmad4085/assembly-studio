@@ -1,9 +1,12 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AssemblyStudio.App.Documents;
 using AssemblyStudio.App.Shell;
+using AssemblyStudio.App.Tests.Documents;
 using Xunit;
 
 namespace AssemblyStudio.App.Tests;
@@ -18,7 +21,7 @@ public sealed partial class ThemeTokenTests
 {
     private static readonly string TokenTable = File.ReadAllText(Path.Combine(MainWindowSmokeTests.RepoRoot(), "docs", "04-design", "design-tokens.md"));
 
-    /// <summary>The 32 color and syntax tokens with their approved dark and light values.</summary>
+    /// <summary>The 40 color, control and syntax tokens with their approved dark and light values (v1.1: 8 control tokens).</summary>
     private static readonly (string Key, Color Dark, Color Light)[] Tokens =
         [.. TokenRow().Matches(TokenTable).Select(m => (m.Groups[1].Value, Parse(m.Groups[2].Value), Parse(m.Groups[3].Value)))];
 
@@ -41,16 +44,41 @@ public sealed partial class ThemeTokenTests
         UiText.SelectMany(f => UiBackgrounds.Select(b => (f, b, 4.5)))
             .Concat(Tokens.Where(t => t.Key.StartsWith("Syntax.", StringComparison.Ordinal)).SelectMany(t => CodeBackgrounds.Select(b => (t.Key, b, 4.5))))
             .Append(("Text.OnAccent", "Accent.Primary", 4.5))
-            .Concat(NonText.SelectMany(f => NonTextBackgrounds.Select(b => (f, b, 3.0))));
+            .Concat(NonText.SelectMany(f => NonTextBackgrounds.Select(b => (f, b, 3.0))))
+            .Concat(ControlPairs());
+
+    /// <summary>
+    /// Design tokens v1.1 "Control pairs" (TASK-112), 25 per theme: text and hints on every control surface; control boundary and
+    /// focus ring on every surface a control sits on and on the control's own fill; the check mark and chevron; the default button.
+    /// </summary>
+    private static IEnumerable<(string Foreground, string Background, double Minimum)> ControlPairs() =>
+        new (string, string, double)[]
+        {
+            ("Text.Primary", "Control.Input", 4.5), ("Control.Text", "Control.Button", 4.5), ("Control.Text.Selected", "Control.Hover", 4.5),
+            ("Control.Text.Selected", "Control.Pressed", 4.5), ("Control.Text.Selected", "Control.Selected", 4.5),
+            ("Text.Muted", "Control.Input", 4.5), ("Status.Error", "Control.Input", 4.5),
+            ("Text.Primary", "Control.Input", 3.0), ("Control.Text", "Control.Button", 3.0), ("Control.Text.Selected", "Control.Hover", 3.0),
+            ("Text.OnAccent", "Accent.Primary", 4.5), ("Text.OnAccent", "Accent.Primary.Hover", 4.5),
+        }
+        .Concat(ControlSurroundings.SelectMany(b => new[] { ("Border.Strong", b, 3.0), ("Focus.Ring", b, 3.0) }))
+        .Concat(UiBackgrounds.Select(b => ("Accent.Primary", b, 3.0)));
+
+    /// <summary>What a control's boundary and focus ring sit against: the surfaces around it and its own fill.</summary>
+    private static readonly string[] ControlSurroundings = ["Surface.Window", "Surface.Panel", "Surface.Raised", "Control.Input", "Control.Button"];
+
+    private static readonly AppTheme[] DarkAndLight = [AppTheme.Dark, AppTheme.Light];
+
+    private static readonly string[] HighlightSurfaces = ["Control.Hover", "Control.Pressed", "Control.Selected"];
 
     private static Color Parse(string hex) => (Color)ColorConverter.ConvertFromString(hex);
 
     private static ResourceDictionary Load(AppTheme theme) => new() { Source = ThemeManager.DictionaryUri(theme) };
 
     [Fact]
-    public void The_token_table_has_the_32_color_tokens()
+    public void The_token_table_has_the_40_color_tokens()
     {
-        Assert.Equal(32, Tokens.Length);
+        Assert.Equal(40, Tokens.Length);
+        Assert.Equal(8, Tokens.Count(t => t.Key.StartsWith("Control.", StringComparison.Ordinal) || t.Key == "Accent.Primary.Hover"));
         Assert.Equal(8, Tokens.Count(t => t.Key.StartsWith("Syntax.", StringComparison.Ordinal)));
     }
 
@@ -99,7 +127,7 @@ public sealed partial class ThemeTokenTests
             TestContext.Current.TestOutputHelper?.WriteLine(
                 $"{theme}: {measured.Count - failures.Count}/{measured.Count} pairs pass; lowest: " +
                 string.Join("; ", measured.OrderBy(m => m.Ratio / m.Minimum).Take(3).Select(m => $"{m.Foreground} on {m.Background} {m.Ratio:F2}:1")));
-            Assert.Equal(95, measured.Count);
+            Assert.Equal(120, measured.Count); // 95 + 25 control pairs (v1.1)
             Assert.Empty(failures);
         });
     }
@@ -108,6 +136,8 @@ public sealed partial class ThemeTokenTests
     [InlineData("Status.Success", "Surface.Window", AppTheme.Light, 4.85)] // design tokens §2, measured 2026-10-26
     [InlineData("Border.Strong", "Surface.Window", AppTheme.Light, 3.47)]
     [InlineData("Accent.Primary", "Surface.Raised", AppTheme.Dark, 5.28)]
+    [InlineData("Border.Strong", "Control.Button", AppTheme.Dark, 3.23)] // design tokens v1.1 control pairs, measured 2026-11-03
+    [InlineData("Border.Strong", "Control.Button", AppTheme.Light, 3.34)]
     public void The_contrast_formula_reproduces_the_documented_measurements(string foreground, string background, AppTheme theme, double documented)
     {
         (string _, Color dark, Color light) fg = Tokens.Single(t => t.Key == foreground);
@@ -125,7 +155,7 @@ public sealed partial class ThemeTokenTests
         string xaml = File.ReadAllText(Path.Combine(MainWindowSmokeTests.RepoRoot(), "src", "AssemblyStudio.App", "Themes", "HighContrast.xaml"));
         Dictionary<string, string> mapping = HighContrastEntry().Matches(xaml).ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
 
-        Assert.Equal(32, mapping.Count);
+        Assert.Equal(40, mapping.Count);
         foreach (string key in Surfaces)
         {
             Assert.Equal("Window", mapping[key]);
@@ -138,6 +168,11 @@ public sealed partial class ThemeTokenTests
         Assert.Equal("HotTrack", mapping["Accent.Primary"]);
         Assert.Equal(("WindowText", "WindowText"), (mapping["Focus.Ring"], mapping["Border.Strong"]));
         Assert.All(MeaningByGlyph, key => Assert.Equal("WindowText", mapping[key])); // meaning by glyph and weight, not hue
+        Assert.Equal("Window", mapping["Control.Input"]); // v1.1 controls
+        Assert.Equal(("Control", "ControlText"), (mapping["Control.Button"], mapping["Control.Text"]));
+        Assert.All(HighlightSurfaces, key => Assert.Equal("Highlight", mapping[key]));
+        Assert.Equal("HighlightText", mapping["Control.Text.Selected"]);
+        Assert.Equal("HotTrack", mapping["Accent.Primary.Hover"]);
     }
 
     // ---- Theme selection ----
@@ -183,6 +218,61 @@ public sealed partial class ThemeTokenTests
             }
             finally
             {
+                window.Close();
+                manager.Apply(AppTheme.Dark); // the application resources are shared by every WPF test
+            }
+        });
+    }
+
+    [Fact]
+    public void TASK_112_text_boxes_buttons_check_boxes_and_combo_boxes_take_the_theme_in_a_real_window()
+    {
+        StaTestThread.Run(() =>
+        {
+            var manager = new ThemeManager(Application.Current.Resources);
+            var workspace = new WorkspaceViewModel(new WorkspaceViewModelTests.FakeDialogs(), new MemoryRecentFilesStore());
+            var shell = new ShellViewModel(new ShellViewModelTests.MemoryLayoutStore(null), "test", workspace);
+            var window = new MainWindow(shell, persistLayout: false) { Width = 1400, Height = 900 };
+            DocumentViewModel document = workspace.New();
+            try
+            {
+                document.Text = "mov ax, 1\n";
+                window.Show();
+                shell.Find.OpenReplaceCommand.Execute(null);
+                foreach (AppTheme theme in DarkAndLight)
+                {
+                    manager.Apply(theme);
+                    window.UpdateLayout();
+                    Color Token(string key) => theme == AppTheme.Dark ? Tokens.Single(t => t.Key == key).Dark : Tokens.Single(t => t.Key == key).Light;
+                    Color BackgroundOf(string name) => ((SolidColorBrush)((Control)window.FindName(name)).Background).Color;
+
+                    Assert.Equal(Token("Control.Input"), BackgroundOf("FindBox"));            // TextBox
+                    Assert.Equal(Token("Control.Button"), BackgroundOf("ReplaceAllButton"));  // Button
+                    Assert.Equal(Token("Control.Input"), BackgroundOf("FindMatchCase"));      // CheckBox square
+                    Assert.Equal(Token("Control.Input"), BackgroundOf("NumberFormatList"));   // ComboBox
+                    Assert.Equal(Token("Text.Primary"), ((SolidColorBrush)((Control)window.FindName("FindBox")).Foreground).Color);
+                    Render(window, theme == AppTheme.Dark ? "controls-dark.png" : "controls-light.png");
+                }
+
+                manager.Apply(AppTheme.Dark);
+                var dialog = new AssemblyStudio.App.Editor.Search.GoToLineDialog(lineCount: 2, currentLine: 1);
+                try
+                {
+                    dialog.Show();
+                    dialog.Entry = "9";
+                    Assert.False(dialog.TryAccept());
+                    dialog.UpdateLayout();
+                    Assert.Equal(Tokens.Single(t => t.Key == "Status.Error").Dark, ((SolidColorBrush)dialog.EntryBorder).Color); // invalid: red border
+                    Render(dialog, "goto-line-invalid-dark.png");
+                }
+                finally
+                {
+                    dialog.Close();
+                }
+            }
+            finally
+            {
+                document.MarkSaved("x.asm");
                 window.Close();
                 manager.Apply(AppTheme.Dark); // the application resources are shared by every WPF test
             }

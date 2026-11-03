@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-03 15:30 +0500 by Claude Code (Opus 5.5), after the design v1.1 approval |
-| Current task | **None in progress. Design v1.1 approved; next: a task to implement the themed control styles** |
-| Last completed | TASK-110 Test script options (Done 2026-11-03 14:27 +0500) |
-| Git state | HEAD after `84b8d11` (TASK-112 backlog entry committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-03 15:55 +0500 by Claude Code (Opus 5.5), after TASK-112 |
+| Current task | **None in progress. Next: `/assembly-test`, then the QA conditions** |
+| Last completed | TASK-112 Themed input controls (Done 2026-11-03 15:55 +0500) |
+| Git state | HEAD `35e0714`; TASK-112 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-112** (Claude Code, Done, uncommitted): Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one. A window-level implicit style of these four types must be `BasedOn` the themed one, or it replaces it.
+
 - **Design v1.1** (Claude Code; documents only): UI spec v1.1 and design tokens v1.1 (themed input controls: `Control.Input/Button/Hover/Pressed/Selected`, `Accent.Primary.Hover`, `Size.Control`, `Size.CheckBox`; TextInput, Button, CheckBox, ComboBox conventions as implicit styles; 50 contrast pairs measured, all passing) **Awaiting approval**.
 
 - **TASK-110** (Claude Code, Done, committed `99f2dd9`): `build/test.ps1 -ResultsDirectory <dir>` (relative or absolute) makes both steps write TRX and xUnit XML results; the broken `--` pass-through is gone; the script help and test plan §4 (v0.7) say so (DEF-024). A test-phase run: `powershell -File build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/<run>`.
@@ -132,9 +134,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: UI spec v1.1 and design tokens v1.1 approved (2026-11-03 15:30 +0500).
-2. `/assembly-implement TASK-112` (themed input controls; approved 2026-11-03 15:33 +0500).
-3. `/assembly-test` to verify DEF-022/024/025/026; the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). User: DEF-003 decision, OQ-026.
+1. The user says "commit" for TASK-112 (then commit and record the hash here).
+2. `/assembly-test` to verify DEF-022, DEF-024, DEF-025, DEF-026 (`build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/<run>`).
+3. The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, TASK-102, TASK-103 (rebuild the installer first), TASK-104, TASK-105; the known-limitations text; then `/assembly-release <version>`. User: DEF-003 decision, OQ-026.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

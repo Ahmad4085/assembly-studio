@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 15:30 +0500 by Claude Code (Opus 5.5) (UI spec and design tokens v1.1 approved) |
+| Last updated | 2026-11-03 15:55 +0500 by Claude Code (Opus 5.5) (TASK-112 done) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-implement TASK-112` (themed input controls, approved 2026-11-03 15:33 +0500); `/assembly-test` (DEF-022/024/025/026); the QA conditions (TASK-006 and TASK-100 by the user; TASK-070, 102, 103, 104, 105; the known-limitations text). DEF-003 decision, OQ-026 |
+| Next recommended action | `/assembly-test` (verify DEF-022/024/025/026); the QA conditions: the user's TASK-006 and TASK-100, then TASK-070, 102, 103 (rebuild the installer first), 104, 105, the known-limitations text; then `/assembly-release <version>`. DEF-003 decision, OQ-026 |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-112 Themed input controls | 2026-11-03 15:55 +0500 | Themed input controls (UI spec and design tokens v1.1): the control tokens in Dark, Light and HighContrast (system colors); implicit TextBox, Button, CheckBox, ComboBox (+ ComboBoxItem) styles with rest, hover, pressed, 2 px outside focus ring, disabled, checked and the accent default button; the Go to Line error border; the Settings window's local button style now based on the themed one. TC-066 22 tests, 120 contrast pairs per theme; full solution 1559 passed + 7 skipped twice |
 | Design v1.1 approved (UI spec, design tokens: themed input controls) | 2026-11-03 15:30 +0500 | User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1" |
 | Design revision v1.1 (themed input controls) | 2026-11-03 15:22 +0500 | UI spec v1.1 and design tokens v1.1 (themed input controls: `Control.Input/Button/Hover/Pressed/Selected`, `Accent.Primary.Hover`, `Size.Control`, `Size.CheckBox`; TextInput, Button, CheckBox, ComboBox conventions as implicit styles; 50 contrast pairs measured, all passing) **Awaiting approval** |
 | TASK-110 Test script options | 2026-11-03 14:27 +0500 | `build/test.ps1 -ResultsDirectory <dir>` (relative or absolute) makes both steps write TRX and xUnit XML results; the broken `--` pass-through is gone; the script help and test plan §4 (v0.7) say so (DEF-024). Three runs: relative and absolute result directories wrote 12 TRX + 12 XML each; without the option none; one load-sensitive failure (DEF-027) in run 1 |

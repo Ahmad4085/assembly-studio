@@ -33,7 +33,7 @@
       <Setter Property="TextWrapping" Value="Wrap" />
       <Setter Property="Margin" Value="0,4,0,0" />
     </Style>
-    <Style TargetType="Button">
+    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"> <!-- keeps the themed button (TASK-112) -->
       <Setter Property="MinWidth" Value="88" />
       <Setter Property="Padding" Value="10,3" />
     </Style>

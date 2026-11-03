@@ -43,4 +43,14 @@
   <SolidColorBrush x:Key="Syntax.Comment" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
   <SolidColorBrush x:Key="Syntax.Label" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
   <SolidColorBrush x:Key="Syntax.Text" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+
+  <!-- Control tokens (design tokens v1.1 section 3, TASK-112) -->
+  <SolidColorBrush x:Key="Control.Input" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+  <SolidColorBrush x:Key="Control.Button" Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}" />
+  <SolidColorBrush x:Key="Control.Hover" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+  <SolidColorBrush x:Key="Control.Pressed" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+  <SolidColorBrush x:Key="Control.Selected" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+  <SolidColorBrush x:Key="Accent.Primary.Hover" Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}" />
+  <SolidColorBrush x:Key="Control.Text" Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}" />
+  <SolidColorBrush x:Key="Control.Text.Selected" Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}" />
 </ResourceDictionary>

@@ -1,6 +1,6 @@
 # Assembly Studio 1.0.0: Release Notes
 
-Release date: not yet published (release candidate built 2026-11-04)
+Release date: 2026-11-04
 
 ## Highlights
 - Write, build, run and debug 8086 assembly programs for DOS (.COM), in one window, fully offline.

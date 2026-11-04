@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 11:56 +0500 by Claude Code (Opus 5.5), release 1.0.0 candidate final |
-| Current task | **None in progress. Release 1.0.0 built, not published (the user's choice)** |
+| Written | 2026-11-04 12:20 +0500 by Claude Code (Opus 5.5), publishing 1.0.0 (after the history rewrite) |
+| Current task | **Publishing release 1.0.0 to the private GitHub repository** |
 | Last completed | Release 1.0.0 candidate: `docs/09-release/release-1.0.0.md` (2026-11-04 11:56 +0500) |
-| Git state | HEAD after `01506b0` (release 1.0.0 final hash committed). Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | Unpushed history rewritten (student ID removed; hash map `docs/sdlc/commit-hash-map-2026-11-04.md`); local backups `backup/before-vuid-rewrite`, `backup/after-first-rewrite` and `refs/original` hold the old data and must never be pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -170,9 +170,8 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: committed (`01506b0`).
-2. Publishing 1.0.0 is the user's decision (tag, push to github.com/Ahmad4085/assembly-studio, release upload): only on explicit request. If the installer is rebuilt, its hash changes; update `docs/09-release/release-1.0.0.md`.
-3. The user's TASK-105 sessions; `/assembly-status`; `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020).
+1. Full suite on the new commit; rebuild the installer (`build/installer/build-installer.ps1`) and run `test-installer.ps1`; record the SHA-256 in `docs/09-release/release-1.0.0.md`.
+2. Tag `v1.0.0` on the commit the installer was built from; push `master` and the tag only (never the backup branches); create the GitHub release (private repository) with the installer and its SHA-256.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

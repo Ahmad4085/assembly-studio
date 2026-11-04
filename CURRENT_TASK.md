@@ -4,14 +4,15 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Active Task
-
-None in progress.
+## Active Task: Release 1.0.1 (`/assembly-release 1.0.1`)
 
 | Field | Value |
 |---|---|
-| Status | Idle / Ready for next task |
-| Recommended next action | The icon reaches users with the next release (`/assembly-release 1.0.1`); the published 1.0.0 installer is unchanged |
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-04 14:36 +0500 |
+| Goal | Release 1.0.1 (the logo) built, tested and published on GitHub |
+| Accepted | QA 2026-11-04-3 conditions; unsigned; publish (approval log 2026-11-04 14:36 +0500) |
 
 ---
 

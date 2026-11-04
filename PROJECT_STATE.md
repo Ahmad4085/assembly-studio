@@ -5,7 +5,7 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 14:02 +0500 by Claude Code (Opus 5.5) (TASK-118 logo done) |
+| Last updated | 2026-11-04 14:35 +0500 by Claude Code (Opus 5.5) (QA 2026-11-04-3) |
 | Current phase | **9 Release: 1.0.0 published** 2026-11-04 on GitHub; the repository is **public** since 2026-11-04 12:48 +0500. Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
 | Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
@@ -27,6 +27,8 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| QA (report 2026-11-04-3) | 2026-11-04 14:35 +0500 | QA 2026-11-04-3: **Pass with conditions** for `e38fb3b` (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; results unchanged from QA 2026-11-04-2; the logo verified as a quality check); traceability v2.19 |
+| Testing phase (report 2026-11-04-2) | 2026-11-04 14:34 +0500 | 1596 tests: 1589 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3%; measurements 7 of 7 (NFR-005 warm median 1,919 ms); 57 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 3 not run; traceability v2.18, AC v2.11, test plan v0.20 |
 | TASK-118 Logo | 2026-11-04 14:02 +0500 | Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header. Full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed |
 | TASK-117 Project website | 2026-11-04 13:24 +0500 | Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project |
 | Repository public | 2026-11-04 12:48 +0500 | Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests |
@@ -142,6 +144,7 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-11-04 14:36 +0500 | **Release 1.0.1: QA 2026-11-04-3 conditions accepted; unsigned installer; publish on GitHub** | 1.0.1 | User | the user, in `/assembly-release 1.0.1`, answering "Do you accept QA 2026-11-04-3's conditions for release 1.0.1 (clean machines waived WVR-002, no usability session yet, user-reported manual checks, open Low test-run defects)?": "Accept all"; "Ship 1.0.1 with an unsigned installer, like 1.0.0?": "Yes, unsigned"; "After building and testing 1.0.1, should I publish it?": "Publish on GitHub (Recommended)" |
 | 2026-11-04 12:48 +0500 | **Repository public** (github.com/Ahmad4085/assembly-studio) | 1.0.0 | User | the user: "make the repository public" |
 | 2026-11-04 12:20 +0500 | **Publish 1.0.0 to the private GitHub repository; rewrite the unpushed history to remove the user's student ID** (`docs/sdlc/commit-hash-map-2026-11-04.md`) | 1.0.0 | User | the user asked "publish it on GitHub"; then answered "Where should release 1.0.0 be published?": "Keep the repo private for now (Recommended)" and "What should happen with your student VUID in the test files?": "Replace it everywhere (Recommended)" |
 | 2026-11-04 11:50 +0500 | **D-027 unsigned installer for 1.0.0**; release 1.0.0 **not published** (commit and rebuild only) | 1.0.0 | User | the user, answering "Ship release 1.0.0 with an unsigned installer?": "Yes, unsigned for 1.0.0 (Recommended)"; the user, answering "What should happen with release 1.0.0 now?": "Commit and rebuild only (Recommended)" |
@@ -177,7 +180,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-04-1: **no failed test**. Verified: DEF-003, 006, 009, 010, 013, 017..022, 024, 025, 026, 028. Status "Fixed" (older, not yet marked Verified): DEF-004, 005, 007, 008. Won't fix (approved): DEF-023. Open (all Low, intermittent test-run failures): DEF-001, DEF-002 (not reproduced), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
+| Failed tests / open defects | Test report 2026-11-04-2: **no failed test**. Verified: DEF-003, 006, 009, 013, 017..022, 024, 025, 026, 028. Status "Fixed" (older): DEF-004, 005, 007, 008. Won't fix (approved): DEF-023. Open (all Low, intermittent test-run failures): DEF-001, DEF-002, DEF-010 (reopened 2026-11-04), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

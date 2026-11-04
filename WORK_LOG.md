@@ -2371,3 +2371,15 @@
 - **Tests executed:** AppIconTests 2/2; Release build 0 warnings; full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed.
 - **Next step:** "commit" (pushing also redeploys the website); the icon reaches users with the next release.
 
+### 14:13 – 14:34 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-04-2 (for release 1.0.1)
+- **Summary:** The user ran `/assembly-release 1.0.1`; the release needs a test report and QA for the current build (TASK-118 changed the app), so I stopped and asked; the user chose "Yes, run all three (Recommended)". 1596 tests: 1589 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3%; measurements 7 of 7 (NFR-005 warm median 1,919 ms); 57 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 3 not run.
+  - Fixed my plan row: TC-098's class is `App.Tests.Shell.AppIconTests`.
+  - The user's installed Assembly Studio 1.0.0 was open (14:22); the user chose "Run now, I'll wait" for the measurements.
+- **Files changed:** `docs/07-testing/{test-report-2026-11-04-2.md (new), test-plan.md (v0.20)}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.18), ACCEPTANCE_CRITERIA.md (v2.11)}`, `PROJECT_STATE.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-qa` (the user asked for test, QA and release in one go).
+
+### 2026-11-04 14:35 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-04-3 (for release 1.0.1)
+- **Summary:** `/assembly-qa` as part of the user's "run all three". QA 2026-11-04-3: **Pass with conditions** for `e38fb3b` (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; results unchanged from QA 2026-11-04-2; the logo verified as a quality check). Compared against the last QA build by its new hash (`360636e`, from the hash map; the old `2f5558a` diff also showed the rewrite's test changes). Code searches clean.
+- **Files changed:** `docs/08-qa/qa-report-2026-11-04-3.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.19), `PROJECT_STATE.md`, `WORK_LOG.md`.
+- **Next step:** `/assembly-release 1.0.1`: the user confirms the conditions for 1.0.1.
+

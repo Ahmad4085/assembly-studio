@@ -1,4 +1,4 @@
-# Assembly Studio 1.0.0: Release Notes
+# Assembly Studio 1.0.1: Release Notes
 
 Release date: 2026-11-04
 
@@ -9,8 +9,12 @@ Release date: 2026-11-04
 - Samples, tutorials, an instruction reference and help are built in.
 - Free and open source under the MIT License.
 
-## New features
-This is the first release.
+## What's new in 1.0.1
+- **Assembly Studio has its own logo,** NASM's memory brackets around the debugger's execution arrow, `[▶]`. You'll see it on the
+  program, the taskbar, the title bar, the Start menu and the installer.
+- Nothing else changed: the features, the supported scope and the known limitations are those of 1.0.0.
+
+## Features (since 1.0.0)
 
 | Feature | Requirements |
 |---|---|
@@ -26,7 +30,7 @@ This is the first release.
 | Accessibility: keyboard for every workflow, visible focus, screen-reader names and announcements, dark, light and high-contrast themes | FR-091..FR-094 |
 
 ## Fixes
-None: this is the first release.
+None in 1.0.1.
 
 ## Supported scope
 - **Processor:** Intel 8086 in real mode with 1 MB of memory. Every documented 8086 instruction except IN, OUT and the 8087 (ESC)
@@ -64,8 +68,8 @@ None: this is the first release.
 - **No .NET installation needed:** the runtime is included. Nothing is downloaded, during installation or afterwards.
 
 ## Installation and upgrade
-Run `AssemblyStudio-1.0.0-setup.exe` and accept the license page. It installs for the current user and needs no administrator
-rights. A newer version installs over an older one and keeps your settings. Uninstalling removes the program but never your
+Run `AssemblyStudio-1.0.1-setup.exe` and accept the license page. It installs for the current user and needs no administrator
+rights. If you have 1.0.0, run the 1.0.1 installer: it installs over 1.0.0 and keeps your settings. Uninstalling removes the program but never your
 source files or settings. See `docs/09-release/install-guide.md`.
 
 ## Third-party components

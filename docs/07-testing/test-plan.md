@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.19 |
+| Version | 0.20 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-04-1.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-04-2.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -139,7 +139,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-095 | `ProgramTests.ComSizeLimitTests` | Program-level (assembler -> loader -> engine) | AC-020, FR-031, TASK-115 | 2 |
 | TC-096 | `ArchitectureTests.LicenseTests` | Architecture rules (repository file) | NFR-030, TASK-100 | 1 |
 | TC-097 | `ArchitectureTests.ReleaseLicensingTests` | Architecture rules (release files) | AC-042, AC-061, FR-090, NFR-030, NFR-031, TASK-102 | 5 |
-| TC-098 | `App.Tests.AppIconTests` | UI / view model / process | FR-083, TASK-118 | 2 |
+| TC-098 | `App.Tests.Shell.AppIconTests` | UI / view model / process | FR-083, TASK-118 | 2 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -195,3 +195,4 @@ has a defect; no unexplained failure.
 - 2026-11-04 v0.17: TASK-102: TC-097 added (notices, license page, inventory, SBOM, pins, NASM checksums; 5 tests); TC-047 checks the installed notices (11).
 - 2026-11-03 v0.18: Test run 2026-11-04-1: counts checked.
 - 2026-11-04 v0.19: TASK-118: TC-098 added (the icon's sizes decode in WPF; executable, window and installer use it; 2 tests).
+- 2026-11-03 v0.20: Test run 2026-11-04-2: counts checked.

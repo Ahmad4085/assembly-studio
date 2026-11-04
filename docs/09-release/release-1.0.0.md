@@ -4,9 +4,9 @@
 |---|---|
 | Version | 1.0.0 |
 | Date | 2026-11-04 (release candidate; not published) |
-| Build | Commit `0aaeaf6` (release files committed); the executable reports ProductVersion `1.0.0+0aaeaf6…`, FileVersion 1.0.0.0. The first candidate was built from `8cd9271` plus the then-uncommitted release files and replaced |
+| Build | Commit `12ac130` (tag `v1.0.0`); the executable reports ProductVersion `1.0.0+12ac130…`, FileVersion 1.0.0.0. Earlier builds (`8cd9271`, `0aaeaf6` in the old numbering) were replaced; the unpushed history was rewritten before publishing (`docs/sdlc/commit-hash-map-2026-11-04.md`) |
 | QA report | `docs/08-qa/qa-report-2026-11-04-2.md`: **Pass with conditions**. Condition 1 waived (WVR-002); conditions 2–4 accepted by the user 2026-11-04 11:33 (approval log) |
-| Readiness | **Ready, with accepted conditions.** Not published: the user chose to commit and rebuild only (2026-11-04 11:50 +0500) |
+| Readiness | **Ready, with accepted conditions.** Published to the private GitHub repository on the user's request 2026-11-04 (first the user chose to commit and rebuild only, 2026-11-04 11:50 +0500) |
 
 ## Checklist
 | # | Check | Evidence | Result |
@@ -23,7 +23,7 @@
 | 10 | Code signing (if applicable) or documented unsigned-installer warning | Not signed; the user decided to ship 1.0.0 unsigned (D-027, 2026-11-04 11:50 +0500; OQ-020 stays open). The install guide documents the SmartScreen warning and the SHA-256 check | Pass (unsigned, documented, accepted) |
 | 11 | Release notes and install guide written | `docs/09-release/release-notes-1.0.0.md` (also `RELEASE-NOTES.md`, installed and shown in Help → About, FR-087), `docs/09-release/install-guide.md` | Pass |
 | 12 | Version numbers consistent (assembly, installer, notes) | `Directory.Build.props` 1.0.0 → executable ProductVersion 1.0.0+…, FileVersion 1.0.0.0; the installer reads the version from the executable (`AssemblyStudio-1.0.0-setup.exe`, AppVersion 1.0.0); notes and guide say 1.0.0 | Pass |
-| 13 | User approval to publish | The user chose "Commit and rebuild only" (2026-11-04 11:50 +0500): no tag, push or upload | Not given (by the user's choice) |
+| 13 | User approval to publish | The user: "publish it on GitHub", then "Keep the repo private for now (Recommended)" (2026-11-04 about 11:58); before that "Commit and rebuild only" (2026-11-04 11:50 +0500): no tag, push or upload | Pass (private repository) |
 
 ## Report
 ### What was built and how
@@ -34,17 +34,21 @@ per-user installer shows a license page and installs:
 - a Start-menu shortcut, plus an optional desktop shortcut and `.asm` association.
 
 ### Artifacts
-In `artifacts/installer/` (git-ignored, not committed), rebuilt from commit `0aaeaf6` 2026-11-04 11:51–11:54 with
+In `artifacts/installer/` (git-ignored, not committed); built from commit `12ac130` 2026-11-04 12:26–12:28 with
 `build/installer/build-installer.ps1`:
 
 | File | Size | SHA-256 |
 |---|---|---|
-| `AssemblyStudio-1.0.0-setup.exe` | 53.5 MB | `355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51` |
+| `AssemblyStudio-1.0.0-setup.exe` | 53.5 MB (56,099,852 bytes) | `16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83` |
 | `AssemblyStudio-1.0.0-upgradetest-setup.exe` | 53.5 MB | test only, **not a release artifact** |
 
-The rebuilt installer passed `test-installer.ps1` again (11:55:28–11:56:26, 21/21, install 17.5 s). The checklist's test runs
-(items 4 and 6) used the first candidate (`e385d9f5…687bc`), whose code is the same; only the commit stamp differs.
-`docs/09-release/sbom.spdx.json` was regenerated from this build.
+**Verification on `12ac130`:**
+- Release build: 0 warnings.
+- `build/test.ps1`: 1584 + 3 passed, 4 + 3 skipped, 0 failed (12:21–12:25).
+- `test-installer.ps1` with this installer: 21/21 (12:30:11–12:31:08, install 17.5 s).
+- `docs/09-release/sbom.spdx.json` was regenerated from this build.
+
+The measurements (item 4) and the first installer test (item 6) ran on earlier candidates of the same code.
 
 ### Known limitations
 As in `release-notes-1.0.0.md`, "Known limitations":
@@ -68,3 +72,4 @@ As in `release-notes-1.0.0.md`, "Known limitations":
 
 ## Change log
 - 2026-11-04 11:56 +0500: Rebuilt from commit `0aaeaf6`; final SHA-256 recorded; the rebuilt installer passed the installer test.
+- 2026-11-04 12:31 +0500: History rewritten before the first push (student ID removed); rebuilt from `12ac130`; final SHA-256 recorded; published to the private repository.

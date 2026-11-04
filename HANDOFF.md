@@ -8,7 +8,7 @@
 | Written | 2026-11-04 10:02 +0500 by Claude Code (Opus 5.5), after QA 2026-11-04-1 |
 | Current task | **None in progress. Next: the user's TASK-006, TASK-100 and TASK-105** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-04-1.md` (2026-11-04 10:02 +0500): Pass with conditions |
-| Git state | HEAD `d25362e`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `8f1b09f` (QA 2026-11-04-1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -154,7 +154,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+1. Done: QA 2026-11-04-1 committed (`8f1b09f`).
 2. The QA conditions (`docs/08-qa/qa-report-2026-11-04-1.md` §4): the user's TASK-006 (clean VMs), TASK-100 (license) and TASK-105 (usability session); then TASK-070, TASK-102, TASK-103 (rebuild the installer first).
 3. Then `/assembly-release <version>`. On this PC, run long test commands in the foreground (low memory stopped a background run).
 

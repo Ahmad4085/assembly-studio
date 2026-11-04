@@ -8,7 +8,7 @@
 | Written | 2026-11-04 11:25 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-04-1) |
 | Current task | **None in progress. Next: `/assembly-qa`** |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-11-04-1.md` (2026-11-04 11:25 +0500): no failed test |
-| Git state | HEAD `2f5558a`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `97a66f8` (testing phase 2026-11-04-1 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -164,7 +164,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the test report and says "commit" (then commit and record the hash here).
+1. Done: testing phase 2026-11-04-1 committed (`97a66f8`).
 2. `/assembly-qa`; the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`.
 3. Then `/assembly-release <version>`. On this PC, run long test commands in the foreground.
 

@@ -8,7 +8,7 @@
 | Written | 2026-11-04 11:02 +0500 by Claude Code (Opus 5.5), after the installer test on this PC |
 | Current task | **None in progress. Next: `/assembly-test`** |
 | Last completed | TASK-102 Third-party notices and SBOM (Done 2026-11-04 10:54 +0500) |
-| Git state | HEAD `b317b18`; installer-test records **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `9e5420b` (installer test committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -162,7 +162,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user says "commit" (then commit and record the hash here).
+1. Done: committed (`9e5420b`).
 2. `/assembly-test` (AC-042 and AC-061 now have tests; DEF and QA status refresh).
 3. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>`. On this PC, run long test commands in the foreground.
 

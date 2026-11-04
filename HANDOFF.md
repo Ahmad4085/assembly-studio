@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 11:02 +0500 by Claude Code (Opus 5.5), after the installer test on this PC |
-| Current task | **None in progress. Next: `/assembly-test`** |
-| Last completed | TASK-102 Third-party notices and SBOM (Done 2026-11-04 10:54 +0500) |
-| Git state | HEAD after `9e5420b` (installer test committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-04 11:25 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-04-1) |
+| Current task | **None in progress. Next: `/assembly-qa`** |
+| Last completed | Testing phase, `docs/07-testing/test-report-2026-11-04-1.md` (2026-11-04 11:25 +0500): no failed test |
+| Git state | HEAD `2f5558a`; testing-phase documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Testing phase 2026-11-04-1** (Claude Code; documents only): 1594 tests: 1587 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (complete); measurement script 7 of 7 passed (NFR-005 warm median 1,780 ms, max 2,853 ms); 57 of 65 acceptance criteria pass in the run (AC-042 and AC-061 first time), 5 on manual or record-based evidence, 0 fail, 3 not run (AC-040, AC-041 under WVR-002; AC-062).
+
 - **Installer test on this PC** (WVR-002 condition met): `build/installer/test-installer.ps1` 21/21 on this PC (2026-11-04 11:00:57–11:01:56), with the installer built at 10:44 from `e9a4ed0`'s code (license page, notices) and an upgrade installer compiled at 11:00 from the same publish folder: silent install 19.7 s (NFR-027 <= 120 s); installed 185.1 MB (NFR-028 <= 300 MB); files, shortcut, uninstall entry, association off by default; the installed application started (smoke test, 3,757 ms, its first start) and its NASM 3.02 ran; upgrade 1.0.0 -> 1.0.0-upgradetest with the association (26.5 s); uninstall removed program files, shortcut, association and entry; settings and a user source file unchanged. Not covered: the license page (a silent install skips it) and a check that LICENSE and THIRD-PARTY-NOTICES.txt were installed (the script has none; both were in the publish folder the installer was compiled from).
 
 - **TASK-102** (Claude Code, Done, committed `e9a4ed0`): `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB. Run `build/installer/build-installer.ps1` for every release: it regenerates these files from the publish folder.
@@ -162,9 +164,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: committed (`9e5420b`).
-2. `/assembly-test` (AC-042 and AC-061 now have tests; DEF and QA status refresh).
-3. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>`. On this PC, run long test commands in the foreground.
+1. The user reviews the test report and says "commit" (then commit and record the hash here).
+2. `/assembly-qa`; the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`.
+3. Then `/assembly-release <version>`. On this PC, run long test commands in the foreground.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

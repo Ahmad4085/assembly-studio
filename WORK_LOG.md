@@ -2280,3 +2280,12 @@
   - The old `AssemblyStudio-1.0.0-upgradetest-setup.exe` was TASK-101's build; compiled a fresh one from the current publish folder with ISCC from PowerShell (Git Bash once rewrote `/Q`).
 - **Files changed:** `PROJECT_STATE.md` (WVR-002 condition, completed items), `HANDOFF.md`, `WORK_LOG.md`. Build outputs only in `artifacts/installer/` (git-ignored).
 - **Next step:** "commit"; then `/assembly-test`.
+
+### 2026-11-04 11:07 – 11:25 +0500 · Claude Code (Opus 5.5) · Testing phase, report 2026-11-04-1
+- **Summary:** Ran `/assembly-test` (user request). 1594 tests: 1587 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (complete); measurement script 7 of 7 passed (NFR-005 warm median 1,780 ms, max 2,853 ms); 57 of 65 acceptance criteria pass in the run (AC-042 and AC-061 first time), 5 on manual or record-based evidence, 0 fail, 3 not run (AC-040, AC-041 under WVR-002; AC-062).
+  - Each step ran in the foreground. AC-042's run evidence is the build output's notices (the same files the installer installs); the installer test does not check the installed notices file; stated in the report.
+  - Noted, not changed: DEF-004, 005, 007, 008 still carry the older status "Fixed".
+- **Commands:** `dotnet build AssemblyStudio.slnx -c Release` (0 warnings); `powershell -File build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/2026-11-04-1` (11:08–11:12: 1588 + 6 total, 1584 + 3 passed, 4 + 3 skipped, 0 failed); `build/coverage.ps1 -NoBuild` (11:12–11:20, exit 0); `build/bench/run-e2e.ps1` (11:20–11:23, exit 0, 7/7).
+- **Files changed:** `docs/07-testing/{test-report-2026-11-04-1.md (new), test-plan.md (v0.18)}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.16), ACCEPTANCE_CRITERIA.md (v2.10)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted test-phase documents on top of `2f5558a`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then `/assembly-qa`.

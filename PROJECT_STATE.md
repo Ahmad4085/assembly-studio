@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 11:02 +0500 by Claude Code (Opus 5.5) (installer test on this PC) |
+| Last updated | 2026-11-04 11:25 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-04-1) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-test` (AC-042, AC-061 now have tests); the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>` |
+| Next recommended action | `/assembly-qa`; the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`; then `/assembly-release <version>` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Testing phase (report 2026-11-04-1) | 2026-11-04 11:25 +0500 | 1594 tests: 1587 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (complete); measurement script 7 of 7 passed (NFR-005 warm median 1,780 ms, max 2,853 ms); 57 of 65 acceptance criteria pass in the run (AC-042 and AC-061 first time), 5 on manual or record-based evidence, 0 fail, 3 not run (AC-040, AC-041 under WVR-002; AC-062); traceability v2.16, AC v2.10, test plan v0.18 |
 | Installer test on this PC (WVR-002 condition) | 2026-11-04 11:02 +0500 | `build/installer/test-installer.ps1` 21/21 on this PC (2026-11-04 11:00:57–11:01:56), with the installer built at 10:44 from `e9a4ed0`'s code (license page, notices) and an upgrade installer compiled at 11:00 from the same publish folder: silent install 19.7 s (NFR-027 <= 120 s); installed 185.1 MB (NFR-028 <= 300 MB); files, shortcut, uninstall entry, association off by default; the installed application started (smoke test, 3,757 ms, its first start) and its NASM 3.02 ran; upgrade 1.0.0 -> 1.0.0-upgradetest with the association (26.5 s); uninstall removed program files, shortcut, association and entry; settings and a user source file unchanged. Not covered: the license page (a silent install skips it) and a check that LICENSE and THIRD-PARTY-NOTICES.txt were installed (the script has none; both were in the publish folder the installer was compiled from) |
 | TASK-102 Third-party notices and SBOM | 2026-11-04 10:54 +0500 | `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB. Full solution 1584 + 3 passed, 7 skipped, 0 failed twice (10:46–10:50, 10:50–10:53) |
 | TASK-100 Product license (MIT) | 2026-11-04 10:26 +0500 | D-025; `LICENSE` (MIT, "Copyright (c) 2026 Assembly Studio contributors"); TC-096 (mutation: another holder fails); full solution 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24) |
@@ -163,7 +164,7 @@ None. Research documents revalidated against requirements v2.0.
 | POC-001 tests (2026-10-26 18:33 +0500) | `dotnet test --solution Poc.Cpu.slnx -c Release` → **94/94 passed** (178,000 SingleStepTests cases). Throwaway code, not product evidence |
 | POC-002 build (2026-10-26 18:42 +0500) | `dotnet build poc/POC-002-source-mapping/Poc.Mapping.slnx -c Release` → **0 warnings, 0 errors** |
 | POC-002 tests (2026-10-26 18:42 +0500) | `dotnet test --solution Poc.Mapping.slnx -c Release` → **24/24 passed** (real NASM 3.02). Throwaway code, not product evidence |
-| Failed tests / open defects | Test report 2026-11-03-4: **no failed test**. Verified: DEF-003, 006, 009, 010, 013, 017..022, 024, 025, 026, 028. Won't fix (approved): DEF-023 (cold start, D-022). Open (all Low, intermittent test-run failures): DEF-001, DEF-002 (not reproduced), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
+| Failed tests / open defects | Test report 2026-11-04-1: **no failed test**. Verified: DEF-003, 006, 009, 010, 013, 017..022, 024, 025, 026, 028. Status "Fixed" (older, not yet marked Verified): DEF-004, 005, 007, 008. Won't fix (approved): DEF-023. Open (all Low, intermittent test-run failures): DEF-001, DEF-002 (not reproduced), DEF-011, DEF-012, DEF-014, DEF-015, DEF-016, DEF-027 |
 
 ## Blockers
 | ID | Blocker | Blocks | Resolution |

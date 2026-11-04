@@ -4,10 +4,10 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.17 |
+| Version | 0.18 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
-| Latest report | `docs/07-testing/test-report-2026-11-03-4.md` |
+| Latest report | `docs/07-testing/test-report-2026-11-04-1.md` |
 
 ## 1. Scope
 Everything implemented so far: the 57 `Done` backlog tasks (M0 except TASK-006; M1, M2, M3; M4 except TASK-070; M5 including
@@ -192,3 +192,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.15: Test run 2026-11-03-4: counts checked.
 - 2026-11-04 v0.16: TASK-100: TC-096 added (the MIT `LICENSE` with its copyright line, 1 test).
 - 2026-11-04 v0.17: TASK-102: TC-097 added (notices, license page, inventory, SBOM, pins, NASM checksums; 5 tests); TC-047 checks the installed notices (11).
+- 2026-11-03 v0.18: Test run 2026-11-04-1: counts checked.

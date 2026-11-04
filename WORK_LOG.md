@@ -2344,3 +2344,7 @@
 - **Summary:** Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests. Command: `gh repo edit Ahmad4085/assembly-studio --visibility public --accept-visibility-change-consequences`. The local backup branches were never pushed and are not affected.
 - **Files changed:** `PROJECT_STATE.md`, `docs/09-release/release-1.0.0.md`, `HANDOFF.md`, `WORK_LOG.md`.
 
+### 2026-11-04 12:55 +0500 · Claude Code (Opus 5.5) · README for the GitHub page
+- **Summary:** The user asked for a README shown on https://github.com/Ahmad4085/assembly-studio. Wrote `README.md` (download with SHA-256, features, quick start with the real Hello, World sample, supported scope, build from source, structure, license) from the release notes and the code; checked each fact (sample text, shortcuts, scripts, SingleStepTests source, that Run builds first). Two screenshots copied to `docs/images/` from the UI tests' renders of the release commit's test run (real engine state; the Variables panel shows the fake ID BC123456789).
+- **Files changed:** `README.md` (new), `docs/images/{debugger-paused.png, variables-panel.png}` (new), `WORK_LOG.md`.
+

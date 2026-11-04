@@ -8,7 +8,7 @@
 | Written | 2026-11-04 11:56 +0500 by Claude Code (Opus 5.5), release 1.0.0 candidate final |
 | Current task | **None in progress. Release 1.0.0 built, not published (the user's choice)** |
 | Last completed | Release 1.0.0 candidate: `docs/09-release/release-1.0.0.md` (2026-11-04 11:56 +0500) |
-| Git state | HEAD `0aaeaf6`; the final hash and SBOM **uncommitted**. Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `01506b0` (release 1.0.0 final hash committed). Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -170,7 +170,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user says "commit" (then commit and record the hash here).
+1. Done: committed (`01506b0`).
 2. Publishing 1.0.0 is the user's decision (tag, push to github.com/Ahmad4085/assembly-studio, release upload): only on explicit request. If the installer is rebuilt, its hash changes; update `docs/09-release/release-1.0.0.md`.
 3. The user's TASK-105 sessions; `/assembly-status`; `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020).
 

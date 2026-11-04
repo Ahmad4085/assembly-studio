@@ -41,7 +41,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-023 | `MachineSnapshot` lacks current-instruction decode, memory and stack windows, and history entries needed by UI-007/008/009/013 | Medium | Design (ADR-0007 amendment) | Resolved 2026-10-26 by ADR-0007 v1.1 amendment | FR-053, FR-054, FR-055, FR-058 |
 | OQ-024 | Floating and re-dockable panels (needs a docking library and an ADR) | Low | Post-MVP | Open | UI-001 |
 | OQ-025 | Are Cascadia Mono and Segoe Fluent Icons present on Windows 10 Enterprise LTSC 21H2? | Low | First shell task | Open (fallbacks: Consolas, Segoe MDL2 Assets) | NFR-025 |
-| OQ-026 | After a failed build, should Run be enabled? AC-013 (approved) says "Run is not enabled"; the ui-spec §4 state matrix (Build failed column) lists "Build, Run (rebuilds)". | Low | Next design or requirements review | Open. TASK-080 follows AC-013: Run is disabled after a failed build until the text changes, then Run rebuilds. Proposed: align the ui-spec matrix with AC-013 | AC-013, UI-002 |
+| OQ-026 | After a failed build, should Run be enabled? AC-013 (approved) says "Run is not enabled"; the ui-spec §4 state matrix (Build failed column) lists "Build, Run (rebuilds)". | Low | Next design or requirements review | **Answered 2026-11-04 09:40 +0500** (D-024): the spec follows the app; Run stays disabled after a failed build until the text changes, then rebuilds (AC-013). The ui-spec matrix is aligned by TASK-116 | AC-013, UI-002 |
 | OQ-027 | NFR-005 asks for a cold start ≤ 3 s; measured after a Windows restart: 7.75 s, 4.3 s of it before the application's code runs (the self-contained .NET runtime and WPF read from disk; warm starts 1.9 s). Change the deployment (framework-dependent needs the .NET Desktop Runtime installed, against ADR-0009), revise NFR-005 (e.g. ≤ 3 s warm, a separate limit for the first start after a restart), or accept a known limitation? | High | Before release (QA) | **Answered 2026-11-03**: revise NFR-005 for the warm start (D-022); the cold start is reported without a target, a known limitation. Evidence: TASK-108, DEF-023, `docs/06-implementation/task-108-verification.md` | NFR-005, AC-056, ADR-0009 |
 
 ## Assumptions to validate
@@ -69,3 +69,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-11-03: OQ-027 added (TASK-108: the cold start after a restart took 7.75 s; NFR-005's 3 s target). No answer recorded.
 - 2026-11-03: OQ-027 answered by the user: "revise NFR-005 for warm start" (D-022).
 - 2026-11-03: ASM-002 follows FR-031 v2.2 (65,278 bytes, D-023).
+- 2026-11-04: OQ-026 answered by the user: "A: spec follows the app (Recommended)" (D-024).

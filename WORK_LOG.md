@@ -2234,3 +2234,8 @@
 - **Files changed:** `docs/07-testing/{test-report-2026-11-03-4.md (new), test-plan.md (v0.15), defects.md}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.14), ACCEPTANCE_CRITERIA.md (v2.9)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `53c6cfc`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006 and TASK-100.
+
+### 2026-11-04 09:40 +0500 · Claude Code (Opus 5.5) · OQ-026 answered (D-024), TASK-116 proposed and approved
+- **Summary:** The user asked "propose the fix task for OQ-026". Checked the code and tests first: the app follows AC-013 (Run disabled after a failed build, enabled after an edit; `BuildRunTests` lines 133 and 146), so the conflict is only the ui-spec §4 cell "Build, Run (rebuilds)". Presented A (spec follows the app, docs only) and B (app follows the spec, AC-013 changes). User 2026-11-04 09:40 +0500, asked "propose the fix task for OQ-026", then answering "How should OQ-026 (Run after a failed build) be resolved?": "A: spec follows the app (Recommended)" (the option stated that the UI spec v1.2 change is approved with this answer). Recorded D-024, answered OQ-026, added TASK-116 as Approved.
+- **Files changed:** `DECISIONS.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `docs/05-planning/backlog.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** "commit"; then `/assembly-implement TASK-116`.

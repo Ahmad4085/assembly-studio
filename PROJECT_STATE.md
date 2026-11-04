@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-03 21:53 +0500 by Claude Code (Opus 5.5) (testing phase, report 2026-11-03-4) |
+| Last updated | 2026-11-04 09:40 +0500 by Claude Code (Opus 5.5) (D-024, TASK-116 approved) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-qa` and `/assembly-release <version>`. User decision: OQ-026 |
+| Next recommended action | `/assembly-implement TASK-116` (OQ-026, D-024, approved 2026-11-04 09:40 +0500); the QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-qa` and `/assembly-release <version>` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool

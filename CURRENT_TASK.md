@@ -11,8 +11,20 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user's TASK-006 (clean VMs) and TASK-100 (license); then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-test` (verifies DEF-003), `/assembly-qa`, `/assembly-release <version>` |
-| Parallel user actions | TASK-006, TASK-100, TASK-105, OQ-026 |
+| Recommended next action | The user's TASK-006 (clean VMs), TASK-100 (license) and TASK-105 (usability session); then TASK-070, 102, 103 (rebuild the installer first); then `/assembly-qa` and `/assembly-release <version>` |
+| Parallel user actions | TASK-006, TASK-100, TASK-105 |
+
+---
+
+## Completed: TASK-116 Align the UI spec's state matrix with AC-013 (Done 2026-11-04 09:58 +0500, Claude Code (Opus 5.5))
+- UI spec v1.2: §4 state matrix, UI-002 Command bar, "Build failed" now reads "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does (D-024, OQ-026 answered); `BuildRunTests` comments cite it. No code change.
+- Tests: `BuildRunTests` 9/9 (Debug); Release build 0 warnings; full solution: 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-04 09:46 / 09:58 +0500 |
 
 ---
 

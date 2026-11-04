@@ -2239,3 +2239,10 @@
 - **Summary:** The user asked "propose the fix task for OQ-026". Checked the code and tests first: the app follows AC-013 (Run disabled after a failed build, enabled after an edit; `BuildRunTests` lines 133 and 146), so the conflict is only the ui-spec §4 cell "Build, Run (rebuilds)". Presented A (spec follows the app, docs only) and B (app follows the spec, AC-013 changes). User 2026-11-04 09:40 +0500, asked "propose the fix task for OQ-026", then answering "How should OQ-026 (Run after a failed build) be resolved?": "A: spec follows the app (Recommended)" (the option stated that the UI spec v1.2 change is approved with this answer). Recorded D-024, answered OQ-026, added TASK-116 as Approved.
 - **Files changed:** `DECISIONS.md`, `docs/01-requirements/OPEN_QUESTIONS.md`, `docs/05-planning/backlog.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** "commit"; then `/assembly-implement TASK-116`.
+
+### 2026-11-04 09:46 – 09:58 +0500 · Claude Code (Opus 5.5) · TASK-116 Align the UI spec's state matrix with AC-013 (OQ-026)
+- **Summary:** Ran `/assembly-implement TASK-116` (user request). UI spec v1.2: §4 state matrix, UI-002 Command bar, "Build failed" now reads "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does (D-024, OQ-026 answered); `BuildRunTests` comments cite it. No code change.
+- **Files changed:** `docs/04-design/ui-spec.md` (v1.2), `tests/AssemblyStudio.App.Tests/Commands/BuildRunTests.cs` (comments), `docs/05-planning/backlog.md`, `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (Tasks column), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** `BuildRunTests` 9/9 (Debug); Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice, each in the foreground after `dotnet build-server shutdown` (low memory stopped a background run yesterday): 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58).
+- **Git state after:** uncommitted TASK-116 changes on top of `c51f17d`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006, TASK-100 and TASK-105.

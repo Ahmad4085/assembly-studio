@@ -4,8 +4,8 @@
 |---|---|
 | Document | UI/UX specification |
 | Status | Approved |
-| Version | 1.1 |
-| Last updated | 2026-11-03 |
+| Version | 1.2 |
+| Last updated | 2026-11-04 |
 | Depends on | `docs/01-requirements/` set v2.0, `docs/03-architecture/architecture.md` v1.0, ADR-0006, ADR-0007 v1.1, `docs/04-design/design-tokens.md` v1.1 |
 
 This spec defines what to build. It builds nothing. All visual values come from `design-tokens.md`. Quality bar:
@@ -120,7 +120,7 @@ Not app UI (engine or installer only): FR-033, FR-036, FR-043, FR-044, FR-083–
 | UI-012 Runtime messages | "Session messages appear here" | same | same | same | "Loaded at 0800:0100" | "Running…" | reason paused (step, breakpoint, Pause, budget + Continue/Stop) | — | "Waiting for keyboard input" | error with what/where/next | unsupported item with what/where/next | termination path + exit code |
 | UI-013 History | "No instructions executed yet" | same | same | same | same | dimmed, updates on pause | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | UI-014 Breakpoints | list (unbound) | list (unbound) | list | list (unbound) | ✓ bound addresses | ✓ | ✓ hit one highlighted | ✓ | ✓ | ✓ | ✓ | ✓ |
-| UI-002 Command bar | New/Open only | Build, Run enabled | Cancel build only | Build, Run (rebuilds) | Run, Step Into/Over, Reset, Stop | Pause, Stop | Run, Steps, Reset, Stop | none | Pause, Stop | Reset, Stop | Reset, Stop | Reset, Build, Run |
+| UI-002 Command bar | New/Open only | Build, Run enabled | Cancel build only | Build; Run after an edit (rebuilds) | Run, Step Into/Over, Reset, Stop | Pause, Stop | Run, Steps, Reset, Stop | none | Pause, Stop | Reset, Stop | Reset, Stop | Reset, Build, Run |
 | UI-016 Status bar | app version | doc info | "Building…" + Cancel | "Build failed · n errors" | "Build OK · bytes" + "Ready" | "Running · count" | "Paused · line n · count" | as Paused | "Waiting for input" | "Halted: error" | "Halted: unsupported" | "Ended · exit n" |
 
 **Changed-value highlighting (FR-056):**
@@ -256,3 +256,4 @@ publish (≤ 30/s while running) [Hypothesis: negligible, validated by the sessi
 - 2026-11-02: UI-023 Variables panel added by the user's request (D-020, FR-097). No other change.
 - 2026-11-03 15:21 +0500 v1.1: **Substantive** (`/assembly-design`, scope chosen by the user: "Themed input controls only"): §9 component conventions for TextInput, Button, CheckBox and ComboBox (implicit styles, all states) using design tokens v1.1. Out of this run's scope and still open: the *Depends on* requirement versions (now FR v2.1, NFR v2.1, AC v2.5), state-matrix rows for UI-004 and UI-023, and OQ-026. Status `Awaiting approval`.
 - 2026-11-03 v1.1: **Approved** by the user (User 2026-11-03 15:30 +0500: "approve UI spec v1.1 and design tokens v1.1"; OQ-024 and OQ-026 remain open).
+- 2026-11-04 09:46 +0500 v1.2: Minor, approved (D-024, OQ-026; the user 2026-11-04 09:40 +0500: "A: spec follows the app (Recommended)"; TASK-116). §4 state matrix, UI-002 Command bar, "Build failed": "Build, Run (rebuilds)" → "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does. No other change.

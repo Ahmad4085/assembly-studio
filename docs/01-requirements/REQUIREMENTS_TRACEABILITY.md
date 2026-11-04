@@ -34,7 +34,7 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 | PG-2 | US-014 | FR-015 | P0 | APPROVED | AC-011 | ADR-0006 | UI-004 | TASK-065 | TC-091 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
 | PG-2 | US-014 | FR-016 | P1 | APPROVED | AC-011 | ADR-0006 | UI-004 | TASK-065 | TC-091 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
 | PG-2 | US-014 | FR-017 | P1 | APPROVED | AC-011 | ADR-0006 | UI-004 | TASK-065 | TC-091 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
-| PG-2 | US-005 | FR-018 | P0 | APPROVED | AC-013 | ADR-0006 | UI-003, UI-011 | TASK-066 | TC-026, TC-077, TC-078, TC-079 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
+| PG-2 | US-005 | FR-018 | P0 | APPROVED | AC-013 | ADR-0006 | UI-003, UI-011 | TASK-066, TASK-116 | TC-026, TC-077, TC-078, TC-079 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
 | PG-2 | US-006 | FR-019 | P1 | APPROVED | AC-012 | ADR-0006, ADR-0007 | UI-003, UI-016 | TASK-062 | TC-053, TC-054 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
 | PG-2 | US-006 | FR-020 | P1 | APPROVED | AC-012 | ADR-0006, ADR-0007 | UI-003, UI-016 | TASK-062 | TC-053, TC-054 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
 | PG-2 | US-005 | FR-021 | P1 | APPROVED | AC-014 | ADR-0005, ADR-0006 | UI-003, UI-011 | TASK-041 | TC-026 | PASS 2026-11-03-4 | QA 2026-11-03-3: Verified |
@@ -176,3 +176,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-11-03: FR-031 (v2.2, D-023) gains TASK-115. No other change.
 - 2026-11-03: TC-095 (TASK-115) verifies FR-031 v2.2 and AC-020; "Test cases" and "Test status" are refreshed by the next test run.
 - 2026-11-03 v2.14: Minor (testing phase, `docs/07-testing/test-report-2026-11-03-4.md`). "Test cases" and "Test status" refreshed from test run 2026-11-03-4 (no failed test). No requirement changed.
+- 2026-11-04: FR-018 gains TASK-116 (ui-spec v1.2, D-024). No other change.

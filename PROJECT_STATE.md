@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 09:40 +0500 by Claude Code (Opus 5.5) (D-024, TASK-116 approved) |
+| Last updated | 2026-11-04 09:58 +0500 by Claude Code (Opus 5.5) (TASK-116 done) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | `/assembly-implement TASK-116` (OQ-026, D-024, approved 2026-11-04 09:40 +0500); the QA conditions: the user's TASK-006 and TASK-100; then TASK-070, 102, 103 (rebuild the installer first); the user's TASK-105; then `/assembly-qa` and `/assembly-release <version>` |
+| Next recommended action | The QA conditions: the user's TASK-006, TASK-100 and TASK-105; then TASK-070, 102, 103 (rebuild the installer first); then `/assembly-qa` and `/assembly-release <version>`. No open user decision |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-116 UI spec state matrix (OQ-026) | 2026-11-04 09:58 +0500 | UI spec v1.2: §4 state matrix, UI-002 Command bar, "Build failed" now reads "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does (D-024, OQ-026 answered); `BuildRunTests` comments cite it. No code change. Full solution 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58) |
 | Testing phase (report 2026-11-03-4) | 2026-11-03 21:53 +0500 | 1587 tests: 1580 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (rerun after Claude Code stopped the first attempt for low memory); measurement script 7 of 7 passed (NFR-005 warm median 1,796 ms); 55 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-003 verified; traceability v2.14, AC v2.9, test plan v0.15 |
 | TASK-115 One .COM size limit (DEF-003) | 2026-11-03 19:25 +0500 | The build's .COM limit and its BLD006 message now say 65,278 bytes, matching the loader (FR-031 v2.2, D-023); the loader's message lost its wrong "(65,280 bytes)"; the help pages state the limit plainly (the DEF-003 note is gone); ADR-0005, the architecture's error table and `known-limitations.md` follow; new `ProgramTests.ComSizeLimitTests` builds, loads and runs an image of exactly `ComLoader.MaxComImageSize` bytes and checks one byte more fails with BLD006. Full solution 1577 + 3 passed, 7 skipped, 0 failed twice (19:16–19:20, 19:20–19:24; the first build attempt at about 19:11 failed because the user's Assembly Studio locked bin\Release; the user closed it, no run was made before) |
 | QA (report 2026-11-03-3) | 2026-11-03 18:55 +0500 | QA 2026-11-03-3: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect open). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), an on-screen high-contrast recheck of the TASK-112 controls, user-reported evidence accepted as such, open Low defects; traceability v2.13 |

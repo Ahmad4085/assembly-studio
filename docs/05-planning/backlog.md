@@ -105,7 +105,7 @@
 | TASK-113 | Known limitations in the help and for the release notes | M7 | — | L | NFR-033, FR-045, NFR-005, FR-097 | Done |
 | TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Done |
 | TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Done |
-| TASK-116 | Align the UI spec's state matrix with AC-013 (OQ-026) | M7 | — | L | FR-018 | Approved |
+| TASK-116 | Align the UI spec's state matrix with AC-013 (OQ-026) | M7 | — | L | FR-018 | Done |
 
 ## 3. Task details
 
@@ -2189,7 +2189,7 @@ contrast targets.
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 (added 2026-11-04, OQ-026) |
 | Requirements | AC-013, FR-018 |
 | Decisions / design | D-024, UI-002 |

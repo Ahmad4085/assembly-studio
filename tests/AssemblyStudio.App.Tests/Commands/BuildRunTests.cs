@@ -130,7 +130,7 @@ public sealed class BuildRunTests
             Assert.Equal([3, 7], document.Diagnostics.Select(d => d.Line!.Value).Order()); // marked in the editor
             Assert.Equal("Build failed · 1 error", run.StatusText);
             Assert.Equal("⨯ Build failed", run.BadgeText);
-            Assert.False(run.RunCommand.CanExecute(null)); // AC-013
+            Assert.False(run.RunCommand.CanExecute(null)); // AC-013; ui-spec §4 "Build failed": Run only after an edit (D-024)
             Assert.False(run.StepIntoCommand.CanExecute(null));
             Assert.False(document.HasSession);
 
@@ -143,7 +143,7 @@ public sealed class BuildRunTests
             document.Text = document.Text.Replace("mov ax,\n", "mov ax, 0\n", StringComparison.Ordinal); // fix the error
             Assert.True(run.Problems.IsOutdated);
             Assert.Equal(RunState.Editing, run.State);
-            Assert.True(run.RunCommand.CanExecute(null)); // Run rebuilds now
+            Assert.True(run.RunCommand.CanExecute(null)); // Run rebuilds now (ui-spec §4, D-024)
         });
     }
 

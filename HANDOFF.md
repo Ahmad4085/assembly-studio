@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 12:32 +0500 by Claude Code (Opus 5.5), after publishing 1.0.0 |
+| Written | 2026-11-04 12:36 +0500 by Claude Code (Opus 5.5), after `/assembly-status --refresh` |
 | Current task | **None in progress. Release 1.0.0 published (private repository)** |
 | Last completed | Release 1.0.0 published: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 |
-| Git state | master = origin/master after this record is pushed; tag `v1.0.0` on `12ac130` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original` (old history with the student ID). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `e951940` = origin/master; status refresh **uncommitted**. Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Status refresh**: `PROJECT_STATE.md` and `ROADMAP.md` corrected (phases 7–9 and milestones were stale; WVR-001 ended; open questions). Document inconsistencies outside `--refresh` are listed in `WORK_LOG.md` for a cleanup task.
+
 - **Release 1.0.0 published** (Claude Code): Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The unpushed history was rewritten first to remove the user's student ID (`docs/sdlc/commit-hash-map-2026-11-04.md`).
 
 - **Release 1.0.0** (Claude Code): Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027).

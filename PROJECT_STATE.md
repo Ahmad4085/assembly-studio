@@ -5,13 +5,14 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 12:32 +0500 by Claude Code (Opus 5.5) (release 1.0.0 published, private) |
-| Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
-| Current milestone | M4 App shell and editor, in progress |
+| Last updated | 2026-11-04 12:36 +0500 by Claude Code (Opus 5.5) (`/assembly-status --refresh`) |
+| Current phase | **9 Release: 1.0.0 published** 2026-11-04 to the private GitHub repository (tag `v1.0.0`). Testing and QA done (latest test report 2026-11-04-1, QA 2026-11-04-2 Pass with conditions). Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
+| Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
 | Next recommended action | The user decides when to make the repository public (the history no longer holds the student ID; delete the local backup branches and `refs/original` first); the user's TASK-105 sessions; `/assembly-status`, then `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020) |
 
 ## Verified status
+- **As of 2026-11-04 12:36 +0500:** requirements FR v2.2 (97 FR), NFR v2.1 (33 NFR), 65 acceptance criteria (AC v2.10), traceability v2.17; backlog: 70 tasks Done, 4 open (TASK-006, 070, 103 waived by WVR-002; TASK-105 user-run); test report 2026-11-04-1 (1,587 passed, 0 failed); QA 2026-11-04-2 Pass with conditions; release 1.0.0 published (private). The bullets below are the earlier history and keep their counts of the time.
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
   entry points for Claude Code (`.claude/skills/`) and Antigravity (`.agent/`) exist and pass
   structural validation (SDLC-002, re-validated by `/assembly-init` on 2026-10-26 16:41 +0500).
@@ -26,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Status refresh | 2026-11-04 12:36 +0500 | `/assembly-status --refresh`: phase, milestone, WVR-001, open questions and current counts corrected here and in `ROADMAP.md` |
 | Release 1.0.0 published | 2026-11-04 12:32 +0500 | Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only |
 | Release 1.0.0 candidate (final build) | 2026-11-04 11:56 +0500 | Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027) |
 | Release candidate 1.0.0 | 2026-11-04 11:48 +0500 | Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set |
@@ -155,7 +157,7 @@ See `DECISIONS.md`.
 ## Waivers
 | ID | Scope | Reason | Date | Condition / status |
 |---|---|---|---|---|
-| WVR-001 | AC-059 manual display-scaling check (100/125/150/200 %, mixed-DPI monitors), the last open item of TASK-061 | The user postponed the manual check to QA so the editor (TASK-064) and the M5 debugger UI can proceed | 2026-10-30 21:17 +0500 | **Open.** AC-059 must still be run and pass in QA (`/assembly-qa`) and before release; until then AC-059 stays NOT RUN and TASK-061 is Done under this waiver |
+| WVR-001 | AC-059 manual display-scaling check (100/125/150/200 %, mixed-DPI monitors), the last open item of TASK-061 | The user postponed the manual check to QA so the editor (TASK-064) and the M5 debugger UI can proceed | 2026-10-30 21:17 +0500 | **Ended 2026-11-03 12:45 +0500:** AC-059 reported passed by the user (user-reported; approval log "QA manual checks (user)"; the scales used were not recorded) |
 | WVR-002 | Clean-machine verification for the first release: AC-040, AC-041 (install, upgrade, uninstall on clean Windows 11 and Windows 10 LTSC; FR-083..086, FR-088, NFR-025, NFR-027) and TASK-070 (fonts on Windows 10 LTSC); TASK-006, TASK-070, TASK-103 stay open | This PC can't host clean machines (virtualization off in the firmware, no Windows Sandbox or Hyper-V, 7 GB free disk), and the user can't provide them now | 2026-11-04 10:26 +0500 | **Open.** Accepted as a known gap of the first release: the release notes say so (`docs/09-release/known-limitations.md` "Tested systems"); AC-040/AC-041 stay Not verified; the installer must still be rebuilt and `test-installer.ps1` run on this PC before release. Ends when TASK-103 passes on clean machines **Condition met for this PC 2026-11-04 11:02 +0500:** installer rebuilt (TASK-102) and `build/installer/test-installer.ps1` 21/21 on this PC passed. |
 
 ## Outdated documents
@@ -180,9 +182,11 @@ None. Research documents revalidated against requirements v2.0.
 | ~~BLK-001~~ | **Resolved 2026-10-26 18:05 +0500**: .NET SDK 10.0.403 installed via WinGet (authorized D-013). `dotnet --list-sdks` → 10.0.403. A WPF template built with 0 warnings and 0 errors | — | — |
 
 ## Open high-impact questions
-Authoritative list: `docs/01-requirements/OPEN_QUESTIONS.md`. High impact: OQ-001 (execution engine), OQ-002 (NASM
-redistribution, CPU restriction, listing output), OQ-007 (specific permissive license. Model decided, D-007), OQ-008
-(engine state access, breakpoints, snapshots, determinism).
+Authoritative list: `docs/01-requirements/OPEN_QUESTIONS.md`. Open with High impact: OQ-008 (engine state access; partly answered by
+POC-001 and the built debugger). Medium: OQ-012 (first-release scope; in practice settled by release 1.0.0), OQ-020 (code signing;
+1.0.0 ships unsigned, D-027), OQ-022 (more DOS functions). Resolved since this list was last written: OQ-001 (ADR-0003),
+OQ-002 (research), OQ-007 (D-025), OQ-026 (D-024), OQ-027 (D-022). OQ-019's text ("SDK not installed") is outdated: the SDK is
+installed (BLK-001 resolved 2026-10-26).
 
 ## Environment (observed 2026-10-26)
 | Item | Observation |

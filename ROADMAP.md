@@ -10,12 +10,12 @@
 | 1 | Requirements | Phase 0 | User approval | **Approved** (v1.0 2026-10-26 17:11 +0500; v2.0 2026-10-26 18:18 +0500) | SDLC-003, SDLC-005 |
 | 2 | Research | Requirements approved | User approval | **Approved** (2026-10-26 17:59 +0500, set v1.0) | SDLC-004 |
 | 3 | Architecture (+ ADRs) | Research approved | User approval | **Approved** (2026-10-26 18:54 +0500, v1.0 + 9 ADRs) | SDLC-006 |
-| 4 | UI/UX design | Architecture approved | User approval | **Approved** (2026-10-26 19:03 +0500, spec + tokens v1.0) | SDLC-007 |
+| 4 | UI/UX design | Architecture approved | User approval | **Approved** (2026-10-26 19:03 +0500, spec + tokens v1.0; v1.1 2026-11-03 15:30 +0500; spec v1.2 2026-11-04, D-024) | SDLC-007 |
 | 5 | Implementation plan | Design approved | User approval (per milestone allowed) | **Approved** (2026-10-26 19:17 +0500, backlog v1.0, all milestones) | SDLC-008 |
-| 6 | Implementation | Task `Approved` | Task `Done` with evidence | **In progress** (M0: TASK-001..005 Done; M1: TASK-010..020 Done; M2: complete; M3: complete) | TASK-001…105 |
-| 7 | Testing | ≥1 task `Done` | Report recorded | Not started | — |
-| 8 | QA | Test report for build | Verdict | Not started | — |
-| 9 | Release | QA not `Fail`, no open Critical | User approval | Not started | — |
+| 6 | Implementation | Task `Approved` | Task `Done` with evidence | **Done for release 1.0.0** (70 tasks Done). Open: TASK-006, TASK-070, TASK-103 (clean machines; waived for 1.0.0, WVR-002), TASK-105 (usability session, user-run) | TASK-001…116 |
+| 7 | Testing | ≥1 task `Done` | Report recorded | **Reports recorded** (first 2026-10-30-1; latest `docs/07-testing/test-report-2026-11-04-1.md`: 0 failed) | — |
+| 8 | QA | Test report for build | Verdict | **Pass with conditions** (`docs/08-qa/qa-report-2026-11-04-2.md`; first QA 2026-11-03-1 was Fail) | — |
+| 9 | Release | QA not `Fail`, no open Critical | User approval | **1.0.0 published 2026-11-04** to the private GitHub repository (tag `v1.0.0`; `docs/09-release/release-1.0.0.md`) | — |
 
 Phases 6–8 iterate per milestone. Any phase can be re-entered (process contract §4).
 
@@ -39,11 +39,12 @@ Phases 6–8 iterate per milestone. Any phase can be re-entered (process contrac
 
 | ID | Milestone | Tasks | Status |
 |---|---|---|---|
-| M0 | Foundation | TASK-001–006 | **In progress** (TASK-001..005 Done) |
+| M0 | Foundation | TASK-001–006 | **Done except TASK-006** (clean test machines; waived for 1.0.0, WVR-002) |
 | M1 | 8086 engine (headless) | TASK-010–020 | **Completed** (TASK-010..020 Done) |
 | M2 | Runtime, DOS and toolchain | TASK-030–044 | **Done** (2026-10-29 13:25 +0500) |
 | M3 | Debug session (headless) | TASK-050–054 | **Done** (2026-10-29 16:47 +0500) |
-| M4 | App shell and editor | TASK-060–070 | **In progress** (TASK-060..069 Done; TASK-061 under WVR-001; TASK-070 left, needs TASK-006) |
+| M4 | App shell and editor | TASK-060–070 | **Done except TASK-070** (Windows 10 LTSC fonts; needs TASK-006; waived for 1.0.0, WVR-002). TASK-061's AC-059 user-reported 2026-11-03 (WVR-001 ended); TASK-112 themed controls added and done |
 | M5 | Debugger UI and visualization | TASK-080–086, TASK-106 | **Done** (2026-11-02 15:36 +0500; TASK-106 Variables panel added and done 16:27; end-to-end NFR measurements in `docs/07-testing/performance-report-2026-11-02.md`) |
 | M6 | Learning content | TASK-090–093 | **Tasks done** (TASK-090–093 Done; tutorial steps to be walked through once M5 exists) |
-| M7 | Packaging and release readiness | TASK-100–105 | **In progress** (TASK-101 Done; TASK-102 waits for TASK-100, TASK-103 for TASK-006) |
+| M7 | Packaging and release readiness | TASK-100–105 | **Released 1.0.0** (2026-11-04). TASK-100, 101, 102, 104 Done (plus added TASK-107..116 Done); TASK-103 waived (WVR-002); TASK-105 open (user-run) |
+- 2026-11-04 12:36 +0500: `/assembly-status --refresh`: phases 4 and 6–9 and milestones M0, M4, M7 brought in line with the documents (tests, QA and release 1.0.0 had happened).

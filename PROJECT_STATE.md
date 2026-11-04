@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 10:54 +0500 by Claude Code (Opus 5.5) (TASK-102 done) |
+| Last updated | 2026-11-04 11:02 +0500 by Claude Code (Opus 5.5) (installer test on this PC) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The installer test on this PC (`test-installer.ps1`; WVR-002 condition; ask first, it replaces the user's installed copy); `/assembly-test` (AC-042, AC-061 now have tests); the user's TASK-105 sessions; then `/assembly-qa` and `/assembly-release <version>` |
+| Next recommended action | `/assembly-test` (AC-042, AC-061 now have tests); the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Installer test on this PC (WVR-002 condition) | 2026-11-04 11:02 +0500 | `build/installer/test-installer.ps1` 21/21 on this PC (2026-11-04 11:00:57–11:01:56), with the installer built at 10:44 from `e9a4ed0`'s code (license page, notices) and an upgrade installer compiled at 11:00 from the same publish folder: silent install 19.7 s (NFR-027 <= 120 s); installed 185.1 MB (NFR-028 <= 300 MB); files, shortcut, uninstall entry, association off by default; the installed application started (smoke test, 3,757 ms, its first start) and its NASM 3.02 ran; upgrade 1.0.0 -> 1.0.0-upgradetest with the association (26.5 s); uninstall removed program files, shortcut, association and entry; settings and a user source file unchanged. Not covered: the license page (a silent install skips it) and a check that LICENSE and THIRD-PARTY-NOTICES.txt were installed (the script has none; both were in the publish folder the installer was compiled from) |
 | TASK-102 Third-party notices and SBOM | 2026-11-04 10:54 +0500 | `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB. Full solution 1584 + 3 passed, 7 skipped, 0 failed twice (10:46–10:50, 10:50–10:53) |
 | TASK-100 Product license (MIT) | 2026-11-04 10:26 +0500 | D-025; `LICENSE` (MIT, "Copyright (c) 2026 Assembly Studio contributors"); TC-096 (mutation: another holder fails); full solution 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24) |
 | QA (report 2026-11-04-1) | 2026-11-04 10:02 +0500 | QA 2026-11-04-1: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect, no open question). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), user-reported evidence accepted as such, open Low test-run defects; traceability v2.15 |
@@ -147,7 +148,7 @@ See `DECISIONS.md`.
 | ID | Scope | Reason | Date | Condition / status |
 |---|---|---|---|---|
 | WVR-001 | AC-059 manual display-scaling check (100/125/150/200 %, mixed-DPI monitors), the last open item of TASK-061 | The user postponed the manual check to QA so the editor (TASK-064) and the M5 debugger UI can proceed | 2026-10-30 21:17 +0500 | **Open.** AC-059 must still be run and pass in QA (`/assembly-qa`) and before release; until then AC-059 stays NOT RUN and TASK-061 is Done under this waiver |
-| WVR-002 | Clean-machine verification for the first release: AC-040, AC-041 (install, upgrade, uninstall on clean Windows 11 and Windows 10 LTSC; FR-083..086, FR-088, NFR-025, NFR-027) and TASK-070 (fonts on Windows 10 LTSC); TASK-006, TASK-070, TASK-103 stay open | This PC can't host clean machines (virtualization off in the firmware, no Windows Sandbox or Hyper-V, 7 GB free disk), and the user can't provide them now | 2026-11-04 10:26 +0500 | **Open.** Accepted as a known gap of the first release: the release notes say so (`docs/09-release/known-limitations.md` "Tested systems"); AC-040/AC-041 stay Not verified; the installer must still be rebuilt and `test-installer.ps1` run on this PC before release. Ends when TASK-103 passes on clean machines |
+| WVR-002 | Clean-machine verification for the first release: AC-040, AC-041 (install, upgrade, uninstall on clean Windows 11 and Windows 10 LTSC; FR-083..086, FR-088, NFR-025, NFR-027) and TASK-070 (fonts on Windows 10 LTSC); TASK-006, TASK-070, TASK-103 stay open | This PC can't host clean machines (virtualization off in the firmware, no Windows Sandbox or Hyper-V, 7 GB free disk), and the user can't provide them now | 2026-11-04 10:26 +0500 | **Open.** Accepted as a known gap of the first release: the release notes say so (`docs/09-release/known-limitations.md` "Tested systems"); AC-040/AC-041 stay Not verified; the installer must still be rebuilt and `test-installer.ps1` run on this PC before release. Ends when TASK-103 passes on clean machines **Condition met for this PC 2026-11-04 11:02 +0500:** installer rebuilt (TASK-102) and `build/installer/test-installer.ps1` 21/21 on this PC passed. |
 
 ## Outdated documents
 None. Research documents revalidated against requirements v2.0.

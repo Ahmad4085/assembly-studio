@@ -4,7 +4,7 @@
 |---|---|
 | Version | 1.0.0 |
 | Date | 2026-11-04 (release candidate; not published) |
-| Build | Commit `8cd9271` plus this release's uncommitted changes (`Directory.Build.props` `<Version>1.0.0</Version>`, `RELEASE-NOTES.md`, the release documents). The executable reports ProductVersion `1.0.0+8cd9271…`, FileVersion 1.0.0.0 |
+| Build | Commit `0aaeaf6` (release files committed); the executable reports ProductVersion `1.0.0+0aaeaf6…`, FileVersion 1.0.0.0. The first candidate was built from `8cd9271` plus the then-uncommitted release files and replaced |
 | QA report | `docs/08-qa/qa-report-2026-11-04-2.md`: **Pass with conditions**. Condition 1 waived (WVR-002); conditions 2–4 accepted by the user 2026-11-04 11:33 (approval log) |
 | Readiness | **Ready, with accepted conditions.** Not published: the user chose to commit and rebuild only (2026-11-04 11:50 +0500) |
 
@@ -34,15 +34,17 @@ per-user installer shows a license page and installs:
 - a Start-menu shortcut, plus an optional desktop shortcut and `.asm` association.
 
 ### Artifacts
-In `artifacts/installer/` (git-ignored, not committed):
+In `artifacts/installer/` (git-ignored, not committed), rebuilt from commit `0aaeaf6` 2026-11-04 11:51–11:54 with
+`build/installer/build-installer.ps1`:
 
 | File | Size | SHA-256 |
 |---|---|---|
-| `AssemblyStudio-1.0.0-setup.exe` | 53.5 MB | `e385d9f5c1ade96bee9fd0389109e069e115f0c47da9013d9096605836d687bc` |
+| `AssemblyStudio-1.0.0-setup.exe` | 53.5 MB | `355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51` |
 | `AssemblyStudio-1.0.0-upgradetest-setup.exe` | 53.5 MB | test only, **not a release artifact** |
 
-**The installer must be rebuilt after the release files are committed.** The build stamps the commit, and this one was made from
-`8cd9271` plus uncommitted changes. Rebuilding gives a new SHA-256; publish the hash of the rebuilt file.
+The rebuilt installer passed `test-installer.ps1` again (11:55:28–11:56:26, 21/21, install 17.5 s). The checklist's test runs
+(items 4 and 6) used the first candidate (`e385d9f5…687bc`), whose code is the same; only the commit stamp differs.
+`docs/09-release/sbom.spdx.json` was regenerated from this build.
 
 ### Known limitations
 As in `release-notes-1.0.0.md`, "Known limitations":
@@ -63,3 +65,6 @@ As in `release-notes-1.0.0.md`, "Known limitations":
 - **The installer's license page** was not clicked through (silent installs skip it); its text is tested (TC-097).
 - **Code signing:** 1.0.0 ships unsigned (D-027); OQ-020 stays open.
 - **The Microsoft licenses' indemnity duty** rests with the distributor; it can't be met by a file.
+
+## Change log
+- 2026-11-04 11:56 +0500: Rebuilt from commit `0aaeaf6`; final SHA-256 recorded; the rebuilt installer passed the installer test.

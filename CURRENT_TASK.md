@@ -4,15 +4,21 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Active Task: Release 1.0.0 (`/assembly-release 1.0.0`)
+## Active Task
+
+None in progress.
 
 | Field | Value |
 |---|---|
-| Status | In progress |
-| Owner | Claude Code (Opus 5.5) |
-| Started | 2026-11-04 11:33 +0500 |
-| Goal | A verifiable, documented release candidate 1.0.0; stop at the publish decision |
-| Accepted conditions | QA 2026-11-04-2 §4: WVR-002 (clean machines); conditions 2–4 accepted 2026-11-04 11:33 +0500 |
+| Status | Idle / Ready for next task |
+| Recommended next action | Publishing 1.0.0 when the user decides; the user's TASK-105 sessions; `/assembly-status`, then `/assembly-plan` for the next milestone |
+| Parallel user actions | Publishing decision; TASK-105 (sessions) |
+
+---
+
+## Completed: Release 1.0.0 candidate (2026-11-04 11:56 +0500, Claude Code (Opus 5.5))
+- `docs/09-release/release-1.0.0.md`: Ready with accepted conditions; not published by the user's choice; unsigned (D-027).
+- Installer `artifacts/installer/AssemblyStudio-1.0.0-setup.exe`, 53.5 MB, SHA-256 `355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51`, built from `0aaeaf6`, installer test 21/21.
 
 ---
 

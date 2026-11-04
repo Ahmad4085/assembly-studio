@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 11:48 +0500 by Claude Code (Opus 5.5), release candidate 1.0.0 |
-| Current task | **Release 1.0.0: waiting for the user's signing and publishing decisions** |
-| Last completed | QA, `docs/08-qa/qa-report-2026-11-04-2.md` (2026-11-04 11:30 +0500): Pass with conditions |
-| Git state | HEAD `8cd9271`; release files **uncommitted**. Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-04 11:56 +0500 by Claude Code (Opus 5.5), release 1.0.0 candidate final |
+| Current task | **None in progress. Release 1.0.0 built, not published (the user's choice)** |
+| Last completed | Release 1.0.0 candidate: `docs/09-release/release-1.0.0.md` (2026-11-04 11:56 +0500) |
+| Git state | HEAD `0aaeaf6`; the final hash and SBOM **uncommitted**. Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Release 1.0.0** (Claude Code): Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027).
+
 - **Release candidate 1.0.0** (Claude Code): Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set.
 
 - **QA 2026-11-04-2** (Claude Code; documents only): QA 2026-11-04-2: **Pass with conditions** (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; no Critical or High defect). Conditions: clean machines waived (WVR-002, release notes say so), usability session (TASK-105, or the user's explicit acceptance at release), user-reported evidence accepted as such, open Low test-run defects.
@@ -168,9 +170,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user decides: ship 1.0.0 unsigned (OQ-020) or not; publish or not, and where.
-2. Commit the release files (on the user's word), rebuild with `build/installer/build-installer.ps1`, record the new SHA-256 in `docs/09-release/release-1.0.0.md`.
-3. No tag, push or upload without the user's explicit request.
+1. The user says "commit" (then commit and record the hash here).
+2. Publishing 1.0.0 is the user's decision (tag, push to github.com/Ahmad4085/assembly-studio, release upload): only on explicit request. If the installer is rebuilt, its hash changes; update `docs/09-release/release-1.0.0.md`.
+3. The user's TASK-105 sessions; `/assembly-status`; `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

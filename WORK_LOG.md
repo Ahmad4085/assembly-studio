@@ -2307,3 +2307,8 @@
 - **Files changed:** `Directory.Build.props`, `RELEASE-NOTES.md` (new), `docs/09-release/{release-1.0.0.md, release-notes-1.0.0.md, install-guide.md, third-party-notices.md}` (new), `docs/09-release/{license-inventory.md, sbom.spdx.json}`, `THIRD-PARTY-NOTICES.txt`, `build/installer/license-agreement.txt` (regenerated), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted on top of `8cd9271`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** the user's signing and publishing decisions.
+
+### 2026-11-04 11:56 +0500 · Claude Code (Opus 5.5) · Release 1.0.0: decisions, commit, final build
+- **Summary:** The user decided: "Yes, unsigned for 1.0.0 (Recommended)" (D-027; OQ-020 stays open) and "Commit and rebuild only (Recommended)". Committed the release files (`0aaeaf6`), rebuilt the installer from that commit (11:51–11:54; ProductVersion 1.0.0+0aaeaf6), compiled a fresh upgrade-test installer, and re-ran `test-installer.ps1` (11:55–11:56, 21/21). Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027). Nothing tagged, pushed, signed or uploaded.
+- **Files changed:** `docs/09-release/{release-1.0.0.md, sbom.spdx.json}`, `DECISIONS.md` (D-027), `docs/01-requirements/OPEN_QUESTIONS.md` (OQ-020 note), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Next step:** "commit"; publishing stays the user's decision.

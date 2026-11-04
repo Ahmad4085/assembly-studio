@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 12:20 +0500 by Claude Code (Opus 5.5), publishing 1.0.0 (after the history rewrite) |
-| Current task | **Publishing release 1.0.0 to the private GitHub repository** |
-| Last completed | Release 1.0.0 candidate: `docs/09-release/release-1.0.0.md` (2026-11-04 11:56 +0500) |
-| Git state | Unpushed history rewritten (student ID removed; hash map `docs/sdlc/commit-hash-map-2026-11-04.md`); local backups `backup/before-vuid-rewrite`, `backup/after-first-rewrite` and `refs/original` hold the old data and must never be pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-04 12:32 +0500 by Claude Code (Opus 5.5), after publishing 1.0.0 |
+| Current task | **None in progress. Release 1.0.0 published (private repository)** |
+| Last completed | Release 1.0.0 published: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 |
+| Git state | master = origin/master after this record is pushed; tag `v1.0.0` on `12ac130` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original` (old history with the student ID). Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Release 1.0.0 published** (Claude Code): Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The unpushed history was rewritten first to remove the user's student ID (`docs/sdlc/commit-hash-map-2026-11-04.md`).
+
 - **Release 1.0.0** (Claude Code): Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027).
 
 - **Release candidate 1.0.0** (Claude Code): Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set.
@@ -170,8 +172,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Full suite on the new commit; rebuild the installer (`build/installer/build-installer.ps1`) and run `test-installer.ps1`; record the SHA-256 in `docs/09-release/release-1.0.0.md`.
-2. Tag `v1.0.0` on the commit the installer was built from; push `master` and the tag only (never the backup branches); create the GitHub release (private repository) with the installer and its SHA-256.
+1. The user decides when to make the repository public. Before that, delete the local backups (`git branch -D backup/before-vuid-rewrite backup/after-first-rewrite`, and `refs/original` via `git update-ref -d refs/original/refs/heads/master`); they were never pushed.
+2. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`.
+3. `/assembly-status`, then `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

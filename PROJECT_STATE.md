@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 11:56 +0500 by Claude Code (Opus 5.5) (release 1.0.0 candidate final, not published) |
+| Last updated | 2026-11-04 12:32 +0500 by Claude Code (Opus 5.5) (release 1.0.0 published, private) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | Publishing 1.0.0 when the user decides (tag, push, upload are the user's call); the user's TASK-105 sessions; later releases: TASK-006/070/103 (clean machines, WVR-002), OQ-020 signing; `/assembly-status`, then `/assembly-plan` for the next milestone |
+| Next recommended action | The user decides when to make the repository public (the history no longer holds the student ID; delete the local backup branches and `refs/original` first); the user's TASK-105 sessions; `/assembly-status`, then `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Release 1.0.0 published | 2026-11-04 12:32 +0500 | Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only |
 | Release 1.0.0 candidate (final build) | 2026-11-04 11:56 +0500 | Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027) |
 | Release candidate 1.0.0 | 2026-11-04 11:48 +0500 | Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set |
 | QA (report 2026-11-04-2) | 2026-11-04 11:30 +0500 | QA 2026-11-04-2: **Pass with conditions** (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; no Critical or High defect). Conditions: clean machines waived (WVR-002, release notes say so), usability session (TASK-105, or the user's explicit acceptance at release), user-reported evidence accepted as such, open Low test-run defects; traceability v2.17 |

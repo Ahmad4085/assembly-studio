@@ -26,6 +26,9 @@
 | 13 | User approval to publish | The user: "publish it on GitHub", then "Keep the repo private for now (Recommended)" (2026-11-04 about 11:58); before that "Commit and rebuild only" (2026-11-04 11:50 +0500): no tag, push or upload | Pass (private repository) |
 
 ## Report
+### Publication
+2026-11-04 12:32 +0500, Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The repository is private, so the release is visible only to its owner and collaborators.
+
 ### What was built and how
 Assembly Studio 1.0.0, a self-contained win-x64 WPF application (.NET 10.0.14, ReadyToRun), with NASM 3.02. The Inno Setup 7.1.0
 per-user installer shows a license page and installs:

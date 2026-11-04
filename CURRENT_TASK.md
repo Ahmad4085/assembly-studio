@@ -11,8 +11,13 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | Publishing 1.0.0 when the user decides; the user's TASK-105 sessions; `/assembly-status`, then `/assembly-plan` for the next milestone |
-| Parallel user actions | Publishing decision; TASK-105 (sessions) |
+| Recommended next action | The user decides about making the repository public; TASK-105 sessions; `/assembly-status`, then `/assembly-plan` |
+| Parallel user actions | Repository visibility; TASK-105 (sessions) |
+
+---
+
+## Completed: Release 1.0.0 published (2026-11-04 12:32 +0500, Claude Code (Opus 5.5))
+- Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only.
 
 ---
 

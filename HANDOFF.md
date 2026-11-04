@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 11:30 +0500 by Claude Code (Opus 5.5), after QA 2026-11-04-2 |
-| Current task | **None in progress. Next: the user's TASK-105 sessions, or `/assembly-release`** |
+| Written | 2026-11-04 11:48 +0500 by Claude Code (Opus 5.5), release candidate 1.0.0 |
+| Current task | **Release 1.0.0: waiting for the user's signing and publishing decisions** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-04-2.md` (2026-11-04 11:30 +0500): Pass with conditions |
-| Git state | HEAD after `dc3d2ad` (QA 2026-11-04-2 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD `8cd9271`; release files **uncommitted**. Not pushed, no tag. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Release candidate 1.0.0** (Claude Code): Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set.
+
 - **QA 2026-11-04-2** (Claude Code; documents only): QA 2026-11-04-2: **Pass with conditions** (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; no Critical or High defect). Conditions: clean machines waived (WVR-002, release notes say so), usability session (TASK-105, or the user's explicit acceptance at release), user-reported evidence accepted as such, open Low test-run defects.
 
 - **Testing phase 2026-11-04-1** (Claude Code; documents only): 1594 tests: 1587 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (complete); measurement script 7 of 7 passed (NFR-005 warm median 1,780 ms, max 2,853 ms); 57 of 65 acceptance criteria pass in the run (AC-042 and AC-061 first time), 5 on manual or record-based evidence, 0 fail, 3 not run (AC-040, AC-041 under WVR-002; AC-062).
@@ -166,9 +168,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: QA 2026-11-04-2 committed (`dc3d2ad`).
-2. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md` ("record the usability session" with the filled sheet).
-3. `/assembly-release <version>` with the QA conditions (§4): WVR-002 in the release notes; AC-062 done or explicitly accepted by the user.
+1. The user decides: ship 1.0.0 unsigned (OQ-020) or not; publish or not, and where.
+2. Commit the release files (on the user's word), rebuild with `build/installer/build-installer.ps1`, record the new SHA-256 in `docs/09-release/release-1.0.0.md`.
+3. No tag, push or upload without the user's explicit request.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

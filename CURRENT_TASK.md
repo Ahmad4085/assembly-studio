@@ -4,15 +4,15 @@
 > and `HANDOFF.md` doesn't mark it handed over, ask the user before continuing.
 > Lifecycle and rules: `docs/sdlc/agent-protocol.md` §4.
 
-## Active Task
-
-None in progress.
+## Active Task: Release 1.0.0 (`/assembly-release 1.0.0`)
 
 | Field | Value |
 |---|---|
-| Status | Idle / Ready for next task |
-| Recommended next action | Installer test on this PC (`test-installer.ps1`, WVR-002 condition; it installs per-user, so ask the user first: their installed copy is replaced); `/assembly-test`; the user's TASK-105 sessions |
-| Parallel user actions | TASK-105 (sessions) |
+| Status | In progress |
+| Owner | Claude Code (Opus 5.5) |
+| Started | 2026-11-04 11:33 +0500 |
+| Goal | A verifiable, documented release candidate 1.0.0; stop at the publish decision |
+| Accepted conditions | QA 2026-11-04-2 §4: WVR-002 (clean machines); conditions 2–4 accepted 2026-11-04 11:33 +0500 |
 
 ---
 

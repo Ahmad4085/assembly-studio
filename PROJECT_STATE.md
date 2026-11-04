@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 11:30 +0500 by Claude Code (Opus 5.5) (QA 2026-11-04-2) |
+| Last updated | 2026-11-04 11:48 +0500 by Claude Code (Opus 5.5) (release candidate 1.0.0) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The user's TASK-105 sessions (kit ready), or `/assembly-release <version>` with the conditions of `docs/08-qa/qa-report-2026-11-04-2.md` §4 |
+| Next recommended action | The user's decisions: ship 1.0.0 unsigned or not (OQ-020); publish or not. Then commit, rebuild the installer from the commit and publish its SHA-256. TASK-105 stays open |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Release candidate 1.0.0 | 2026-11-04 11:48 +0500 | Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set |
 | QA (report 2026-11-04-2) | 2026-11-04 11:30 +0500 | QA 2026-11-04-2: **Pass with conditions** (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; no Critical or High defect). Conditions: clean machines waived (WVR-002, release notes say so), usability session (TASK-105, or the user's explicit acceptance at release), user-reported evidence accepted as such, open Low test-run defects; traceability v2.17 |
 | Testing phase (report 2026-11-04-1) | 2026-11-04 11:25 +0500 | 1594 tests: 1587 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (complete); measurement script 7 of 7 passed (NFR-005 warm median 1,780 ms, max 2,853 ms); 57 of 65 acceptance criteria pass in the run (AC-042 and AC-061 first time), 5 on manual or record-based evidence, 0 fail, 3 not run (AC-040, AC-041 under WVR-002; AC-062); traceability v2.16, AC v2.10, test plan v0.18 |
 | Installer test on this PC (WVR-002 condition) | 2026-11-04 11:02 +0500 | `build/installer/test-installer.ps1` 21/21 on this PC (2026-11-04 11:00:57–11:01:56), with the installer built at 10:44 from `e9a4ed0`'s code (license page, notices) and an upgrade installer compiled at 11:00 from the same publish folder: silent install 19.7 s (NFR-027 <= 120 s); installed 185.1 MB (NFR-028 <= 300 MB); files, shortcut, uninstall entry, association off by default; the installed application started (smoke test, 3,757 ms, its first start) and its NASM 3.02 ran; upgrade 1.0.0 -> 1.0.0-upgradetest with the association (26.5 s); uninstall removed program files, shortcut, association and entry; settings and a user source file unchanged. Not covered: the license page (a silent install skips it) and a check that LICENSE and THIRD-PARTY-NOTICES.txt were installed (the script has none; both were in the publish folder the installer was compiled from) |
@@ -134,6 +135,8 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-11-04 11:50 +0500 | **D-027 unsigned installer for 1.0.0**; release 1.0.0 **not published** (commit and rebuild only) | 1.0.0 | User | the user, answering "Ship release 1.0.0 with an unsigned installer?": "Yes, unsigned for 1.0.0 (Recommended)"; the user, answering "What should happen with release 1.0.0 now?": "Commit and rebuild only (Recommended)" |
+| 2026-11-04 11:33 +0500 | **QA 2026-11-04-2 conditions accepted for release 1.0.0** (2: no usability session, AC-062 Not verified; 3: AC-034, AC-044, AC-059 user-reported; 4: open Low test-run defects). Condition 1 is WVR-002 | 1.0.0 | User | the user, in `/assembly-release 1.0.0`, answering "Do you accept QA 2026-11-04-2's conditions 2, 3 and 4 for release 1.0.0 (no usability session yet, user-reported manual checks, open Low test-run defects)?": "Accept all three" |
 | 2026-11-04 10:54 +0500 | **D-026 installer license page** (TASK-102, ADR-0009 amendment) | — | User | the user 2026-11-04 about 10:35 +0500, answering "How should end users agree to the Microsoft terms for the bundled .NET/WPF runtime files?": "Installer license page (Recommended)" |
 | 2026-11-04 10:26 +0500 | **D-025 product license MIT** (OQ-007, TASK-100) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "Which open-source license should Assembly Studio use (TASK-100)?": "MIT (Recommended)" and "Whose name goes in the copyright line?": "Assembly Studio contributors" |
 | 2026-11-04 10:26 +0500 | **Waiver WVR-002** (TASK-006: clean test machines) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "For the clean test machines (TASK-006), what's possible on your side?": "Waive for this release" |

@@ -3,9 +3,9 @@
     "dataLicense":  "CC0-1.0",
     "SPDXID":  "SPDXRef-DOCUMENT",
     "name":  "Assembly Studio 1.0.0 win-x64",
-    "documentNamespace":  "https://spdx.org/spdxdocs/assembly-studio-1.0.0-win-x64-269d5c3e-11a4-4554-8c6e-9b04f9315ba0",
+    "documentNamespace":  "https://spdx.org/spdxdocs/assembly-studio-1.0.0-win-x64-2de87d38-680b-4add-8b21-ddaa481d611d",
     "creationInfo":  {
-                         "created":  "2026-11-04T05:42:39Z",
+                         "created":  "2026-11-04T06:35:54Z",
                          "creators":  [
                                           "Tool: build/installer/license-inventory.ps1",
                                           "Organization: Assembly Studio contributors"
@@ -124,7 +124,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "290a638538a32859e72c738f10c62abf3c81790b175ed419b479d32e48349f7e"
+                                            "checksumValue":  "9384a5281989ff45ca68ff2fed92e7e33778ef1b4cebc020fe886d6571db7b7d"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -136,7 +136,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "47e035afb020de18b2bd191050d3084cc349637e2f32373729c7ca239950a154"
+                                            "checksumValue":  "b89d0a51e370133aec855753dd5e8033c8a31dfddc550da8822ff1259a5c426d"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -148,7 +148,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "0ff952b7cb3196c51ac29249ff7447f6caead0e5cea295f9edb41b67131924f6"
+                                            "checksumValue":  "b6bfc7c83865be73b09b101d58364d8c60ba5754d1c839e6aecf795600df1989"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -172,7 +172,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "aa9098c1f02f258105255a4d97827b1fb39ee44473b7bebed55de890663eea9b"
+                                            "checksumValue":  "2448685246a904474cfa412c5bde867554b31a01afd773628fa3b65ef576c30c"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -184,7 +184,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "64bc0c96f3291c186a95bf27e979481fe81078f1765655682ff337dc68e27faa"
+                                            "checksumValue":  "2ef248d7387a20dff5ce10d3e03eaed2bfddf9cc1fec75bce1431dd1fd65bd56"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -196,7 +196,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "fdb73f6734f962b138de1fe3b481bf300fdd58f77be7513c70ca7f215d834eb3"
+                                            "checksumValue":  "8fd70de83f7649bfb6e03681a0c9342cf4a45cd1689fa9003eee432bff76bb00"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -208,7 +208,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "2267be82ce6e466a172c1100690bc58d0f297c9b23d4394374353c2ed9d26a68"
+                                            "checksumValue":  "7f75d77a4d495e103914bd65f94f4f940d7d83e0acbbce017f91793f7b6daedd"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -220,7 +220,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "0c1ef1e8c8c6dbee592359069aa9e44c94f000f0b57ac811539186c623610fdb"
+                                            "checksumValue":  "9d74e84df73a73a12f8d2d8ffa559e286a83a2af09a745895ad7620ea4e6719a"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -232,7 +232,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "f1390ce65d6e3a5e6b96080457fc32bb34ffc24566093d914a7bba19ce75b13e"
+                                            "checksumValue":  "dfdb3d4aae0c8e9953f0679dc4d1f5d113e4904e385cab90d3b04872d3e093c5"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -244,7 +244,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "042e42a669293d5d09d5ef0b55ba5b90ca17aeb423dddabc4e324aed29bb1791"
+                                            "checksumValue":  "b01656e0cf39d786ec5b2d97c35546b5887ba6783c271d48e3ef7ac13f889ff7"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -256,7 +256,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "a257c8e12ae670b3abec52ee3f9b5ee2ea68c21a79a07ff51853fa10fde1ff07"
+                                            "checksumValue":  "ad3fe99268471fd05f854e75726ad69137620bed8e3c6f628f93a60792953801"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -268,7 +268,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "ce72559068c657fdd4225854d92797471f0f5d36a16291838f5cdd29f1127e91"
+                                            "checksumValue":  "8f122be222d2e075c53cc1126ccb88b21bf4bb538cf2545690f5a051a69f9861"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -280,7 +280,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "4257e9f7eab03783a779fd334367600972cc74fb7fff5315333a352e9129357b"
+                                            "checksumValue":  "9f4fc59b85d99b38dd9e9566102f0dd1bb85997493aef054ffef7dc81c122bd6"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -292,7 +292,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "6b3fc128b4e8b0c2177de6703ad6edc056e09c60eedab084f0021779f3f6e740"
+                                            "checksumValue":  "da6909dacddd48e5166da191475db21616e1a612c11ee80d3ed0bd4466766ea6"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -304,7 +304,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "97da739779e2791758ca7c3b8ff5bc6011068c1d3270a68e7bab49b68b31e79f"
+                                            "checksumValue":  "3d6425427657b1ccf5f3d04f20ffe4ce5d7ad7eb8585bbca57fb04110a66716f"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -316,7 +316,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "0aaa548a4046450b82c660e66098b8bcd529aa738743a5a5c8510b1720c6029f"
+                                            "checksumValue":  "8cdf484100656e796b612ba0987b7aad0f84b82e55b4c76ea69c4e9a69f7a726"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -328,7 +328,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "be904db9a39265a92c0bf43532c043e0d80e5cfac8b278c584cfbf19dd2e95b3"
+                                            "checksumValue":  "613bf0c34dfb9fae463ed0cef2c9afbfb4f8c563a7c1015d66a60e9cd8a916f4"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -2748,6 +2748,18 @@
                   },
                   {
                       "SPDXID":  "SPDXRef-File-222",
+                      "fileName":  "./RELEASE-NOTES.md",
+                      "checksums":  [
+                                        {
+                                            "algorithm":  "SHA256",
+                                            "checksumValue":  "fa5c5cda34d8f5b8c1b62fd29bd495b9351255a1d34246671147e5a4f7204568"
+                                        }
+                                    ],
+                      "licenseConcluded":  "MIT",
+                      "copyrightText":  "NOASSERTION"
+                  },
+                  {
+                      "SPDXID":  "SPDXRef-File-223",
                       "fileName":  "./ru/Microsoft.VisualBasic.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -2759,7 +2771,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-223",
+                      "SPDXID":  "SPDXRef-File-224",
                       "fileName":  "./ru/PresentationCore.resources.dll",
                       "checksums":  [
                                         {
@@ -2771,7 +2783,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-224",
+                      "SPDXID":  "SPDXRef-File-225",
                       "fileName":  "./ru/PresentationFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -2783,7 +2795,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-225",
+                      "SPDXID":  "SPDXRef-File-226",
                       "fileName":  "./ru/PresentationUI.resources.dll",
                       "checksums":  [
                                         {
@@ -2795,7 +2807,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-226",
+                      "SPDXID":  "SPDXRef-File-227",
                       "fileName":  "./ru/ReachFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -2807,7 +2819,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-227",
+                      "SPDXID":  "SPDXRef-File-228",
                       "fileName":  "./ru/System.Windows.Controls.Ribbon.resources.dll",
                       "checksums":  [
                                         {
@@ -2819,7 +2831,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-228",
+                      "SPDXID":  "SPDXRef-File-229",
                       "fileName":  "./ru/System.Windows.Forms.Design.resources.dll",
                       "checksums":  [
                                         {
@@ -2831,7 +2843,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-229",
+                      "SPDXID":  "SPDXRef-File-230",
                       "fileName":  "./ru/System.Windows.Forms.Primitives.resources.dll",
                       "checksums":  [
                                         {
@@ -2843,7 +2855,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-230",
+                      "SPDXID":  "SPDXRef-File-231",
                       "fileName":  "./ru/System.Windows.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -2855,7 +2867,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-231",
+                      "SPDXID":  "SPDXRef-File-232",
                       "fileName":  "./ru/System.Windows.Input.Manipulations.resources.dll",
                       "checksums":  [
                                         {
@@ -2867,7 +2879,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-232",
+                      "SPDXID":  "SPDXRef-File-233",
                       "fileName":  "./ru/System.Xaml.resources.dll",
                       "checksums":  [
                                         {
@@ -2879,7 +2891,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-233",
+                      "SPDXID":  "SPDXRef-File-234",
                       "fileName":  "./ru/UIAutomationClient.resources.dll",
                       "checksums":  [
                                         {
@@ -2891,7 +2903,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-234",
+                      "SPDXID":  "SPDXRef-File-235",
                       "fileName":  "./ru/UIAutomationClientSideProviders.resources.dll",
                       "checksums":  [
                                         {
@@ -2903,7 +2915,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-235",
+                      "SPDXID":  "SPDXRef-File-236",
                       "fileName":  "./ru/UIAutomationProvider.resources.dll",
                       "checksums":  [
                                         {
@@ -2915,7 +2927,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-236",
+                      "SPDXID":  "SPDXRef-File-237",
                       "fileName":  "./ru/UIAutomationTypes.resources.dll",
                       "checksums":  [
                                         {
@@ -2927,7 +2939,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-237",
+                      "SPDXID":  "SPDXRef-File-238",
                       "fileName":  "./ru/WindowsBase.resources.dll",
                       "checksums":  [
                                         {
@@ -2939,7 +2951,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-238",
+                      "SPDXID":  "SPDXRef-File-239",
                       "fileName":  "./ru/WindowsFormsIntegration.resources.dll",
                       "checksums":  [
                                         {
@@ -2951,7 +2963,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-239",
+                      "SPDXID":  "SPDXRef-File-240",
                       "fileName":  "./System.AppContext.dll",
                       "checksums":  [
                                         {
@@ -2963,7 +2975,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-240",
+                      "SPDXID":  "SPDXRef-File-241",
                       "fileName":  "./System.Buffers.dll",
                       "checksums":  [
                                         {
@@ -2975,7 +2987,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-241",
+                      "SPDXID":  "SPDXRef-File-242",
                       "fileName":  "./System.CodeDom.dll",
                       "checksums":  [
                                         {
@@ -2987,7 +2999,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-242",
+                      "SPDXID":  "SPDXRef-File-243",
                       "fileName":  "./System.Collections.Concurrent.dll",
                       "checksums":  [
                                         {
@@ -2999,7 +3011,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-243",
+                      "SPDXID":  "SPDXRef-File-244",
                       "fileName":  "./System.Collections.dll",
                       "checksums":  [
                                         {
@@ -3011,7 +3023,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-244",
+                      "SPDXID":  "SPDXRef-File-245",
                       "fileName":  "./System.Collections.Immutable.dll",
                       "checksums":  [
                                         {
@@ -3023,7 +3035,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-245",
+                      "SPDXID":  "SPDXRef-File-246",
                       "fileName":  "./System.Collections.NonGeneric.dll",
                       "checksums":  [
                                         {
@@ -3035,7 +3047,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-246",
+                      "SPDXID":  "SPDXRef-File-247",
                       "fileName":  "./System.Collections.Specialized.dll",
                       "checksums":  [
                                         {
@@ -3047,7 +3059,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-247",
+                      "SPDXID":  "SPDXRef-File-248",
                       "fileName":  "./System.ComponentModel.Annotations.dll",
                       "checksums":  [
                                         {
@@ -3059,7 +3071,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-248",
+                      "SPDXID":  "SPDXRef-File-249",
                       "fileName":  "./System.ComponentModel.DataAnnotations.dll",
                       "checksums":  [
                                         {
@@ -3071,7 +3083,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-249",
+                      "SPDXID":  "SPDXRef-File-250",
                       "fileName":  "./System.ComponentModel.dll",
                       "checksums":  [
                                         {
@@ -3083,7 +3095,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-250",
+                      "SPDXID":  "SPDXRef-File-251",
                       "fileName":  "./System.ComponentModel.EventBasedAsync.dll",
                       "checksums":  [
                                         {
@@ -3095,7 +3107,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-251",
+                      "SPDXID":  "SPDXRef-File-252",
                       "fileName":  "./System.ComponentModel.Primitives.dll",
                       "checksums":  [
                                         {
@@ -3107,7 +3119,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-252",
+                      "SPDXID":  "SPDXRef-File-253",
                       "fileName":  "./System.ComponentModel.TypeConverter.dll",
                       "checksums":  [
                                         {
@@ -3119,7 +3131,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-253",
+                      "SPDXID":  "SPDXRef-File-254",
                       "fileName":  "./System.Configuration.ConfigurationManager.dll",
                       "checksums":  [
                                         {
@@ -3131,7 +3143,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-254",
+                      "SPDXID":  "SPDXRef-File-255",
                       "fileName":  "./System.Configuration.dll",
                       "checksums":  [
                                         {
@@ -3143,7 +3155,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-255",
+                      "SPDXID":  "SPDXRef-File-256",
                       "fileName":  "./System.Console.dll",
                       "checksums":  [
                                         {
@@ -3155,7 +3167,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-256",
+                      "SPDXID":  "SPDXRef-File-257",
                       "fileName":  "./System.Core.dll",
                       "checksums":  [
                                         {
@@ -3167,7 +3179,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-257",
+                      "SPDXID":  "SPDXRef-File-258",
                       "fileName":  "./System.Data.Common.dll",
                       "checksums":  [
                                         {
@@ -3179,7 +3191,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-258",
+                      "SPDXID":  "SPDXRef-File-259",
                       "fileName":  "./System.Data.DataSetExtensions.dll",
                       "checksums":  [
                                         {
@@ -3191,7 +3203,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-259",
+                      "SPDXID":  "SPDXRef-File-260",
                       "fileName":  "./System.Data.dll",
                       "checksums":  [
                                         {
@@ -3203,7 +3215,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-260",
+                      "SPDXID":  "SPDXRef-File-261",
                       "fileName":  "./System.Design.dll",
                       "checksums":  [
                                         {
@@ -3215,7 +3227,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-261",
+                      "SPDXID":  "SPDXRef-File-262",
                       "fileName":  "./System.Diagnostics.Contracts.dll",
                       "checksums":  [
                                         {
@@ -3227,7 +3239,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-262",
+                      "SPDXID":  "SPDXRef-File-263",
                       "fileName":  "./System.Diagnostics.Debug.dll",
                       "checksums":  [
                                         {
@@ -3239,7 +3251,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-263",
+                      "SPDXID":  "SPDXRef-File-264",
                       "fileName":  "./System.Diagnostics.DiagnosticSource.dll",
                       "checksums":  [
                                         {
@@ -3251,7 +3263,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-264",
+                      "SPDXID":  "SPDXRef-File-265",
                       "fileName":  "./System.Diagnostics.EventLog.dll",
                       "checksums":  [
                                         {
@@ -3263,7 +3275,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-265",
+                      "SPDXID":  "SPDXRef-File-266",
                       "fileName":  "./System.Diagnostics.EventLog.Messages.dll",
                       "checksums":  [
                                         {
@@ -3275,7 +3287,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-266",
+                      "SPDXID":  "SPDXRef-File-267",
                       "fileName":  "./System.Diagnostics.FileVersionInfo.dll",
                       "checksums":  [
                                         {
@@ -3287,7 +3299,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-267",
+                      "SPDXID":  "SPDXRef-File-268",
                       "fileName":  "./System.Diagnostics.PerformanceCounter.dll",
                       "checksums":  [
                                         {
@@ -3299,7 +3311,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-268",
+                      "SPDXID":  "SPDXRef-File-269",
                       "fileName":  "./System.Diagnostics.Process.dll",
                       "checksums":  [
                                         {
@@ -3311,7 +3323,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-269",
+                      "SPDXID":  "SPDXRef-File-270",
                       "fileName":  "./System.Diagnostics.StackTrace.dll",
                       "checksums":  [
                                         {
@@ -3323,7 +3335,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-270",
+                      "SPDXID":  "SPDXRef-File-271",
                       "fileName":  "./System.Diagnostics.TextWriterTraceListener.dll",
                       "checksums":  [
                                         {
@@ -3335,7 +3347,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-271",
+                      "SPDXID":  "SPDXRef-File-272",
                       "fileName":  "./System.Diagnostics.Tools.dll",
                       "checksums":  [
                                         {
@@ -3347,7 +3359,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-272",
+                      "SPDXID":  "SPDXRef-File-273",
                       "fileName":  "./System.Diagnostics.TraceSource.dll",
                       "checksums":  [
                                         {
@@ -3359,7 +3371,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-273",
+                      "SPDXID":  "SPDXRef-File-274",
                       "fileName":  "./System.Diagnostics.Tracing.dll",
                       "checksums":  [
                                         {
@@ -3371,7 +3383,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-274",
+                      "SPDXID":  "SPDXRef-File-275",
                       "fileName":  "./System.DirectoryServices.dll",
                       "checksums":  [
                                         {
@@ -3383,7 +3395,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-275",
+                      "SPDXID":  "SPDXRef-File-276",
                       "fileName":  "./System.dll",
                       "checksums":  [
                                         {
@@ -3395,7 +3407,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-276",
+                      "SPDXID":  "SPDXRef-File-277",
                       "fileName":  "./System.Drawing.Common.dll",
                       "checksums":  [
                                         {
@@ -3407,7 +3419,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-277",
+                      "SPDXID":  "SPDXRef-File-278",
                       "fileName":  "./System.Drawing.Design.dll",
                       "checksums":  [
                                         {
@@ -3419,7 +3431,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-278",
+                      "SPDXID":  "SPDXRef-File-279",
                       "fileName":  "./System.Drawing.dll",
                       "checksums":  [
                                         {
@@ -3431,7 +3443,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-279",
+                      "SPDXID":  "SPDXRef-File-280",
                       "fileName":  "./System.Drawing.Primitives.dll",
                       "checksums":  [
                                         {
@@ -3443,7 +3455,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-280",
+                      "SPDXID":  "SPDXRef-File-281",
                       "fileName":  "./System.Dynamic.Runtime.dll",
                       "checksums":  [
                                         {
@@ -3455,7 +3467,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-281",
+                      "SPDXID":  "SPDXRef-File-282",
                       "fileName":  "./System.Formats.Asn1.dll",
                       "checksums":  [
                                         {
@@ -3467,7 +3479,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-282",
+                      "SPDXID":  "SPDXRef-File-283",
                       "fileName":  "./System.Formats.Nrbf.dll",
                       "checksums":  [
                                         {
@@ -3479,7 +3491,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-283",
+                      "SPDXID":  "SPDXRef-File-284",
                       "fileName":  "./System.Formats.Tar.dll",
                       "checksums":  [
                                         {
@@ -3491,7 +3503,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-284",
+                      "SPDXID":  "SPDXRef-File-285",
                       "fileName":  "./System.Globalization.Calendars.dll",
                       "checksums":  [
                                         {
@@ -3503,7 +3515,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-285",
+                      "SPDXID":  "SPDXRef-File-286",
                       "fileName":  "./System.Globalization.dll",
                       "checksums":  [
                                         {
@@ -3515,7 +3527,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-286",
+                      "SPDXID":  "SPDXRef-File-287",
                       "fileName":  "./System.Globalization.Extensions.dll",
                       "checksums":  [
                                         {
@@ -3527,7 +3539,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-287",
+                      "SPDXID":  "SPDXRef-File-288",
                       "fileName":  "./System.IO.Compression.Brotli.dll",
                       "checksums":  [
                                         {
@@ -3539,7 +3551,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-288",
+                      "SPDXID":  "SPDXRef-File-289",
                       "fileName":  "./System.IO.Compression.dll",
                       "checksums":  [
                                         {
@@ -3551,7 +3563,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-289",
+                      "SPDXID":  "SPDXRef-File-290",
                       "fileName":  "./System.IO.Compression.FileSystem.dll",
                       "checksums":  [
                                         {
@@ -3563,7 +3575,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-290",
+                      "SPDXID":  "SPDXRef-File-291",
                       "fileName":  "./System.IO.Compression.Native.dll",
                       "checksums":  [
                                         {
@@ -3575,7 +3587,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-291",
+                      "SPDXID":  "SPDXRef-File-292",
                       "fileName":  "./System.IO.Compression.ZipFile.dll",
                       "checksums":  [
                                         {
@@ -3587,7 +3599,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-292",
+                      "SPDXID":  "SPDXRef-File-293",
                       "fileName":  "./System.IO.dll",
                       "checksums":  [
                                         {
@@ -3599,7 +3611,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-293",
+                      "SPDXID":  "SPDXRef-File-294",
                       "fileName":  "./System.IO.FileSystem.AccessControl.dll",
                       "checksums":  [
                                         {
@@ -3611,7 +3623,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-294",
+                      "SPDXID":  "SPDXRef-File-295",
                       "fileName":  "./System.IO.FileSystem.dll",
                       "checksums":  [
                                         {
@@ -3623,7 +3635,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-295",
+                      "SPDXID":  "SPDXRef-File-296",
                       "fileName":  "./System.IO.FileSystem.DriveInfo.dll",
                       "checksums":  [
                                         {
@@ -3635,7 +3647,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-296",
+                      "SPDXID":  "SPDXRef-File-297",
                       "fileName":  "./System.IO.FileSystem.Primitives.dll",
                       "checksums":  [
                                         {
@@ -3647,7 +3659,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-297",
+                      "SPDXID":  "SPDXRef-File-298",
                       "fileName":  "./System.IO.FileSystem.Watcher.dll",
                       "checksums":  [
                                         {
@@ -3659,7 +3671,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-298",
+                      "SPDXID":  "SPDXRef-File-299",
                       "fileName":  "./System.IO.IsolatedStorage.dll",
                       "checksums":  [
                                         {
@@ -3671,7 +3683,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-299",
+                      "SPDXID":  "SPDXRef-File-300",
                       "fileName":  "./System.IO.MemoryMappedFiles.dll",
                       "checksums":  [
                                         {
@@ -3683,7 +3695,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-300",
+                      "SPDXID":  "SPDXRef-File-301",
                       "fileName":  "./System.IO.Packaging.dll",
                       "checksums":  [
                                         {
@@ -3695,7 +3707,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-301",
+                      "SPDXID":  "SPDXRef-File-302",
                       "fileName":  "./System.IO.Pipelines.dll",
                       "checksums":  [
                                         {
@@ -3707,7 +3719,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-302",
+                      "SPDXID":  "SPDXRef-File-303",
                       "fileName":  "./System.IO.Pipes.AccessControl.dll",
                       "checksums":  [
                                         {
@@ -3719,7 +3731,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-303",
+                      "SPDXID":  "SPDXRef-File-304",
                       "fileName":  "./System.IO.Pipes.dll",
                       "checksums":  [
                                         {
@@ -3731,7 +3743,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-304",
+                      "SPDXID":  "SPDXRef-File-305",
                       "fileName":  "./System.IO.UnmanagedMemoryStream.dll",
                       "checksums":  [
                                         {
@@ -3743,7 +3755,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-305",
+                      "SPDXID":  "SPDXRef-File-306",
                       "fileName":  "./System.Linq.AsyncEnumerable.dll",
                       "checksums":  [
                                         {
@@ -3755,7 +3767,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-306",
+                      "SPDXID":  "SPDXRef-File-307",
                       "fileName":  "./System.Linq.dll",
                       "checksums":  [
                                         {
@@ -3767,7 +3779,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-307",
+                      "SPDXID":  "SPDXRef-File-308",
                       "fileName":  "./System.Linq.Expressions.dll",
                       "checksums":  [
                                         {
@@ -3779,7 +3791,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-308",
+                      "SPDXID":  "SPDXRef-File-309",
                       "fileName":  "./System.Linq.Parallel.dll",
                       "checksums":  [
                                         {
@@ -3791,7 +3803,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-309",
+                      "SPDXID":  "SPDXRef-File-310",
                       "fileName":  "./System.Linq.Queryable.dll",
                       "checksums":  [
                                         {
@@ -3803,7 +3815,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-310",
+                      "SPDXID":  "SPDXRef-File-311",
                       "fileName":  "./System.Memory.dll",
                       "checksums":  [
                                         {
@@ -3815,7 +3827,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-311",
+                      "SPDXID":  "SPDXRef-File-312",
                       "fileName":  "./System.Net.dll",
                       "checksums":  [
                                         {
@@ -3827,7 +3839,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-312",
+                      "SPDXID":  "SPDXRef-File-313",
                       "fileName":  "./System.Net.Http.dll",
                       "checksums":  [
                                         {
@@ -3839,7 +3851,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-313",
+                      "SPDXID":  "SPDXRef-File-314",
                       "fileName":  "./System.Net.Http.Json.dll",
                       "checksums":  [
                                         {
@@ -3851,7 +3863,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-314",
+                      "SPDXID":  "SPDXRef-File-315",
                       "fileName":  "./System.Net.HttpListener.dll",
                       "checksums":  [
                                         {
@@ -3863,7 +3875,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-315",
+                      "SPDXID":  "SPDXRef-File-316",
                       "fileName":  "./System.Net.Mail.dll",
                       "checksums":  [
                                         {
@@ -3875,7 +3887,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-316",
+                      "SPDXID":  "SPDXRef-File-317",
                       "fileName":  "./System.Net.NameResolution.dll",
                       "checksums":  [
                                         {
@@ -3887,7 +3899,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-317",
+                      "SPDXID":  "SPDXRef-File-318",
                       "fileName":  "./System.Net.NetworkInformation.dll",
                       "checksums":  [
                                         {
@@ -3899,7 +3911,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-318",
+                      "SPDXID":  "SPDXRef-File-319",
                       "fileName":  "./System.Net.Ping.dll",
                       "checksums":  [
                                         {
@@ -3911,7 +3923,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-319",
+                      "SPDXID":  "SPDXRef-File-320",
                       "fileName":  "./System.Net.Primitives.dll",
                       "checksums":  [
                                         {
@@ -3923,7 +3935,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-320",
+                      "SPDXID":  "SPDXRef-File-321",
                       "fileName":  "./System.Net.Quic.dll",
                       "checksums":  [
                                         {
@@ -3935,7 +3947,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-321",
+                      "SPDXID":  "SPDXRef-File-322",
                       "fileName":  "./System.Net.Requests.dll",
                       "checksums":  [
                                         {
@@ -3947,7 +3959,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-322",
+                      "SPDXID":  "SPDXRef-File-323",
                       "fileName":  "./System.Net.Security.dll",
                       "checksums":  [
                                         {
@@ -3959,7 +3971,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-323",
+                      "SPDXID":  "SPDXRef-File-324",
                       "fileName":  "./System.Net.ServerSentEvents.dll",
                       "checksums":  [
                                         {
@@ -3971,7 +3983,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-324",
+                      "SPDXID":  "SPDXRef-File-325",
                       "fileName":  "./System.Net.ServicePoint.dll",
                       "checksums":  [
                                         {
@@ -3983,7 +3995,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-325",
+                      "SPDXID":  "SPDXRef-File-326",
                       "fileName":  "./System.Net.Sockets.dll",
                       "checksums":  [
                                         {
@@ -3995,7 +4007,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-326",
+                      "SPDXID":  "SPDXRef-File-327",
                       "fileName":  "./System.Net.WebClient.dll",
                       "checksums":  [
                                         {
@@ -4007,7 +4019,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-327",
+                      "SPDXID":  "SPDXRef-File-328",
                       "fileName":  "./System.Net.WebHeaderCollection.dll",
                       "checksums":  [
                                         {
@@ -4019,7 +4031,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-328",
+                      "SPDXID":  "SPDXRef-File-329",
                       "fileName":  "./System.Net.WebProxy.dll",
                       "checksums":  [
                                         {
@@ -4031,7 +4043,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-329",
+                      "SPDXID":  "SPDXRef-File-330",
                       "fileName":  "./System.Net.WebSockets.Client.dll",
                       "checksums":  [
                                         {
@@ -4043,7 +4055,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-330",
+                      "SPDXID":  "SPDXRef-File-331",
                       "fileName":  "./System.Net.WebSockets.dll",
                       "checksums":  [
                                         {
@@ -4055,7 +4067,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-331",
+                      "SPDXID":  "SPDXRef-File-332",
                       "fileName":  "./System.Numerics.dll",
                       "checksums":  [
                                         {
@@ -4067,7 +4079,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-332",
+                      "SPDXID":  "SPDXRef-File-333",
                       "fileName":  "./System.Numerics.Vectors.dll",
                       "checksums":  [
                                         {
@@ -4079,7 +4091,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-333",
+                      "SPDXID":  "SPDXRef-File-334",
                       "fileName":  "./System.ObjectModel.dll",
                       "checksums":  [
                                         {
@@ -4091,7 +4103,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-334",
+                      "SPDXID":  "SPDXRef-File-335",
                       "fileName":  "./System.Printing.dll",
                       "checksums":  [
                                         {
@@ -4103,7 +4115,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-335",
+                      "SPDXID":  "SPDXRef-File-336",
                       "fileName":  "./System.Private.CoreLib.dll",
                       "checksums":  [
                                         {
@@ -4115,7 +4127,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-336",
+                      "SPDXID":  "SPDXRef-File-337",
                       "fileName":  "./System.Private.DataContractSerialization.dll",
                       "checksums":  [
                                         {
@@ -4127,7 +4139,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-337",
+                      "SPDXID":  "SPDXRef-File-338",
                       "fileName":  "./System.Private.Uri.dll",
                       "checksums":  [
                                         {
@@ -4139,7 +4151,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-338",
+                      "SPDXID":  "SPDXRef-File-339",
                       "fileName":  "./System.Private.Windows.Core.dll",
                       "checksums":  [
                                         {
@@ -4151,7 +4163,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-339",
+                      "SPDXID":  "SPDXRef-File-340",
                       "fileName":  "./System.Private.Windows.GdiPlus.dll",
                       "checksums":  [
                                         {
@@ -4163,7 +4175,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-340",
+                      "SPDXID":  "SPDXRef-File-341",
                       "fileName":  "./System.Private.Xml.dll",
                       "checksums":  [
                                         {
@@ -4175,7 +4187,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-341",
+                      "SPDXID":  "SPDXRef-File-342",
                       "fileName":  "./System.Private.Xml.Linq.dll",
                       "checksums":  [
                                         {
@@ -4187,7 +4199,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-342",
+                      "SPDXID":  "SPDXRef-File-343",
                       "fileName":  "./System.Reflection.DispatchProxy.dll",
                       "checksums":  [
                                         {
@@ -4199,7 +4211,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-343",
+                      "SPDXID":  "SPDXRef-File-344",
                       "fileName":  "./System.Reflection.dll",
                       "checksums":  [
                                         {
@@ -4211,7 +4223,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-344",
+                      "SPDXID":  "SPDXRef-File-345",
                       "fileName":  "./System.Reflection.Emit.dll",
                       "checksums":  [
                                         {
@@ -4223,7 +4235,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-345",
+                      "SPDXID":  "SPDXRef-File-346",
                       "fileName":  "./System.Reflection.Emit.ILGeneration.dll",
                       "checksums":  [
                                         {
@@ -4235,7 +4247,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-346",
+                      "SPDXID":  "SPDXRef-File-347",
                       "fileName":  "./System.Reflection.Emit.Lightweight.dll",
                       "checksums":  [
                                         {
@@ -4247,7 +4259,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-347",
+                      "SPDXID":  "SPDXRef-File-348",
                       "fileName":  "./System.Reflection.Extensions.dll",
                       "checksums":  [
                                         {
@@ -4259,7 +4271,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-348",
+                      "SPDXID":  "SPDXRef-File-349",
                       "fileName":  "./System.Reflection.Metadata.dll",
                       "checksums":  [
                                         {
@@ -4271,7 +4283,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-349",
+                      "SPDXID":  "SPDXRef-File-350",
                       "fileName":  "./System.Reflection.Primitives.dll",
                       "checksums":  [
                                         {
@@ -4283,7 +4295,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-350",
+                      "SPDXID":  "SPDXRef-File-351",
                       "fileName":  "./System.Reflection.TypeExtensions.dll",
                       "checksums":  [
                                         {
@@ -4295,7 +4307,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-351",
+                      "SPDXID":  "SPDXRef-File-352",
                       "fileName":  "./System.Resources.Extensions.dll",
                       "checksums":  [
                                         {
@@ -4307,7 +4319,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-352",
+                      "SPDXID":  "SPDXRef-File-353",
                       "fileName":  "./System.Resources.Reader.dll",
                       "checksums":  [
                                         {
@@ -4319,7 +4331,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-353",
+                      "SPDXID":  "SPDXRef-File-354",
                       "fileName":  "./System.Resources.ResourceManager.dll",
                       "checksums":  [
                                         {
@@ -4331,7 +4343,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-354",
+                      "SPDXID":  "SPDXRef-File-355",
                       "fileName":  "./System.Resources.Writer.dll",
                       "checksums":  [
                                         {
@@ -4343,7 +4355,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-355",
+                      "SPDXID":  "SPDXRef-File-356",
                       "fileName":  "./System.Runtime.CompilerServices.Unsafe.dll",
                       "checksums":  [
                                         {
@@ -4355,7 +4367,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-356",
+                      "SPDXID":  "SPDXRef-File-357",
                       "fileName":  "./System.Runtime.CompilerServices.VisualC.dll",
                       "checksums":  [
                                         {
@@ -4367,7 +4379,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-357",
+                      "SPDXID":  "SPDXRef-File-358",
                       "fileName":  "./System.Runtime.dll",
                       "checksums":  [
                                         {
@@ -4379,7 +4391,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-358",
+                      "SPDXID":  "SPDXRef-File-359",
                       "fileName":  "./System.Runtime.Extensions.dll",
                       "checksums":  [
                                         {
@@ -4391,7 +4403,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-359",
+                      "SPDXID":  "SPDXRef-File-360",
                       "fileName":  "./System.Runtime.Handles.dll",
                       "checksums":  [
                                         {
@@ -4403,7 +4415,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-360",
+                      "SPDXID":  "SPDXRef-File-361",
                       "fileName":  "./System.Runtime.InteropServices.dll",
                       "checksums":  [
                                         {
@@ -4415,7 +4427,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-361",
+                      "SPDXID":  "SPDXRef-File-362",
                       "fileName":  "./System.Runtime.InteropServices.JavaScript.dll",
                       "checksums":  [
                                         {
@@ -4427,7 +4439,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-362",
+                      "SPDXID":  "SPDXRef-File-363",
                       "fileName":  "./System.Runtime.InteropServices.RuntimeInformation.dll",
                       "checksums":  [
                                         {
@@ -4439,7 +4451,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-363",
+                      "SPDXID":  "SPDXRef-File-364",
                       "fileName":  "./System.Runtime.Intrinsics.dll",
                       "checksums":  [
                                         {
@@ -4451,7 +4463,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-364",
+                      "SPDXID":  "SPDXRef-File-365",
                       "fileName":  "./System.Runtime.Loader.dll",
                       "checksums":  [
                                         {
@@ -4463,7 +4475,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-365",
+                      "SPDXID":  "SPDXRef-File-366",
                       "fileName":  "./System.Runtime.Numerics.dll",
                       "checksums":  [
                                         {
@@ -4475,7 +4487,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-366",
+                      "SPDXID":  "SPDXRef-File-367",
                       "fileName":  "./System.Runtime.Serialization.dll",
                       "checksums":  [
                                         {
@@ -4487,7 +4499,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-367",
+                      "SPDXID":  "SPDXRef-File-368",
                       "fileName":  "./System.Runtime.Serialization.Formatters.dll",
                       "checksums":  [
                                         {
@@ -4499,7 +4511,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-368",
+                      "SPDXID":  "SPDXRef-File-369",
                       "fileName":  "./System.Runtime.Serialization.Json.dll",
                       "checksums":  [
                                         {
@@ -4511,7 +4523,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-369",
+                      "SPDXID":  "SPDXRef-File-370",
                       "fileName":  "./System.Runtime.Serialization.Primitives.dll",
                       "checksums":  [
                                         {
@@ -4523,7 +4535,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-370",
+                      "SPDXID":  "SPDXRef-File-371",
                       "fileName":  "./System.Runtime.Serialization.Xml.dll",
                       "checksums":  [
                                         {
@@ -4535,7 +4547,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-371",
+                      "SPDXID":  "SPDXRef-File-372",
                       "fileName":  "./System.Security.AccessControl.dll",
                       "checksums":  [
                                         {
@@ -4547,7 +4559,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-372",
+                      "SPDXID":  "SPDXRef-File-373",
                       "fileName":  "./System.Security.Claims.dll",
                       "checksums":  [
                                         {
@@ -4559,7 +4571,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-373",
+                      "SPDXID":  "SPDXRef-File-374",
                       "fileName":  "./System.Security.Cryptography.Algorithms.dll",
                       "checksums":  [
                                         {
@@ -4571,7 +4583,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-374",
+                      "SPDXID":  "SPDXRef-File-375",
                       "fileName":  "./System.Security.Cryptography.Cng.dll",
                       "checksums":  [
                                         {
@@ -4583,7 +4595,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-375",
+                      "SPDXID":  "SPDXRef-File-376",
                       "fileName":  "./System.Security.Cryptography.Csp.dll",
                       "checksums":  [
                                         {
@@ -4595,7 +4607,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-376",
+                      "SPDXID":  "SPDXRef-File-377",
                       "fileName":  "./System.Security.Cryptography.dll",
                       "checksums":  [
                                         {
@@ -4607,7 +4619,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-377",
+                      "SPDXID":  "SPDXRef-File-378",
                       "fileName":  "./System.Security.Cryptography.Encoding.dll",
                       "checksums":  [
                                         {
@@ -4619,7 +4631,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-378",
+                      "SPDXID":  "SPDXRef-File-379",
                       "fileName":  "./System.Security.Cryptography.OpenSsl.dll",
                       "checksums":  [
                                         {
@@ -4631,7 +4643,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-379",
+                      "SPDXID":  "SPDXRef-File-380",
                       "fileName":  "./System.Security.Cryptography.Pkcs.dll",
                       "checksums":  [
                                         {
@@ -4643,7 +4655,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-380",
+                      "SPDXID":  "SPDXRef-File-381",
                       "fileName":  "./System.Security.Cryptography.Primitives.dll",
                       "checksums":  [
                                         {
@@ -4655,7 +4667,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-381",
+                      "SPDXID":  "SPDXRef-File-382",
                       "fileName":  "./System.Security.Cryptography.ProtectedData.dll",
                       "checksums":  [
                                         {
@@ -4667,7 +4679,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-382",
+                      "SPDXID":  "SPDXRef-File-383",
                       "fileName":  "./System.Security.Cryptography.X509Certificates.dll",
                       "checksums":  [
                                         {
@@ -4679,7 +4691,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-383",
+                      "SPDXID":  "SPDXRef-File-384",
                       "fileName":  "./System.Security.Cryptography.Xml.dll",
                       "checksums":  [
                                         {
@@ -4691,7 +4703,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-384",
+                      "SPDXID":  "SPDXRef-File-385",
                       "fileName":  "./System.Security.dll",
                       "checksums":  [
                                         {
@@ -4703,7 +4715,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-385",
+                      "SPDXID":  "SPDXRef-File-386",
                       "fileName":  "./System.Security.Permissions.dll",
                       "checksums":  [
                                         {
@@ -4715,7 +4727,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-386",
+                      "SPDXID":  "SPDXRef-File-387",
                       "fileName":  "./System.Security.Principal.dll",
                       "checksums":  [
                                         {
@@ -4727,7 +4739,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-387",
+                      "SPDXID":  "SPDXRef-File-388",
                       "fileName":  "./System.Security.Principal.Windows.dll",
                       "checksums":  [
                                         {
@@ -4739,7 +4751,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-388",
+                      "SPDXID":  "SPDXRef-File-389",
                       "fileName":  "./System.Security.SecureString.dll",
                       "checksums":  [
                                         {
@@ -4751,7 +4763,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-389",
+                      "SPDXID":  "SPDXRef-File-390",
                       "fileName":  "./System.ServiceModel.Web.dll",
                       "checksums":  [
                                         {
@@ -4763,7 +4775,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-390",
+                      "SPDXID":  "SPDXRef-File-391",
                       "fileName":  "./System.ServiceProcess.dll",
                       "checksums":  [
                                         {
@@ -4775,7 +4787,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-391",
+                      "SPDXID":  "SPDXRef-File-392",
                       "fileName":  "./System.Text.Encoding.CodePages.dll",
                       "checksums":  [
                                         {
@@ -4787,7 +4799,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-392",
+                      "SPDXID":  "SPDXRef-File-393",
                       "fileName":  "./System.Text.Encoding.dll",
                       "checksums":  [
                                         {
@@ -4799,7 +4811,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-393",
+                      "SPDXID":  "SPDXRef-File-394",
                       "fileName":  "./System.Text.Encoding.Extensions.dll",
                       "checksums":  [
                                         {
@@ -4811,7 +4823,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-394",
+                      "SPDXID":  "SPDXRef-File-395",
                       "fileName":  "./System.Text.Encodings.Web.dll",
                       "checksums":  [
                                         {
@@ -4823,7 +4835,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-395",
+                      "SPDXID":  "SPDXRef-File-396",
                       "fileName":  "./System.Text.Json.dll",
                       "checksums":  [
                                         {
@@ -4835,7 +4847,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-396",
+                      "SPDXID":  "SPDXRef-File-397",
                       "fileName":  "./System.Text.RegularExpressions.dll",
                       "checksums":  [
                                         {
@@ -4847,7 +4859,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-397",
+                      "SPDXID":  "SPDXRef-File-398",
                       "fileName":  "./System.Threading.AccessControl.dll",
                       "checksums":  [
                                         {
@@ -4859,7 +4871,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-398",
+                      "SPDXID":  "SPDXRef-File-399",
                       "fileName":  "./System.Threading.Channels.dll",
                       "checksums":  [
                                         {
@@ -4871,7 +4883,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-399",
+                      "SPDXID":  "SPDXRef-File-400",
                       "fileName":  "./System.Threading.dll",
                       "checksums":  [
                                         {
@@ -4883,7 +4895,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-400",
+                      "SPDXID":  "SPDXRef-File-401",
                       "fileName":  "./System.Threading.Overlapped.dll",
                       "checksums":  [
                                         {
@@ -4895,7 +4907,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-401",
+                      "SPDXID":  "SPDXRef-File-402",
                       "fileName":  "./System.Threading.Tasks.Dataflow.dll",
                       "checksums":  [
                                         {
@@ -4907,7 +4919,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-402",
+                      "SPDXID":  "SPDXRef-File-403",
                       "fileName":  "./System.Threading.Tasks.dll",
                       "checksums":  [
                                         {
@@ -4919,7 +4931,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-403",
+                      "SPDXID":  "SPDXRef-File-404",
                       "fileName":  "./System.Threading.Tasks.Extensions.dll",
                       "checksums":  [
                                         {
@@ -4931,7 +4943,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-404",
+                      "SPDXID":  "SPDXRef-File-405",
                       "fileName":  "./System.Threading.Tasks.Parallel.dll",
                       "checksums":  [
                                         {
@@ -4943,7 +4955,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-405",
+                      "SPDXID":  "SPDXRef-File-406",
                       "fileName":  "./System.Threading.Thread.dll",
                       "checksums":  [
                                         {
@@ -4955,7 +4967,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-406",
+                      "SPDXID":  "SPDXRef-File-407",
                       "fileName":  "./System.Threading.ThreadPool.dll",
                       "checksums":  [
                                         {
@@ -4967,7 +4979,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-407",
+                      "SPDXID":  "SPDXRef-File-408",
                       "fileName":  "./System.Threading.Timer.dll",
                       "checksums":  [
                                         {
@@ -4979,7 +4991,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-408",
+                      "SPDXID":  "SPDXRef-File-409",
                       "fileName":  "./System.Transactions.dll",
                       "checksums":  [
                                         {
@@ -4991,7 +5003,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-409",
+                      "SPDXID":  "SPDXRef-File-410",
                       "fileName":  "./System.Transactions.Local.dll",
                       "checksums":  [
                                         {
@@ -5003,7 +5015,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-410",
+                      "SPDXID":  "SPDXRef-File-411",
                       "fileName":  "./System.ValueTuple.dll",
                       "checksums":  [
                                         {
@@ -5015,7 +5027,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-411",
+                      "SPDXID":  "SPDXRef-File-412",
                       "fileName":  "./System.Web.dll",
                       "checksums":  [
                                         {
@@ -5027,7 +5039,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-412",
+                      "SPDXID":  "SPDXRef-File-413",
                       "fileName":  "./System.Web.HttpUtility.dll",
                       "checksums":  [
                                         {
@@ -5039,7 +5051,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-413",
+                      "SPDXID":  "SPDXRef-File-414",
                       "fileName":  "./System.Windows.Controls.Ribbon.dll",
                       "checksums":  [
                                         {
@@ -5051,7 +5063,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-414",
+                      "SPDXID":  "SPDXRef-File-415",
                       "fileName":  "./System.Windows.dll",
                       "checksums":  [
                                         {
@@ -5063,7 +5075,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-415",
+                      "SPDXID":  "SPDXRef-File-416",
                       "fileName":  "./System.Windows.Extensions.dll",
                       "checksums":  [
                                         {
@@ -5075,7 +5087,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-416",
+                      "SPDXID":  "SPDXRef-File-417",
                       "fileName":  "./System.Windows.Forms.Design.dll",
                       "checksums":  [
                                         {
@@ -5087,7 +5099,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-417",
+                      "SPDXID":  "SPDXRef-File-418",
                       "fileName":  "./System.Windows.Forms.Design.Editors.dll",
                       "checksums":  [
                                         {
@@ -5099,7 +5111,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-418",
+                      "SPDXID":  "SPDXRef-File-419",
                       "fileName":  "./System.Windows.Forms.dll",
                       "checksums":  [
                                         {
@@ -5111,7 +5123,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-419",
+                      "SPDXID":  "SPDXRef-File-420",
                       "fileName":  "./System.Windows.Forms.Primitives.dll",
                       "checksums":  [
                                         {
@@ -5123,7 +5135,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-420",
+                      "SPDXID":  "SPDXRef-File-421",
                       "fileName":  "./System.Windows.Input.Manipulations.dll",
                       "checksums":  [
                                         {
@@ -5135,7 +5147,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-421",
+                      "SPDXID":  "SPDXRef-File-422",
                       "fileName":  "./System.Windows.Presentation.dll",
                       "checksums":  [
                                         {
@@ -5147,7 +5159,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-422",
+                      "SPDXID":  "SPDXRef-File-423",
                       "fileName":  "./System.Windows.Primitives.dll",
                       "checksums":  [
                                         {
@@ -5159,7 +5171,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-423",
+                      "SPDXID":  "SPDXRef-File-424",
                       "fileName":  "./System.Xaml.dll",
                       "checksums":  [
                                         {
@@ -5171,7 +5183,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-424",
+                      "SPDXID":  "SPDXRef-File-425",
                       "fileName":  "./System.Xml.dll",
                       "checksums":  [
                                         {
@@ -5183,7 +5195,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-425",
+                      "SPDXID":  "SPDXRef-File-426",
                       "fileName":  "./System.Xml.Linq.dll",
                       "checksums":  [
                                         {
@@ -5195,7 +5207,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-426",
+                      "SPDXID":  "SPDXRef-File-427",
                       "fileName":  "./System.Xml.ReaderWriter.dll",
                       "checksums":  [
                                         {
@@ -5207,7 +5219,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-427",
+                      "SPDXID":  "SPDXRef-File-428",
                       "fileName":  "./System.Xml.Serialization.dll",
                       "checksums":  [
                                         {
@@ -5219,7 +5231,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-428",
+                      "SPDXID":  "SPDXRef-File-429",
                       "fileName":  "./System.Xml.XDocument.dll",
                       "checksums":  [
                                         {
@@ -5231,7 +5243,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-429",
+                      "SPDXID":  "SPDXRef-File-430",
                       "fileName":  "./System.Xml.XmlDocument.dll",
                       "checksums":  [
                                         {
@@ -5243,7 +5255,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-430",
+                      "SPDXID":  "SPDXRef-File-431",
                       "fileName":  "./System.Xml.XmlSerializer.dll",
                       "checksums":  [
                                         {
@@ -5255,7 +5267,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-431",
+                      "SPDXID":  "SPDXRef-File-432",
                       "fileName":  "./System.Xml.XPath.dll",
                       "checksums":  [
                                         {
@@ -5267,7 +5279,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-432",
+                      "SPDXID":  "SPDXRef-File-433",
                       "fileName":  "./System.Xml.XPath.XDocument.dll",
                       "checksums":  [
                                         {
@@ -5279,7 +5291,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-433",
+                      "SPDXID":  "SPDXRef-File-434",
                       "fileName":  "./THIRD-PARTY-NOTICES.txt",
                       "checksums":  [
                                         {
@@ -5291,7 +5303,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-434",
+                      "SPDXID":  "SPDXRef-File-435",
                       "fileName":  "./tools/nasm/LICENSE",
                       "checksums":  [
                                         {
@@ -5303,7 +5315,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-435",
+                      "SPDXID":  "SPDXRef-File-436",
                       "fileName":  "./tools/nasm/nasm.exe",
                       "checksums":  [
                                         {
@@ -5315,7 +5327,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-436",
+                      "SPDXID":  "SPDXRef-File-437",
                       "fileName":  "./tr/Microsoft.VisualBasic.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5327,7 +5339,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-437",
+                      "SPDXID":  "SPDXRef-File-438",
                       "fileName":  "./tr/PresentationCore.resources.dll",
                       "checksums":  [
                                         {
@@ -5339,7 +5351,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-438",
+                      "SPDXID":  "SPDXRef-File-439",
                       "fileName":  "./tr/PresentationFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5351,7 +5363,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-439",
+                      "SPDXID":  "SPDXRef-File-440",
                       "fileName":  "./tr/PresentationUI.resources.dll",
                       "checksums":  [
                                         {
@@ -5363,7 +5375,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-440",
+                      "SPDXID":  "SPDXRef-File-441",
                       "fileName":  "./tr/ReachFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5375,7 +5387,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-441",
+                      "SPDXID":  "SPDXRef-File-442",
                       "fileName":  "./tr/System.Windows.Controls.Ribbon.resources.dll",
                       "checksums":  [
                                         {
@@ -5387,7 +5399,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-442",
+                      "SPDXID":  "SPDXRef-File-443",
                       "fileName":  "./tr/System.Windows.Forms.Design.resources.dll",
                       "checksums":  [
                                         {
@@ -5399,7 +5411,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-443",
+                      "SPDXID":  "SPDXRef-File-444",
                       "fileName":  "./tr/System.Windows.Forms.Primitives.resources.dll",
                       "checksums":  [
                                         {
@@ -5411,7 +5423,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-444",
+                      "SPDXID":  "SPDXRef-File-445",
                       "fileName":  "./tr/System.Windows.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5423,7 +5435,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-445",
+                      "SPDXID":  "SPDXRef-File-446",
                       "fileName":  "./tr/System.Windows.Input.Manipulations.resources.dll",
                       "checksums":  [
                                         {
@@ -5435,7 +5447,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-446",
+                      "SPDXID":  "SPDXRef-File-447",
                       "fileName":  "./tr/System.Xaml.resources.dll",
                       "checksums":  [
                                         {
@@ -5447,7 +5459,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-447",
+                      "SPDXID":  "SPDXRef-File-448",
                       "fileName":  "./tr/UIAutomationClient.resources.dll",
                       "checksums":  [
                                         {
@@ -5459,7 +5471,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-448",
+                      "SPDXID":  "SPDXRef-File-449",
                       "fileName":  "./tr/UIAutomationClientSideProviders.resources.dll",
                       "checksums":  [
                                         {
@@ -5471,7 +5483,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-449",
+                      "SPDXID":  "SPDXRef-File-450",
                       "fileName":  "./tr/UIAutomationProvider.resources.dll",
                       "checksums":  [
                                         {
@@ -5483,7 +5495,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-450",
+                      "SPDXID":  "SPDXRef-File-451",
                       "fileName":  "./tr/UIAutomationTypes.resources.dll",
                       "checksums":  [
                                         {
@@ -5495,7 +5507,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-451",
+                      "SPDXID":  "SPDXRef-File-452",
                       "fileName":  "./tr/WindowsBase.resources.dll",
                       "checksums":  [
                                         {
@@ -5507,7 +5519,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-452",
+                      "SPDXID":  "SPDXRef-File-453",
                       "fileName":  "./tr/WindowsFormsIntegration.resources.dll",
                       "checksums":  [
                                         {
@@ -5519,7 +5531,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-453",
+                      "SPDXID":  "SPDXRef-File-454",
                       "fileName":  "./UIAutomationClient.dll",
                       "checksums":  [
                                         {
@@ -5531,7 +5543,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-454",
+                      "SPDXID":  "SPDXRef-File-455",
                       "fileName":  "./UIAutomationClientSideProviders.dll",
                       "checksums":  [
                                         {
@@ -5543,7 +5555,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-455",
+                      "SPDXID":  "SPDXRef-File-456",
                       "fileName":  "./UIAutomationProvider.dll",
                       "checksums":  [
                                         {
@@ -5555,7 +5567,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-456",
+                      "SPDXID":  "SPDXRef-File-457",
                       "fileName":  "./UIAutomationTypes.dll",
                       "checksums":  [
                                         {
@@ -5567,7 +5579,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-457",
+                      "SPDXID":  "SPDXRef-File-458",
                       "fileName":  "./vcruntime140_cor3.dll",
                       "checksums":  [
                                         {
@@ -5579,7 +5591,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-458",
+                      "SPDXID":  "SPDXRef-File-459",
                       "fileName":  "./WindowsBase.dll",
                       "checksums":  [
                                         {
@@ -5591,7 +5603,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-459",
+                      "SPDXID":  "SPDXRef-File-460",
                       "fileName":  "./WindowsFormsIntegration.dll",
                       "checksums":  [
                                         {
@@ -5603,7 +5615,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-460",
+                      "SPDXID":  "SPDXRef-File-461",
                       "fileName":  "./wpfgfx_cor3.dll",
                       "checksums":  [
                                         {
@@ -5615,7 +5627,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-461",
+                      "SPDXID":  "SPDXRef-File-462",
                       "fileName":  "./zh-Hans/Microsoft.VisualBasic.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5627,7 +5639,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-462",
+                      "SPDXID":  "SPDXRef-File-463",
                       "fileName":  "./zh-Hans/PresentationCore.resources.dll",
                       "checksums":  [
                                         {
@@ -5639,7 +5651,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-463",
+                      "SPDXID":  "SPDXRef-File-464",
                       "fileName":  "./zh-Hans/PresentationFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5651,7 +5663,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-464",
+                      "SPDXID":  "SPDXRef-File-465",
                       "fileName":  "./zh-Hans/PresentationUI.resources.dll",
                       "checksums":  [
                                         {
@@ -5663,7 +5675,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-465",
+                      "SPDXID":  "SPDXRef-File-466",
                       "fileName":  "./zh-Hans/ReachFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5675,7 +5687,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-466",
+                      "SPDXID":  "SPDXRef-File-467",
                       "fileName":  "./zh-Hans/System.Windows.Controls.Ribbon.resources.dll",
                       "checksums":  [
                                         {
@@ -5687,7 +5699,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-467",
+                      "SPDXID":  "SPDXRef-File-468",
                       "fileName":  "./zh-Hans/System.Windows.Forms.Design.resources.dll",
                       "checksums":  [
                                         {
@@ -5699,7 +5711,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-468",
+                      "SPDXID":  "SPDXRef-File-469",
                       "fileName":  "./zh-Hans/System.Windows.Forms.Primitives.resources.dll",
                       "checksums":  [
                                         {
@@ -5711,7 +5723,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-469",
+                      "SPDXID":  "SPDXRef-File-470",
                       "fileName":  "./zh-Hans/System.Windows.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5723,7 +5735,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-470",
+                      "SPDXID":  "SPDXRef-File-471",
                       "fileName":  "./zh-Hans/System.Windows.Input.Manipulations.resources.dll",
                       "checksums":  [
                                         {
@@ -5735,7 +5747,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-471",
+                      "SPDXID":  "SPDXRef-File-472",
                       "fileName":  "./zh-Hans/System.Xaml.resources.dll",
                       "checksums":  [
                                         {
@@ -5747,7 +5759,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-472",
+                      "SPDXID":  "SPDXRef-File-473",
                       "fileName":  "./zh-Hans/UIAutomationClient.resources.dll",
                       "checksums":  [
                                         {
@@ -5759,7 +5771,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-473",
+                      "SPDXID":  "SPDXRef-File-474",
                       "fileName":  "./zh-Hans/UIAutomationClientSideProviders.resources.dll",
                       "checksums":  [
                                         {
@@ -5771,7 +5783,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-474",
+                      "SPDXID":  "SPDXRef-File-475",
                       "fileName":  "./zh-Hans/UIAutomationProvider.resources.dll",
                       "checksums":  [
                                         {
@@ -5783,7 +5795,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-475",
+                      "SPDXID":  "SPDXRef-File-476",
                       "fileName":  "./zh-Hans/UIAutomationTypes.resources.dll",
                       "checksums":  [
                                         {
@@ -5795,7 +5807,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-476",
+                      "SPDXID":  "SPDXRef-File-477",
                       "fileName":  "./zh-Hans/WindowsBase.resources.dll",
                       "checksums":  [
                                         {
@@ -5807,7 +5819,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-477",
+                      "SPDXID":  "SPDXRef-File-478",
                       "fileName":  "./zh-Hans/WindowsFormsIntegration.resources.dll",
                       "checksums":  [
                                         {
@@ -5819,7 +5831,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-478",
+                      "SPDXID":  "SPDXRef-File-479",
                       "fileName":  "./zh-Hant/Microsoft.VisualBasic.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5831,7 +5843,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-479",
+                      "SPDXID":  "SPDXRef-File-480",
                       "fileName":  "./zh-Hant/PresentationCore.resources.dll",
                       "checksums":  [
                                         {
@@ -5843,7 +5855,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-480",
+                      "SPDXID":  "SPDXRef-File-481",
                       "fileName":  "./zh-Hant/PresentationFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5855,7 +5867,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-481",
+                      "SPDXID":  "SPDXRef-File-482",
                       "fileName":  "./zh-Hant/PresentationUI.resources.dll",
                       "checksums":  [
                                         {
@@ -5867,7 +5879,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-482",
+                      "SPDXID":  "SPDXRef-File-483",
                       "fileName":  "./zh-Hant/ReachFramework.resources.dll",
                       "checksums":  [
                                         {
@@ -5879,7 +5891,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-483",
+                      "SPDXID":  "SPDXRef-File-484",
                       "fileName":  "./zh-Hant/System.Windows.Controls.Ribbon.resources.dll",
                       "checksums":  [
                                         {
@@ -5891,7 +5903,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-484",
+                      "SPDXID":  "SPDXRef-File-485",
                       "fileName":  "./zh-Hant/System.Windows.Forms.Design.resources.dll",
                       "checksums":  [
                                         {
@@ -5903,7 +5915,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-485",
+                      "SPDXID":  "SPDXRef-File-486",
                       "fileName":  "./zh-Hant/System.Windows.Forms.Primitives.resources.dll",
                       "checksums":  [
                                         {
@@ -5915,7 +5927,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-486",
+                      "SPDXID":  "SPDXRef-File-487",
                       "fileName":  "./zh-Hant/System.Windows.Forms.resources.dll",
                       "checksums":  [
                                         {
@@ -5927,7 +5939,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-487",
+                      "SPDXID":  "SPDXRef-File-488",
                       "fileName":  "./zh-Hant/System.Windows.Input.Manipulations.resources.dll",
                       "checksums":  [
                                         {
@@ -5939,7 +5951,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-488",
+                      "SPDXID":  "SPDXRef-File-489",
                       "fileName":  "./zh-Hant/System.Xaml.resources.dll",
                       "checksums":  [
                                         {
@@ -5951,7 +5963,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-489",
+                      "SPDXID":  "SPDXRef-File-490",
                       "fileName":  "./zh-Hant/UIAutomationClient.resources.dll",
                       "checksums":  [
                                         {
@@ -5963,7 +5975,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-490",
+                      "SPDXID":  "SPDXRef-File-491",
                       "fileName":  "./zh-Hant/UIAutomationClientSideProviders.resources.dll",
                       "checksums":  [
                                         {
@@ -5975,7 +5987,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-491",
+                      "SPDXID":  "SPDXRef-File-492",
                       "fileName":  "./zh-Hant/UIAutomationProvider.resources.dll",
                       "checksums":  [
                                         {
@@ -5987,7 +5999,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-492",
+                      "SPDXID":  "SPDXRef-File-493",
                       "fileName":  "./zh-Hant/UIAutomationTypes.resources.dll",
                       "checksums":  [
                                         {
@@ -5999,7 +6011,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-493",
+                      "SPDXID":  "SPDXRef-File-494",
                       "fileName":  "./zh-Hant/WindowsBase.resources.dll",
                       "checksums":  [
                                         {
@@ -6011,7 +6023,7 @@
                       "copyrightText":  "NOASSERTION"
                   },
                   {
-                      "SPDXID":  "SPDXRef-File-494",
+                      "SPDXID":  "SPDXRef-File-495",
                       "fileName":  "./zh-Hant/WindowsFormsIntegration.resources.dll",
                       "checksums":  [
                                         {
@@ -7170,7 +7182,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-221"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-assembly-studio",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-222"
                           },
@@ -7255,7 +7267,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-238"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-239"
                           },
@@ -7265,12 +7277,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-240"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-241"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-242"
                           },
@@ -7325,12 +7337,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-252"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-253"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-254"
                           },
@@ -7360,12 +7372,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-259"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-260"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-261"
                           },
@@ -7380,7 +7392,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-263"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-264"
                           },
@@ -7390,17 +7402,17 @@
                               "relatedSpdxElement":  "SPDXRef-File-265"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-266"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-267"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-268"
                           },
@@ -7430,17 +7442,17 @@
                               "relatedSpdxElement":  "SPDXRef-File-273"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-274"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-275"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-276"
                           },
@@ -7455,7 +7467,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-278"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-279"
                           },
@@ -7470,12 +7482,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-281"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-282"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-283"
                           },
@@ -7560,12 +7572,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-299"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-300"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-301"
                           },
@@ -7730,12 +7742,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-333"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-334"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-335"
                           },
@@ -7750,7 +7762,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-337"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-338"
                           },
@@ -7760,7 +7772,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-339"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-340"
                           },
@@ -7815,12 +7827,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-350"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-351"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-352"
                           },
@@ -7955,42 +7967,42 @@
                               "relatedSpdxElement":  "SPDXRef-File-378"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-379"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-380"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-381"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-382"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-383"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-384"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-385"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-386"
                           },
@@ -8125,17 +8137,17 @@
                               "relatedSpdxElement":  "SPDXRef-File-412"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-413"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-414"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-415"
                           },
@@ -8180,7 +8192,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-423"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-424"
                           },
@@ -8225,12 +8237,12 @@
                               "relatedSpdxElement":  "SPDXRef-File-432"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-assembly-studio",
+                              "spdxElementId":  "SPDXRef-Package-dotnet-runtime",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-433"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-nasm",
+                              "spdxElementId":  "SPDXRef-Package-assembly-studio",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-434"
                           },
@@ -8240,7 +8252,7 @@
                               "relatedSpdxElement":  "SPDXRef-File-435"
                           },
                           {
-                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "spdxElementId":  "SPDXRef-Package-nasm",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-436"
                           },
@@ -8533,6 +8545,11 @@
                               "spdxElementId":  "SPDXRef-Package-windows-desktop",
                               "relationshipType":  "CONTAINS",
                               "relatedSpdxElement":  "SPDXRef-File-494"
+                          },
+                          {
+                              "spdxElementId":  "SPDXRef-Package-windows-desktop",
+                              "relationshipType":  "CONTAINS",
+                              "relatedSpdxElement":  "SPDXRef-File-495"
                           }
                       ],
     "hasExtractedLicensingInfos":  [

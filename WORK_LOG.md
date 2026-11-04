@@ -2297,3 +2297,13 @@
 - **Files changed:** `docs/08-qa/qa-report-2026-11-04-2.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.17, QA column), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted QA documents on top of `f0df514`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-105 sessions or `/assembly-release <version>`.
+
+### 2026-11-04 11:31 – 11:48 +0500 · Claude Code (Opus 5.5) · Release candidate 1.0.0
+- **Summary:** Ran `/assembly-release 1.0.0` (user request). Prerequisites: QA 2026-11-04-2 Pass with conditions; the user accepted conditions 2–4 ("Accept all three", 11:33; condition 1 is WVR-002); no Critical/High defects; ADR-0009 approved; SDK 10.0.403 and Inno Setup 7.1.0 present. Release candidate 1.0.0 (`docs/09-release/release-1.0.0.md`): **Ready, with accepted conditions**; pending the user's decisions on shipping unsigned (OQ-020) and on publishing. Clean publish 495 files; full suite 1584 + 3 passed, 0 failed; measurements 7/7; installer 53.5 MB, SHA-256 e385d9f5…687bc (to be rebuilt after commit); installer test 21/21 on this PC; release notes (also RELEASE-NOTES.md, in-app), install guide, third-party obligations check written; `<Version>1.0.0</Version>` set.
+  - Set the version explicitly (it was .NET's default 1.0.0). Wrote the release notes before building so the installed `RELEASE-NOTES.md` is in the package (FR-087).
+  - The build stamps commit `8cd9271` but includes uncommitted release files; recorded in the report: rebuild after commit, publish that hash.
+  - Item 10 (signing) is the user's decision (OQ-020); no signing, tagging, pushing or uploading done.
+- **Commands:** `build/installer/build-installer.ps1` (11:34–11:37); `dotnet build -c Release` (0 warnings); `build/test.ps1 -NoBuild -ResultsDirectory artifacts/test-results/release-1.0.0` (11:38–11:42, 0 failed); `build/bench/run-e2e.ps1` (11:42–11:44, 7/7); ISCC for the upgrade-test installer; `build/installer/test-installer.ps1` (11:46–11:47, 21/21). All in the foreground.
+- **Files changed:** `Directory.Build.props`, `RELEASE-NOTES.md` (new), `docs/09-release/{release-1.0.0.md, release-notes-1.0.0.md, install-guide.md, third-party-notices.md}` (new), `docs/09-release/{license-inventory.md, sbom.spdx.json}`, `THIRD-PARTY-NOTICES.txt`, `build/installer/license-agreement.txt` (regenerated), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted on top of `8cd9271`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** the user's signing and publishing decisions.

@@ -2356,3 +2356,10 @@
 - **Files changed:** `website/{index.html, styles.css, favicon.svg, images/}` (new), `README.md` (site link), `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Next step:** "commit".
 
+### 2026-11-04 13:33 +0500 · Claude Code (Opus 5.5) · Website 404 after the push, fixed
+- **Summary:** The user pasted Vercel's "404 NOT_FOUND" page. Cause: the Vercel project is connected to the GitHub repository (the repository's homepage field was already set), so pushing `b289b68`/`fd397fb` triggered a production deploy from the repository root (Root Directory "."), which has no index.html.
+  - Restored the site at once by promoting the working CLI deployment (`9n6w98ft9`).
+  - My mistake: `vercel project update --root-directory website` without `--yes` only asked for confirmation; I rebuilt before checking the setting, and the site was 404 again for about a minute until I promoted the good deployment back. Then applied with `--yes`, confirmed "Root Directory website", rebuilt the Git deployment (`gwlxhzz6y`): page, styles, images 200; `.env.local` and `.gitignore` 404.
+  - From now on every push to master redeploys the site from `website/`.
+- **Files changed:** `HANDOFF.md` (redeploy instructions), `WORK_LOG.md`.
+

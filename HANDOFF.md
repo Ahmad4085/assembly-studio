@@ -8,7 +8,7 @@
 | Written | 2026-11-04 10:26 +0500 by Claude Code (Opus 5.5), after TASK-100, WVR-002 and the TASK-105 kit |
 | Current task | **None in progress. Next: TASK-102 (notices and SBOM)** |
 | Last completed | TASK-100 Product license: MIT (Done 2026-11-04 10:26 +0500) |
-| Git state | HEAD `824365a`; TASK-100, WVR-002 and the TASK-105 kit **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `89b77fb` (TASK-100, WVR-002 and the TASK-105 kit committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -158,7 +158,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user says "commit" (then commit and record the hash here).
+1. Done: committed (`89b77fb`).
 2. TASK-102 (third-party notices and SBOM; the notices reference `LICENSE`), then the installer rebuild and `test-installer.ps1` on this PC (WVR-002 condition).
 3. The user runs TASK-105 with the kit and brings the filled sheet ("record the usability session"); then `/assembly-qa` and `/assembly-release <version>`. On this PC, run long test commands in the foreground.
 

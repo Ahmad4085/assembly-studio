@@ -8,7 +8,7 @@
 | Written | 2026-11-04 12:36 +0500 by Claude Code (Opus 5.5), after `/assembly-status --refresh` |
 | Current task | **None in progress. Release 1.0.0 published (private repository)** |
 | Last completed | Release 1.0.0 published: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 |
-| Git state | HEAD `e951940` = origin/master; status refresh **uncommitted**. Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `d1a8375` (status refresh committed); origin/master is `e951940` (these commits not pushed). Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).

@@ -8,7 +8,7 @@
 | Written | 2026-11-03 21:53 +0500 by Claude Code (Opus 5.5), after the testing phase (report 2026-11-03-4) |
 | Current task | **None in progress. Next: the user's TASK-006, TASK-100 and TASK-105, then the release tasks** |
 | Last completed | Testing phase, `docs/07-testing/test-report-2026-11-03-4.md` (2026-11-03 21:53 +0500): no failed test |
-| Git state | HEAD `fc452f5`; D-024 and the TASK-116 backlog entry **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `6579ccd` (D-024 and the TASK-116 backlog entry committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).

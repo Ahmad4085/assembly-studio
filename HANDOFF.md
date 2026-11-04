@@ -8,7 +8,7 @@
 | Written | 2026-11-04 11:30 +0500 by Claude Code (Opus 5.5), after QA 2026-11-04-2 |
 | Current task | **None in progress. Next: the user's TASK-105 sessions, or `/assembly-release`** |
 | Last completed | QA, `docs/08-qa/qa-report-2026-11-04-2.md` (2026-11-04 11:30 +0500): Pass with conditions |
-| Git state | HEAD `f0df514`; QA documents **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | HEAD after `dc3d2ad` (QA 2026-11-04-2 committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -166,7 +166,7 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user reviews the QA report and says "commit" (then commit and record the hash here).
+1. Done: QA 2026-11-04-2 committed (`dc3d2ad`).
 2. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md` ("record the usability session" with the filled sheet).
 3. `/assembly-release <version>` with the QA conditions (§4): WVR-002 in the release notes; AC-062 done or explicitly accepted by the user.
 

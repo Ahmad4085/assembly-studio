@@ -2246,3 +2246,10 @@
 - **Tests executed:** `BuildRunTests` 9/9 (Debug); Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice, each in the foreground after `dotnet build-server shutdown` (low memory stopped a background run yesterday): 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58).
 - **Git state after:** uncommitted TASK-116 changes on top of `c51f17d`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006, TASK-100 and TASK-105.
+
+### 2026-11-04 10:02 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-04-1
+- **Summary:** Ran `/assembly-qa` (user request). Gate: test report 2026-11-03-4 tested `53c6cfc`; since then only two comment lines in `BuildRunTests.cs` changed (TASK-116), and TASK-116's two full runs on the current code passed; stated in the report. QA 2026-11-04-1: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect, no open question). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), user-reported evidence accepted as such, open Low test-run defects.
+  - Code searches run now: no network API or URL in `src`; no fake/mock/dummy/demo data. 68 tasks Done (counted in the backlog).
+- **Files changed:** `docs/08-qa/qa-report-2026-11-04-1.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.15, QA column), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted QA documents on top of `d25362e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-006, TASK-100 and TASK-105.

@@ -2289,3 +2289,11 @@
 - **Files changed:** `docs/07-testing/{test-report-2026-11-04-1.md (new), test-plan.md (v0.18)}`, `docs/01-requirements/{REQUIREMENTS_TRACEABILITY.md (v2.16), ACCEPTANCE_CRITERIA.md (v2.10)}`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted test-phase documents on top of `2f5558a`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then `/assembly-qa`.
+
+### 2026-11-04 11:30 +0500 · Claude Code (Opus 5.5) · QA, report 2026-11-04-2
+- **Summary:** Ran `/assembly-qa` (user request). Gate: test report 2026-11-04-1 tested `2f5558a`, the current code. QA 2026-11-04-2: **Pass with conditions** (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; no Critical or High defect). Conditions: clean machines waived (WVR-002, release notes say so), usability session (TASK-105, or the user's explicit acceptance at release), user-reported evidence accepted as such, open Low test-run defects.
+  - FR-090, NFR-030 (AC-042), NFR-031 (AC-061) and NFR-028 (installed size) newly verified; the clean-machine requirements stay Not verified (waived, WVR-002) although this PC passed the installer test.
+  - Code searches run now: no network API or URL in `src`; no fake/mock/dummy/demo data.
+- **Files changed:** `docs/08-qa/qa-report-2026-11-04-2.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.17, QA column), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Git state after:** uncommitted QA documents on top of `f0df514`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then the user's TASK-105 sessions or `/assembly-release <version>`.

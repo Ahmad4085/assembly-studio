@@ -89,7 +89,7 @@
 | TASK-091 | Sample programs with automated verification | M6 | TASK-044, TASK-090 | L | FR-068 | Done |
 | TASK-092 | Tutorials and reference | M6 | TASK-090, TASK-020 | M | FR-070, FR-071, FR-072 | Done |
 | TASK-093 | Help: scope, limitations, NASM vs MASM, shortcuts | M6 | TASK-090, TASK-018, TASK-043 | L | FR-032, FR-045, NFR-033 | Done |
-| TASK-100 | Product license decision (user action) **(User action)** | M7 | — | M | NFR-030 | Approved |
+| TASK-100 | Product license decision (user action) **(User action)** | M7 | — | M | NFR-030 | Done |
 | TASK-101 | Self-contained publish and Inno Setup installer | M7 | TASK-005, TASK-068 | M | FR-083, FR-084, FR-085, FR-086, FR-087, FR-088, NFR-027, NFR-028 | Done |
 | TASK-102 | Third-party notices and SBOM | M7 | TASK-101, TASK-100 | L | FR-090, NFR-030, NFR-031 | Approved |
 | TASK-103 | Clean-VM install, offline and compatibility verification | M7 | TASK-101, TASK-006 | M | NFR-008, NFR-025, NFR-027, FR-083, FR-085, FR-088 | Approved |
@@ -259,6 +259,7 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
+| Waiver | WVR-002 (2026-11-04 10:26 +0500): waived for the first release; still open |
 | Milestone | M0 |
 | Requirements | NFR-025 |
 | Decisions / design | D-011, ADR-0001 |
@@ -1738,7 +1739,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done (2026-11-04 10:26 +0500: MIT, D-025; the notices reference `LICENSE` in TASK-102) |
 | Milestone | M7 |
 | Requirements | NFR-030 |
 | Decisions / design | D-007, OQ-007 |
@@ -1878,6 +1879,7 @@
 | Field | Value |
 |---|---|
 | Status | Approved |
+| Progress | Agent part done 2026-11-04 10:26 +0500: `docs/08-qa/usability-session-kit.md` (script and recording sheet). Waiting for the user's sessions |
 | Milestone | M7 |
 | Requirements | NFR-023 |
 | Decisions / design | UI spec |
@@ -2261,6 +2263,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
 - 2026-11-03 18:12 +0500: TASK-114 (DEF-028 fix) added. User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)".
 - 2026-11-03 19:07 +0500: TASK-115 (DEF-003 fix, D-023) added. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).
+- 2026-11-04 10:26 +0500: TASK-100 Done (MIT, D-025); TASK-006 waived for the first release (WVR-002); TASK-105 kit prepared. the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and".
 - 2026-11-04 09:40 +0500: TASK-116 (OQ-026, D-024) added. User 2026-11-04 09:40 +0500, asked "propose the fix task for OQ-026", then answering "How should OQ-026 (Run after a failed build) be resolved?": "A: spec follows the app (Recommended)" (the option stated that the UI spec v1.2 change is approved with this answer).
 - 2026-11-03 17:17 +0500: TASK-104 scope widened (moving the hard-coded user-facing messages into resource files; expected files widened to four src projects). The user, answering "TASK-104 needs about 26 messages moved into resource files across Runtime, Os.Dos, Toolchain.Nasm and the App (identical English text, two new .resx files), not only a test. Should I widen the task to include that?": "Widen and fix (Recommended)".
 - 2026-11-03 17:11 +0500: TASK-113 requirements corrected from "FR-073, NFR-005, FR-097" to "NFR-033, FR-045, NFR-005, FR-097": FR-073 (exercises with automatic checking) was a citation error; NFR-033 (offline guide: scope and limitations) and FR-045 (help: known deviations) are the help requirements. Scope unchanged.

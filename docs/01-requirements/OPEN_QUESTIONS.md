@@ -22,7 +22,7 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 | OQ-004 | Executable formats: confirm .COM-only for MVP. Can NASM produce MZ .EXE without a separate linker, and at what cost? | Medium | Research | Answered 2026-10-26 (research): .COM confirmed for MVP. MZ via `exebin.mac` without a linker (P2) | FR-026, FR-034, FR-043 |
 | OQ-005 | Target .NET version (10 LTS preferred) and WPF support on the supported Windows versions. SDK availability (BLK-001). | Medium | Research → ADR | Resolved 2026-10-26 by ADR-0001 (.NET 10 LTS + WPF) | FR-086, NFR-025 |
 | OQ-006 | Initialize a Git repository? | Low | User | Resolved 2026-10-26 (D-004) | — |
-| OQ-007 | Product distribution model and license. | High | User | Partially resolved: permissive open source (D-007). Specific license (e.g. MIT or Apache-2.0) open, needed before first release | NFR-030 |
+| OQ-007 | Product distribution model and license. | High | User | **Answered 2026-11-04 10:25 +0500** (D-025): MIT, "Copyright (c) 2026 Assembly Studio contributors" (D-007: permissive open source) | NFR-030 |
 | OQ-008 | Can the selected engine expose all registers, flags, memory and per-instruction state, support breakpoints and execution control, and snapshot/restore state? Is it deterministic? | High | Research / POC | Partially answered 2026-10-26 (POC-001): full register/flag/memory access, single-step, INT interception hook and deterministic traces shown. Breakpoints/snapshots designed in the architecture | FR-046 to FR-062, NFR-016 |
 | OQ-009 | How are addresses mapped to source lines (NASM listing or map files), including macros and `times`? How reliable is it? | Medium | Research / POC | Answered 2026-10-26 by POC-002: listing + map is sufficient with limitations (macros → invoking line, includes, times/align verified). Limitations listed in `docs/02-research/poc-002.md` | FR-028, FR-052, FR-053 |
 | OQ-010 | Minimum supported Windows 10/11 builds for the chosen .NET/WPF. x64 only, or also ARM64? | Medium | Research | Resolved 2026-10-26 by D-011: Windows 11 24H2+ and Windows 10 Enterprise LTSC 21H2 (x64) supported. Arm64 optional build, not required | NFR-025 |
@@ -70,3 +70,4 @@ OQ-001 to OQ-007 were carried over from `docs/00-project-overview/project-overvi
 - 2026-11-03: OQ-027 answered by the user: "revise NFR-005 for warm start" (D-022).
 - 2026-11-03: ASM-002 follows FR-031 v2.2 (65,278 bytes, D-023).
 - 2026-11-04: OQ-026 answered by the user: "A: spec follows the app (Recommended)" (D-024).
+- 2026-11-04: OQ-007 answered by the user: MIT, copyright "Assembly Studio contributors" (D-025).

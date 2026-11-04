@@ -11,8 +11,21 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user's TASK-006 (clean VMs), TASK-100 (license) and TASK-105 (usability session); then TASK-070, 102, 103 (rebuild the installer first); then `/assembly-qa` and `/assembly-release <version>` |
-| Parallel user actions | TASK-006, TASK-100, TASK-105 |
+| Recommended next action | TASK-102 (notices and SBOM); the installer rebuild and `test-installer.ps1` on this PC (WVR-002 condition); the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md` |
+| Parallel user actions | TASK-105 (sessions); TASK-006 waived for the first release (WVR-002) |
+
+---
+
+## Completed: TASK-100 Product license decision (Done 2026-11-04 10:26 +0500, Claude Code (Opus 5.5))
+- The user asked the agent to do the three remaining user tasks and to choose an open-source license; the agent recommended, the user chose MIT with "Assembly Studio contributors" (D-025, OQ-007 answered). `LICENSE` added; TC-096 checks it (mutation: another holder fails).
+- Same session: TASK-006 waived for the first release (WVR-002, the user's answer); TASK-105's agent part done (`docs/08-qa/usability-session-kit.md`), the sessions need real participants and stay with the user.
+- Full solution: 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Finished | 10:26 +0500 |
 
 ---
 

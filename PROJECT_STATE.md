@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 10:02 +0500 by Claude Code (Opus 5.5) (QA 2026-11-04-1) |
+| Last updated | 2026-11-04 10:26 +0500 by Claude Code (Opus 5.5) (TASK-100 done, WVR-002, TASK-105 kit) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | The QA conditions (`docs/08-qa/qa-report-2026-11-04-1.md` §4): the user's TASK-006, TASK-100 and TASK-105; then TASK-070, 102, 103 (rebuild the installer first); then `/assembly-release <version>` |
+| Next recommended action | TASK-102 (notices and SBOM; TASK-100 done); rebuild the installer and run `test-installer.ps1` on this PC (WVR-002 condition); the user runs TASK-105 with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>`. TASK-006, TASK-070, TASK-103 waived for the first release (WVR-002) |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-100 Product license (MIT) | 2026-11-04 10:26 +0500 | D-025; `LICENSE` (MIT, "Copyright (c) 2026 Assembly Studio contributors"); TC-096 (mutation: another holder fails); full solution 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24) |
 | QA (report 2026-11-04-1) | 2026-11-04 10:02 +0500 | QA 2026-11-04-1: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect, no open question). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), user-reported evidence accepted as such, open Low test-run defects; traceability v2.15 |
 | TASK-116 UI spec state matrix (OQ-026) | 2026-11-04 09:58 +0500 | UI spec v1.2: §4 state matrix, UI-002 Command bar, "Build failed" now reads "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does (D-024, OQ-026 answered); `BuildRunTests` comments cite it. No code change. Full solution 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58) |
 | Testing phase (report 2026-11-03-4) | 2026-11-03 21:53 +0500 | 1587 tests: 1580 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3% (rerun after Claude Code stopped the first attempt for low memory); measurement script 7 of 7 passed (NFR-005 warm median 1,796 ms); 55 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 5 not run; DEF-003 verified; traceability v2.14, AC v2.9, test plan v0.15 |
@@ -129,6 +130,8 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-11-04 10:26 +0500 | **D-025 product license MIT** (OQ-007, TASK-100) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "Which open-source license should Assembly Studio use (TASK-100)?": "MIT (Recommended)" and "Whose name goes in the copyright line?": "Assembly Studio contributors" |
+| 2026-11-04 10:26 +0500 | **Waiver WVR-002** (TASK-006: clean test machines) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "For the clean test machines (TASK-006), what's possible on your side?": "Waive for this release" |
 | 2026-10-30 21:17 +0500 | **Waiver WVR-001** (AC-059 for TASK-061) and **new task TASK-087** (test reliability: DEF-006, DEF-009, placeholder tests) | — | User | answered "Waive it for now (Recommended)" and approved "Fix DEF-006 and DEF-009, Remove placeholder tests, Start the editor/Run path" (2026-10-30 21:17 +0500, after "start task 61 which is block and other you new add i approve it") |
 | 2026-10-26 16:39 +0500 | Process decisions D-002, D-003, D-005 (`DECISIONS.md`), incl. `docs/sdlc/agent-protocol.md` | 1.0 | User | Process and tooling decisions, not an SDLC phase gate |
 | 2026-10-26 17:11 +0500 | **Requirements gate (phase 1)**: requirements set `docs/01-requirements/` + D-010 | 1.0 | User | "approve requirements v0.1 and D-010". PROPOSED → APPROVED. 12 NEEDS_RESEARCH items approved as goals. PROPOSED-basis targets remain unvalidated |
@@ -142,6 +145,7 @@ See `DECISIONS.md`.
 | ID | Scope | Reason | Date | Condition / status |
 |---|---|---|---|---|
 | WVR-001 | AC-059 manual display-scaling check (100/125/150/200 %, mixed-DPI monitors), the last open item of TASK-061 | The user postponed the manual check to QA so the editor (TASK-064) and the M5 debugger UI can proceed | 2026-10-30 21:17 +0500 | **Open.** AC-059 must still be run and pass in QA (`/assembly-qa`) and before release; until then AC-059 stays NOT RUN and TASK-061 is Done under this waiver |
+| WVR-002 | Clean-machine verification for the first release: AC-040, AC-041 (install, upgrade, uninstall on clean Windows 11 and Windows 10 LTSC; FR-083..086, FR-088, NFR-025, NFR-027) and TASK-070 (fonts on Windows 10 LTSC); TASK-006, TASK-070, TASK-103 stay open | This PC can't host clean machines (virtualization off in the firmware, no Windows Sandbox or Hyper-V, 7 GB free disk), and the user can't provide them now | 2026-11-04 10:26 +0500 | **Open.** Accepted as a known gap of the first release: the release notes say so (`docs/09-release/known-limitations.md` "Tested systems"); AC-040/AC-041 stay Not verified; the installer must still be rebuilt and `test-installer.ps1` run on this PC before release. Ends when TASK-103 passes on clean machines |
 
 ## Outdated documents
 None. Research documents revalidated against requirements v2.0.

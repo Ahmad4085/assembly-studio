@@ -2253,3 +2253,13 @@
 - **Files changed:** `docs/08-qa/qa-report-2026-11-04-1.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.15, QA column), `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
 - **Git state after:** uncommitted QA documents on top of `d25362e`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
 - **Next step:** "commit"; then the user's TASK-006, TASK-100 and TASK-105.
+
+### 2026-11-04 10:26 +0500 · Claude Code (Opus 5.5) · TASK-100 done (MIT), WVR-002 (TASK-006), TASK-105 kit
+- **Summary:** the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and".
+  - TASK-100: checked the shipped components' licenses (all permissive), recommended MIT; the user chose MIT and "Assembly Studio contributors". `LICENSE` added, D-025, OQ-007 answered; TC-096 `LicenseTests` (mutation: another holder fails).
+  - TASK-006: checked this PC (read-only): virtualization off in the firmware, no Windows Sandbox or Hyper-V, 7 GB free on C:, about 3.3 GB free memory; clean machines can't be made here and Windows 10 LTSC needs the user's image and license. The user chose "Waive for this release": WVR-002 recorded, the release notes' known limitations say so (v0.3); TASK-006, TASK-070 and TASK-103 stay open.
+  - TASK-105: a usability session needs at least 5 real first-time participants; I can't run it and won't invent results. Wrote `docs/08-qa/usability-session-kit.md` (moderator script, rules, recording sheet). Corrected my first draft: settings are in `%APPDATA%`, not `%LOCALAPPDATA%`.
+- **Files changed:** `LICENSE` (new), `tests/AssemblyStudio.ArchitectureTests/LicenseTests.cs` (new), `docs/08-qa/usability-session-kit.md` (new), `DECISIONS.md`, `docs/01-requirements/{OPEN_QUESTIONS.md, REQUIREMENTS_TRACEABILITY.md}`, `docs/05-planning/backlog.md`, `docs/07-testing/test-plan.md` (v0.16), `docs/09-release/known-limitations.md` (v0.3), `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** `LicenseTests` 1/1 and its mutation; Release build 0 warnings; `powershell -File build/test.ps1 -NoBuild` twice in the foreground: 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24).
+- **Git state after:** uncommitted on top of `824365a`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1`.
+- **Next step:** "commit"; then TASK-102.

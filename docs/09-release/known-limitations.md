@@ -4,7 +4,7 @@
 |---|---|
 | Document | Known limitations (input to the release notes) |
 | Status | Draft |
-| Version | 0.2 |
+| Version | 0.3 |
 | Last updated | 2026-11-03 |
 | Depends on | `docs/07-testing/defects.md`, `DECISIONS.md` (D-022), `docs/07-testing/test-report-2026-11-03-2.md`, help page "What Assembly Studio supports" (`src/AssemblyStudio.Content/Content/Help/scope.txt`) |
 | Task | TASK-113 (QA 2026-11-03-2 condition 4) |
@@ -31,6 +31,8 @@ source. Keep §2, §3 and the help page in step; `HelpPagesTests.TASK_113_…` c
   only. No files, disks, date, time, memory allocation, and no BIOS services (INT 10h, INT 16h and so on).
 - **Input and output:** text only, through the Console panel; no graphics, sound, mouse, timer or printer.
 - **Assembler:** NASM syntax only (NASM 3.02 is installed); MASM and TASM syntax is not accepted.
+- **Tested systems:** this release was tested on one Windows 11 PC. Installing on a clean machine and running on Windows 10
+  LTSC were not tested (WVR-002).
 
 ## 3. Sources
 | Item | Source | Evidence |
@@ -38,6 +40,7 @@ source. Keep §2, §3 and the help page in step; `HelpPagesTests.TASK_113_…` c
 | First start | DEF-023 (Won't fix, approved), D-022, NFR-005 v2.1 | The user's cold-start run 2026-11-03 11:19: 7,752 ms after a restart; warm start median 1,562 ms, max 1,636 ms (test report 2026-11-03-2, TC-089). Reference machine D-014 |
 | Variables panel | FR-097, D-020, TASK-106 | `VariablesViewModel.MaxShownBytes` (64), `MaxWindows` (2), `MaxWindowLength` (4096), `Describe` (1 byte as a byte, 2 bytes as a word, longer than 64 as hex with "…"), `Strings.VariableNotWatched` |
 | Program size | D-023, FR-031 v2.2 (DEF-003 fixed by TASK-115) | `ComLoader.MaxComImageSize` and `BuildMessages.MaxComImageSize`, both 65,278, tied by `ComSizeLimitTests` |
+| Tested systems | WVR-002 (TASK-006 waived for the first release) | AC-040, AC-041 Not verified (QA 2026-11-04-1) |
 | Processor, programs, services, input and output, assembler | Help page "What Assembly Studio supports" (its numbers checked by `HelpTests`, `HelpConsistencyTests`, `HelpPagesTests`) | The help pages "Unsupported instructions" and "DOS services" |
 
 **Not listed (no effect on users):** the open Low defects DEF-001, DEF-002, DEF-011, DEF-012, DEF-014, DEF-015, DEF-016 and
@@ -47,3 +50,4 @@ runs), not of the application.
 ## 4. Change log
 - 2026-11-03 v0.1: Created (TASK-113).
 - 2026-11-03 v0.2: Program size: one limit of 65,278 bytes (D-023, TASK-115); the DEF-003 issue is gone.
+- 2026-11-04 v0.3: Tested systems added (WVR-002).

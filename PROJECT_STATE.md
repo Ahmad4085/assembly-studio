@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 12:36 +0500 by Claude Code (Opus 5.5) (`/assembly-status --refresh`) |
-| Current phase | **9 Release: 1.0.0 published** 2026-11-04 to the private GitHub repository (tag `v1.0.0`). Testing and QA done (latest test report 2026-11-04-1, QA 2026-11-04-2 Pass with conditions). Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
+| Last updated | 2026-11-04 12:48 +0500 by Claude Code (Opus 5.5) (repository public) |
+| Current phase | **9 Release: 1.0.0 published** 2026-11-04 on GitHub; the repository is **public** since 2026-11-04 12:48 +0500. Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
 | Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
-| Next recommended action | The user decides when to make the repository public (the history no longer holds the student ID; delete the local backup branches and `refs/original` first); the user's TASK-105 sessions; `/assembly-status`, then `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020) |
+| Next recommended action | None pending. Later: `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing. Optional: delete the local backup branches and `refs/original` |
 
 ## Verified status
 - **As of 2026-11-04 12:36 +0500:** requirements FR v2.2 (97 FR), NFR v2.1 (33 NFR), 65 acceptance criteria (AC v2.10), traceability v2.17; backlog: 70 tasks Done, 4 open (TASK-006, 070, 103 waived by WVR-002; TASK-105 user-run); test report 2026-11-04-1 (1,587 passed, 0 failed); QA 2026-11-04-2 Pass with conditions; release 1.0.0 published (private). The bullets below are the earlier history and keep their counts of the time.
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Repository public | 2026-11-04 12:48 +0500 | Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests |
 | Status refresh | 2026-11-04 12:36 +0500 | `/assembly-status --refresh`: phase, milestone, WVR-001, open questions and current counts corrected here and in `ROADMAP.md` |
 | Release 1.0.0 published | 2026-11-04 12:32 +0500 | Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only |
 | Release 1.0.0 candidate (final build) | 2026-11-04 11:56 +0500 | Release 1.0.0 candidate final: installer rebuilt from `0aaeaf6`, 53.5 MB, SHA-256 355e2428ba738c59038c509fe29f02da461544d88eaf24de000a33b808eb7c51, installer test 21/21; not published (the user's choice); unsigned (D-027) |
@@ -139,6 +140,7 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-11-04 12:48 +0500 | **Repository public** (github.com/Ahmad4085/assembly-studio) | 1.0.0 | User | the user: "make the repository public" |
 | 2026-11-04 12:20 +0500 | **Publish 1.0.0 to the private GitHub repository; rewrite the unpushed history to remove the user's student ID** (`docs/sdlc/commit-hash-map-2026-11-04.md`) | 1.0.0 | User | the user asked "publish it on GitHub"; then answered "Where should release 1.0.0 be published?": "Keep the repo private for now (Recommended)" and "What should happen with your student VUID in the test files?": "Replace it everywhere (Recommended)" |
 | 2026-11-04 11:50 +0500 | **D-027 unsigned installer for 1.0.0**; release 1.0.0 **not published** (commit and rebuild only) | 1.0.0 | User | the user, answering "Ship release 1.0.0 with an unsigned installer?": "Yes, unsigned for 1.0.0 (Recommended)"; the user, answering "What should happen with release 1.0.0 now?": "Commit and rebuild only (Recommended)" |
 | 2026-11-04 11:33 +0500 | **QA 2026-11-04-2 conditions accepted for release 1.0.0** (2: no usability session, AC-062 Not verified; 3: AC-034, AC-044, AC-059 user-reported; 4: open Low test-run defects). Condition 1 is WVR-002 | 1.0.0 | User | the user, in `/assembly-release 1.0.0`, answering "Do you accept QA 2026-11-04-2's conditions 2, 3 and 4 for release 1.0.0 (no usability session yet, user-reported manual checks, open Low test-run defects)?": "Accept all three" |

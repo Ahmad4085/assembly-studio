@@ -27,7 +27,7 @@
 
 ## Report
 ### Publication
-2026-11-04 12:32 +0500, Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The repository is private, so the release is visible only to its owner and collaborators.
+2026-11-04 12:32 +0500, Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The repository was private at first; it was made public 2026-11-04 12:48 +0500, so the release is now public.
 
 ### What was built and how
 Assembly Studio 1.0.0, a self-contained win-x64 WPF application (.NET 10.0.14, ReadyToRun), with NASM 3.02. The Inno Setup 7.1.0
@@ -76,3 +76,4 @@ As in `release-notes-1.0.0.md`, "Known limitations":
 ## Change log
 - 2026-11-04 11:56 +0500: Rebuilt from commit `0aaeaf6`; final SHA-256 recorded; the rebuilt installer passed the installer test.
 - 2026-11-04 12:31 +0500: History rewritten before the first push (student ID removed); rebuilt from `12ac130`; final SHA-256 recorded; published to the private repository.
+- 2026-11-04 12:48 +0500: The repository was made public; the release is public.

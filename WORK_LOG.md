@@ -2340,3 +2340,7 @@
 - **Summary:** The user ran `/assembly-plan`; I presented scope options (A maintenance, B debugger features, C learning features, D bigger programs). The user: "why we go deeply if our ide is complete we push on github remaining changing we do after". No backlog change; planning deferred. Pushed the local commits to origin.
 - **Files changed:** `HANDOFF.md`, `WORK_LOG.md`.
 
+### 2026-11-04 12:48 +0500 · Claude Code (Opus 5.5) · Repository made public
+- **Summary:** Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests. Command: `gh repo edit Ahmad4085/assembly-studio --visibility public --accept-visibility-change-consequences`. The local backup branches were never pushed and are not affected.
+- **Files changed:** `PROJECT_STATE.md`, `docs/09-release/release-1.0.0.md`, `HANDOFF.md`, `WORK_LOG.md`.
+

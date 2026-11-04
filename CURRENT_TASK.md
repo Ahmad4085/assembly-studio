@@ -11,8 +11,12 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | The user decides about making the repository public; TASK-105 sessions; `/assembly-status`, then `/assembly-plan` |
-| Parallel user actions | Repository visibility; TASK-105 (sessions) |
+| Recommended next action | Nothing pending. Later: `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing; optionally a custom domain for the website |
+
+---
+
+## Completed: TASK-117 Project website on Vercel (Done 2026-11-04 13:24 +0500, Claude Code (Opus 5.5))
+- Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project.
 
 ---
 

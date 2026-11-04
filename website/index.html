@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assembly Studio: an IDE for learning 8086 assembly</title>
+  <meta name="description" content="A free, open-source Windows IDE for learning 8086 assembly. Write, build, run and step through DOS .COM programs in one window, fully offline.">
+  <meta name="theme-color" content="#151618">
+  <meta property="og:title" content="Assembly Studio">
+  <meta property="og:description" content="Step through 8086 code and watch every register change. Free and open source, for Windows.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/debugger-paused.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="brand" href="#main" aria-label="Assembly Studio, top of the page">
+        <img src="favicon.svg" alt="" width="26" height="26">
+        Assembly Studio
+      </a>
+      <nav aria-label="Main">
+        <a href="#features">Features</a>
+        <a href="#start">Quick start</a>
+        <a href="https://github.com/Ahmad4085/assembly-studio">GitHub</a>
+        <a class="nav-dl" href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="tag reveal">v1.0.0 &nbsp;/&nbsp; 8086 &middot; NASM &middot; DOS .COM &nbsp;/&nbsp; Windows</p>
+          <h1 class="reveal">Step through 8086 code and watch every register <span class="nowrap">change<span class="caret" aria-hidden="true"></span></span></h1>
+          <p class="lead reveal">Assembly Studio is a free Windows IDE for learning assembly language. Write a program, build it with the bundled NASM, run it on an emulated 8086, and follow it one instruction at a time. One window, fully offline.</p>
+          <div class="actions reveal">
+            <a class="btn" href="https://github.com/Ahmad4085/assembly-studio/releases/download/v1.0.0/AssemblyStudio-1.0.0-setup.exe">
+              Download for Windows
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 17h12"/></svg>
+            </a>
+            <a class="textlink" href="https://github.com/Ahmad4085/assembly-studio">Source on GitHub <span aria-hidden="true">&rarr;</span></a>
+          </div>
+          <p class="meta reveal">53.5 MB installer &middot; Windows 10 / 11, 64-bit &middot; no administrator rights &middot; MIT license</p>
+        </div>
+
+        <!-- Live demo: replays a real trace recorded from Assembly Studio's engine -->
+        <figure class="demo reveal" aria-labelledby="demo-cap">
+          <div class="demo-bar">
+            <span class="demo-title">loop.asm</span>
+            <span class="demo-state" id="demo-state">Paused &middot; line 2</span>
+            <span class="demo-buttons">
+              <button type="button" id="demo-play" aria-pressed="true">Pause</button>
+              <button type="button" id="demo-step">Step <kbd>F11</kbd></button>
+            </span>
+          </div>
+          <div class="demo-body">
+            <ol class="demo-code" id="demo-code" aria-label="Source code">
+              <li><span class="d">org</span> <span class="n">100h</span></li>
+              <li>        <span class="m">mov</span>  <span class="r">cx</span>, <span class="n">3</span></li>
+              <li><span class="l">again:</span></li>
+              <li>        <span class="m">dec</span>  <span class="r">cx</span></li>
+              <li>        <span class="m">jnz</span>  <span class="l">again</span></li>
+              <li>        <span class="m">mov</span>  <span class="r">ax</span>, <span class="n">4C00h</span></li>
+              <li>        <span class="m">int</span>  <span class="n">21h</span></li>
+            </ol>
+            <dl class="demo-regs" aria-label="Registers" aria-live="polite">
+              <div><dt>IP</dt><dd id="r-ip">0100</dd></div>
+              <div><dt>CX</dt><dd id="r-cx">0000</dd></div>
+              <div><dt>AX</dt><dd id="r-ax">0000</dd></div>
+              <div><dt>ZF</dt><dd id="r-zf">0</dd></div>
+            </dl>
+          </div>
+          <figcaption id="demo-cap">A real trace, recorded from Assembly Studio's 8086 engine and replayed here. Changed values are marked as in the app.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Screenshot -->
+    <section class="shot-section">
+      <div class="wrap">
+        <figure class="shot reveal">
+          <img src="images/debugger-paused.png" width="1386" height="863" alt="Assembly Studio paused inside a loop: the current line highlighted in the editor, registers and flags on the right, memory and the stack below.">
+          <figcaption><span>Fig. 1</span> Paused inside a loop: editor, registers, flags, memory and stack in one window.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Features as a datasheet -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>What's inside</h2>
+          <p>No DOSBox, no command line, nothing to configure. Open a sample and press F5.</p>
+        </div>
+        <dl class="sheet">
+          <div class="reveal"><dt>Editor</dt><dd>NASM syntax highlighting, line numbers and the current line, undo and redo, find and replace, go to line, zoom, tabs. Unsaved edits survive a crash.</dd></div>
+          <div class="reveal"><dt>Build</dt><dd>One key builds with the bundled NASM 3.02. Errors and warnings appear on their source lines, each with a plain next step, and code that looks like MASM or TASM gets a hint.</dd></div>
+          <div class="reveal"><dt>Run</dt><dd>Programs run inside an emulated 8086 PC with 1 MB of memory and can't touch your files or network. An instruction budget pauses endless loops, so the IDE never freezes.</dd></div>
+          <div class="reveal"><dt>Debug</dt><dd>Step Into, Step Over and breakpoints, the current instruction with its disassembly, and a history of what just ran.</dd></div>
+          <div class="reveal"><dt>Panels</dt><dd>Registers with their 8-bit halves in hex, decimal or binary; flags; memory in hex and ASCII; the stack; and your variables by name. Every change is marked.</dd></div>
+          <div class="reveal"><dt>I/O</dt><dd>DOS text services (INT 21h input and output, INT 20h, Ctrl-C) with a console that takes keyboard input.</dd></div>
+          <div class="reveal"><dt>Learn</dt><dd>8 sample programs, 5 tutorials, an instruction reference and help pages, all built in.</dd></div>
+          <div class="reveal"><dt>Access</dt><dd>Every workflow by keyboard, a visible focus, screen-reader names, and dark, light and high-contrast themes.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Variables -->
+    <section class="section alt">
+      <div class="wrap split">
+        <div class="split-copy reveal">
+          <h2>Your data, by name</h2>
+          <p>The Variables panel lists every data label in your program with its address and current value: text in quotes, bytes and words as numbers. When a value changes it's marked, and the same bytes light up in the memory view.</p>
+          <p class="muted">Every value comes from the emulated machine. Nothing is guessed.</p>
+        </div>
+        <figure class="shot reveal">
+          <img src="images/variables-panel.png" width="1386" height="863" loading="lazy" alt="The Variables panel after a program ended: six data labels with their addresses and values, changed values outlined and the matching bytes highlighted in memory.">
+          <figcaption><span>Fig. 2</span> The Variables panel after a run.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Quick start -->
+    <section class="section" id="start">
+      <div class="wrap split">
+        <div class="reveal">
+          <h2>Running in a minute</h2>
+          <ol class="steps">
+            <li>Install and start Assembly Studio.</li>
+            <li>Open the Learn sidebar with <kbd>Ctrl</kbd> <kbd>Alt</kbd> <kbd>L</kbd> and choose <em>Hello, World</em>.</li>
+            <li>Press <kbd>F5</kbd> to build and run. The output appears in the Console.</li>
+            <li>Press <kbd>F11</kbd> to step one instruction at a time.</li>
+          </ol>
+        </div>
+        <figure class="code reveal">
+          <figcaption>hello.asm <span>built-in sample, comments shortened</span></figcaption>
+<pre><code><span class="d">org</span> <span class="n">100h</span>              <span class="c">; .COM programs start at 100h</span>
+
+    <span class="m">mov</span> <span class="r">dx</span>, <span class="l">message</span>   <span class="c">; DS:DX = the text</span>
+    <span class="m">mov</span> <span class="r">ah</span>, <span class="n">09h</span>       <span class="c">; DOS: print up to '$'</span>
+    <span class="m">int</span> <span class="n">21h</span>
+
+    <span class="m">mov</span> <span class="r">ax</span>, <span class="n">4C00h</span>     <span class="c">; DOS: exit with code 0</span>
+    <span class="m">int</span> <span class="n">21h</span>
+
+<span class="l">message</span> <span class="d">db</span> <span class="s">'Hello, World!'</span>, <span class="n">13</span>, <span class="n">10</span>, <span class="s">'$'</span></code></pre>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Scope -->
+    <section class="section alt" id="scope">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>What it supports</h2>
+          <p>Version 1.0 does one thing well: classic 8086 programs for DOS.</p>
+        </div>
+        <dl class="specs">
+          <div class="reveal"><dt>Processor</dt><dd>Intel 8086, real mode, 1 MB. Every documented instruction except IN, OUT and the 8087 (ESC) instructions.</dd></div>
+          <div class="reveal"><dt>Programs</dt><dd>DOS .COM programs up to 65,278 bytes, in NASM syntax. MASM and TASM syntax isn't accepted.</dd></div>
+          <div class="reveal"><dt>Services</dt><dd>INT 21h functions 00h, 01h, 02h, 07h, 08h, 09h, 0Ah and 4Ch, INT 20h and Ctrl-C. No files, disks, clock or BIOS services.</dd></div>
+          <div class="reveal"><dt>Windows</dt><dd>64-bit Windows 11, or Windows 10 21H2 or later. Version 1.0.0 was tested on Windows 11.</dd></div>
+        </dl>
+        <p class="more reveal">See the <a href="https://github.com/Ahmad4085/assembly-studio/blob/master/docs/09-release/known-limitations.md">known limitations</a> and the <a href="https://github.com/Ahmad4085/assembly-studio/blob/master/docs/09-release/release-notes-1.0.0.md">release notes</a>.</p>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section class="section download" id="download">
+      <div class="wrap dl">
+        <div class="dl-copy reveal">
+          <h2>Download</h2>
+          <p>Assembly Studio 1.0.0 for 64-bit Windows 11, or Windows 10 version 21H2 or later. About 190 MB of disk space; the .NET runtime and NASM are included.</p>
+          <a class="btn btn-lg" href="https://github.com/Ahmad4085/assembly-studio/releases/download/v1.0.0/AssemblyStudio-1.0.0-setup.exe">
+            AssemblyStudio-1.0.0-setup.exe
+            <span class="size">53.5 MB</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0l-4-4m4 4l4-4M4 17h12"/></svg>
+          </a>
+          <div class="hash">
+            <span class="hash-label">SHA-256</span>
+            <code id="sha">16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83</code>
+            <button type="button" id="copy">Copy</button>
+          </div>
+        </div>
+        <div class="dl-side reveal">
+          <div class="warn">
+            <h3>Windows may warn you</h3>
+            <p>The installer isn't code-signed yet, so SmartScreen can say "Windows protected your PC". Choose <em>More info</em>, then <em>Run anyway</em>. To check the file first, run <code>Get-FileHash .\AssemblyStudio-1.0.0-setup.exe</code> in PowerShell and compare it with the hash.</p>
+          </div>
+          <ul class="facts">
+            <li>Installs for your account; no administrator rights</li>
+            <li>Downloads nothing, during installation or afterwards</li>
+            <li>Uninstalling keeps your source files and settings</li>
+          </ul>
+          <p class="more-left"><a href="https://github.com/Ahmad4085/assembly-studio/blob/master/docs/09-release/install-guide.md">Install guide</a> &middot; <a href="https://github.com/Ahmad4085/assembly-studio/releases">All releases</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <p class="brand"><img src="favicon.svg" alt="" width="20" height="20"> Assembly Studio</p>
+      <p>Open source under the <a href="https://github.com/Ahmad4085/assembly-studio/blob/master/LICENSE">MIT License</a>. Includes the Microsoft .NET runtime and WPF, AvalonEdit, CommunityToolkit.Mvvm, Iced and NASM 3.02 (<a href="https://github.com/Ahmad4085/assembly-studio/blob/master/THIRD-PARTY-NOTICES.txt">notices</a>).</p>
+      <p><a href="https://github.com/Ahmad4085/assembly-studio">GitHub</a> &middot; <a href="https://github.com/Ahmad4085/assembly-studio/issues">Report a problem</a></p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveal on scroll.
+    var items = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      items.forEach(function (el, i) { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+    }
+
+    // Copy the hash.
+    document.getElementById('copy').addEventListener('click', function () {
+      var b = this, t = document.getElementById('sha').textContent;
+      var ok = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1600); };
+      if (navigator.clipboard) { navigator.clipboard.writeText(t).then(ok, function () { b.textContent = 'Select it'; }); } else { b.textContent = 'Select it'; }
+    });
+
+    // The demo replays a trace recorded from Assembly Studio's own engine (AssemblyStudio.Engine.I8086, commit 034c070):
+    // the state after loading and after each executed instruction of loop.asm. Nothing here is computed in the browser.
+    var trace = [
+      { line: 2, ip: '0100', cx: '0000', ax: '0000', zf: 0 },
+      { line: 4, ip: '0103', cx: '0003', ax: '0000', zf: 0 },
+      { line: 5, ip: '0104', cx: '0002', ax: '0000', zf: 0 },
+      { line: 4, ip: '0103', cx: '0002', ax: '0000', zf: 0 },
+      { line: 5, ip: '0104', cx: '0001', ax: '0000', zf: 0 },
+      { line: 4, ip: '0103', cx: '0001', ax: '0000', zf: 0 },
+      { line: 5, ip: '0104', cx: '0000', ax: '0000', zf: 1 },
+      { line: 6, ip: '0106', cx: '0000', ax: '0000', zf: 1 },
+      { line: 7, ip: '0109', cx: '0000', ax: '4C00', zf: 1 },
+      { line: 7, ip: '0109', cx: '0000', ax: '4C00', zf: 1, ended: true }
+    ];
+    var lines = document.querySelectorAll('#demo-code li');
+    var state = document.getElementById('demo-state');
+    var regs = { ip: document.getElementById('r-ip'), cx: document.getElementById('r-cx'), ax: document.getElementById('r-ax'), zf: document.getElementById('r-zf') };
+    var playBtn = document.getElementById('demo-play'), stepBtn = document.getElementById('demo-step');
+    var i = 0, timer = null, playing = !reduce;
+
+    function show(k, mark) {
+      var s = trace[k], prev = trace[k - 1];
+      lines.forEach(function (li, n) { li.classList.toggle('cur', n + 1 === s.line && !s.ended); });
+      ['ip', 'cx', 'ax', 'zf'].forEach(function (r) {
+        var v = String(s[r]);
+        regs[r].textContent = v;
+        var changed = mark && prev && String(prev[r]) !== v;
+        regs[r].classList.toggle('chg', !!changed);
+        if (changed && !reduce) { regs[r].classList.remove('flash'); void regs[r].offsetWidth; regs[r].classList.add('flash'); }
+      });
+      state.textContent = s.ended ? 'Ended · exit 0' : (k === 0 ? 'Paused · line ' + s.line : 'Paused · line ' + s.line + ' · ' + k + (k === 1 ? ' instruction' : ' instructions'));
+    }
+    function step() { i = (i + 1) % trace.length; show(i, i !== 0); }
+    function tick() { step(); timer = setTimeout(tick, trace[i].ended ? 2600 : (i === 0 ? 1400 : 1100)); }
+    function setPlaying(p) {
+      playing = p; clearTimeout(timer);
+      playBtn.textContent = p ? 'Pause' : 'Play';
+      playBtn.setAttribute('aria-pressed', String(p));
+      if (p) { timer = setTimeout(tick, 1100); }
+    }
+    playBtn.addEventListener('click', function () { setPlaying(!playing); });
+    stepBtn.addEventListener('click', function () { setPlaying(false); step(); });
+    show(0, false);
+    setPlaying(playing);
+  })();
+  </script>
+</body>
+</html>

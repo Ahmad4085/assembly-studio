@@ -5,7 +5,7 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 12:48 +0500 by Claude Code (Opus 5.5) (repository public) |
+| Last updated | 2026-11-04 13:24 +0500 by Claude Code (Opus 5.5) (website live, TASK-117) |
 | Current phase | **9 Release: 1.0.0 published** 2026-11-04 on GitHub; the repository is **public** since 2026-11-04 12:48 +0500. Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
 | Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-117 Project website | 2026-11-04 13:24 +0500 | Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project |
 | Repository public | 2026-11-04 12:48 +0500 | Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests |
 | Status refresh | 2026-11-04 12:36 +0500 | `/assembly-status --refresh`: phase, milestone, WVR-001, open questions and current counts corrected here and in `ROADMAP.md` |
 | Release 1.0.0 published | 2026-11-04 12:32 +0500 | Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only |

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Assembly Studio">
+  <rect x="14" y="14" width="36" height="36" rx="6" fill="#232428" stroke="#5AA2FF" stroke-width="3"/>
+  <g stroke="#5AA2FF" stroke-width="3" stroke-linecap="round">
+    <path d="M24 6v8M32 6v8M40 6v8M24 50v8M32 50v8M40 50v8M6 24h8M6 32h8M6 40h8M50 24h8M50 32h8M50 40h8"/>
+  </g>
+  <path d="M25 39l7-14 7 14M28 34h8" fill="none" stroke="#F5C542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

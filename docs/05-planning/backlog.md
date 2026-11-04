@@ -106,6 +106,7 @@
 | TASK-114 | Fix the RTE021 next step (DEF-028) | M7 | TASK-104 | L | NFR-024, FR-040 | Done |
 | TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Done |
 | TASK-116 | Align the UI spec's state matrix with AC-013 (OQ-026) | M7 | — | L | FR-018 | Done |
+| TASK-117 | Project website on Vercel | Post-1.0 | — | L | FR-087, NFR-030 | Done |
 
 ## 3. Task details
 
@@ -2214,6 +2215,33 @@ contrast targets.
 
 **Definition of Done:** standard (§4).
 
+### TASK-117 Project website on Vercel
+
+| Field | Value |
+|---|---|
+| Status | Done (2026-11-04 13:24 +0500; https://assembly-studio-one.vercel.app) |
+| Milestone | Post-release 1.0.0 (added 2026-11-04 on the user's request) |
+| Requirements | FR-087 (version and release information visible), NFR-030 (license shown) |
+| Decisions / design | Release 1.0.0 (`docs/09-release/`), design tokens (dark theme) |
+| Depends on | Release 1.0.0 |
+| Risk | L |
+
+**Goal:** A public web page that presents Assembly Studio and offers the 1.0.0 download.
+
+**Scope (in):**
+- `website/`: one static page (HTML, CSS, no build step); the download links to the GitHub release asset (not hosted on Vercel); SHA-256, unsigned-installer note, features with real screenshots, quick start, scope, requirements, license
+- Deployment to Vercel with the official CLI (`npx vercel`), after the user's one-time login
+
+**Out of scope:**
+- The application; a custom domain; analytics or tracking
+
+**Expected files / projects touched:** `website/`
+
+**Test requirements:**
+- Every link resolves; the download URL serves the 1.0.0 installer with the recorded SHA-256; the facts match the release notes; the page renders at phone and desktop widths
+
+**Definition of Done:** standard (section 4), plus the deployed URL answers.
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2263,6 +2291,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
 - 2026-11-03 18:12 +0500: TASK-114 (DEF-028 fix) added. User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)".
 - 2026-11-03 19:07 +0500: TASK-115 (DEF-003 fix, D-023) added. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).
+- 2026-11-04 13:04 +0500: TASK-117 (project website on Vercel) added and approved. the user asked "i want please make a webpage for my ide and deploy vercel please make a beautiful webpage and add download my ide there", then answered "Do you approve TASK-117 (a static project website in website/, deployed to Vercel, download linking to the GitHub release)?": "Approve" and "How should it be deployed to Vercel?": "Vercel CLI (Recommended)".
 - 2026-11-04 10:26 +0500: TASK-100 Done (MIT, D-025); TASK-006 waived for the first release (WVR-002); TASK-105 kit prepared. the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and".
 - 2026-11-04 09:40 +0500: TASK-116 (OQ-026, D-024) added. User 2026-11-04 09:40 +0500, asked "propose the fix task for OQ-026", then answering "How should OQ-026 (Run after a failed build) be resolved?": "A: spec follows the app (Recommended)" (the option stated that the UI spec v1.2 change is approved with this answer).
 - 2026-11-03 17:17 +0500: TASK-104 scope widened (moving the hard-coded user-facing messages into resource files; expected files widened to four src projects). The user, answering "TASK-104 needs about 26 messages moved into resource files across Runtime, Os.Dos, Toolchain.Nasm and the App (identical English text, two new .resx files), not only a test. Should I widen the task to include that?": "Widen and fix (Recommended)".

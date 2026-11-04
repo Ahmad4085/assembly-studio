@@ -5,9 +5,9 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 12:48 +0500 by Claude Code (Opus 5.5), after making the repository public |
-| Current task | **None. Release 1.0.0 public on GitHub** |
-| Last completed | Release 1.0.0 published: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 |
+| Written | 2026-11-04 13:24 +0500 by Claude Code (Opus 5.5), after TASK-117 (website) |
+| Current task | **None. Website live at https://assembly-studio-one.vercel.app** |
+| Last completed | TASK-117 Project website on Vercel (Done 2026-11-04 13:24 +0500) |
 | Git state | master pushed to origin (this commit included). Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-117 website** (Claude Code, uncommitted): Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project. To redeploy after changes: `cd website && npx vercel@65.11.0 deploy --prod --yes` (the user is logged in on this PC). Never commit `website/.env.local` or `website/.vercel/` (git-ignored).
+
 - **Status refresh**: `PROJECT_STATE.md` and `ROADMAP.md` corrected (phases 7–9 and milestones were stale; WVR-001 ended; open questions). Document inconsistencies outside `--refresh` are listed in `WORK_LOG.md` for a cleanup task.
 
 - **Release 1.0.0 published** (Claude Code): Release 1.0.0 **published** to the private repository: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 (tag `v1.0.0` on `12ac130`; asset AssemblyStudio-1.0.0-setup.exe, 56,099,852 bytes, GitHub digest sha256:16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83 equal to the local file). Pushed `master` and the tag only. The unpushed history was rewritten first to remove the user's student ID (`docs/sdlc/commit-hash-map-2026-11-04.md`).

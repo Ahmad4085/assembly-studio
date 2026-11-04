@@ -5,6 +5,8 @@
     <UseWPF>true</UseWPF>
     <!-- Per-monitor DPI awareness (NFR-026) -->
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- TASK-118: the logo (docs/brand/) as the executable's icon: Explorer, the taskbar and the Start-menu shortcut. -->
+    <ApplicationIcon>Assets\AssemblyStudio.ico</ApplicationIcon>
     <!-- TASK-108 (D-021, ADR-0009 amendment): a published build is precompiled (ReadyToRun), which halved the startup JIT time
          and cut the first launch after publishing from 18.8 s to 8.4 s on the reference machine. Applies to `dotnet publish`
          with a runtime identifier (the installer); needs the Microsoft.NETCore.App.Crossgen2 package (MIT) at build time. -->
@@ -20,6 +22,11 @@
     <ProjectReference Include="..\AssemblyStudio.Toolchain.Nasm\AssemblyStudio.Toolchain.Nasm.csproj" />
     <ProjectReference Include="..\AssemblyStudio.Debugging\AssemblyStudio.Debugging.csproj" />
     <ProjectReference Include="..\AssemblyStudio.Content\AssemblyStudio.Content.csproj" />
+  </ItemGroup>
+
+  <!-- TASK-118: the same icon as a WPF resource, for the main window's title bar. -->
+  <ItemGroup>
+    <Resource Include="Assets\AssemblyStudio.ico" />
   </ItemGroup>
 
   <ItemGroup>

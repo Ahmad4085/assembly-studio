@@ -11,7 +11,20 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | Nothing pending. Later: `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing; optionally a custom domain for the website |
+| Recommended next action | The icon reaches users with the next release (`/assembly-release 1.0.1`); the published 1.0.0 installer is unchanged |
+
+---
+
+## Completed: TASK-118 Logo (Done 2026-11-04 14:02 +0500, Claude Code (Opus 5.5))
+- Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header.
+- Checked: TC-098 (7 sizes 16–256 decode in WPF; `ApplicationIcon`, window `Icon`, `g.resources` entry, `SetupIconFile`); Windows extracted the built executable's icon (centre pixel #F5C542, the arrow); a throwaway installer compiled with `SetupIconFile` showed the same icon; the website header rendered with the logo; logo audit 100/100; real-size icon sheet on light and dark checked by eye.
+- Full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed.
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-04 13:38 / 14:02 +0500 |
 
 ---
 

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="t">
+  <title id="t">Assembly Studio</title>
+  <!-- Small-size cut (16-32 px): heavier brackets (44 wide, 40-high serifs) and a larger arrow so the gaps stay open. -->
+  <path fill="#5AA2FF" d="M20 32 H96 V72 H64 V184 H96 V224 H20 Z M236 32 H160 V72 H192 V184 H160 V224 H236 Z"/>
+  <path fill="#F5C542" d="M98 78 L98 178 L184.6 128 Z"/>
+</svg>

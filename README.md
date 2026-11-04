@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/assembly-studio-icon.svg" alt="Assembly Studio logo" width="112"></p>
+
 # Assembly Studio
 
 **Write, build, run and debug 8086 assembly programs, in one window, fully offline.**

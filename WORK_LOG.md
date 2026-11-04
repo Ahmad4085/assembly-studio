@@ -2363,3 +2363,11 @@
   - From now on every push to master redeploys the site from `website/`.
 - **Files changed:** `HANDOFF.md` (redeploy instructions), `WORK_LOG.md`.
 
+### 13:34 – 14:02 +0500 · Claude Code (Opus 5.5) · TASK-118 Logo
+- **Summary:** The user asked for a logo for the IDE, the installer and the website. Used the logo-design skill (fast track): brief with assumptions, clichés named (chip with pins, `</>`, `>_`, binary), three concepts built in black and tested (audit, test sheet, 64/32/16 px overview): A "Step A", B "Current line", C "Bracket step". Snapped near-miss angles to 60°/30°; floated A's arrow. The user chose C and approved TASK-118. Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header.
+  - Packed the Windows icon myself from per-size renders (small-size cut for 16–32 px, full mark from 48 px) because the skill's .ico builder takes one source.
+  - Reopened DEF-010 (editor latency, previously Verified) after it recurred under full-suite load.
+- **Files changed:** `docs/brand/` (new), `src/AssemblyStudio.App/{Assets/AssemblyStudio.ico (new), AssemblyStudio.App.csproj, Shell/MainWindow.xaml}`, `build/installer/AssemblyStudio.iss`, `tests/AssemblyStudio.App.Tests/Shell/AppIconTests.cs` (new), `website/{favicon.svg, favicon.ico, apple-touch-icon.png, logo.svg, index.html}`, `README.md`, `docs/07-testing/{test-plan.md (v0.19), defects.md}`, `docs/05-planning/backlog.md`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `HANDOFF.md`, `WORK_LOG.md`.
+- **Tests executed:** AppIconTests 2/2; Release build 0 warnings; full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed.
+- **Next step:** "commit" (pushing also redeploys the website); the icon reaches users with the next release.
+

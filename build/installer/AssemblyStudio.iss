@@ -41,6 +41,8 @@ OutputDir={#OutputDir}
 OutputBaseFilename=AssemblyStudio-{#AppVersion}-setup
 UninstallDisplayName=Assembly Studio
 UninstallDisplayIcon={app}\AssemblyStudio.App.exe
+; TASK-118: the logo as the setup program's icon (the installed shortcuts use the executable's own icon).
+SetupIconFile=..\..\src\AssemblyStudio.App\Assets\AssemblyStudio.ico
 ; The .asm association changes Explorer's file types; tell Explorer when it changes.
 ChangesAssociations=yes
 ; Code signing is deferred (ADR-0009 §4, OQ-020): the installer is unsigned.

@@ -5,9 +5,9 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 13:24 +0500 by Claude Code (Opus 5.5), after TASK-117 (website) |
-| Current task | **None. Website live at https://assembly-studio-one.vercel.app** |
-| Last completed | TASK-117 Project website on Vercel (Done 2026-11-04 13:24 +0500) |
+| Written | 2026-11-04 14:02 +0500 by Claude Code (Opus 5.5), after TASK-118 (logo) |
+| Current task | **None. Logo done; it ships with the next release** |
+| Last completed | TASK-118 Logo (Done 2026-11-04 14:02 +0500) |
 | Git state | master pushed to origin (after `b289b68`, TASK-117). Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`; git-ignored: `website/.env.local`, `website/.vercel/`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-118 logo** (Claude Code, uncommitted): Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header. The published 1.0.0 installer is unchanged: `/assembly-release 1.0.1` ships the icon. DEF-010 reopened.
+
 - **TASK-117 website** (Claude Code, committed `b289b68`): Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project. Redeploy: push to GitHub. The Vercel project is connected to the repository and its Root Directory is `website` (set 2026-11-04 13:33 +0500), so every push to master deploys the site. Don't deploy with the CLI from inside `website/` any more (it would look for `website/website`). Never commit `website/.env.local` or `website/.vercel/` (git-ignored).
 
 - **Status refresh**: `PROJECT_STATE.md` and `ROADMAP.md` corrected (phases 7–9 and milestones were stale; WVR-001 ended; open questions). Document inconsistencies outside `--refresh` are listed in `WORK_LOG.md` for a cleanup task.

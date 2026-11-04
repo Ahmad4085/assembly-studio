@@ -13,6 +13,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
         Title="{x:Static shell:Strings.AppTitle}"
+        Icon="/AssemblyStudio.App;component/Assets/AssemblyStudio.ico"
         MinWidth="{x:Static shell:LayoutState.MinWindowWidth}"
         MinHeight="{x:Static shell:LayoutState.MinWindowHeight}"
         WindowStartupLocation="CenterScreen"

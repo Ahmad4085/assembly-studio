@@ -1,7 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Assembly Studio">
-  <rect x="14" y="14" width="36" height="36" rx="6" fill="#232428" stroke="#5AA2FF" stroke-width="3"/>
-  <g stroke="#5AA2FF" stroke-width="3" stroke-linecap="round">
-    <path d="M24 6v8M32 6v8M40 6v8M24 50v8M32 50v8M40 50v8M6 24h8M6 32h8M6 40h8M50 24h8M50 32h8M50 40h8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="t">
+  <title id="t">Assembly Studio</title>
+  <!-- App icon for 16-32 px: full-bleed tile and the small-size cut at 78 %. -->
+  <rect x="0" y="0" width="256" height="256" rx="56" fill="#1B1C1F"/>
+  <g transform="translate(128 128) scale(0.78) translate(-128 -128)">
+    <path fill="#5AA2FF" d="M20 32 H96 V72 H64 V184 H96 V224 H20 Z M236 32 H160 V72 H192 V184 H160 V224 H236 Z"/>
+    <path fill="#F5C542" d="M98 78 L98 178 L184.6 128 Z"/>
   </g>
-  <path d="M25 39l7-14 7 14M28 34h8" fill="none" stroke="#F5C542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

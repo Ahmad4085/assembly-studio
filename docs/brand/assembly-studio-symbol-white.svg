@@ -1,0 +1,6 @@
+<svg fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="t"><title>Assembly Studio</title>
+  <title id="t">Assembly Studio</title>
+  <!-- Bracket step: NASM's memory brackets around the debugger's execution arrow. Grid: 256; brackets 32 wide, serifs 30 high; arrow edges at +/-30 degrees, centred on its centroid. -->
+  <path fill="#ffffff" d="M30 40 H94 V70 H62 V186 H94 V216 H30 Z M226 40 H162 V70 H194 V186 H162 V216 H226 Z"/>
+  <path fill="#ffffff" d="M102 86 L102 170 L174.7 128 Z"/>
+</svg>

@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 13:24 +0500 by Claude Code (Opus 5.5) (website live, TASK-117) |
+| Last updated | 2026-11-04 14:02 +0500 by Claude Code (Opus 5.5) (TASK-118 logo done) |
 | Current phase | **9 Release: 1.0.0 published** 2026-11-04 on GitHub; the repository is **public** since 2026-11-04 12:48 +0500. Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
 | Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
-| Next recommended action | None pending. Later: `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing. Optional: delete the local backup branches and `refs/original` |
+| Next recommended action | `/assembly-release 1.0.1` to ship the new icon (the published 1.0.0 is unchanged); later `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing |
 
 ## Verified status
 - **As of 2026-11-04 12:36 +0500:** requirements FR v2.2 (97 FR), NFR v2.1 (33 NFR), 65 acceptance criteria (AC v2.10), traceability v2.17; backlog: 70 tasks Done, 4 open (TASK-006, 070, 103 waived by WVR-002; TASK-105 user-run); test report 2026-11-04-1 (1,587 passed, 0 failed); QA 2026-11-04-2 Pass with conditions; release 1.0.0 published (private). The bullets below are the earlier history and keep their counts of the time.
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-118 Logo | 2026-11-04 14:02 +0500 | Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header. Full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed |
 | TASK-117 Project website | 2026-11-04 13:24 +0500 | Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project |
 | Repository public | 2026-11-04 12:48 +0500 | Repository made **public** 2026-11-04 12:48 +0500 on the user's request ("make the repository public"): https://github.com/Ahmad4085/assembly-studio (GitHub detects the MIT License; the release page answers anonymously, HTTP 200). Checked first, on GitHub's refs only (master, tag v1.0.0, 217 commits): no student ID or its digit groups, no account email, no keys or tokens; commit emails are the no-reply address; no issues or pull requests |
 | Status refresh | 2026-11-04 12:36 +0500 | `/assembly-status --refresh`: phase, milestone, WVR-001, open questions and current counts corrected here and in `ROADMAP.md` |

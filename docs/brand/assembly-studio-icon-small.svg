@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="t">
+  <title id="t">Assembly Studio</title>
+  <!-- App icon for 16-32 px: full-bleed tile and the small-size cut at 78 %. -->
+  <rect x="0" y="0" width="256" height="256" rx="56" fill="#1B1C1F"/>
+  <g transform="translate(128 128) scale(0.78) translate(-128 -128)">
+    <path fill="#5AA2FF" d="M20 32 H96 V72 H64 V184 H96 V224 H20 Z M236 32 H160 V72 H192 V184 H160 V224 H236 Z"/>
+    <path fill="#F5C542" d="M98 78 L98 178 L184.6 128 Z"/>
+  </g>
+</svg>

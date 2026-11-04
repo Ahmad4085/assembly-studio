@@ -107,6 +107,7 @@
 | TASK-115 | One .COM size limit: 65,278 bytes (DEF-003) | M7 | — | L | FR-031 | Done |
 | TASK-116 | Align the UI spec's state matrix with AC-013 (OQ-026) | M7 | — | L | FR-018 | Done |
 | TASK-117 | Project website on Vercel | Post-1.0 | — | L | FR-087, NFR-030 | Done |
+| TASK-118 | Logo: kit, app icon, installer and website | Post-1.0 | TASK-117 | L | FR-083, FR-076 | Done |
 
 ## 3. Task details
 
@@ -2242,6 +2243,35 @@ contrast targets.
 
 **Definition of Done:** standard (section 4), plus the deployed URL answers.
 
+### TASK-118 Logo: kit, app icon, installer and website
+
+| Field | Value |
+|---|---|
+| Status | Done (2026-11-04 14:02 +0500) |
+| Milestone | Post-release 1.0.0 (added 2026-11-04 on the user's request) |
+| Requirements | FR-083 (installer, shortcuts), FR-076 (application identity in About) |
+| Decisions / design | Concept C "Bracket step" chosen by the user; design tokens (Accent.Primary #5AA2FF, Accent.ExecutionArrow #F5C542, Surface.Window #1B1C1F) |
+| Depends on | TASK-117 |
+| Risk | L |
+
+**Goal:** Assembly Studio has a logo, used as the application and installer icon and on the website.
+
+**Scope (in):**
+- Logo kit (`docs/brand/`): final symbol, small-size cut, colour, one-colour and reversed versions, app-icon tile, usage notes
+- App: a multi-size Windows icon as the executable icon (`ApplicationIcon`: Explorer, taskbar, Start-menu shortcut) and the main window's icon
+- Installer: `SetupIconFile`
+- Website: favicon set and header logo; README header
+
+**Out of scope:**
+- Rebuilding or replacing the published 1.0.0 installer (the icon ships with the next release)
+
+**Expected files / projects touched:** `docs/brand/`, `src/AssemblyStudio.App/` (icon, csproj, main window), `build/installer/AssemblyStudio.iss`, `website/`, `README.md`, tests
+
+**Test requirements:**
+- The icon file holds 16, 24, 32, 48, 64 and 256 px images; the executable carries it; the main window shows it; full solution twice; the installer compiles with it; the website serves the new icons
+
+**Definition of Done:** standard (section 4).
+
 ## 4. Definition of Done (all tasks)
 - [ ] Builds with zero warnings in affected projects (`dotnet build -c Release` executed)
 - [ ] New and affected tests executed and passing (`dotnet test --solution AssemblyStudio.slnx` executed; oracle/NASM data present)
@@ -2291,6 +2321,7 @@ Every task that builds on these items depends on the verifying task (checked by 
 - 2026-10-26 v1.0: **Approved** by the user (2026-10-26 19:17 +0500: "approve backlog v0.1"). All milestones and tasks → Approved.
 - 2026-11-03 18:12 +0500: TASK-114 (DEF-028 fix) added. User 2026-11-03 18:12 +0500, answering "Do you approve TASK-114 (fix the RTE021 next step for DEF-028) with the proposed wording?": "Approve (Recommended)".
 - 2026-11-03 19:07 +0500: TASK-115 (DEF-003 fix, D-023) added. User 2026-11-03 19:07 +0500, asked "propose the fix task for DEF-003", then answering "How should DEF-003 be fixed?": "B: limit 65,278 (Recommended)" (the option stated that this answer approves changing FR-031 and AC-020 from 65,280 to 65,278).
+- 2026-11-04 13:38 +0500: TASK-118 (logo) added and approved. the user asked "help me make a logo and add on my website and add on my software"; then chose "C · Bracket step [▶] (Recommended)" and answered "Do you approve TASK-118: build the logo kit and use it in the app (window/taskbar/.exe icon), the installer and shortcuts, and the website?": "Approve".
 - 2026-11-04 13:04 +0500: TASK-117 (project website on Vercel) added and approved. the user asked "i want please make a webpage for my ide and deploy vercel please make a beautiful webpage and add download my ide there", then answered "Do you approve TASK-117 (a static project website in website/, deployed to Vercel, download linking to the GitHub release)?": "Approve" and "How should it be deployed to Vercel?": "Vercel CLI (Recommended)".
 - 2026-11-04 10:26 +0500: TASK-100 Done (MIT, D-025); TASK-006 waived for the first release (WVR-002); TASK-105 kit prepared. the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and".
 - 2026-11-04 09:40 +0500: TASK-116 (OQ-026, D-024) added. User 2026-11-04 09:40 +0500, asked "propose the fix task for OQ-026", then answering "How should OQ-026 (Run after a failed build) be resolved?": "A: spec follows the app (Recommended)" (the option stated that the UI spec v1.2 change is approved with this answer).

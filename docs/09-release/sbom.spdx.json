@@ -2,10 +2,10 @@
     "spdxVersion":  "SPDX-2.3",
     "dataLicense":  "CC0-1.0",
     "SPDXID":  "SPDXRef-DOCUMENT",
-    "name":  "Assembly Studio 1.0.0 win-x64",
-    "documentNamespace":  "https://spdx.org/spdxdocs/assembly-studio-1.0.0-win-x64-e35d8ec9-4e8b-4501-b167-a8b72fae759b",
+    "name":  "Assembly Studio 1.0.1 win-x64",
+    "documentNamespace":  "https://spdx.org/spdxdocs/assembly-studio-1.0.1-win-x64-7f52e824-71c7-4378-9916-9bfd9bbebce9",
     "creationInfo":  {
-                         "created":  "2026-11-04T07:27:25Z",
+                         "created":  "2026-11-04T09:39:02Z",
                          "creators":  [
                                           "Tool: build/installer/license-inventory.ps1",
                                           "Organization: Assembly Studio contributors"
@@ -15,7 +15,7 @@
                      {
                          "SPDXID":  "SPDXRef-Package-assembly-studio",
                          "name":  "Assembly Studio",
-                         "versionInfo":  "1.0.0",
+                         "versionInfo":  "1.0.1",
                          "downloadLocation":  "NOASSERTION",
                          "filesAnalyzed":  false,
                          "licenseConcluded":  "MIT",
@@ -112,7 +112,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "24c3b0aec5c3b85dbeab0395e1b6f44a0b301fcca69fee12b35b17581261dc52"
+                                            "checksumValue":  "131d729057daf4450a2d317abedf1ed68e4f100f42e851494131584b530f2059"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -124,7 +124,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "d19e4cd05582ef9176745ddcfda8303aa83fde575a5d1fe14ae183fe5d9782d0"
+                                            "checksumValue":  "884430a915bee652770b85b935142a6d1e278e7376485278e4d0fe4e4bad92d1"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -136,7 +136,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "01174e5db3e4c392d6530a45c4dfe40ca97475b606954a4b3b14a118546a5dd0"
+                                            "checksumValue":  "3539236832072ae59f6e94e9ec03273cce48a410c0111fca9327b58ab916ab39"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -148,7 +148,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "20afa74227e67487db1e355c0534d2b7242c5f60fa6d3b891cc8a5eeaa3307ed"
+                                            "checksumValue":  "0d22f96bb5f9336c008a238e1cb0437db997eb854ecaa79ea6f8441873020dec"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -172,7 +172,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "9d60c3764f1fcfd0afdc16285693eca7926b179bd98e65c3038e9d034002dedc"
+                                            "checksumValue":  "97697c32941aec896dc985ddc1c396e3dea60e1556ee1ae8928e63c8f27dc84b"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -184,7 +184,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "6a14ba96857e72ecee3aa496035e2a5e75750a47e49f0d2ed357a0721c7c9295"
+                                            "checksumValue":  "846d3c30edd9947cf8fe50d9732ecd5c2c61dfdb4541351a0409d1b75aa09edf"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -196,7 +196,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "cad4139bdaccf99a1c0f861861909b460e0f25d8fdd1031bbb1792ba55051498"
+                                            "checksumValue":  "dd8101401264a871c6208effdd6bbb61ae8a503fd76ef88e8e24ede8b925a20d"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -208,7 +208,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "520b4bc442bd6d2b486517dc2f9e16f9557dd53ac5f75bc4a4690f8a334e3077"
+                                            "checksumValue":  "a5ec26b2fc2f9e0e2d1c5690efeb6cb9e75cf4b9a5a2906f34182340c006d518"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -220,7 +220,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "b3cef85afbab02ce2e7e0dab35e4154c05194d9c50743b982de5d7a8827e73ae"
+                                            "checksumValue":  "6881977acfc2bff263dd13fc35e976b0ae9c10ed375ffc87b401188fd9b1dfc3"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -232,7 +232,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "8af76ff356968332676fdf895d31139dd56d9461c40906738cc6ce937b776a1c"
+                                            "checksumValue":  "90577966066c931a39c9d02ba7a959a02eb83400203e3b2eeab49aadd0cc6d57"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -244,7 +244,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "9c559e43cbf3addcd45e780f5434dd09e1bce288b185654ced621991f1a69dbc"
+                                            "checksumValue":  "9acd67e341a4332b05995dc3fba8c45a73a7b435d3b562108b75a8354e1e198c"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -256,7 +256,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "e735ffb1be659150cf49d3754c60f75f9380cfeb5173b54a565c270fa921bfd5"
+                                            "checksumValue":  "934aab018f4d153f44b10c184b20d6791597af146eae662d4b29fc8b84ffda12"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -268,7 +268,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "fdf631518516878700d436b27c0ab6195f22237cea1e03b17a54327dcb42ee82"
+                                            "checksumValue":  "bf79a65799650d4ed39272f4966a30bb0e2e2755cd616bd3de0185fe5ac2e9fe"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -280,7 +280,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "775a70ad61a610307b63eaad453c33c2046a959df304260213998db30e5377be"
+                                            "checksumValue":  "183dedd0a9b46d346f2d89322455a4c1502b1b6f68b3fbedec9870f640b28ab3"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -292,7 +292,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "095cf593194ff08fac1b5a95ff1d6cbbc63d0903ca47d0b2fd61a59c7332b71b"
+                                            "checksumValue":  "f9b8aa71f15604b7cc95bba4a5f3ecf9714586afa0ffcbfd8db275d9258fdf8e"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -304,7 +304,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "445994f0145f53652d797f7d846bf6481869948d2b10ee1544674e7cb2db87e9"
+                                            "checksumValue":  "4bd01b6d64bec05f839dc2a31a0925800e978e6f0b4d27aeef6967ee1c04bd73"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -316,7 +316,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "0941b0cb2f9eed18cf6b687da5f17a8ca14de879e56e6aa92e77db15569bde80"
+                                            "checksumValue":  "fe2e87d109f28ddf33978c831fa2095d18d42951fae4fc1e87bc6bfcf8435e32"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -328,7 +328,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "bc82193025509ed1e101b340d7480a4163be759aa990e3ddfb02f46d16fb1ae5"
+                                            "checksumValue":  "c25cee7eada9d55db829f03769b12d6f5e4df2b6385f76e67314d0ea9a5023cb"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",
@@ -2752,7 +2752,7 @@
                       "checksums":  [
                                         {
                                             "algorithm":  "SHA256",
-                                            "checksumValue":  "8b7a60dbcf8cd886ceee5753fb16c39f04a8ce5e24aea22e53afb7df7cd59fac"
+                                            "checksumValue":  "60afbfb1f552a03d7aa8ea55e99b670e55046592cdf91b4c81cddebe7ce94847"
                                         }
                                     ],
                       "licenseConcluded":  "MIT",

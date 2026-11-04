@@ -2383,3 +2383,9 @@
 - **Files changed:** `docs/08-qa/qa-report-2026-11-04-3.md` (new), `docs/01-requirements/REQUIREMENTS_TRACEABILITY.md` (v2.19), `PROJECT_STATE.md`, `WORK_LOG.md`.
 - **Next step:** `/assembly-release 1.0.1`: the user confirms the conditions for 1.0.1.
 
+### 14:36 – 14:52 +0500 · Claude Code (Opus 5.5) · Release 1.0.1
+- **Summary:** The user accepted the QA conditions, unsigned, and publishing. Committed the candidate (`2c10a2f`), built the installer, ran the suite. The installer test refuses while Assembly Studio is installed; the user chose to upgrade their own 1.0.0, but instead uninstalled it (14:47:53) and installed 1.0.1 (the user: "i uninstall it and install now updated version"); I checked the installation and smoke-tested it with temporary settings. Release 1.0.1 (the logo) **published** 2026-11-04 14:52 +0500: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.1 (tag `v1.0.1` on `2c10a2f`, marked Latest; asset AssemblyStudio-1.0.1-setup.exe, 56,087,303 bytes, GitHub digest sha256:17f4f02ed28c69f0a155f2106ab76d7a3303b424e4a15026c2efa5d780990370 equal to the local file). The first create attempt returned HTTP 502 and left nothing; the retry succeeded. Website and README point to 1.0.1.
+- **Files changed:** `docs/09-release/{release-1.0.1.md (new), license-inventory.md, sbom.spdx.json}`, `THIRD-PARTY-NOTICES.txt`, `README.md`, `website/index.html`, `CURRENT_TASK.md`, `PROJECT_STATE.md`, `WORK_LOG.md`, `HANDOFF.md`.
+- **Tests executed:** release build 0 warnings; suite on `2c10a2f` 1586 + 3 passed, 0 failed (14:41–14:44); installer built 14:37–14:40; the user uninstalled 1.0.0 and installed 1.0.1 (user-reported), checked by me: version, files identical to the build, shortcut, icon, headless smoke test exit 0; the automatic installer test and the upgrade path not rerun for 1.0.1.
+- **Next step:** none required.
+

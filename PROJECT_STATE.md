@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 14:35 +0500 by Claude Code (Opus 5.5) (QA 2026-11-04-3) |
+| Last updated | 2026-11-04 14:52 +0500 by Claude Code (Opus 5.5) (release 1.0.1 published) |
 | Current phase | **9 Release: 1.0.0 published** 2026-11-04 on GitHub; the repository is **public** since 2026-11-04 12:48 +0500. Open: TASK-006/070/103 (waived, WVR-002), TASK-105 (user-run) |
 | Current milestone | None active: release 1.0.0 is out. Next milestone to be planned (`/assembly-plan`) |
 | Active task | None in progress |
-| Next recommended action | `/assembly-release 1.0.1` to ship the new icon (the published 1.0.0 is unchanged); later `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing |
+| Next recommended action | None required. Optional: `/assembly-plan` with a scope; TASK-105 sessions; OQ-020 signing; the automatic installer test on a machine without Assembly Studio installed |
 
 ## Verified status
 - **As of 2026-11-04 12:36 +0500:** requirements FR v2.2 (97 FR), NFR v2.1 (33 NFR), 65 acceptance criteria (AC v2.10), traceability v2.17; backlog: 70 tasks Done, 4 open (TASK-006, 070, 103 waived by WVR-002; TASK-105 user-run); test report 2026-11-04-1 (1,587 passed, 0 failed); QA 2026-11-04-2 Pass with conditions; release 1.0.0 published (private). The bullets below are the earlier history and keep their counts of the time.
@@ -27,6 +27,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| Release 1.0.1 | 2026-11-04 14:52 +0500 | Release 1.0.1 (the logo) **published** 2026-11-04 14:52 +0500: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.1 (tag `v1.0.1` on `2c10a2f`, marked Latest; asset AssemblyStudio-1.0.1-setup.exe, 56,087,303 bytes, GitHub digest sha256:17f4f02ed28c69f0a155f2106ab76d7a3303b424e4a15026c2efa5d780990370 equal to the local file). The first create attempt returned HTTP 502 and left nothing; the retry succeeded. release build 0 warnings; suite on `2c10a2f` 1586 + 3 passed, 0 failed (14:41–14:44); installer built 14:37–14:40; the user uninstalled 1.0.0 and installed 1.0.1 (user-reported), checked by me: version, files identical to the build, shortcut, icon, headless smoke test exit 0; the automatic installer test and the upgrade path not rerun for 1.0.1; `docs/09-release/release-1.0.1.md` |
 | QA (report 2026-11-04-3) | 2026-11-04 14:35 +0500 | QA 2026-11-04-3: **Pass with conditions** for `e38fb3b` (P0 71 verified, 4 not verified, 0 failed; P1 38 verified, 3 not verified; results unchanged from QA 2026-11-04-2; the logo verified as a quality check); traceability v2.19 |
 | Testing phase (report 2026-11-04-2) | 2026-11-04 14:34 +0500 | 1596 tests: 1589 passed, 0 failed, 7 skipped (opt-in); coverage engine 99.6%, runtime 95.3%; measurements 7 of 7 (NFR-005 warm median 1,919 ms); 57 of 65 acceptance criteria pass in the run, 5 on manual or record-based evidence, 0 fail, 3 not run; traceability v2.18, AC v2.11, test plan v0.20 |
 | TASK-118 Logo | 2026-11-04 14:02 +0500 | Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header. Full solution: run a (13:46–13:51) 1586 + 3 passed, 0 failed; run b (13:51–13:55) 2 failed: the View menu smoke test (DEF-001/DEF-016) and NFR-001 editor latency (best p95 51.24 ms > 50; DEF-010 reopened); both passed 3 of 3 alone; run c (13:57–14:01) 1586 + 3 passed, 7 skipped, 0 failed |

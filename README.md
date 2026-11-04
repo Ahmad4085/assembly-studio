@@ -17,9 +17,9 @@ variables update, with every change marked.
 **Website:** https://assembly-studio-one.vercel.app
 
 ## Download
-Get **`AssemblyStudio-1.0.0-setup.exe`** from the [latest release](https://github.com/Ahmad4085/assembly-studio/releases/latest).
+Get **`AssemblyStudio-1.0.1-setup.exe`** from the [latest release](https://github.com/Ahmad4085/assembly-studio/releases/latest).
 
-- **SHA-256:** `16ac15358b80d2d12425be5ed05bce5e89dbf2a453514cd5dfaa8ce7153f3d83`
+- **SHA-256:** `17f4f02ed28c69f0a155f2106ab76d7a3303b424e4a15026c2efa5d780990370`
 - **No administrator rights needed.** It installs for your Windows account and downloads nothing. The .NET runtime and NASM 3.02
   are included.
 - **The installer is not code-signed,** so Windows SmartScreen may warn you. Choose **More info**, then **Run anyway**. See the
@@ -86,9 +86,9 @@ message db 'Hello, World!', 13, 10, '$'   ; 13, 10 = carriage return, line feed
 - **Processor:** Intel 8086, real mode. Every documented 8086 instruction except IN, OUT and the 8087 (ESC) instructions.
 - **Programs:** DOS `.COM` programs of up to 65,278 bytes, in NASM syntax.
 - **Services:** the DOS text functions above. No files, disks, clock or BIOS services (INT 10h, INT 16h).
-- **Windows:** 64-bit Windows 11, or Windows 10 21H2 or later. Release 1.0.0 was tested on Windows 11.
+- **Windows:** 64-bit Windows 11, or Windows 10 21H2 or later. Releases 1.0.0 and 1.0.1 were tested on Windows 11.
 
-See the [known limitations](docs/09-release/known-limitations.md) and the [release notes](docs/09-release/release-notes-1.0.0.md).
+See the [known limitations](docs/09-release/known-limitations.md) and the [release notes](docs/09-release/release-notes-1.0.1.md).
 
 ## Build from source
 **You need:** Windows 10 or 11 x64, the [.NET SDK 10.0.403](https://dotnet.microsoft.com/download) (pinned in `global.json`) and

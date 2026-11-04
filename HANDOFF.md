@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 14:02 +0500 by Claude Code (Opus 5.5), after TASK-118 (logo) |
-| Current task | **None. Logo done; it ships with the next release** |
-| Last completed | TASK-118 Logo (Done 2026-11-04 14:02 +0500) |
-| Git state | master pushed to origin (after `84e72f5`, TASK-118); the push redeploys the website. Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`; git-ignored: `website/.env.local`, `website/.vercel/`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-04 14:52 +0500 by Claude Code (Opus 5.5), after release 1.0.1 |
+| Current task | **None. Release 1.0.1 published** |
+| Last completed | Release 1.0.1 (published 2026-11-04 14:52 +0500) |
+| Git state | master pushed to origin (release record commit after `2c10a2f`); tags `v1.0.0` and `v1.0.1` pushed; the push redeploys the website. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`; git-ignored: `website/.env.local`, `website/.vercel/`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **Release 1.0.1** (Claude Code): Release 1.0.1 (the logo) **published** 2026-11-04 14:52 +0500: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.1 (tag `v1.0.1` on `2c10a2f`, marked Latest; asset AssemblyStudio-1.0.1-setup.exe, 56,087,303 bytes, GitHub digest sha256:17f4f02ed28c69f0a155f2106ab76d7a3303b424e4a15026c2efa5d780990370 equal to the local file). The first create attempt returned HTTP 502 and left nothing; the retry succeeded. Test report 2026-11-04-2, QA 2026-11-04-3. The automatic installer test was not run for 1.0.1 (the user's copy was installed).
+
 - **TASK-118 logo** (Claude Code, committed `84e72f5`): Logo "Bracket step" (NASM memory brackets around the execution arrow; the user chose concept C of three): kit in `docs/brand/` (colour, small-size cut, one-colour, app-icon tiles, a 16–256 px Windows icon, PNGs, usage notes); the app's executable icon (`ApplicationIcon`) and main window icon; the installer's `SetupIconFile`; website favicon set and header/footer logo; README header. The published 1.0.0 installer is unchanged: `/assembly-release 1.0.1` ships the icon. DEF-010 reopened.
 
 - **TASK-117 website** (Claude Code, committed `b289b68`): Website live at https://assembly-studio-one.vercel.app (Vercel project assembly-studio, account ahmad4085; production deployment assembly-studio-9n6w98ft9). Static page in `website/` (HTML, CSS, a little JS), redesigned on the user's feedback: no gradients, IBM Plex, flat app-theme colors, a datasheet-style feature list, scroll reveals and a hero demo that replays a real trace recorded from the engine (AssemblyStudio.Engine.I8086, commit 034c070, via a scratch console program wired like SessionFactory). Checked: every link resolves; the download URL serves 56,099,852 bytes; phone width 390 px has no overflow (rendered in a 390 px frame); `.env.local` and `.vercel/` are not served (404). `assembly-studio.vercel.app` belongs to an unrelated project. Redeploy: push to GitHub. The Vercel project is connected to the repository and its Root Directory is `website` (set 2026-11-04 13:33 +0500), so every push to master deploys the site. Don't deploy with the CLI from inside `website/` any more (it would look for `website/website`). Never commit `website/.env.local` or `website/.vercel/` (git-ignored).

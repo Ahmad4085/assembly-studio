@@ -1,11 +1,11 @@
-ASSEMBLY STUDIO 1.0.0: LICENSE AND THIRD-PARTY NOTICES
+ASSEMBLY STUDIO 1.0.1: LICENSE AND THIRD-PARTY NOTICES
 
 Assembly Studio is open source under the MIT License. It ships the third-party components listed below,
 each with its license. This file is generated from the published application by
 build/installer/license-inventory.ps1 (do not edit it by hand).
 
 ==============================================================================
-Assembly Studio 1.0.0
+Assembly Studio 1.0.1
 ==============================================================================
 License: MIT
 

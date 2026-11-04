@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 12:36 +0500 by Claude Code (Opus 5.5), after `/assembly-status --refresh` |
-| Current task | **None in progress. Release 1.0.0 published (private repository)** |
+| Written | 2026-11-04 12:45 +0500 by Claude Code (Opus 5.5); planning deferred by the user |
+| Current task | **None. Release 1.0.0 is complete; the next milestone will be planned when the user asks** |
 | Last completed | Release 1.0.0 published: https://github.com/Ahmad4085/assembly-studio/releases/tag/v1.0.0 |
-| Git state | HEAD after `d1a8375` (status refresh committed); origin/master is `e951940` (these commits not pushed). Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Git state | master pushed to origin (this commit included). Tag `v1.0.0` pushed. Local only (never push): `backup/before-vuid-rewrite`, `backup/after-first-rewrite`, `refs/original`. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -174,9 +174,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. The user decides when to make the repository public. Before that, delete the local backups (`git branch -D backup/before-vuid-rewrite backup/after-first-rewrite`, and `refs/original` via `git update-ref -d refs/original/refs/heads/master`); they were never pushed.
-2. The user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md`.
-3. `/assembly-status`, then `/assembly-plan` for the next milestone (clean machines TASK-006/070/103, signing OQ-020).
+1. Nothing pending. The user stopped `/assembly-plan` (2026-11-04 12:45 +0500): the IDE is complete for 1.0.0 and further changes come later.
+2. When the user wants more: `/assembly-plan` with a scope (options discussed: 1.0.x maintenance and document cleanup; debugger features FR-060/061/062/009; learning features FR-073/074; bigger programs FR-010/043/044, which need `/assembly-architecture` first).
+3. Open items that stay recorded: TASK-105 (usability session, kit ready); TASK-006/070/103 (waived for 1.0.0, WVR-002); OQ-020 (signing); making the repository public (delete the local backup branches and `refs/original` first).
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

@@ -91,7 +91,7 @@
 | TASK-093 | Help: scope, limitations, NASM vs MASM, shortcuts | M6 | TASK-090, TASK-018, TASK-043 | L | FR-032, FR-045, NFR-033 | Done |
 | TASK-100 | Product license decision (user action) **(User action)** | M7 | — | M | NFR-030 | Done |
 | TASK-101 | Self-contained publish and Inno Setup installer | M7 | TASK-005, TASK-068 | M | FR-083, FR-084, FR-085, FR-086, FR-087, FR-088, NFR-027, NFR-028 | Done |
-| TASK-102 | Third-party notices and SBOM | M7 | TASK-101, TASK-100 | L | FR-090, NFR-030, NFR-031 | Approved |
+| TASK-102 | Third-party notices and SBOM | M7 | TASK-101, TASK-100 | L | FR-090, NFR-030, NFR-031 | Done |
 | TASK-103 | Clean-VM install, offline and compatibility verification | M7 | TASK-101, TASK-006 | M | NFR-008, NFR-025, NFR-027, FR-083, FR-085, FR-088 | Approved |
 | TASK-104 | Localizability and message review | M7 | TASK-085 | L | NFR-032, NFR-024 | Done |
 | TASK-105 | Beginner usability session (user-run) **(User action)** | M7 | TASK-091, TASK-092, TASK-086 | M | NFR-023 | Approved |
@@ -1795,7 +1795,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Approved |
+| Status | Done |
 | Milestone | M7 |
 | Requirements | FR-090, NFR-030, NFR-031 |
 | Decisions / design | ADR-0009 |

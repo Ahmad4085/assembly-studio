@@ -4,7 +4,7 @@
 |---|---|
 | Document | Test plan |
 | Status | Draft |
-| Version | 0.16 |
+| Version | 0.17 |
 | Last updated | 2026-11-02 |
 | Depends on | `docs/01-requirements/` v2.x (requirements, acceptance criteria, traceability v2.5), `docs/03-architecture/architecture.md` v1.0, `docs/05-planning/backlog.md` |
 | Latest report | `docs/07-testing/test-report-2026-11-03-4.md` |
@@ -88,7 +88,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-044 | `ProgramTests.ProgramTests` | Program-level (assembler -> loader -> engine) | AC-017, AC-021, AC-022, AC-023, AC-029, AC-031, AC-047, AC-064, TASK-044 | 14 |
 | TC-045 | `ProgramTests.ReferenceTests` | Program-level (assembler -> loader -> engine) | AC-037, FR-071, FR-072, TASK-092 | 80 |
 | TC-046 | `ProgramTests.SampleTests` | Program-level (assembler -> loader -> engine) | AC-035, FR-068, TASK-091 | 18 |
-| TC-047 | `App.Tests.About.AboutTests` | UI / view model / process | AC-038, FR-076, FR-087, FR-090, TASK-068 | 10 |
+| TC-047 | `App.Tests.About.AboutTests` | UI / view model / process | AC-038, AC-042, FR-076, FR-087, FR-090, TASK-068, TASK-102 | 11 |
 | TC-048 | `App.Tests.Documents.AtomicFileAndErrorsTests` | UI / view model / process | AC-004, FR-004, FR-008, NFR-029, TASK-062 | 5 |
 | TC-049 | `App.Tests.Documents.CrashRecoveryProcessTests` | UI / view model / process | AC-050, NFR-011 | 1 |
 | TC-050 | `App.Tests.Documents.DocumentUiTests` | UI / view model / process | AC-005, AC-006, TASK-062 | 6 |
@@ -138,6 +138,7 @@ TC-058 (no networking library in any application assembly) verifies the static p
 | TC-094 | `ArchitectureTests.LocalizableStringTests` | Architecture rules (source scan) | AC-060, NFR-032, TASK-104 | 14 |
 | TC-095 | `ProgramTests.ComSizeLimitTests` | Program-level (assembler -> loader -> engine) | AC-020, FR-031, TASK-115 | 2 |
 | TC-096 | `ArchitectureTests.LicenseTests` | Architecture rules (repository file) | NFR-030, TASK-100 | 1 |
+| TC-097 | `ArchitectureTests.ReleaseLicensingTests` | Architecture rules (release files) | AC-042, AC-061, FR-090, NFR-030, NFR-031, TASK-102 | 5 |
 
 Deterministic inputs and expected results are in each test. Engine tests use hand-assembled images and the SingleStepTests
 data; random tests use fixed seeds (fuzz: per-test seeds; reference flag probes: a seed per mnemonic).
@@ -190,3 +191,4 @@ has a defect; no unexplained failure.
 - 2026-11-03 v0.14: TASK-115: TC-095 added (the build and the loader share the .COM limit, 2 tests); TC-026 and TC-043 at the new limit of 65,278 bytes.
 - 2026-11-03 v0.15: Test run 2026-11-03-4: counts checked.
 - 2026-11-04 v0.16: TASK-100: TC-096 added (the MIT `LICENSE` with its copyright line, 1 test).
+- 2026-11-04 v0.17: TASK-102: TC-097 added (notices, license page, inventory, SBOM, pins, NASM checksums; 5 tests); TC-047 checks the installed notices (11).

@@ -179,3 +179,4 @@ Test case `NOT CREATED` and status `NOT RUN` mean no test exists yet. They must 
 - 2026-11-04: FR-018 gains TASK-116 (ui-spec v1.2, D-024). No other change.
 - 2026-11-04 v2.15: Minor (QA, `docs/08-qa/qa-report-2026-11-04-1.md`). "QA status" set from QA 2026-11-04-1. No requirement changed.
 - 2026-11-04: NFR-030 cites TASK-100 (MIT `LICENSE`, D-025, TC-096). No other change.
+- 2026-11-04: FR-090, NFR-030, NFR-031 cite TASK-102 (0 rows); test status is refreshed by the next test run.

@@ -1,6 +1,7 @@
 # Builds the Assembly Studio installer (ADR-0009, TASK-101):
 #   1. dotnet publish src/AssemblyStudio.App -c Release -r win-x64 --self-contained (no trimming, no single file; ReadyToRun from the project, TASK-108)
 #   2. checks the publish folder holds what the installer must ship (the app, the runtime, the bundled NASM and its license)
+#   2a. runs license-inventory.ps1: notices, license page and SBOM from the published files (TASK-102)
 #   3. compiles build/installer/AssemblyStudio.iss with the pinned Inno Setup (build/fetch-innosetup.ps1)
 # Output: artifacts/installer/AssemblyStudio-<version>-setup.exe. Prints the published size and the installer size (NFR-028).
 # Needs tools/nasm (build/fetch-nasm.ps1) and tools/innosetup (build/fetch-innosetup.ps1).
@@ -28,6 +29,10 @@ $required = @('AssemblyStudio.App.exe', 'AssemblyStudio.App.dll', 'coreclr.dll',
 foreach ($file in $required) {
     if (-not (Test-Path -LiteralPath (Join-Path $publishDir $file))) { throw "The publish folder lacks $file." }
 }
+
+# TASK-102: inventory every published file (an unknown file or a NASM checksum mismatch stops the build), regenerate the
+# notices, the license page and the SBOM from it, and put the notices and LICENSE into the publish folder.
+& (Join-Path $PSScriptRoot 'license-inventory.ps1') -PublishDir $publishDir -CopyToPublish
 
 $exe = Get-Item -LiteralPath (Join-Path $publishDir 'AssemblyStudio.App.exe')
 $version = $exe.VersionInfo.ProductVersion.Split('+')[0]

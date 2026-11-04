@@ -5,10 +5,10 @@
 
 | Field | Value |
 |---|---|
-| Written | 2026-11-04 10:26 +0500 by Claude Code (Opus 5.5), after TASK-100, WVR-002 and the TASK-105 kit |
-| Current task | **None in progress. Next: TASK-102 (notices and SBOM)** |
-| Last completed | TASK-100 Product license: MIT (Done 2026-11-04 10:26 +0500) |
-| Git state | HEAD after `89b77fb` (TASK-100, WVR-002 and the TASK-105 kit committed). Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
+| Written | 2026-11-04 10:54 +0500 by Claude Code (Opus 5.5), after TASK-102 |
+| Current task | **None in progress. Next: the installer test on this PC (ask the user first)** |
+| Last completed | TASK-102 Third-party notices and SBOM (Done 2026-11-04 10:54 +0500) |
+| Git state | HEAD `be70396`; TASK-102 changes **uncommitted**. Not pushed. Untracked, not ours: `.idea/vcs.xml`, `poc/task015-*.ps1` |
 
 ## Last verified working state
 - `dotnet build AssemblyStudio.slnx -c Release` → **0 warnings, 0 errors** (2026-11-02, in `run-e2e.ps1` at 15:02 +0500 and the test rebuild after the AC-045 fix).
@@ -17,6 +17,8 @@
 - Notes: full runs now take 5–6.5 min (the UI test project starts the app). Debug runs can't judge the performance tests. While the user runs the app from `src/AssemblyStudio.App/bin/Release`, the Release build can't replace its files; never stop the user's app. Real-key UI tests: `ASSEMBLY_STUDIO_UI_INPUT=1 dotnet test --project tests/AssemblyStudio.App.UiTests -c Release`, with the user's agreement and the user away from the PC (D-018).
 
 ## Changes since the previous handoff
+- **TASK-102** (Claude Code, Done, uncommitted): `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB. Run `build/installer/build-installer.ps1` for every release: it regenerates these files from the publish folder.
+
 - **TASK-100** Done: MIT, "Copyright (c) 2026 Assembly Studio contributors" (D-025, OQ-007 answered); `LICENSE`; TC-096.
 - **WVR-002**: TASK-006 (clean machines) waived for the first release; AC-040/AC-041 stay Not verified; known limitation "Tested systems"; the installer must still be rebuilt and tested on this PC.
 - **TASK-105**: kit ready (`docs/08-qa/usability-session-kit.md`); the sessions need at least 5 real first-time participants (the user).
@@ -158,9 +160,9 @@
   - Test cases: one TC per test class (inventory in `docs/07-testing/test-plan.md`); new classes take the next free number.
 
 ## Exact next action
-1. Done: committed (`89b77fb`).
-2. TASK-102 (third-party notices and SBOM; the notices reference `LICENSE`), then the installer rebuild and `test-installer.ps1` on this PC (WVR-002 condition).
-3. The user runs TASK-105 with the kit and brings the filled sheet ("record the usability session"); then `/assembly-qa` and `/assembly-release <version>`. On this PC, run long test commands in the foreground.
+1. The user says "commit" for TASK-102 (then commit and record the hash here).
+2. The installer test on this PC (`build/installer/test-installer.ps1`; WVR-002 condition). It installs per-user and replaces the user's installed copy: ask first.
+3. `/assembly-test`; the user's TASK-105 sessions with the kit; then `/assembly-qa` and `/assembly-release <version>`. On this PC, run long test commands in the foreground.
 
 ## Do not overwrite or revert
 `AGENTS.md`, `CLAUDE.md`, `docs/sdlc/**`, `docs/00-project-overview/**`, `docs/templates/**`,

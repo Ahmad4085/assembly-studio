@@ -5,11 +5,11 @@
 
 | Field | Value |
 |---|---|
-| Last updated | 2026-11-04 10:26 +0500 by Claude Code (Opus 5.5) (TASK-100 done, WVR-002, TASK-105 kit) |
+| Last updated | 2026-11-04 10:54 +0500 by Claude Code (Opus 5.5) (TASK-102 done) |
 | Current phase | **6 Implementation**: M1, M2, M3 complete; M4 in progress (only TASK-070 left; it needs TASK-006); M5 complete (TASK-080..086 and the added TASK-106 done); M6 tasks all done; M7 started (TASK-101 done); M0 nearly complete (TASK-006 pending) |
 | Current milestone | M4 App shell and editor, in progress |
 | Active task | None in progress |
-| Next recommended action | TASK-102 (notices and SBOM; TASK-100 done); rebuild the installer and run `test-installer.ps1` on this PC (WVR-002 condition); the user runs TASK-105 with `docs/08-qa/usability-session-kit.md`; then `/assembly-qa` and `/assembly-release <version>`. TASK-006, TASK-070, TASK-103 waived for the first release (WVR-002) |
+| Next recommended action | The installer test on this PC (`test-installer.ps1`; WVR-002 condition; ask first, it replaces the user's installed copy); `/assembly-test` (AC-042, AC-061 now have tests); the user's TASK-105 sessions; then `/assembly-qa` and `/assembly-release <version>` |
 
 ## Verified status
 - The SDLC process, tool-independent core (`docs/sdlc/`), templates, shared memory files and the tool
@@ -26,6 +26,7 @@
 ## Completed
 | Item | Completed | Evidence |
 |---|---|---|
+| TASK-102 Third-party notices and SBOM | 2026-11-04 10:54 +0500 | `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB. Full solution 1584 + 3 passed, 7 skipped, 0 failed twice (10:46–10:50, 10:50–10:53) |
 | TASK-100 Product license (MIT) | 2026-11-04 10:26 +0500 | D-025; `LICENSE` (MIT, "Copyright (c) 2026 Assembly Studio contributors"); TC-096 (mutation: another holder fails); full solution 1578 + 3 passed, 7 skipped, 0 failed twice (10:16–10:20, 10:20–10:24) |
 | QA (report 2026-11-04-1) | 2026-11-04 10:02 +0500 | QA 2026-11-04-1: **Pass with conditions** (P0 69 verified, 6 not verified, 0 failed; P1 37 verified, 4 not verified; no Critical or High defect, no open question). Conditions: clean-machine install (TASK-006, TASK-070, TASK-103), notices and SBOM (TASK-100, TASK-102), usability session (TASK-105), user-reported evidence accepted as such, open Low test-run defects; traceability v2.15 |
 | TASK-116 UI spec state matrix (OQ-026) | 2026-11-04 09:58 +0500 | UI spec v1.2: §4 state matrix, UI-002 Command bar, "Build failed" now reads "Build; Run after an edit (rebuilds)", as AC-013 requires and the app does (D-024, OQ-026 answered); `BuildRunTests` comments cite it. No code change. Full solution 1577 + 3 passed, 7 skipped, 0 failed twice (09:48–09:53, 09:53–09:58) |
@@ -130,6 +131,7 @@ See `DECISIONS.md`.
 ## Approval log
 | Date | Artifact | Version | Approver | Scope / notes |
 |---|---|---|---|---|
+| 2026-11-04 10:54 +0500 | **D-026 installer license page** (TASK-102, ADR-0009 amendment) | — | User | the user 2026-11-04 about 10:35 +0500, answering "How should end users agree to the Microsoft terms for the bundled .NET/WPF runtime files?": "Installer license page (Recommended)" |
 | 2026-11-04 10:26 +0500 | **D-025 product license MIT** (OQ-007, TASK-100) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "Which open-source license should Assembly Studio use (TASK-100)?": "MIT (Recommended)" and "Whose name goes in the copyright line?": "Assembly Studio contributors" |
 | 2026-11-04 10:26 +0500 | **Waiver WVR-002** (TASK-006: clean test machines) | — | User | the user, 2026-11-04 about 10:05 +0500: "please do these 3 remaining task i want this ide opensource you can chose licence opensource and"; then answering "For the clean test machines (TASK-006), what's possible on your side?": "Waive for this release" |
 | 2026-10-30 21:17 +0500 | **Waiver WVR-001** (AC-059 for TASK-061) and **new task TASK-087** (test reliability: DEF-006, DEF-009, placeholder tests) | — | User | answered "Waive it for now (Recommended)" and approved "Fix DEF-006 and DEF-009, Remove placeholder tests, Start the editor/Run path" (2026-10-30 21:17 +0500, after "start task 61 which is block and other you new add i approve it") |

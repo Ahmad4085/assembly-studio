@@ -11,8 +11,21 @@ None in progress.
 | Field | Value |
 |---|---|
 | Status | Idle / Ready for next task |
-| Recommended next action | TASK-102 (notices and SBOM); the installer rebuild and `test-installer.ps1` on this PC (WVR-002 condition); the user's TASK-105 sessions with `docs/08-qa/usability-session-kit.md` |
-| Parallel user actions | TASK-105 (sessions); TASK-006 waived for the first release (WVR-002) |
+| Recommended next action | Installer test on this PC (`test-installer.ps1`, WVR-002 condition; it installs per-user, so ask the user first: their installed copy is replaced); `/assembly-test`; the user's TASK-105 sessions |
+| Parallel user actions | TASK-105 (sessions) |
+
+---
+
+## Completed: TASK-102 Third-party notices and SBOM (Done 2026-11-04 10:54 +0500, Claude Code (Opus 5.5))
+- `build/installer/license-inventory.ps1` maps every published file to a component (494 files, 8 components; an unknown file or a NASM checksum mismatch stops it) and writes `THIRD-PARTY-NOTICES.txt` (shown in Help > About), the installer's license page `build/installer/license-agreement.txt` (D-026), `docs/09-release/license-inventory.md` and the SPDX 2.3 SBOM `docs/09-release/sbom.spdx.json`; Microsoft's .NET Library License and Windows SDK License texts saved in `build/installer/licenses/` with their source; the installer shows the license page and installs `LICENSE` and the notices; installer rebuilt: 53.5 MB.
+- Found while doing it: the .NET Library License also covers coreclr.dll and Microsoft.DiaSymReader.Native.amd64.dll (Microsoft's per-file list), and both Microsoft licenses require end users to agree to protective terms and the distributor to indemnify Microsoft; the user chose an installer license page (D-026).
+- Tests: TC-097 (5) and TC-047's new AC-042 test; mutations: an unknown published file and a wrong NASM checksum stop the generator; a renamed component fails TC-097. Installer built 10:41–10:44 (license page compiled in; not clicked through: a silent install skips it, an interactive run would replace the user's installed copy). Full solution: 1584 + 3 passed, 7 skipped, 0 failed twice (10:46–10:50, 10:50–10:53).
+
+| Field | Value |
+|---|---|
+| Status | Done |
+| Owner | Claude Code (Opus 5.5) |
+| Started / finished | 2026-11-04 10:31 / 10:54 +0500 |
 
 ---
 

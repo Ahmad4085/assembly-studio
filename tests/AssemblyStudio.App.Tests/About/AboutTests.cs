@@ -125,6 +125,25 @@ public sealed class AboutTests : IDisposable
     }
 
     [Fact]
+    public void AC_042_the_installed_notices_show_every_bundled_component_with_its_license_text()
+    {
+        // The build copies THIRD-PARTY-NOTICES.txt, LICENSE and tools\nasm next to the application (TASK-102).
+        string notices = AboutViewModel.BuildNotices(AppContext.BaseDirectory);
+
+        Assert.DoesNotContain("This file isn't installed", notices, StringComparison.Ordinal);
+        Assert.Contains("Copyright (c) 2026 Assembly Studio contributors", notices, StringComparison.Ordinal);
+        foreach (string component in new[] { "Microsoft .NET runtime", "Microsoft Windows Desktop runtime (WPF)", "AvalonEdit", "CommunityToolkit.Mvvm", "Iced", "NASM" })
+        {
+            Assert.Contains(component, notices, StringComparison.Ordinal);
+        }
+
+        Assert.Contains("MICROSOFT .NET LIBRARY", notices, StringComparison.Ordinal);
+        Assert.Contains("MICROSOFT WINDOWS SOFTWARE DEVELOPMENT KIT", notices, StringComparison.Ordinal);
+        Assert.Contains("Redistribution and use in source and binary forms", notices, StringComparison.Ordinal); // NASM's BSD-2-Clause text
+        Assert.True(File.Exists(Path.Combine(AppContext.BaseDirectory, "LICENSE")));
+    }
+
+    [Fact]
     public void The_bundled_NASM_license_is_installed_next_to_the_application()
     {
         Assert.True(File.Exists(Path.Combine(AppContext.BaseDirectory, "tools", "nasm", "LICENSE")));
